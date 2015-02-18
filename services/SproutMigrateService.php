@@ -252,13 +252,6 @@ class SproutMigrateService extends BaseApplicationComponent
 									)
 								)
 							);
-
-							sproutMigrate()->log(
-								'Preparing matrix field.', array(
-									'definition' => $definition,
-									'matrix'     => $fields[$name]
-								)
-							);
 						}
 						else
 						{
