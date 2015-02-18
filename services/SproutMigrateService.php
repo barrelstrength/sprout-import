@@ -66,6 +66,9 @@ class SproutMigrateService extends BaseApplicationComponent
 
 			$this->resolveRelationships($related, $fields);
 			$model->setAttributes($attributes);
+
+			unset($element['content']['related']);
+
 			$model->setContent($content);
 			$model->setContentFromPost($fields);
 
@@ -253,19 +256,7 @@ class SproutMigrateService extends BaseApplicationComponent
 								)
 							);
 						}
-						else
-						{
-							unset($fields[$name]);
-						}
 					}
-					else
-					{
-						$fields[$name] = $ids;
-					}
-				}
-				else
-				{
-					unset($fields[$name]);
 				}
 			}
 		}
