@@ -22,7 +22,7 @@ class SproutMigrateTask extends BaseTask
 
 					IOHelper::deleteFile($file);
 
-					sproutMigrate()->log('Task result.', $result);
+					sproutMigrate()->log('Task result for '.$file, $result);
 
 					return true;
 				}
