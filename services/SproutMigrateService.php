@@ -140,7 +140,8 @@ class SproutMigrateService extends BaseApplicationComponent
 
 				try
 				{
-					$element = craft()->elements->getCriteria($this->getValueByKey('type', $data))->first($criteria);
+					$type    = $this->getValueByKey('type', $data);
+					$element = craft()->elements->getCriteria($type)->first($criteria);
 				}
 				catch (\Exception $e)
 				{
@@ -190,8 +191,6 @@ class SproutMigrateService extends BaseApplicationComponent
 	{
 		if (count($related))
 		{
-			sproutMigrate()->log('Resolving relationships.', $related);
-
 			foreach ($related as $name => $definition)
 			{
 				$type       = $this->getValueByKey('type', $definition);
@@ -226,7 +225,7 @@ class SproutMigrateService extends BaseApplicationComponent
 					}
 					catch (\Exception $e)
 					{
-						sproutMigrate()->error($e->getMessage());
+						sproutMigrate()->error($e->getMessage(), $e);
 
 						continue;
 					}
@@ -256,6 +255,10 @@ class SproutMigrateService extends BaseApplicationComponent
 								)
 							);
 						}
+					}
+					else
+					{
+						$fields[$name] = $ids;
 					}
 				}
 			}
@@ -302,6 +305,11 @@ class SproutMigrateService extends BaseApplicationComponent
 		if ($data)
 		{
 			$data = print_r($data, true);
+		}
+
+		if (!is_string($message))
+		{
+			$message = print_r($message, true);
 		}
 
 		SproutMigratePlugin::log(PHP_EOL.$message.PHP_EOL.PHP_EOL.$data, $level);
