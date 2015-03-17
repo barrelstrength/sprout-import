@@ -95,11 +95,15 @@ class SproutMigrateService extends BaseApplicationComponent
 				}
 				catch (\Exception $e)
 				{
+					$this->unsavedElements[] = $model->getTitle();
+
 					sproutMigrate()->error($e->getMessage());
 				}
 			}
 			else
 			{
+				$this->unsavedElements[] = $model->getTitle();
+
 				sproutMigrate()->error('Unable to validate.', $model->getErrors());
 			}
 		}
@@ -127,21 +131,37 @@ class SproutMigrateService extends BaseApplicationComponent
 	 */
 	protected function getElementModel($beforeSave = null, array $data = array())
 	{
-		$name  = $this->getModelClass($this->getValueByKey('type', $data));
+		$type  = $this->getValueByKey('type', $data);
+		$name  = $this->getModelClass($type);
 		$model = new $name();
 
 		if ($beforeSave)
 		{
-			$match = $this->getValueByKey('matchBy', $beforeSave);
+			$matchBy       = $this->getValueByKey('matchBy', $beforeSave);
+			$matchValue    = $this->getValueByKey('matchValue', $beforeSave);
+			$matchCriteria = $this->getValueByKey('matchCriteria', $beforeSave);
 
-			if ($match && ($value = $this->getValueByKey('matchValue', $beforeSave)))
+			if ($matchBy && $matchValue)
 			{
-				$criteria = array('limit' => 1, $match => $value);
+				$criteria = craft()->elements->getCriteria($type);
+
+				if (array_key_exists($matchBy, $criteria->getAttributes()))
+				{
+					$attributes = array('limit' => 1, $matchBy => $matchValue);
+				}
+				else
+				{
+					$attributes = array('limit' => 1, 'search' => $matchBy.':'.$matchValue);
+				}
+
+				if (is_array($matchCriteria))
+				{
+					$attributes = array_merge($attributes, $matchCriteria);
+				}
 
 				try
 				{
-					$type    = $this->getValueByKey('type', $data);
-					$element = craft()->elements->getCriteria($type)->first($criteria);
+					$element = $criteria->first($attributes);
 				}
 				catch (\Exception $e)
 				{
@@ -150,8 +170,6 @@ class SproutMigrateService extends BaseApplicationComponent
 
 				if ($element)
 				{
-					$this->updatedElements[] = $element->getTitle();
-
 					return $element;
 				}
 			}
@@ -193,10 +211,11 @@ class SproutMigrateService extends BaseApplicationComponent
 		{
 			foreach ($related as $name => $definition)
 			{
-				$type       = $this->getValueByKey('type', $definition);
-				$matchBy    = $this->getValueByKey('matchBy', $definition);
-				$matchValue = $this->getValueByKey('matchValue', $definition);
-				$fieldType  = $this->getValueByKey('destinationField.type', $definition);
+				$type          = $this->getValueByKey('type', $definition);
+				$matchBy       = $this->getValueByKey('matchBy', $definition);
+				$matchValue    = $this->getValueByKey('matchValue', $definition);
+				$matchCriteria = $this->getValueByKey('matchCriteria', $definition);
+				$fieldType     = $this->getValueByKey('destinationField.type', $definition);
 
 				if (!$type && !$matchValue && !$matchBy)
 				{
@@ -217,22 +236,36 @@ class SproutMigrateService extends BaseApplicationComponent
 
 				foreach ($matchValue as $reference)
 				{
-					$criteria = array('limit' => 1, $matchBy => $reference);
+					$criteria = craft()->elements->getCriteria($type);
+
+					if (array_key_exists($matchBy, $criteria->getAttributes()))
+					{
+						$attributes = array('limit' => 1, $matchBy => $reference);
+					}
+					else
+					{
+						$attributes = array('limit' => 1, 'search' => $matchBy.':'.$reference);
+					}
+
+					if (is_array($matchCriteria))
+					{
+						$attributes = array_merge($attributes, $matchCriteria);
+					}
 
 					try
 					{
-						$element = craft()->elements->getCriteria($type)->first($criteria);
+						$element = $criteria->first($attributes);
+
+						if ($element)
+						{
+							$ids[] = $element->getAttribute('id');
+						}
 					}
 					catch (\Exception $e)
 					{
 						sproutMigrate()->error($e->getMessage(), $e);
 
 						continue;
-					}
-
-					if ($element)
-					{
-						$ids[] = $element->getAttribute('id');
 					}
 				}
 
