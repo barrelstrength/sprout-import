@@ -12,7 +12,8 @@ class SproutMigrateController extends BaseController
 
 		foreach ($files as $file)
 		{
-			if (!$file->getHasError() && $file->getType() == 'application/json')
+			if (!$file->getHasError() && $file->getType() == 'application/json'
+			|| $file->getType() == 'application/octet-stream')
 			{
 				$path = craft()->path->getPluginsPath().'sproutmigrate/downloads/'.$file->getName();
 
