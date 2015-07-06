@@ -43,6 +43,37 @@ class SproutMigrateService extends BaseApplicationComponent
 		return craft()->tasks->createTask('SproutMigrate', Craft::t($description), array('files' => $tasks));
 	}
 
+	public function resolveMatrixRelationships(&$fields)
+	{
+		foreach ($fields as $field => $blocks)
+		{
+			if (is_array($blocks) && count($blocks))
+			{
+				foreach ($blocks as $block => $attributes)
+				{
+					if (strpos($block, 'new') === 0 && isset($attributes['related']))
+					{
+						$blockFields   = isset($attributes['fields']) ? $attributes['fields'] : array();
+						$relatedFields = $attributes['related'];
+
+						$this->resolveRelationships($relatedFields, $blockFields);
+
+						unset($fields[$field][$block]['related']);
+
+						if (empty($blockFields))
+						{
+							unset($fields[$field][$block]);
+						}
+						else
+						{
+							$fields[$field][$block]['fields'] = array_unique($blockFields);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * @param array $elements
 	 *
@@ -64,6 +95,7 @@ class SproutMigrateService extends BaseApplicationComponent
 			$related    = $this->getValueByKey('content.related', $element, array());
 			$attributes = $this->getValueByKey('attributes', $element, array());
 
+			$this->resolveMatrixRelationships($fields);
 			$this->resolveRelationships($related, $fields);
 			$model->setAttributes($attributes);
 
@@ -95,14 +127,14 @@ class SproutMigrateService extends BaseApplicationComponent
 				}
 				catch (\Exception $e)
 				{
-					$this->unsavedElements[] = $model->getTitle();
+					$this->unsavedElements[] = array('title' => $model->getTitle(), 'error' => $e->getMessage());
 
 					sproutMigrate()->error($e->getMessage());
 				}
 			}
 			else
 			{
-				$this->unsavedElements[] = $model->getTitle();
+				$this->unsavedElements[] = array('title' => $model->getTitle(), 'error' => print_r($model->getErrors(), true));
 
 				sproutMigrate()->error('Unable to validate.', $model->getErrors());
 			}
@@ -114,9 +146,10 @@ class SproutMigrateService extends BaseApplicationComponent
 		}
 
 		$result = array(
-			'saved'   => count($this->savedElements),
-			'updated' => count($this->updatedElements),
-			'unsaved' => count($this->unsavedElements),
+			'saved'          => count($this->savedElements),
+			'updated'        => count($this->updatedElements),
+			'unsaved'        => count($this->unsavedElements),
+			'unsavedDetails' => $this->unsavedElements,
 		);
 
 		return $result;
@@ -143,7 +176,8 @@ class SproutMigrateService extends BaseApplicationComponent
 
 			if ($matchBy && $matchValue)
 			{
-				$criteria = craft()->elements->getCriteria($type);
+				$criteria         = craft()->elements->getCriteria($type);
+				$criteria->status = null;
 
 				if (array_key_exists($matchBy, $criteria->getAttributes()))
 				{
@@ -162,15 +196,15 @@ class SproutMigrateService extends BaseApplicationComponent
 				try
 				{
 					$element = $criteria->first($attributes);
+
+					if ($element)
+					{
+						return $element;
+					}
 				}
 				catch (\Exception $e)
 				{
 					sproutMigrate()->error($e->getMessage());
-				}
-
-				if ($element)
-				{
-					return $element;
 				}
 			}
 		}
@@ -211,6 +245,12 @@ class SproutMigrateService extends BaseApplicationComponent
 		{
 			foreach ($related as $name => $definition)
 			{
+				if (empty($definition))
+				{
+					unset($related[$name]);
+					continue;
+				}
+
 				$type          = $this->getValueByKey('type', $definition);
 				$matchBy       = $this->getValueByKey('matchBy', $definition);
 				$matchValue    = $this->getValueByKey('matchValue', $definition);
@@ -236,7 +276,8 @@ class SproutMigrateService extends BaseApplicationComponent
 
 				foreach ($matchValue as $reference)
 				{
-					$criteria = craft()->elements->getCriteria($type);
+					$criteria         = craft()->elements->getCriteria($type);
+					$criteria->status = null;
 
 					if (array_key_exists($matchBy, $criteria->getAttributes()))
 					{
@@ -269,7 +310,7 @@ class SproutMigrateService extends BaseApplicationComponent
 					}
 				}
 
-				if ($ids)
+				if (count($ids))
 				{
 					if (strtolower($fieldType) === 'matrix')
 					{
@@ -300,13 +341,20 @@ class SproutMigrateService extends BaseApplicationComponent
 
 	/**
 	 * @param string $key
-	 * @param array  $data
+	 * @param mixed  $data
 	 * @param mixed  $default
 	 *
 	 * @return mixed
 	 */
-	public function getValueByKey($key, array $data, $default = null)
+	public function getValueByKey($key, $data, $default = null)
 	{
+		if (!is_array($data))
+		{
+			sproutMigrate()->error('getValueByKey() was passed in a non-array as data.');
+
+			return $default;
+		}
+
 		if (!is_string($key) || empty($key) || !count($data))
 		{
 			return $default;

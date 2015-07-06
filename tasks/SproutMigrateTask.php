@@ -10,31 +10,28 @@ class SproutMigrateTask extends BaseTask
 		$files = $this->getSettings()->getAttribute('files');
 		$file  = $step ? $files[$step] : $files[0];
 
-		if ($file && is_readable($file))
+		$content = file_get_contents($file);
+
+		if ($content && ($elements = json_decode($content, true)) && !json_last_error())
 		{
-			$content = file_get_contents($file);
-
-			if ($content && ($elements = json_decode($content, true)) && !json_last_error())
+			try
 			{
-				try
-				{
-					$result = sproutMigrate()->save($elements);
+				$result = sproutMigrate()->save($elements);
 
-					IOHelper::deleteFile($file);
+				IOHelper::deleteFile($file);
 
-					sproutMigrate()->log('Task result for '.$file, $result);
+				sproutMigrate()->log('Task result for '.$file, $result);
 
-					return true;
-				}
-				catch (\Exception $e)
-				{
-					sproutMigrate()->error($e->getMessage());
-				}
+				return true;
 			}
-			else
+			catch (\Exception $e)
 			{
-				sproutMigrate()->error('Unable to parse file.', compact('file'));
+				sproutMigrate()->error($e->getMessage());
 			}
+		}
+		else
+		{
+			sproutMigrate()->error('Unable to parse file.', compact('file'));
 		}
 
 		return false;
