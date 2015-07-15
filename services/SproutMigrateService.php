@@ -43,37 +43,6 @@ class SproutMigrateService extends BaseApplicationComponent
 		return craft()->tasks->createTask('SproutMigrate', Craft::t($description), array('files' => $tasks));
 	}
 
-	public function resolveMatrixRelationships(&$fields)
-	{
-		foreach ($fields as $field => $blocks)
-		{
-			if (is_array($blocks) && count($blocks))
-			{
-				foreach ($blocks as $block => $attributes)
-				{
-					if (strpos($block, 'new') === 0 && isset($attributes['related']))
-					{
-						$blockFields   = isset($attributes['fields']) ? $attributes['fields'] : array();
-						$relatedFields = $attributes['related'];
-
-						$this->resolveRelationships($relatedFields, $blockFields);
-
-						unset($fields[$field][$block]['related']);
-
-						if (empty($blockFields))
-						{
-							unset($fields[$field][$block]);
-						}
-						else
-						{
-							$fields[$field][$block]['fields'] = array_unique($blockFields);
-						}
-					}
-				}
-			}
-		}
-	}
-
 	/**
 	 * @param array $elements
 	 *
@@ -82,9 +51,10 @@ class SproutMigrateService extends BaseApplicationComponent
 	 * @throws \CDbException
 	 * @throws \Exception
 	 */
-	public function save(array $elements)
+	public function save(array $elements, $returnSavedElementIds = false)
 	{
-		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
+		$transaction     = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
+		$savedElementIds = array();
 
 		foreach ($elements as $element)
 		{
@@ -114,6 +84,7 @@ class SproutMigrateService extends BaseApplicationComponent
 
 					if ($saved && $isNewElement)
 					{
+						$savedElementIds[]     = $model->id;
 						$this->savedElements[] = $model->getTitle();
 					}
 					elseif ($saved && !$isNewElement)
@@ -140,7 +111,10 @@ class SproutMigrateService extends BaseApplicationComponent
 			}
 			else
 			{
-				$this->unsavedElements[] = array('title' => $model->getTitle(), 'error' => print_r($model->getErrors(), true));
+				$this->unsavedElements[] = array(
+					'title' => $model->getTitle(),
+					'error' => print_r($model->getErrors(), true)
+				);
 
 				sproutMigrate()->error('Unable to validate.', $model->getErrors());
 			}
@@ -158,7 +132,38 @@ class SproutMigrateService extends BaseApplicationComponent
 			'unsavedDetails' => $this->unsavedElements,
 		);
 
-		return $result;
+		return $returnSavedElementIds ? $savedElementIds : $result;
+	}
+
+	public function resolveMatrixRelationships(&$fields)
+	{
+		foreach ($fields as $field => $blocks)
+		{
+			if (is_array($blocks) && count($blocks))
+			{
+				foreach ($blocks as $block => $attributes)
+				{
+					if (strpos($block, 'new') === 0 && isset($attributes['related']))
+					{
+						$blockFields   = isset($attributes['fields']) ? $attributes['fields'] : array();
+						$relatedFields = $attributes['related'];
+
+						$this->resolveRelationships($relatedFields, $blockFields);
+
+						unset($fields[$field][$block]['related']);
+
+						if (empty($blockFields))
+						{
+							unset($fields[$field][$block]);
+						}
+						else
+						{
+							$fields[$field][$block]['fields'] = array_unique($blockFields);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -257,11 +262,13 @@ class SproutMigrateService extends BaseApplicationComponent
 					continue;
 				}
 
-				$type          = $this->getValueByKey('type', $definition);
-				$matchBy       = $this->getValueByKey('matchBy', $definition);
-				$matchValue    = $this->getValueByKey('matchValue', $definition);
-				$matchCriteria = $this->getValueByKey('matchCriteria', $definition);
-				$fieldType     = $this->getValueByKey('destinationField.type', $definition);
+				$type                  = $this->getValueByKey('type', $definition);
+				$matchBy               = $this->getValueByKey('matchBy', $definition);
+				$matchValue            = $this->getValueByKey('matchValue', $definition);
+				$matchCriteria         = $this->getValueByKey('matchCriteria', $definition);
+				$fieldType             = $this->getValueByKey('destinationField.type', $definition);
+				$createIfNotFound      = $this->getValueByKey('createIfNotFound', $definition);
+				$newElementDefinitions = $this->getValueByKey('newElementDefinitions', $definition);
 
 				if (!$type && !$matchValue && !$matchBy)
 				{
@@ -306,6 +313,12 @@ class SproutMigrateService extends BaseApplicationComponent
 						if ($element)
 						{
 							$ids[] = $element->getAttribute('id');
+						}
+						elseif ($createIfNotFound && is_array($newElementDefinitions) && count($newElementDefinitions))
+						{
+							// Do we need to create the element?
+							// @todo - Make sure save does not get called on every iteration
+							$ids = array_merge($ids, $this->save($newElementDefinitions, true));
 						}
 					}
 					catch (\Exception $e)
