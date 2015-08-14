@@ -10,7 +10,7 @@ class SproutMigratePlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '0.3.0';
+		return '0.4.0';
 	}
 
 	public function getDeveloper()

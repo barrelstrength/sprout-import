@@ -3,6 +3,12 @@ namespace Craft;
 
 class SproutMigrateService extends BaseApplicationComponent
 {
+	/**
+	 * Maps the element we support importing into
+	 *
+	 * @note Custom elements can be registered by defining sproutMigrateRegisterElements() in your plugin
+	 * @var array
+	 */
 	protected $mapping = array(
 		'user'     => array(
 			'model'   => 'Craft\\UserModel',
@@ -26,10 +32,56 @@ class SproutMigrateService extends BaseApplicationComponent
 		)
 	);
 
+	/**
+	 * Elements saved during the length of the import job
+	 *
+	 * @var array
+	 */
 	protected $savedElements = array();
+
+	/**
+	 * @var array
+	 */
 	protected $unsavedElements = array();
+
+	/**
+	 * @var array
+	 */
 	protected $updatedElements = array();
 
+	/**
+	 * Gives third party plugins a chance to register custom elements to import into
+	 */
+	public function init()
+	{
+		$results = craft()->plugins->call('sproutMigrateRegisterElements');
+
+		if ($results)
+		{
+			foreach ($results as $elements)
+			{
+				if (is_array($elements) && count($elements))
+				{
+					foreach ($elements as $type => $element)
+					{
+						// @todo - Add validation and enforce rules
+						if (isset($element['model']) && isset($element['method']) && isset($element['service']))
+						{
+							// @todo - Think about adding checks to replace isset() checks
+							$this->mapping[$type] = $element;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param array $tasks
+	 *
+	 * @throws Exception
+	 * @return TaskModel
+	 */
 	public function enqueueTasks(array $tasks)
 	{
 		if (!count($tasks))
@@ -45,6 +97,7 @@ class SproutMigrateService extends BaseApplicationComponent
 
 	/**
 	 * @param array $elements
+	 * @param bool  $returnSavedElementIds
 	 *
 	 * @return array
 	 * @throws Exception
@@ -60,10 +113,10 @@ class SproutMigrateService extends BaseApplicationComponent
 		{
 			$type       = $this->getValueByKey('type', $element);
 			$model      = $this->getElementModel($this->getValueByKey('content.beforeSave', $element), $element);
-			$content    = $this->getValueByKey('content', $element, array());
-			$fields     = $this->getValueByKey('content.fields', $element, array());
-			$related    = $this->getValueByKey('content.related', $element, array());
-			$attributes = $this->getValueByKey('attributes', $element, array());
+			$content    = $this->getValueByKey('content', $element);
+			$fields     = $this->getValueByKey('content.fields', $element);
+			$related    = $this->getValueByKey('content.related', $element);
+			$attributes = $this->getValueByKey('attributes', $element);
 
 			$this->resolveMatrixRelationships($fields);
 			$this->resolveRelationships($related, $fields);
@@ -95,12 +148,15 @@ class SproutMigrateService extends BaseApplicationComponent
 					{
 						$this->unsavedElements[] = $model->getTitle();
 					}
+
+					// @todo Ask Dale why the following is necessary
 					// Assign user to created groups
-					if(strtolower($type) == 'user' && !empty($attributes['groupId'])) {
-						$groupIds = $attributes['groupId'];						
+					if (strtolower($type) == 'user' && !empty($attributes['groupId']))
+					{
+						$groupIds = $attributes['groupId'];
 						craft()->userGroups->assignUserToGroups($model->id, $groupIds);
 					}
-					
+
 				}
 				catch (\Exception $e)
 				{
@@ -135,6 +191,11 @@ class SproutMigrateService extends BaseApplicationComponent
 		return $returnSavedElementIds ? $savedElementIds : $result;
 	}
 
+	/**
+	 * Allows us to resolve relationships at the matrix field level
+	 *
+	 * @param $fields
+	 */
 	public function resolveMatrixRelationships(&$fields)
 	{
 		foreach ($fields as $field => $blocks)
@@ -187,7 +248,9 @@ class SproutMigrateService extends BaseApplicationComponent
 
 			if ($matchBy && $matchValue)
 			{
-				$criteria         = craft()->elements->getCriteria($type);
+				$criteria = craft()->elements->getCriteria($type);
+
+				// The following is critical to import/relate elements not enabled
 				$criteria->status = null;
 
 				if (array_key_exists($matchBy, $criteria->getAttributes()))
@@ -223,6 +286,11 @@ class SproutMigrateService extends BaseApplicationComponent
 		return $model;
 	}
 
+	/**
+	 * @param $type
+	 *
+	 * @return mixed
+	 */
 	protected function getModelClass($type)
 	{
 		$type = strtolower($type);
@@ -230,6 +298,11 @@ class SproutMigrateService extends BaseApplicationComponent
 		return $this->getValueByKey("{$type}.model", $this->mapping);
 	}
 
+	/**
+	 * @param $type
+	 *
+	 * @return mixed
+	 */
 	protected function getServiceName($type)
 	{
 		$type = strtolower($type);
@@ -237,6 +310,11 @@ class SproutMigrateService extends BaseApplicationComponent
 		return $this->getValueByKey("{$type}.service", $this->mapping);
 	}
 
+	/**
+	 * @param $type
+	 *
+	 * @return mixed
+	 */
 	protected function getMethodName($type)
 	{
 		$type = strtolower($type);
@@ -308,16 +386,26 @@ class SproutMigrateService extends BaseApplicationComponent
 
 					try
 					{
-						$element = $criteria->first($attributes);
+						$foundAll = true;
+						$element  = $criteria->first($attributes);
+
+						if (strtolower($type) == 'asset' && !$element)
+						{
+							sproutMigrate()->log('Missing > '.$matchBy.': '.$reference);
+						}
 
 						if ($element)
 						{
 							$ids[] = $element->getAttribute('id');
 						}
-						elseif ($createIfNotFound && is_array($newElementDefinitions) && count($newElementDefinitions))
+						else
+						{
+							$foundAll = false;
+						}
+
+						if (!$foundAll && $createIfNotFound && is_array($newElementDefinitions) && count($newElementDefinitions))
 						{
 							// Do we need to create the element?
-							// @todo - Make sure save does not get called on every iteration
 							$ids = array_merge($ids, $this->save($newElementDefinitions, true));
 						}
 					}
@@ -400,6 +488,11 @@ class SproutMigrateService extends BaseApplicationComponent
 		return array_key_exists($key, $data) ? $data[$key] : $default;
 	}
 
+	/**
+	 * @param string|mixed $message
+	 * @param array|mixed  $data
+	 * @param string       $level
+	 */
 	public function log($message, $data = null, $level = LogLevel::Info)
 	{
 		if ($data)
@@ -415,6 +508,11 @@ class SproutMigrateService extends BaseApplicationComponent
 		SproutMigratePlugin::log(PHP_EOL.$message.PHP_EOL.PHP_EOL.$data, $level);
 	}
 
+	/**
+	 * @param        $message
+	 * @param null   $data
+	 * @param string $level
+	 */
 	public function error($message, $data = null, $level = LogLevel::Error)
 	{
 		$this->log($message, $data, $level);
