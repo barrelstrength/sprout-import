@@ -161,7 +161,9 @@ class SproutMigrateService extends BaseApplicationComponent
 				catch (\Exception $e)
 				{
 					$this->unsavedElements[] = array('title' => $model->getTitle(), 'error' => $e->getMessage());
-
+					$title = $this->getValueByKey('content.title', $element);
+					$msg = $title . ' ' . implode(', ',array_keys($fields)) . ' Check field values if it exists.';
+					sproutMigrate()->error($msg);
 					sproutMigrate()->error($e->getMessage());
 				}
 			}
