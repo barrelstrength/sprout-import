@@ -127,6 +127,15 @@ class SproutMigrateService extends BaseApplicationComponent
 			$model->setContent($content);
 			$model->setContentFromPost($fields);
 
+			$event = new Event(array('element' => $model));
+
+			sproutMigrate()->onBeforeMigrateElement($event);
+
+			/**
+			 * @var $model BaseModel
+			 */
+			$model = $event->params['element'];
+
 			if ($model->validate())
 			{
 				$isNewElement = !$model->id;
@@ -518,5 +527,15 @@ class SproutMigrateService extends BaseApplicationComponent
 	public function error($message, $data = null, $level = LogLevel::Error)
 	{
 		$this->log($message, $data, $level);
+	}
+
+	/**
+	 * @param Event|SproutForms_OnSaveEntryEvent $event
+	 *
+	 * @throws \CException
+	 */
+	public function onBeforeMigrateElement(Event $event)
+	{
+		$this->raiseEvent('onBeforeMigrateElement', $event);
 	}
 }

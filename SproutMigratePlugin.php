@@ -3,6 +3,11 @@ namespace Craft;
 
 class SproutMigratePlugin extends BasePlugin
 {
+	public function init()
+	{
+		craft()->on('sproutMigrate.beforeMigrateElement', array($this, 'handleElementMigration'));
+	}
+
 	public function getName()
 	{
 		return 'Sprout Migrate';
@@ -34,6 +39,19 @@ class SproutMigratePlugin extends BasePlugin
 			'sproutmigrate/start/'                       => array('action' => 'sproutMigrate/start'),
 			'sproutmigrate/run/[a-zA-Z]+/[a-zA-Z0-9\-]+' => array('action' => 'sproutMigrate/runTask')
 		);
+	}
+
+	protected function handleElementMigration(Event $event)
+	{
+		/**
+		 * @var $element EntryModel
+		 */
+		$element = $event->params['element'];
+
+		if ($element->getElementType() == ElementType::Entry)
+		{
+			// Do something
+		}
 	}
 }
 
