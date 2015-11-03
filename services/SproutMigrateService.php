@@ -127,7 +127,7 @@ class SproutMigrateService extends BaseApplicationComponent
 			$model->setContent($content);
 			$model->setContentFromPost($fields);
 
-			$event = new Event(array('element' => $model));
+			$event = new Event($this, array('element' => $model));
 
 			sproutMigrate()->onBeforeMigrateElement($event);
 
