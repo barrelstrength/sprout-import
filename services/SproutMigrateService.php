@@ -127,7 +127,7 @@ class SproutMigrateService extends BaseApplicationComponent
 			$model->setContent($content);
 			$model->setContentFromPost($fields);
 
-			$event = new Event(array('element' => $model));
+			$event = new Event($this, array('element' => $model));
 
 			sproutMigrate()->onBeforeMigrateElement($event);
 
@@ -538,4 +538,19 @@ class SproutMigrateService extends BaseApplicationComponent
 	{
 		$this->raiseEvent('onBeforeMigrateElement', $event);
 	}
+
+	function sectionArray($array, $step)
+	{
+		$sectioned = array();
+
+		$k = 0;
+		for ( $i=0;$i < count($array); $i++ ) {
+			if ( !($i % $step) ) {
+				$k++;
+			}
+			$sectioned[$k][] = $array[$i];
+		}
+		return $sectioned;
+	}
+
 }
