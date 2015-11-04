@@ -1,15 +1,17 @@
 <?php
 namespace Craft;
 
-class SproutMigratePostTask extends BaseTask
+class SproutMigrate_PostTask extends BaseTask
 {
 	public function runStep($step)
 	{
 		craft()->config->maxPowerCaptain();
-
 		$elements = $this->getSettings()->getAttribute('elements');
+		$element  = $step ? $elements[$step] : $elements[0];
 
-		return false;
+		$result = sproutMigrate()->save($element);
+
+		return true;
 	}
 
 	public function getTotalSteps()
