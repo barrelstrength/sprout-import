@@ -651,4 +651,33 @@ class SproutMigrateService extends BaseApplicationComponent
 		return true;
 	}
 
+	/** Migrate elements to Craft
+	 * @param $elements
+	 * @throws Exception
+	 */
+	public function setEnqueueTasksByPost($elements)
+	{
+
+		// support serialize format
+		if(sproutMigrate()->isSerialized($elements))
+		{
+			$elements = unserialize($elements);
+
+		}
+
+		// Divide array for the tasks service
+		$tasks = sproutMigrate()->sectionArray($elements, 10);
+
+		sproutMigrate()->enqueueTasksByPost($tasks);
+
+		try
+		{
+			craft()->userSession->setNotice(Craft::t('({tasks}) Tasks queued successfully.', array('tasks' => count($tasks))));
+		}
+		catch(\Exception $e)
+		{
+			craft()->userSession->setError($e->getMessage());
+		}
+
+	}
 }
