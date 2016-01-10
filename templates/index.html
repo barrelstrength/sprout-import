@@ -1,31 +1,48 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
-{% set title = 'Sprout Migrate' %}
+{% set title = 'Import Elements' %}
+
+{% set selectedTab = 'elements' %}
+
+{% set tabs = {
+	elements: {
+		label: "Import Elements"|t,
+		url: url('sproutmigrate/index')
+	},
+	settings: {
+		label: "Import Settings"|t,
+		url: url('sproutmigrate/settings')
+	},
+	weed: {
+		label: "Weed"|t,
+		url: url('sproutmigrate/weed')
+	}
+} %}
+
 {% set content %}
-<h2>Run Import Tasks</h2>
-<hr>
-<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
-	<input type="hidden" name="action" value="sproutMigrate/enqueueTasks">
 
-	<div class="field" id="files-field">
-		<div class="heading">
-			<label for="files">Files</label>
-		<div class="instructions"><p>Select one or more <strong>JSON</strong> encoded files.</p>
-	</div>
+	<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
+		<input type="hidden" name="action" value="sproutMigrate/enqueueTasks">
 
-	</div>
-		<div class="input"><input type="file" multiple id="files" name="files[]"></div>
-	</div>
+		<div class="field first" id="files-field">
+			<div class="heading">
+				<label for="files">Files</label>
+			<div class="instructions"><p>Select one or more <strong>JSON</strong> encoded files.</p>
+		</div>
 
-	{{
-		forms.textField({
+		</div>
+			<div class="input"><input type="file" multiple id="files" name="files[]"></div>
+		</div>
+
+		{{ forms.textField({
 			id:				"taskName",
 			name:			"taskName",
 			label:			"Task Name"|t,
 			instructions:	"Give this task a name to identify it in the Control Panel."|t,
-		})
-	}}
-	<button class="btn submit" type="submit">Enqueue Task</button>
-</form>
+		}) }}
+
+		<button class="btn submit" type="submit">Enqueue Task</button>
+	</form>
+
 {% endset %}
