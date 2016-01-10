@@ -1,0 +1,51 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = 'Import Elements' %}
+
+{% set selectedTab = 'weed' %}
+
+{% set tabs = {
+	elements: {
+		label: "Import Elements"|t,
+		url: url('sproutmigrate/index')
+	},
+	settings: {
+		label: "Import Settings"|t,
+		url: url('sproutmigrate/settings')
+	},
+	weed: {
+		label: "Weed"|t,
+		url: url('sproutmigrate/weed')
+	}
+} %}
+
+{% set hasSeeds = craft.sproutMigrate.hasSeeds() %}
+
+{% set content %}
+
+	<h2>Clean up database</h2>
+
+	{% if hasSeeds > 0 %}
+
+		<p>There are <strong>{{ hasSeeds }}</strong> seeds to weed.</p>
+
+		<form method="post" accept-charset="UTF-8">
+			<input type="hidden" name="action" value="sproutMigrate/seed/weed">
+			<input type="hidden" name="redirect" value="sproutmigrate/weed">
+
+			<p>Remove all imported data that was marked as seed content.</p>
+
+			<div class="buttons">
+				<input class="btn submit" type="submit" value="Weed database">
+			</div>
+
+		</form>
+
+	{% else %}
+
+		<p>Currently, there are no seeded elements in your database.</p>
+
+	{% endif %}
+
+{% endset %}
