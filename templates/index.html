@@ -8,22 +8,22 @@
 {% set tabs = {
 	elements: {
 		label: "Import Elements"|t,
-		url: url('sproutmigrate/index')
+		url: url('sproutimport/index')
 	},
 	settings: {
 		label: "Import Settings"|t,
-		url: url('sproutmigrate/settings')
+		url: url('sproutimport/settings')
 	},
 	weed: {
 		label: "Weed"|t,
-		url: url('sproutmigrate/weed')
+		url: url('sproutimport/weed')
 	}
 } %}
 
 {% set content %}
 
 	<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
-		<input type="hidden" name="action" value="sproutMigrate/enqueueTasks">
+		<input type="hidden" name="action" value="sproutImport/enqueueTasks">
 
 		<div class="field first" id="files-field">
 			<div class="heading">

@@ -1,39 +1,19 @@
 <?php
 namespace Craft;
 
-class SproutMigrateService extends BaseApplicationComponent
+class SproutImportService extends BaseApplicationComponent
 {
 	/**
 	 * Maps the element we support importing into
 	 *
-	 * @note Custom elements can be registered by defining sproutMigrateRegisterElements() in your plugin
+	 * @note Custom elements can be registered by defining registerSproutImportElements
+	 * () in your plugin
 	 * @var array
 	 */
-	protected $mapping = array(
-		'user'     => array(
-			'model'   => 'Craft\\UserModel',
-			'method'  => 'saveUser',
-			'service' => 'users',
-		),
-		'entry'    => array(
-			'model'   => 'Craft\\EntryModel',
-			'method'  => 'saveEntry',
-			'service' => 'entries',
-		),
-		'category' => array(
-			'model'   => 'Craft\\CategoryModel',
-			'method'  => 'saveCategory',
-			'service' => 'categories',
-		),
-		'tag'      => array(
-			'model'   => 'Craft\\TagModel',
-			'method'  => 'saveTag',
-			'service' => 'tags',
-		)
-	);
+	protected $mapping = array();
 
 	/**
-	 * @var SproutMigrateBaseImporter[]
+	 * @var SproutImportBaseImporter[]
 	 */
 	protected $importers;
 
@@ -59,7 +39,7 @@ class SproutMigrateService extends BaseApplicationComponent
 	 */
 	public function init()
 	{
-		$results = craft()->plugins->call('sproutMigrateRegisterElements');
+		$results = craft()->plugins->call('registerSproutImportElements');
 
 		if ($results)
 		{
@@ -80,7 +60,7 @@ class SproutMigrateService extends BaseApplicationComponent
 			}
 		}
 
-		$importersToLoad = craft()->plugins->call('registerSproutMigrateImporters');
+		$importersToLoad = craft()->plugins->call('registerSproutImportImporters');
 
 		if ($importersToLoad)
 		{
@@ -89,7 +69,7 @@ class SproutMigrateService extends BaseApplicationComponent
 
 				foreach ($importers as $importer)
 				{
-					if ($importer && $importer instanceof SproutMigrateBaseImporter)
+					if ($importer && $importer instanceof SproutImportBaseImporter)
 					{
 						$importer->setId($plugin, $importer);
 
@@ -114,9 +94,9 @@ class SproutMigrateService extends BaseApplicationComponent
 		}
 
 		$taskName    = craft()->request->getPost('taskName');
-		$description = $tasks ? "Sprout Migrate {$taskName}" : 'Sprout Migrate';
+		$description = $tasks ? "Sprout Import {$taskName}" : 'Sprout Import';
 
-		return craft()->tasks->createTask('SproutMigrate', Craft::t($description), array('files' => $tasks));
+		return craft()->tasks->createTask('SproutImport', Craft::t($description), array('files' => $tasks));
 	}
 
 	/**
@@ -133,9 +113,9 @@ class SproutMigrateService extends BaseApplicationComponent
 		}
 
 		$taskName    = craft()->request->getPost('taskName');
-		$description = $tasks ? "Sprout Migrate {$taskName}" : 'Sprout Migrate';
+		$description = $tasks ? "Sprout Import {$taskName}" : 'Sprout Import';
 
-		return craft()->tasks->createTask('SproutMigrate_Settings', Craft::t($description), array('files' => $tasks));
+		return craft()->tasks->createTask('SproutImport_Settings', Craft::t($description), array('files' => $tasks));
 	}
 
 	/**
@@ -179,15 +159,15 @@ class SproutMigrateService extends BaseApplicationComponent
 
 			$event = new Event($this, array('element' => $model));
 
-			sproutMigrate()->onBeforeMigrateElement($event);
+			sproutImport()->onBeforeMigrateElement($event);
 
 			/**
 			 * @var $model BaseModel
 			 */
 			$model = $event->params['element'];
 
-			sproutMigrate()->log("Begin Model Validation. Model:");
-			sproutMigrate()->log($model);
+			sproutImport()->log("Begin validation of Element Model.");
+			//sproutImport()->log($model);
 
 			if ($model->validate())
 			{
@@ -224,8 +204,8 @@ class SproutMigrateService extends BaseApplicationComponent
 					$this->unsavedElements[] = array('title' => $model->getTitle(), 'error' => $e->getMessage());
 					$title                   = $this->getValueByKey('content.title', $element);
 					$msg                     = $title . ' ' . implode(', ', array_keys($fields)) . ' Check field values if it exists.';
-					sproutMigrate()->error($msg);
-					sproutMigrate()->error($e->getMessage());
+					sproutImport()->error($msg);
+					sproutImport()->error($e->getMessage());
 				}
 			}
 			else
@@ -235,7 +215,7 @@ class SproutMigrateService extends BaseApplicationComponent
 					'error' => print_r($model->getErrors(), true)
 				);
 
-				sproutMigrate()->error('Unable to validate.', $model->getErrors());
+				sproutImport()->error('Unable to validate.', $model->getErrors());
 			}
 		}
 
@@ -306,7 +286,7 @@ class SproutMigrateService extends BaseApplicationComponent
 
 		if ($seed)
 		{
-			craft()->sproutMigrate_seed->seed = true;
+			craft()->sproutImport_seed->seed = true;
 		}
 
 		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
@@ -320,7 +300,7 @@ class SproutMigrateService extends BaseApplicationComponent
 			{
 				//Craft::dd($e);
 				// @todo clarify what happened more in errors
-				sproutMigrate()->error($e->getMessage());
+				sproutImport()->error($e->getMessage());
 			}
 		}
 
@@ -336,30 +316,30 @@ class SproutMigrateService extends BaseApplicationComponent
 	{
 		if ($seed)
 		{
-			craft()->sproutMigrate_seed->seed = true;
+			craft()->sproutImport_seed->seed = true;
 		}
 
 		$importer = $this->getImporter($settings);
 
 		if ($importer->isValid() && $importer->save())
 		{
-			if (craft()->sproutMigrate_seed->seed)
+			if (craft()->sproutImport_seed->seed)
 			{
-				craft()->sproutMigrate_seed->trackSeed($importer->model->id, $this->getImporterModel($settings));
+				craft()->sproutImport_seed->trackSeed($importer->model->id, $this->getImporterModel($settings));
 			}
 
 			// @todo - probably want to protect $importer->model and update to $importer->getModel()
 			$importer->resolveNestedSettings($importer->model, $settings);
 
 			// @todo - keep track of what we've saved for reporting later.
-			sproutMigrate()->log('Saved ID: ' . $importer->model->id);
+			sproutImport()->log('Saved ID: ' . $importer->model->id);
 
 			return $importer->model;
 		}
 		else
 		{
-			sproutMigrate()->error('Unable to validate.');
-			sproutMigrate()->error($importer->getErrors());
+			sproutImport()->error('Unable to validate.');
+			sproutImport()->error($importer->getErrors());
 
 			return false;
 		}
@@ -381,7 +361,7 @@ class SproutMigrateService extends BaseApplicationComponent
 	{
 		$importerModel = $this->getImporterModel($settings);
 
-		$importerClassName = 'Craft\\' . $importerModel . 'SproutMigrateImporter';
+		$importerClassName = 'Craft\\' . $importerModel . 'SproutImportImporter';
 
 		return new $importerClassName($settings);
 	}
@@ -449,7 +429,7 @@ class SproutMigrateService extends BaseApplicationComponent
 					}
 				} catch (\Exception $e)
 				{
-					sproutMigrate()->error($e->getMessage());
+					sproutImport()->error($e->getMessage());
 				}
 			}
 		}
@@ -562,7 +542,7 @@ class SproutMigrateService extends BaseApplicationComponent
 
 						if (strtolower($type) == 'asset' && !$element)
 						{
-							sproutMigrate()->log('Missing > ' . $matchBy . ': ' . $reference);
+							sproutImport()->log('Missing > ' . $matchBy . ': ' . $reference);
 						}
 
 						if ($element)
@@ -581,7 +561,7 @@ class SproutMigrateService extends BaseApplicationComponent
 						}
 					} catch (\Exception $e)
 					{
-						sproutMigrate()->error($e->getMessage(), $e);
+						sproutImport()->error($e->getMessage(), $e);
 
 						continue;
 					}
@@ -627,7 +607,7 @@ class SproutMigrateService extends BaseApplicationComponent
 	{
 		if (!is_array($data))
 		{
-			sproutMigrate()->error('getValueByKey() was passed in a non-array as data.');
+			sproutImport()->error('getValueByKey() was passed in a non-array as data.');
 
 			return $default;
 		}
@@ -675,7 +655,7 @@ class SproutMigrateService extends BaseApplicationComponent
 			$message = print_r($message, true);
 		}
 
-		SproutMigratePlugin::log(PHP_EOL . $message . PHP_EOL . PHP_EOL . $data, $level);
+		SproutImportPlugin::log(PHP_EOL . $message . PHP_EOL . PHP_EOL . $data, $level);
 	}
 
 	/**

@@ -1,11 +1,11 @@
 <?php
 namespace Craft;
 
-class SproutMigrate_SeedController extends BaseController
+class SproutImport_SeedController extends BaseController
 {
 	public function actionWeed()
 	{
-		if (!craft()->sproutMigrate_seed->weed())
+		if (!craft()->sproutImport_seed->weed())
 		{
 			craft()->userSession->setError(Craft::t('No luck weeding. Try again.'));
 		}

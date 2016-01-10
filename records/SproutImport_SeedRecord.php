@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutMigrate_SeedRecord extends BaseRecord
+class SproutImport_SeedRecord extends BaseRecord
 {
 	/**
 	 * Return table name
@@ -10,7 +10,7 @@ class SproutMigrate_SeedRecord extends BaseRecord
 	 */
 	public function getTableName()
 	{
-		return 'sproutmigrate_seeds';
+		return 'sproutimport_seeds';
 	}
 	
 	/**

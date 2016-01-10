@@ -2,11 +2,11 @@
 namespace Craft;
 
 /**
- * Class SproutMigrateBaseImporter
+ * Class SproutImportBaseImporter
  *
  * @package Craft
  */
-abstract class SproutMigrateBaseImporter
+abstract class SproutImportBaseImporter
 {
 	protected $id;
 

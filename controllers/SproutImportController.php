@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutMigrateController extends BaseController
+class SproutImportController extends BaseController
 {
 	public function actionEnqueueTasks()
 	{
@@ -15,7 +15,7 @@ class SproutMigrateController extends BaseController
 			if (!$file->getHasError() && $file->getType() == 'application/json'
 			|| $file->getType() == 'application/octet-stream')
 			{
-				$path = craft()->path->getPluginsPath().'sproutmigrate/downloads/'.$file->getName();
+				$path = craft()->path->getPluginsPath().'sproutimport/downloads/'.$file->getName();
 
 				if (move_uploaded_file($file->getTempName(), $path))
 				{
@@ -26,7 +26,7 @@ class SproutMigrateController extends BaseController
 
 		try
 		{
-			sproutMigrate()->enqueueTasks($tasks);
+			sproutImport()->enqueueTasks($tasks);
 
 			craft()->userSession->setNotice(Craft::t('({tasks}) Tasks queued successfully.', array('tasks' => count($tasks))));
 		}
@@ -50,7 +50,7 @@ class SproutMigrateController extends BaseController
 			if (!$file->getHasError() && $file->getType() == 'application/json'
 					|| $file->getType() == 'application/octet-stream')
 			{
-				$path = craft()->path->getPluginsPath().'sproutmigrate/downloads/'.$file->getName();
+				$path = craft()->path->getPluginsPath().'sproutimport/downloads/'.$file->getName();
 
 				if (move_uploaded_file($file->getTempName(), $path))
 				{
@@ -63,9 +63,9 @@ class SproutMigrateController extends BaseController
 		// THIS CODE GOES IN THE TASK FILE
 		// only here for convenience...  Update $path => $file in the Task file and uncomment the delete file line.
 
-		if ($content = sproutMigrate()->getJson($path))
+		if ($content = sproutImport()->getJson($path))
 		{
-			if ($content = sproutMigrate()->getJson($path))
+			if ($content = sproutImport()->getJson($path))
 			{
 				// @TODO - make logic around parsing settings more robust
 				$settings = $content['@settings'];
@@ -73,21 +73,21 @@ class SproutMigrateController extends BaseController
 				try
 				{
 					// @TODO - add control for $trackSeeds via setting
-					$result = sproutMigrate()->saveSettings($settings, true);
+					$result = sproutImport()->saveSettings($settings, true);
 
 					//IOHelper::deleteFile($file);
 
-					sproutMigrate()->log('Task result for ' . $file, $result);
+					sproutImport()->log('Task result for ' . $file, $result);
 
 					return true;
 				} catch (\Exception $e)
 				{
-					sproutMigrate()->error($e->getMessage());
+					sproutImport()->error($e->getMessage());
 				}
 			}
 			else
 			{
-				sproutMigrate()->error('Unable to parse file.', compact('file'));
+				sproutImport()->error('Unable to parse file.', compact('file'));
 			}
 
 			return false;
@@ -97,7 +97,7 @@ class SproutMigrateController extends BaseController
 
 		//try
 		//{
-		//	sproutMigrate()->enqueueSettingsTasks($tasks);
+		//	sproutImport()->enqueueSettingsTasks($tasks);
 		//
 		//	craft()->userSession->setNotice(Craft::t('({tasks}) Tasks queued successfully.', array('tasks' => count($tasks))));
 		//}

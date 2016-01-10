@@ -1,11 +1,11 @@
 <?php
 namespace Craft;
 
-class SproutMigrateVariable
+class SproutImportVariable
 {
 	public function hasSeeds()
 	{
-		$seeds = craft()->sproutMigrate_seed->getAllSeeds();
+		$seeds = craft()->sproutImport_seed->getAllSeeds();
 
 		return count($seeds);
 	}

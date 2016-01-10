@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SectionSproutMigrateImporter extends SproutMigrateBaseImporter
+class SectionSproutImportImporter extends SproutImportBaseImporter
 {
 	public $isNewSection;
 
@@ -111,7 +111,7 @@ class SectionSproutMigrateImporter extends SproutMigrateBaseImporter
 		{
 			$settings['entryTypes'][$key]['sectionId'] = $sectionId;
 
-			$entryType = craft()->sproutMigrate->saveSetting($settings['entryTypes'][$key]);
+			$entryType = craft()->sproutImport->saveSetting($settings['entryTypes'][$key]);
 
 			// ------------------------------------------------------------
 
@@ -138,7 +138,7 @@ class SectionSproutMigrateImporter extends SproutMigrateBaseImporter
 				
 				foreach ($fields as $fieldSettings) 
 				{
-					$field = craft()->sproutMigrate->saveSetting($fieldSettings);
+					$field = craft()->sproutImport->saveSetting($fieldSettings);
 					
 					$fieldLayout[$tabName][] = $field->id;
 					

@@ -8,19 +8,19 @@
 {% set tabs = {
 	elements: {
 		label: "Import Elements"|t,
-		url: url('sproutmigrate/index')
+		url: url('sproutimport/index')
 	},
 	settings: {
 		label: "Import Settings"|t,
-		url: url('sproutmigrate/settings')
+		url: url('sproutimport/settings')
 	},
 	weed: {
 		label: "Weed"|t,
-		url: url('sproutmigrate/weed')
+		url: url('sproutimport/weed')
 	}
 } %}
 
-{% set hasSeeds = craft.sproutMigrate.hasSeeds() %}
+{% set hasSeeds = craft.sproutImport.hasSeeds() %}
 
 {% set content %}
 
@@ -31,8 +31,8 @@
 		<p>There are <strong>{{ hasSeeds }}</strong> seeds to weed.</p>
 
 		<form method="post" accept-charset="UTF-8">
-			<input type="hidden" name="action" value="sproutMigrate/seed/weed">
-			<input type="hidden" name="redirect" value="sproutmigrate/weed">
+			<input type="hidden" name="action" value="sproutImport/seed/weed">
+			<input type="hidden" name="redirect" value="sproutimport/weed">
 
 			<p>Remove all imported data that was marked as seed content.</p>
 

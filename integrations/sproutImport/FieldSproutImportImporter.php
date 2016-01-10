@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class FieldSproutMigrateImporter extends SproutMigrateBaseImporter
+class FieldSproutImportImporter extends SproutImportBaseImporter
 {
 	public function getModel()
 	{
