@@ -43,9 +43,8 @@ class SproutMigrate_SeedService extends BaseApplicationComponent
 			try
 			{
 				// @todo - improve how we handle this setting...
-				// we're just adding it to the array here...
-				$stringId = explode('_',$row['importerClass']);
-				$row['@id'] = implode('.', array_map('strtolower', $stringId));
+				// we're just appending 'Model' and adding it to the array here...
+				$row['@model'] = $row['importerClass'] . 'Model';
 
 				$importer = sproutMigrate()->getImporter($row);
 				$importer->deleteById($row['itemId']);
