@@ -1,0 +1,22 @@
+{%- set faker = craft.faker.fake -%}
+{%- set paragraphs = "<p>" ~ faker.paragraphs(5)|join('</p><p>')|raw ~ "</p>" -%}
+[
+{%- for i in 0..97 %}
+  {
+    "type": "User",
+    "attributes": {
+      "username": "{{ faker.username }}",
+      "firstName": "{{ faker.firstName }}",
+      "lastName": "{{ faker.lastName }}",
+      "email": "{{ faker.email }}",
+      "preferredLocale": "en_us",
+      "pending": {{ random([0,0,0,0,1]) }},
+      "lastLoginDate": "{{ faker.dateTimeBetween('-2 years', 'now')|date('Y-m-d h:m:s') }}",
+      "dateCreated": "{{ faker.dateTimeBetween('-2 years', 'now')|date('Y-m-d h:m:s') }}",
+      "dateUpdated": "{{ faker.dateTimeBetween('-2 years', 'now')|date('Y-m-d h:m:s') }}"
+    }
+  }{% if not loop.last %},{% endif %}
+{%- endfor -%}
+]
+
+
