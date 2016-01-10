@@ -23,7 +23,7 @@
 {% set content %}
 
 	<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
-		<input type="hidden" name="action" value="sproutImport/enqueueTasks">
+		<input type="hidden" name="action" value="sproutImport/importElements">
 
 		<div class="field first" id="files-field">
 			<div class="heading">
@@ -35,14 +35,7 @@
 			<div class="input"><input type="file" multiple id="files" name="files[]"></div>
 		</div>
 
-		{{ forms.textField({
-			id:				"taskName",
-			name:			"taskName",
-			label:			"Task Name"|t,
-			instructions:	"Give this task a name to identify it in the Control Panel."|t,
-		}) }}
-
-		<button class="btn submit" type="submit">Enqueue Task</button>
+		<button class="btn submit" type="submit">Import Elements</button>
 	</form>
 
 {% endset %}

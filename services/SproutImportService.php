@@ -86,17 +86,14 @@ class SproutImportService extends BaseApplicationComponent
 	 * @throws Exception
 	 * @return TaskModel
 	 */
-	public function enqueueTasks(array $tasks)
+	public function createImportElementsTasks(array $tasks)
 	{
 		if (!count($tasks))
 		{
-			throw new Exception(Craft::t('No tasks to enqueue'));
+			throw new Exception(Craft::t('Unable to create element import task. No tasks found.'));
 		}
 
-		$taskName    = craft()->request->getPost('taskName');
-		$description = $tasks ? "Sprout Import {$taskName}" : 'Sprout Import';
-
-		return craft()->tasks->createTask('SproutImport', Craft::t($description), array('files' => $tasks));
+		return craft()->tasks->createTask('SproutImport', Craft::t("Importing elements"), array('files' => $tasks));
 	}
 
 	/**
@@ -105,17 +102,17 @@ class SproutImportService extends BaseApplicationComponent
 	 * @throws Exception
 	 * @return TaskModel
 	 */
-	public function enqueueSettingsTasks(array $tasks)
+	public function createImportSettingsTasks(array $tasks, $seed = false)
 	{
 		if (!count($tasks))
 		{
-			throw new Exception(Craft::t('No tasks to enqueue'));
+			throw new Exception(Craft::t('Unable to create settings import task. No tasks found.'));
 		}
 
-		$taskName    = craft()->request->getPost('taskName');
-		$description = $tasks ? "Sprout Import {$taskName}" : 'Sprout Import';
-
-		return craft()->tasks->createTask('SproutImport_Settings', Craft::t($description), array('files' => $tasks));
+		return craft()->tasks->createTask('SproutImport_Settings', Craft::t("Importing settings"), array(
+			'files' => $tasks,
+			'seed'  => $seed
+		));
 	}
 
 	/**

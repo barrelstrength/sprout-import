@@ -7,19 +7,22 @@ class SproutImport_SettingsTask extends BaseTask
 	{
 		craft()->config->maxPowerCaptain();
 
+		$seed = $this->getSettings()->getAttribute('seed');
+
 		$files = $this->getSettings()->getAttribute('files');
 		$file  = $step ? $files[$step] : $files[0];
 
-		if ($content = sproutImport()->getJsonContent($file))
+		if ($content = sproutImport()->getJson($file))
 		{
-			if ($content = sproutImport()->getJsonContent($file))
+			if ($content = sproutImport()->getJson($file))
 			{
 				// @TODO - make logic around parsing settings more robust
 				$settings = $content['@settings'];
 
 				try
 				{
-					$result = sproutImport()->saveSettings($settings);
+					// @TODO - add control for $trackSeeds via setting
+					$result = sproutImport()->saveSettings($settings, $seed);
 
 					IOHelper::deleteFile($file);
 
@@ -48,7 +51,8 @@ class SproutImport_SettingsTask extends BaseTask
 	protected function defineSettings()
 	{
 		return array(
-			'files' => AttributeType::Mixed
+			'files' => AttributeType::Mixed,
+			'seed'  => AttributeType::Bool
 		);
 	}
 

@@ -3,7 +3,7 @@ namespace Craft;
 
 class SproutImportController extends BaseController
 {
-	public function actionEnqueueTasks()
+	public function actionImportElements()
 	{
 		$this->requirePostRequest();
 
@@ -12,6 +12,9 @@ class SproutImportController extends BaseController
 
 		foreach ($files as $file)
 		{
+			// @todo - why do we have 'application/octet-stream' here?
+			// From the answer below, it sounds like this may indicate some file we were importing had the wrong format?
+			// http://stackoverflow.com/questions/20508788/do-i-need-content-type-application-octet-stream-for-file-download
 			if (!$file->getHasError() && $file->getType() == 'application/json'
 			|| $file->getType() == 'application/octet-stream')
 			{
@@ -26,9 +29,11 @@ class SproutImportController extends BaseController
 
 		try
 		{
-			sproutImport()->enqueueTasks($tasks);
+			sproutImport()->createImportElementsTasks($tasks);
 
-			craft()->userSession->setNotice(Craft::t('({tasks}) Tasks queued successfully.', array('tasks' => count($tasks))));
+			craft()->userSession->setNotice(Craft::t('Files queued for import. Total: {tasks}', array(
+				'tasks' => count($tasks)
+			)));
 		}
 		catch(\Exception $e)
 		{
@@ -38,9 +43,11 @@ class SproutImportController extends BaseController
 		$this->redirectToPostedUrl();
 	}
 
-	public function actionEnqueueSettingsTasks()
+	public function actionImportSettings()
 	{
 		$this->requirePostRequest();
+
+		$seed = craft()->request->getRequiredPost('seed');
 
 		$tasks = array();
 		$files = UploadedFile::getInstancesByName('files');
@@ -59,52 +66,20 @@ class SproutImportController extends BaseController
 			}
 		}
 
-		// ---------------
-		// THIS CODE GOES IN THE TASK FILE
-		// only here for convenience...  Update $path => $file in the Task file and uncomment the delete file line.
-
-		if ($content = sproutImport()->getJson($path))
+		try
 		{
-			if ($content = sproutImport()->getJson($path))
-			{
-				// @TODO - make logic around parsing settings more robust
-				$settings = $content['@settings'];
+			sproutImport()->createImportSettingsTasks($tasks, $seed);
 
-				try
-				{
-					// @TODO - add control for $trackSeeds via setting
-					$result = sproutImport()->saveSettings($settings, true);
-
-					//IOHelper::deleteFile($file);
-
-					sproutImport()->log('Task result for ' . $file, $result);
-
-					return true;
-				} catch (\Exception $e)
-				{
-					sproutImport()->error($e->getMessage());
-				}
-			}
-			else
-			{
-				sproutImport()->error('Unable to parse file.', compact('file'));
-			}
-
-			return false;
+			craft()->userSession->setNotice(Craft::t('Files queued for import. Total: {tasks}', array(
+				'tasks' => count($tasks)
+			)));
 		}
+		catch(\Exception $e)
+		{
+			sproutImport()->log($e->getMessage());
 
-		// ---------------
-
-		//try
-		//{
-		//	sproutImport()->enqueueSettingsTasks($tasks);
-		//
-		//	craft()->userSession->setNotice(Craft::t('({tasks}) Tasks queued successfully.', array('tasks' => count($tasks))));
-		//}
-		//catch(\Exception $e)
-		//{
-		//	craft()->userSession->setError($e->getMessage());
-		//}
+			craft()->userSession->setError($e->getMessage());
+		}
 
 		$this->redirectToPostedUrl();
 	}
