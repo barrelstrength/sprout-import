@@ -12,9 +12,6 @@ class SproutImportController extends BaseController
 
 		foreach ($files as $file)
 		{
-			// @todo - why do we have 'application/octet-stream' here?
-			// From the answer below, it sounds like this may indicate some file we were importing had the wrong format?
-			// http://stackoverflow.com/questions/20508788/do-i-need-content-type-application-octet-stream-for-file-download
 			if (!$file->getHasError() && $file->getType() == 'application/json'
 			|| $file->getType() == 'application/octet-stream')
 			{
