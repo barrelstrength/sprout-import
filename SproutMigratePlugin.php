@@ -5,6 +5,9 @@ class SproutMigratePlugin extends BasePlugin
 {
 	public function init()
 	{
+		Craft::import('plugins.sproutmigrate.contracts.*');
+		Craft::import('plugins.sproutmigrate.integrations.sproutmigrate.*');
+
 		craft()->on('sproutMigrate.beforeMigrateElement', array($this, 'handleElementMigration'));
 	}
 
@@ -38,6 +41,15 @@ class SproutMigratePlugin extends BasePlugin
 		return array(
 			'sproutmigrate/start/'                       => array('action' => 'sproutMigrate/start'),
 			'sproutmigrate/run/[a-zA-Z]+/[a-zA-Z0-9\-]+' => array('action' => 'sproutMigrate/runTask')
+		);
+	}
+
+	public function registerSproutMigrateImporters()
+	{
+		return array(
+			new EntryTypeSproutMigrateImporter(),
+			new FieldSproutMigrateImporter(),
+			new SectionSproutMigrateImporter()
 		);
 	}
 
