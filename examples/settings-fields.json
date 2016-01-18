@@ -1,0 +1,18 @@
+{
+	"@settings": [
+		{
+			"@model": "FieldModel",
+			"groupId": 1,
+			"name": "Field Name",
+			"handle": "fieldName",
+			"type": "PlainText"
+		},
+		{
+			"@model": "FieldModel",
+			"groupId": 1,
+			"name": "Field Name 2",
+			"handle": "fieldName2",
+			"type": "PlainText"
+		}
+	]
+}

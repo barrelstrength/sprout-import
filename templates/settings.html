@@ -1,9 +1,9 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
-{% set title = 'Import Elements' %}
+{% set title = 'Import Settings' %}
 
-{% set selectedTab = 'elements' %}
+{% set selectedTab = 'settings' %}
 
 {% set tabs = {
 	elements: {
@@ -23,7 +23,7 @@
 {% set content %}
 
 	<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
-		<input type="hidden" name="action" value="sproutImport/importElements">
+		<input type="hidden" name="action" value="sproutImport/importSettings">
 
 		<div class="field first" id="files-field">
 			<div class="heading">
@@ -35,7 +35,15 @@
 			<div class="input"><input type="file" multiple id="files" name="files[]"></div>
 		</div>
 
-		<button class="btn submit" type="submit">Import Elements</button>
+		{{ forms.lightswitchField({
+			label: "Seed database"|t,
+			instructions: "Mark your import as Seed content if you want to log each item you import so it can be
+			removed later via the Weed tab."|t,
+			on: false,
+			name: 'seed'
+		}) }}
+
+		<button class="btn submit" type="submit">Import Settings</button>
 	</form>
 
 {% endset %}

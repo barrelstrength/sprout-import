@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutMigrate_PostTask extends BaseTask
+class SproutImport_PostTask extends BaseTask
 {
 	public function runStep($step)
 	{
@@ -9,7 +9,7 @@ class SproutMigrate_PostTask extends BaseTask
 		$elements = $this->getSettings()->getAttribute('elements');
 		$element  = $step ? $elements[$step] : $elements[0];
 
-		$result = sproutMigrate()->save($element);
+		$result = sproutImport()->save($element);
 
 		return true;
 	}
@@ -28,6 +28,6 @@ class SproutMigrate_PostTask extends BaseTask
 
 	protected function getDescriptions()
 	{
-		return 'Sprout Migrate Task By Post';
+		return 'Sprout Import Task By Post';
 	}
 }

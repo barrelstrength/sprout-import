@@ -1,0 +1,22 @@
+{%- set faker = craft.faker.fake -%}
+[
+{%- for i in 0..97 %}
+  {
+    "type": "SproutForms_Entry",
+    "attributes": {
+      "formId": 446,
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36",
+      "dateCreated": "{{ faker.dateTimeBetween('-2 years', 'now')|date('Y-m-d h:m:s') }}",
+      "dateUpdated": "{{ faker.dateTimeBetween('-2 years', 'now')|date('Y-m-d h:m:s') }}"
+    },
+    "content": {
+      "title": "{{ faker.text(40) }}",
+      "fields": {
+        "fullName": "{{ faker.text(40) }}",
+        "message": "{{ faker.text(40) }}"
+      }
+    }
+  }{% if not loop.last %},{% endif %}
+{%- endfor -%}
+]

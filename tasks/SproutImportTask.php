@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutMigrateTask extends BaseTask
+class SproutImportTask extends BaseTask
 {
 	public function runStep($step)
 	{
@@ -16,22 +16,22 @@ class SproutMigrateTask extends BaseTask
 		{
 			try
 			{
-				$result = sproutMigrate()->save($elements);
+				$result = sproutImport()->save($elements);
 
 				IOHelper::deleteFile($file);
 
-				sproutMigrate()->log('Task result for '.$file, $result);
+				sproutImport()->log('Task result for '.$file, $result);
 
 				return true;
 			}
 			catch (\Exception $e)
 			{
-				sproutMigrate()->error($e->getMessage());
+				sproutImport()->error($e->getMessage());
 			}
 		}
 		else
 		{
-			sproutMigrate()->error('Unable to parse file.', compact('file'));
+			sproutImport()->error('Unable to parse file.', compact('file'));
 		}
 
 		return false;
@@ -51,6 +51,6 @@ class SproutMigrateTask extends BaseTask
 
 	protected function getDescriptions()
 	{
-		return 'Sprout Migrate Task';
+		return 'Sprout Import Task';
 	}
 }
