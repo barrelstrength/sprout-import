@@ -3,6 +3,9 @@ namespace Craft;
 
 class SproutMigrateController extends BaseController
 {
+
+	protected $allowAnonymous = array('actionEnqueueTasksByPost');
+
 	public function actionEnqueueTasks()
 	{
 		$this->requirePostRequest();
@@ -37,4 +40,13 @@ class SproutMigrateController extends BaseController
 
 		$this->redirectToPostedUrl();
 	}
+
+	public function actionEnqueueTasksByPost()
+	{
+		$elements = craft()->request->getPost('elements');
+
+		sproutMigrate()->setEnqueueTasksByPost($elements);
+		craft()->end();
+	}
+
 }
