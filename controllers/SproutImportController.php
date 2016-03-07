@@ -24,9 +24,11 @@ class SproutImportController extends BaseController
 			}
 		}
 
+		$seed = craft()->request->getPost('seedElements');
+
 		try
 		{
-			sproutImport()->createImportElementsTasks($tasks);
+			sproutImport()->createImportElementsTasks($tasks, $seed);
 
 			craft()->userSession->setNotice(Craft::t('Files queued for import. Total: {tasks}', array(
 				'tasks' => count($tasks)

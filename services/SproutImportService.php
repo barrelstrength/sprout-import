@@ -34,11 +34,17 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	protected $updatedElements = array();
 
+	public $seed;
+
 	/**
 	 * Gives third party plugins a chance to register custom elements to import into
 	 */
 	public function init()
 	{
+		parent::init();
+
+		$this->seed = Craft::app()->getComponent('sproutImport_seed');
+
 		$results = craft()->plugins->call('registerSproutImportElements');
 
 		if ($results)
@@ -86,14 +92,15 @@ class SproutImportService extends BaseApplicationComponent
 	 * @throws Exception
 	 * @return TaskModel
 	 */
-	public function createImportElementsTasks(array $tasks)
+	public function createImportElementsTasks(array $tasks, $seed = false)
 	{
 		if (!count($tasks))
 		{
 			throw new Exception(Craft::t('Unable to create element import task. No tasks found.'));
 		}
 
-		return craft()->tasks->createTask('SproutImport', Craft::t("Importing elements"), array('files' => $tasks));
+		return craft()->tasks->createTask('SproutImport', Craft::t("Importing elements"), array('files' => $tasks,
+		                                                                                        'seed'  => $seed ));
 	}
 
 	/**
@@ -137,7 +144,7 @@ class SproutImportService extends BaseApplicationComponent
 	 * @throws \CDbException
 	 * @throws \Exception
 	 */
-	public function save(array $elements, $returnSavedElementIds = false)
+	public function save(array $elements, $returnSavedElementIds = false, $seed = false)
 	{
 		$transaction     = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 		$savedElementIds = array();
@@ -191,6 +198,8 @@ class SproutImportService extends BaseApplicationComponent
 					{
 						$savedElementIds[]     = $model->id;
 						$this->savedElements[] = $model->getTitle();
+
+						$this->seed->trackSeed($model->id, $type);
 					}
 					elseif ($saved && !$isNewElement)
 					{

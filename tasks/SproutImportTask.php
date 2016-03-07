@@ -7,6 +7,8 @@ class SproutImportTask extends BaseTask
 	{
 		craft()->config->maxPowerCaptain();
 
+		$seed = $this->getSettings()->getAttribute('seed');
+
 		$files = $this->getSettings()->getAttribute('files');
 		$file  = $step ? $files[$step] : $files[0];
 
@@ -16,7 +18,7 @@ class SproutImportTask extends BaseTask
 		{
 			try
 			{
-				$result = sproutImport()->save($elements);
+				$result = sproutImport()->save($elements, $seed);
 
 				IOHelper::deleteFile($file);
 
