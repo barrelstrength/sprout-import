@@ -9,6 +9,7 @@ class SproutImportTask extends BaseTask
 
 		$seed = $this->getSettings()->getAttribute('seed');
 
+
 		$files = $this->getSettings()->getAttribute('files');
 		$file  = $step ? $files[$step] : $files[0];
 
@@ -18,7 +19,7 @@ class SproutImportTask extends BaseTask
 		{
 			try
 			{
-				$result = sproutImport()->save($elements, $seed);
+				$result = sproutImport()->save($elements, false, $seed);
 
 				IOHelper::deleteFile($file);
 
@@ -47,7 +48,8 @@ class SproutImportTask extends BaseTask
 	protected function defineSettings()
 	{
 		return array(
-			'files' => AttributeType::Mixed
+			'files' => AttributeType::Mixed,
+			'seed'  => AttributeType::Bool
 		);
 	}
 

@@ -178,13 +178,9 @@ class SproutImportService extends BaseApplicationComponent
 
 			sproutImport()->onBeforeMigrateElement($event);
 
-			/**
-			 * @var $model BaseModel
-			 */
-			$model = $event->params['element'];
 
 			sproutImport()->log("Begin validation of Element Model.");
-			//sproutImport()->log($model);
+
 
 			if ($model->validate())
 			{
@@ -199,7 +195,11 @@ class SproutImportService extends BaseApplicationComponent
 						$savedElementIds[]     = $model->id;
 						$this->savedElements[] = $model->getTitle();
 
-						$this->seed->trackSeed($model->id, $type);
+
+						$event = new Event($this, array( 'element' => $model, 'seed' => $seed, 'type' => $type ));
+
+						$this->onAfterMigrateElement($event);
+
 					}
 					elseif ($saved && !$isNewElement)
 					{
@@ -688,13 +688,23 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param Event|SproutForms_OnSaveEntryEvent $event
+	 * @param Event|SproutImport_onBeforeMigrateElement $event
 	 *
 	 * @throws \CException
 	 */
 	public function onBeforeMigrateElement(Event $event)
 	{
 		$this->raiseEvent('onBeforeMigrateElement', $event);
+	}
+
+	/**
+	 * @param Event|SproutImport_onAfterMigrateElement $event
+	 *
+	 * @throws \CException
+	 */
+	public function onAfterMigrateElement(Event $event)
+	{
+		$this->raiseEvent('onAfterMigrateElement', $event);
 	}
 
 	/**
