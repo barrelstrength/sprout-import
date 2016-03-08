@@ -18,11 +18,11 @@ class SproutImportPlugin extends BasePlugin
 
 			$id = $element->id;
 
-
 			if ($seed)
 			{
 				sproutImport()->seed->trackSeed($id, $type);
 			}
+
 		});
 	}
 

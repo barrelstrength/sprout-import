@@ -317,7 +317,6 @@ class SproutImportService extends BaseApplicationComponent
 				$this->saveSetting($importSettings);
 			} catch (\Exception $e)
 			{
-				//Craft::dd($e);
 				// @todo clarify what happened more in errors
 				sproutImport()->error($e->getMessage());
 			}
@@ -380,9 +379,25 @@ class SproutImportService extends BaseApplicationComponent
 	{
 		$importerModel = $this->getImporterModel($settings);
 
-		$importerClassName = 'Craft\\' . $importerModel . 'SproutImportImporter';
+		$elements = craft()->elements->getAllElementTypes();
 
-		return new $importerClassName($settings);
+		$elementHandles = array_keys($elements);
+
+		if (in_array($importerModel, $elementHandles))
+		{
+			$importerClassName = 'Craft\\ElementSproutImportImporter';
+
+			$importerClass = new $importerClassName($settings, $importerModel);
+
+		}
+		else
+		{
+			$importerClassName = 'Craft\\' . $importerModel . 'SproutImportImporter';
+
+			$importerClass = new $importerClassName($settings);
+		}
+
+		return $importerClass;
 	}
 
 	public function getImporterModel($settings)
