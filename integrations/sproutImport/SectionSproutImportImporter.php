@@ -95,13 +95,16 @@ class SectionSproutImportImporter extends SproutImportBaseImporter
 
 		// If we have a new section, we may want to update the Default Entry Type
 		// that Craft creates when a section is created
-		if ($this->isNewSection) 
+		if ($this->isNewSection)
 		{
 			$entryTypes = $model->getEntryTypes();
 
-			if (count($entryTypes) && empty($entryTypes[0]->getFieldLayout()->getFields()))
+			$firstEntryType = $entryTypes[0];
+			$firstEntryType = $firstEntryType->getFieldLayout()->getFields();
+
+			if (count($entryTypes) && empty($firstEntryType))
 			{
-				$entryTypeId = $entryTypes[0]->id;
+				$entryTypeId = $firstEntryType->id;
 				craft()->sections->deleteEntryTypeById($entryTypeId);
 			}
 		}
