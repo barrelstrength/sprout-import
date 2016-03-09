@@ -34,11 +34,17 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	protected $updatedElements = array();
 
+	public $seed;
+
 	/**
 	 * Gives third party plugins a chance to register custom elements to import into
 	 */
 	public function init()
 	{
+		parent::init();
+
+		$this->seed = Craft::app()->getComponent('sproutImport_seed');
+
 		$results = craft()->plugins->call('registerSproutImportElements');
 
 		if ($results)
@@ -86,14 +92,15 @@ class SproutImportService extends BaseApplicationComponent
 	 * @throws Exception
 	 * @return TaskModel
 	 */
-	public function createImportElementsTasks(array $tasks)
+	public function createImportElementsTasks(array $tasks, $seed = false)
 	{
 		if (!count($tasks))
 		{
 			throw new Exception(Craft::t('Unable to create element import task. No tasks found.'));
 		}
 
-		return craft()->tasks->createTask('SproutImport', Craft::t("Importing elements"), array('files' => $tasks));
+		return craft()->tasks->createTask('SproutImport', Craft::t("Importing elements"), array('files' => $tasks,
+		                                                                                        'seed'  => $seed ));
 	}
 
 	/**
@@ -137,7 +144,7 @@ class SproutImportService extends BaseApplicationComponent
 	 * @throws \CDbException
 	 * @throws \Exception
 	 */
-	public function save(array $elements, $returnSavedElementIds = false)
+	public function save(array $elements, $returnSavedElementIds = false, $seed = false)
 	{
 		$transaction     = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 		$savedElementIds = array();
@@ -171,13 +178,9 @@ class SproutImportService extends BaseApplicationComponent
 
 			sproutImport()->onBeforeMigrateElement($event);
 
-			/**
-			 * @var $model BaseModel
-			 */
-			$model = $event->params['element'];
 
 			sproutImport()->log("Begin validation of Element Model.");
-			//sproutImport()->log($model);
+
 
 			if ($model->validate())
 			{
@@ -191,6 +194,12 @@ class SproutImportService extends BaseApplicationComponent
 					{
 						$savedElementIds[]     = $model->id;
 						$this->savedElements[] = $model->getTitle();
+
+
+						$event = new Event($this, array( 'element' => $model, 'seed' => $seed, 'type' => $type ));
+
+						$this->onAfterMigrateElement($event);
+
 					}
 					elseif ($saved && !$isNewElement)
 					{
@@ -308,7 +317,6 @@ class SproutImportService extends BaseApplicationComponent
 				$this->saveSetting($importSettings);
 			} catch (\Exception $e)
 			{
-				//Craft::dd($e);
 				// @todo clarify what happened more in errors
 				sproutImport()->error($e->getMessage());
 			}
@@ -371,9 +379,25 @@ class SproutImportService extends BaseApplicationComponent
 	{
 		$importerModel = $this->getImporterModel($settings);
 
-		$importerClassName = 'Craft\\' . $importerModel . 'SproutImportImporter';
+		$elements = craft()->elements->getAllElementTypes();
 
-		return new $importerClassName($settings);
+		$elementHandles = array_keys($elements);
+
+		if (in_array($importerModel, $elementHandles))
+		{
+			$importerClassName = 'Craft\\ElementSproutImportImporter';
+
+			$importerClass = new $importerClassName($settings, $importerModel);
+
+		}
+		else
+		{
+			$importerClassName = 'Craft\\' . $importerModel . 'SproutImportImporter';
+
+			$importerClass = new $importerClassName($settings);
+		}
+
+		return $importerClass;
 	}
 
 	public function getImporterModel($settings)
@@ -679,13 +703,23 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param Event|SproutForms_OnSaveEntryEvent $event
+	 * @param Event|SproutImport_onBeforeMigrateElement $event
 	 *
 	 * @throws \CException
 	 */
 	public function onBeforeMigrateElement(Event $event)
 	{
 		$this->raiseEvent('onBeforeMigrateElement', $event);
+	}
+
+	/**
+	 * @param Event|SproutImport_onAfterMigrateElement $event
+	 *
+	 * @throws \CException
+	 */
+	public function onAfterMigrateElement(Event $event)
+	{
+		$this->raiseEvent('onAfterMigrateElement', $event);
 	}
 
 	/**

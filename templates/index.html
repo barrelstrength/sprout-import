@@ -35,6 +35,14 @@
 			<div class="input"><input type="file" multiple id="files" name="files[]"></div>
 		</div>
 
+		{{ forms.lightswitchField({
+			label: "Seed database"|t,
+			instructions: "Mark your import as Seed content if you want to log each item you import so it can be
+			removed later via the Weed tab."|t,
+			on: false,
+			name: 'seedElements'
+		}) }}
+
 		<button class="btn submit" type="submit">Import Elements</button>
 	</form>
 

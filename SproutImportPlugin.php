@@ -5,8 +5,25 @@ class SproutImportPlugin extends BasePlugin
 {
 	public function init()
 	{
+		parent::init();
+
 		Craft::import('plugins.sproutimport.contracts.*');
 		Craft::import('plugins.sproutimport.integrations.sproutimport.*');
+
+		craft()->on('sproutImport.onAfterMigrateElement', function(Event $event) {
+
+			$element = $event->params['element'];
+			$seed    = $event->params['seed'];
+			$type    = $event->params['type'];
+
+			$id = $element->id;
+
+			if ($seed)
+			{
+				sproutImport()->seed->trackSeed($id, $type);
+			}
+
+		});
 	}
 
 	public function getName()
