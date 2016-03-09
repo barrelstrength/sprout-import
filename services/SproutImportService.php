@@ -168,6 +168,18 @@ class SproutImportService extends BaseApplicationComponent
 				$this->resolveRelationships($related, $fields);
 			}
 
+			// Allows author email to add as author of the entry
+			if(isset($attributes['authorId']))
+			{
+				if(is_array($attributes['authorId']) && !empty($attributes['authorId']['email']))
+				{
+					$userEmail = $attributes['authorId']['email'];
+					$userModel = craft()->users->getUserByUsernameOrEmail($userEmail);
+					$authorId = $userModel->getAttribute('id');
+					$attributes['authorId'] = $authorId;
+				}
+			}
+
 			$model->setAttributes($attributes);
 			unset($element['content']['related']);
 
