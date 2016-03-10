@@ -75,4 +75,9 @@ class SproutImport_SeedService extends BaseApplicationComponent
 				array(':id'=>$id)
 		);
 	}
+
+	public function test()
+	{
+		echo 'testas';
+	}
 }

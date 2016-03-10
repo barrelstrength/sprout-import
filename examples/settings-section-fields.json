@@ -1,57 +1,56 @@
-{
-	"@settings": [
-		{
-			"@model": "FieldModel",
-			"groupId": 1,
-			"name": "Lonely Field",
-			"handle": "lonelyField1",
-			"type": "PlainText"
-		},
-		{
-			"@model": "FieldModel",
-			"groupId": 1,
-			"name": "Lonely Field 2",
-			"handle": "lonelyField2",
-			"type": "PlainText"
-		},
-		{
-			"@model": "SectionModel",
-			"name": "Blog",
-			"handle": "blog",
-			"type": "channel",
-			"hasUrls": true,
-			"urlFormat": "blog/{slug}",
-			"template": "blog/_entry",
-			"entryTypes": [
-					{
-					"@model": "EntryTypeModel",
-					"name": "Posts",
-					"handle": "posts",
-					"showTitles": true,
-					"titleLabel": "Title",
-					"fieldLayout": {
-						"fieldLayoutTab": {
-							"name": "Content",
-							"fields": [
-								{
-									"@model": "FieldModel",
-									"groupId": 1,
-									"name": "Blog Field 1",
-									"handle": "blogField1",
-									"type": "PlainText"
-								},
-								{
-									"@model": "FieldModel",
-									"groupId": 1,
-									"name": "Blog Field 2",
-									"handle": "blogField2",
-									"type": "PlainText"
-								}
-							]
-						}
+[
+	{
+		"@model": "FieldModel",
+		"groupId": 1,
+		"name": "Lonely Field",
+		"handle": "lonelyField1",
+		"type": "PlainText"
+	},
+	{
+		"@model": "FieldModel",
+		"groupId": 1,
+		"name": "Lonely Field 2",
+		"handle": "lonelyField2",
+		"type": "PlainText"
+	},
+	{
+		"@model": "SectionModel",
+		"name": "Blog",
+		"handle": "blog",
+		"type": "channel",
+		"hasUrls": true,
+		"urlFormat": "blog/{slug}",
+		"template": "blog/_entry",
+		"entryTypes": [
+				{
+				"@model": "EntryTypeModel",
+				"name": "Posts",
+				"handle": "posts",
+				"showTitles": true,
+				"titleLabel": "Title",
+				"fieldLayout": {
+					"fieldLayoutTab": {
+						"name": "Content",
+						"fields": [
+							{
+								"@model": "FieldModel",
+								"groupId": 1,
+								"name": "Blog Field 1",
+								"handle": "blogField1",
+								"type": "PlainText"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 1,
+								"name": "Blog Field 2",
+								"handle": "blogField2",
+								"type": "PlainText"
+							}
+						]
 					}
 				}
-			]
-		}
-	]
-}
+			}
+		]
+	}
+]
+

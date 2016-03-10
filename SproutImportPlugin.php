@@ -14,7 +14,7 @@ class SproutImportPlugin extends BasePlugin
 
 			$element = $event->params['element'];
 			$seed    = $event->params['seed'];
-			$type    = $event->params['type'];
+			$type    = $event->params['@model'];
 
 			$id = $element->id;
 

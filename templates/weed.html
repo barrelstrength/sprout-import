@@ -1,13 +1,13 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
-{% set title = 'Import Elements' %}
+{% set title = 'Import Data' %}
 
 {% set selectedTab = 'weed' %}
 
 {% set tabs = {
-	elements: {
-		label: "Import Elements"|t,
+	data: {
+		label: "Import Data"|t,
 		url: url('sproutimport/index')
 	},
 	settings: {

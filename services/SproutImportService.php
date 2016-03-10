@@ -25,6 +25,14 @@ class SproutImportService extends BaseApplicationComponent
 	protected $savedElements = array();
 
 	/**
+	 * Element Ids saved during the length of the import job
+	 *
+	 * @var array
+	 */
+
+	protected $savedElementIds = array();
+
+	/**
 	 * @var array
 	 */
 	protected $unsavedElements = array();
@@ -36,12 +44,23 @@ class SproutImportService extends BaseApplicationComponent
 
 	public $seed;
 
+	protected $elementsService;
+
 	/**
 	 * Gives third party plugins a chance to register custom elements to import into
 	 */
-	public function init()
+	public function init($elementsService = null)
 	{
 		parent::init();
+
+		if($elementsService != null)
+		{
+			$this->elementsService = $elementsService;
+		}
+		else
+		{
+			$this->elementsService = craft()->elements;
+		}
 
 		$this->seed = Craft::app()->getComponent('sproutImport_seed');
 
@@ -92,7 +111,7 @@ class SproutImportService extends BaseApplicationComponent
 	 * @throws Exception
 	 * @return TaskModel
 	 */
-	public function createImportElementsTasks(array $tasks, $seed = false)
+	public function createImportTasks(array $tasks, $seed = false)
 	{
 		if (!count($tasks))
 		{
@@ -101,25 +120,6 @@ class SproutImportService extends BaseApplicationComponent
 
 		return craft()->tasks->createTask('SproutImport', Craft::t("Importing elements"), array('files' => $tasks,
 		                                                                                        'seed'  => $seed ));
-	}
-
-	/**
-	 * @param array $tasks
-	 *
-	 * @throws Exception
-	 * @return TaskModel
-	 */
-	public function createImportSettingsTasks(array $tasks, $seed = false)
-	{
-		if (!count($tasks))
-		{
-			throw new Exception(Craft::t('Unable to create settings import task. No tasks found.'));
-		}
-
-		return craft()->tasks->createTask('SproutImport_Settings', Craft::t("Importing settings"), array(
-			'files' => $tasks,
-			'seed'  => $seed
-		));
 	}
 
 	public function enqueueTasksByPost(array $tasks)
@@ -144,109 +144,35 @@ class SproutImportService extends BaseApplicationComponent
 	 * @throws \CDbException
 	 * @throws \Exception
 	 */
-	public function save(array $elements, $returnSavedElementIds = false, $seed = false)
+	public function save(array $rows, $returnSavedElementIds = false, $seed = false)
 	{
-		$transaction     = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
-		$savedElementIds = array();
+		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 
-		foreach ($elements as $element)
+		if(!empty($rows))
 		{
-			$type       = $this->getValueByKey('type', $element);
-			$model      = $this->getElementModel($this->getValueByKey('content.beforeSave', $element), $element);
-			$content    = $this->getValueByKey('content', $element);
-			$fields     = $this->getValueByKey('content.fields', $element);
-			$related    = $this->getValueByKey('content.related', $element);
-			$attributes = $this->getValueByKey('attributes', $element);
 
-			$this->resolveMatrixRelationships($fields);
+			$results = array();
 
-			// @todo - when trying to import Sprout Forms Form Models,
-			// which do not have any fields or content, running this method kills the script
-			// moving the $related check to before the method runs, works.
-			if (count($related))
+			foreach ($rows as $row)
 			{
-				$this->resolveRelationships($related, $fields);
-			}
+				$model = $this->getImporterModel($row);
 
-			// Allows author email to add as author of the entry
-			if(isset($attributes['authorId']))
-			{
-				if(is_array($attributes['authorId']) && !empty($attributes['authorId']['email']))
+				if($this->isElementType($model))
 				{
-					$userEmail = $attributes['authorId']['email'];
-					$userModel = craft()->users->getUserByUsernameOrEmail($userEmail);
-					$authorId = $userModel->getAttribute('id');
-					$attributes['authorId'] = $authorId;
+					$this->saveElement($row, $seed);
 				}
-			}
-
-			$model->setAttributes($attributes);
-			unset($element['content']['related']);
-
-			$model->setContent($content);
-			$model->setContentFromPost($fields);
-
-			$event = new Event($this, array('element' => $model));
-
-			sproutImport()->onBeforeMigrateElement($event);
-
-
-			sproutImport()->log("Begin validation of Element Model.");
-
-
-			if ($model->validate())
-			{
-				$isNewElement = !$model->id;
-
-				try
+				else
 				{
-					$saved = craft()->{$this->getServiceName($type)}->{$this->getMethodName($type)}($model, $element);
-
-					if ($saved && $isNewElement)
+					try
 					{
-						$savedElementIds[]     = $model->id;
-						$this->savedElements[] = $model->getTitle();
-
-
-						$event = new Event($this, array( 'element' => $model, 'seed' => $seed, 'type' => $type ));
-
-						$this->onAfterMigrateElement($event);
-
+						$this->saveSetting($row, $seed);
 					}
-					elseif ($saved && !$isNewElement)
+					catch (\Exception $e)
 					{
-						$this->updatedElements[] = $model->getTitle();
+						// @todo clarify what happened more in errors
+						sproutImport()->error($e->getMessage());
 					}
-					else
-					{
-						$this->unsavedElements[] = $model->getTitle();
-					}
-
-					// @todo Ask Dale why the following is necessary
-					// Assign user to created groups
-					if (strtolower($type) == 'user' && !empty($attributes['groupId']))
-					{
-						$groupIds = $attributes['groupId'];
-						craft()->userGroups->assignUserToGroups($model->id, $groupIds);
-					}
-
-				} catch (\Exception $e)
-				{
-					$this->unsavedElements[] = array('title' => $model->getTitle(), 'error' => $e->getMessage());
-					$title                   = $this->getValueByKey('content.title', $element);
-					$msg                     = $title . ' ' . implode(', ', array_keys($fields)) . ' Check field values if it exists.';
-					sproutImport()->error($msg);
-					sproutImport()->error($e->getMessage());
 				}
-			}
-			else
-			{
-				$this->unsavedElements[] = array(
-					'title' => $model->getTitle(),
-					'error' => print_r($model->getErrors(), true)
-				);
-
-				sproutImport()->error('Unable to validate.', $model->getErrors());
 			}
 		}
 
@@ -262,7 +188,118 @@ class SproutImportService extends BaseApplicationComponent
 			'unsavedDetails' => $this->unsavedElements,
 		);
 
-		return $returnSavedElementIds ? $savedElementIds : $result;
+		return $returnSavedElementIds ? $this->savedElementIds : $result;
+	}
+
+	/**
+	 * @param array $elements
+	 * @param bool $returnSavedElementIds
+	 *
+	 * @return array
+	 * @throws Exception
+	 * @throws \CDbException
+	 * @throws \Exception
+	 */
+	public function saveElement(array $element, $seed = false)
+	{
+
+		$type       = $this->getValueByKey('@model', $element);
+		$model      = $this->getElementModel($this->getValueByKey('content.beforeSave', $element), $element);
+		$content    = $this->getValueByKey('content', $element);
+		$fields     = $this->getValueByKey('content.fields', $element);
+		$related    = $this->getValueByKey('content.related', $element);
+		$attributes = $this->getValueByKey('attributes', $element);
+
+		$this->resolveMatrixRelationships($fields);
+
+		// @todo - when trying to import Sprout Forms Form Models,
+		// which do not have any fields or content, running this method kills the script
+		// moving the $related check to before the method runs, works.
+		if (count($related))
+		{
+			$this->resolveRelationships($related, $fields);
+		}
+
+		// Allows author email to add as author of the entry
+		if(isset($attributes['authorId']))
+		{
+			if(is_array($attributes['authorId']) && !empty($attributes['authorId']['email']))
+			{
+				$userEmail = $attributes['authorId']['email'];
+				$userModel = craft()->users->getUserByUsernameOrEmail($userEmail);
+				$authorId = $userModel->getAttribute('id');
+				$attributes['authorId'] = $authorId;
+			}
+		}
+
+		$model->setAttributes($attributes);
+		unset($element['content']['related']);
+
+		$model->setContent($content);
+		$model->setContentFromPost($fields);
+
+		$event = new Event($this, array('element' => $model));
+
+		sproutImport()->onBeforeMigrateElement($event);
+
+
+		sproutImport()->log("Begin validation of Element Model.");
+
+
+		if ($model->validate())
+		{
+			$isNewElement = !$model->id;
+
+			try
+			{
+				$saved = craft()->{$this->getServiceName($type)}->{$this->getMethodName($type)}($model, $element);
+
+				if ($saved && $isNewElement)
+				{
+					$this->savedElementIds[]     = $model->id;
+					$this->savedElements[] = $model->getTitle();
+
+
+					$event = new Event($this, array( 'element' => $model, 'seed' => $seed, '@model' => $type ));
+
+					$this->onAfterMigrateElement($event);
+
+				}
+				elseif ($saved && !$isNewElement)
+				{
+					$this->updatedElements[] = $model->getTitle();
+				}
+				else
+				{
+					$this->unsavedElements[] = $model->getTitle();
+				}
+
+				// @todo Ask Dale why the following is necessary
+				// Assign user to created groups
+				if (strtolower($type) == 'user' && !empty($attributes['groupId']))
+				{
+					$groupIds = $attributes['groupId'];
+					craft()->userGroups->assignUserToGroups($model->id, $groupIds);
+				}
+
+			} catch (\Exception $e)
+			{
+				$this->unsavedElements[] = array('title' => $model->getTitle(), 'error' => $e->getMessage());
+				$title                   = $this->getValueByKey('content.title', $element);
+				$msg                     = $title . ' ' . implode(', ', array_keys($fields)) . ' Check field values if it exists.';
+				sproutImport()->error($msg);
+				sproutImport()->error($e->getMessage());
+			}
+		}
+		else
+		{
+			$this->unsavedElements[] = array(
+				'title' => $model->getTitle(),
+				'error' => print_r($model->getErrors(), true)
+			);
+
+			sproutImport()->error('Unable to validate.', $model->getErrors());
+		}
 	}
 
 	/**
@@ -303,40 +340,6 @@ class SproutImportService extends BaseApplicationComponent
 					}
 				}
 			}
-		}
-	}
-
-	// Process our settings
-	// This is primarily called when we have a group of settings we want to loop through and save
-	public function saveSettings($settings = array(), $seed = false)
-	{
-		if (empty($settings))
-		{
-			return false;
-		}
-
-		if ($seed)
-		{
-			craft()->sproutImport_seed->seed = true;
-		}
-
-		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
-
-		foreach ($settings as $importSettings)
-		{
-			try
-			{
-				$this->saveSetting($importSettings);
-			} catch (\Exception $e)
-			{
-				// @todo clarify what happened more in errors
-				sproutImport()->error($e->getMessage());
-			}
-		}
-
-		if ($transaction && $transaction->active)
-		{
-			$transaction->commit();
 		}
 	}
 
@@ -387,15 +390,31 @@ class SproutImportService extends BaseApplicationComponent
 		return false;
 	}
 
+	/**
+	 * Check if name given is an element type
+	 * @param $name
+	 *
+	 * @return bool
+	 */
+	public function isElementType($name)
+	{
+		$elements = $this->elementsService->getAllElementTypes();
+
+		$elementHandles = array_keys($elements);
+
+		if (in_array($name, $elementHandles))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
 	public function getImporter($settings)
 	{
 		$importerModel = $this->getImporterModel($settings);
 
-		$elements = craft()->elements->getAllElementTypes();
-
-		$elementHandles = array_keys($elements);
-
-		if (in_array($importerModel, $elementHandles))
+		if ($this->isElementType($importerModel))
 		{
 			$importerClassName = 'Craft\\ElementSproutImportImporter';
 
@@ -420,7 +439,7 @@ class SproutImportService extends BaseApplicationComponent
 		}
 
 		// Remove the word 'Model' from the end of our setting
-		$importerModel = substr($settings['@model'], 0, -5);
+		$importerModel = str_replace('Model', '', $settings['@model']);
 
 		return $importerModel;
 	}
@@ -434,7 +453,7 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	protected function getElementModel($beforeSave = null, array $data = array())
 	{
-		$type  = $this->getValueByKey('type', $data);
+		$type  = $this->getValueByKey('@model', $data);
 		$name  = $this->getModelClass($type);
 		$model = new $name();
 
@@ -537,7 +556,7 @@ class SproutImportService extends BaseApplicationComponent
 					continue;
 				}
 
-				$type                  = $this->getValueByKey('type', $definition);
+				$type                  = $this->getValueByKey('@model', $definition);
 				$matchBy               = $this->getValueByKey('matchBy', $definition);
 				$matchValue            = $this->getValueByKey('matchValue', $definition);
 				$matchCriteria         = $this->getValueByKey('matchCriteria', $definition);

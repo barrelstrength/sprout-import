@@ -1,5 +1,5 @@
-{
-	"@settings": [
+
+	[
 		{
 			"@model": "SectionModel",
 			"name": "Blog",
@@ -179,4 +179,3 @@
 			]
 		}
 	]
-}
