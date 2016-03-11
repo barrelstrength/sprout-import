@@ -15,7 +15,7 @@ class SproutImportController extends BaseController
 			if (!$file->getHasError() && $file->getType() == 'application/json'
 			|| $file->getType() == 'application/octet-stream')
 			{
-				$path = craft()->path->getPluginsPath().'sproutimport/downloads/'.$file->getName();
+				$path = craft()->path->getStoragePath().'/'.$file->getName();
 
 				if (move_uploaded_file($file->getTempName(), $path))
 				{
