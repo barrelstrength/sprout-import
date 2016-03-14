@@ -43,11 +43,12 @@ class SproutImport_ElementService extends BaseApplicationComponent
 	public function saveElement(array $element, $seed = false)
 	{
 
-		$type = sproutImport()->getValueByKey('@model', $element);
 		$model = $this->getElementModel(sproutImport()->getValueByKey('content.beforeSave', $element), $element);
-		$content = sproutImport()->getValueByKey('content', $element);
-		$fields = sproutImport()->getValueByKey('content.fields', $element);
-		$related = sproutImport()->getValueByKey('content.related', $element);
+
+		$type       = sproutImport()->getValueByKey('@model', $element);
+		$content    = sproutImport()->getValueByKey('content', $element);
+		$fields     = sproutImport()->getValueByKey('content.fields', $element);
+		$related    = sproutImport()->getValueByKey('content.related', $element);
 		$attributes = sproutImport()->getValueByKey('attributes', $element);
 
 		$this->resolveMatrixRelationships($fields);
@@ -90,7 +91,11 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 			try
 			{
-				$saved = craft()->{sproutImport()->getServiceName($type)}->{sproutImport()->getMethodName($type)}($model, $element);
+				$importer = sproutImport()->getImporter($element);
+
+				$importer->setModel($model);
+
+				$saved = $importer->save();
 
 				if ($saved && $isNewElement)
 				{
@@ -381,16 +386,5 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		}
 
 		return $model;
-	}
-
-	public function getImporter($settings)
-	{
-		$importerModel = sproutImport()->getImporterModel($settings);
-
-		$importerClassName = 'Craft\\ElementSproutImportImporter';
-
-		$importerClass = new $importerClassName($settings, $importerModel);
-
-		return $importerClass;
 	}
 }

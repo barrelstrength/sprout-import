@@ -477,13 +477,17 @@ class SproutImportService extends BaseApplicationComponent
 	{
 		$importerModel = sproutImport()->getImporterModel($row);
 
-		if($this->isElementType($importerModel))
-		{
-			return $this->element->getImporter($row);
-		}
-		else
-		{
-			return $this->setting->getImporter($row);
-		}
+		$importerClassName = $this->getImporterByName($importerModel);
+
+		$importerClass = new $importerClassName($row);
+
+		return $importerClass;
+	}
+
+	public function getImporterByName($name)
+	{
+		$importerClassName = 'Craft\\' . $name . 'SproutImportImporter';
+
+		return $importerClassName;
 	}
 }

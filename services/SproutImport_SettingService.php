@@ -17,7 +17,7 @@ class SproutImport_SettingService extends BaseApplicationComponent
 			craft()->sproutImport_seed->seed = true;
 		}
 
-		$importer = $this->getImporter($settings);
+		$importer = sproutImport()->getImporter($settings);
 
 		if ($importer->isValid() && $importer->save())
 		{
@@ -51,17 +51,4 @@ class SproutImport_SettingService extends BaseApplicationComponent
 			'savedSettingIds' => $this->savedIds
 		);
 	}
-
-
-	public function getImporter($settings)
-	{
-		$importerModel = sproutImport()->getImporterModel($settings);
-
-		$importerClassName = 'Craft\\' . $importerModel . 'SproutImportImporter';
-
-		$importerClass = new $importerClassName($settings);
-
-		return $importerClass;
-	}
-
 }

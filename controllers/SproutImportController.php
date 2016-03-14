@@ -49,4 +49,28 @@ class SproutImportController extends BaseController
 		sproutImport()->setEnqueueTasksByPost($elements);
 		craft()->end();
 	}
+
+	public function actionGenerateData()
+	{
+		$elementSelect = array();
+
+		$elementSelect['Entry']    = 'Entries';
+		$elementSelect['Category'] = 'Categories';
+		$elementSelect['Tag']      = 'Tags';
+
+		$this->renderTemplate('sproutimport/generatedata', array(
+			'elements' => $elementSelect
+		));
+	}
+
+	public function actionGenerateElements()
+	{
+		$this->requirePostRequest();
+
+		$elementType = craft()->request->getRequiredPost('elementType');
+
+		craft()->userSession->setNotice(Craft::t('Elements generated.' . $elementType));
+
+		$this->redirectToPostedUrl();
+	}
 }

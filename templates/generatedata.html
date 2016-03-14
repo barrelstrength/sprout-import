@@ -1,0 +1,48 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = 'Generate Data' %}
+
+{% set selectedTab = 'mock' %}
+
+{% set tabs = {
+	data: {
+		label: "Import Data"|t,
+		url: url('sproutimport/index')
+	},
+	weed: {
+		label: "Weed"|t,
+		url: url('sproutimport/weed')
+	},
+	mock: {
+		label: "Generate Data"|t,
+		url: url('sproutimport/mock')
+	}
+} %}
+
+
+
+{% set content %}
+
+	<h2>Generate Fake Data</h2>
+	<form method="post" accept-charset="UTF-8">
+
+		<input type="hidden" name="action" value="sproutImport/generateElements">
+
+		<div class="field first">
+			{{ forms.selectField({
+				id: "elementType",
+				name: "elementType",
+				label: "Elements"|t,
+				options: [{label: "Select element..."|t, value: null}]|merge(elements),
+				value: elementType is defined ? elementType : null,
+			}) }}
+
+		</div>
+
+		<div class="buttons">
+			<button class="btn submit actions">Generate</button>
+		</div>
+	</form>
+
+{% endset %}
