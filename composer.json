@@ -1,0 +1,6 @@
+{
+	"name": "barrelstrengthdesign/sproutimport",
+	"require": {
+		"fzaninotto/faker": "~1.4"
+	}
+}

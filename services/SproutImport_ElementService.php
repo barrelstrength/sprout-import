@@ -387,4 +387,22 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 		return $model;
 	}
+
+	public function getChannelSections()
+	{
+		$selects = array();
+		$sections = craft()->sections->getAllSections();
+		if (!empty($sections))
+		{
+			foreach ($sections as $section)
+			{
+
+				if ($section->type == 'single') continue;
+
+				$selects[$section->id] = $section->name;
+			}
+		}
+
+		return $selects;
+	}
 }

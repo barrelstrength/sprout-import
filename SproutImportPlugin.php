@@ -10,6 +10,11 @@ class SproutImportPlugin extends BasePlugin
 		Craft::import('plugins.sproutimport.contracts.*');
 		Craft::import('plugins.sproutimport.integrations.sproutimport.*');
 
+		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutimport')
+		{
+			craft()->templates->includeJsResource("sproutimport/js/sproutimport.js");
+		}
+
 		craft()->on('sproutImport.onAfterMigrateElement', function(Event $event) {
 
 			$element = $event->params['element'];

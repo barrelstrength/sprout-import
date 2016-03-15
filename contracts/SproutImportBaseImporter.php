@@ -16,6 +16,7 @@ abstract class SproutImportBaseImporter
 
 	public function __construct($settings = array())
 	{
+		require_once dirname(__FILE__) . '/../vendor/autoload.php';
 		if (count($settings))
 		{
 			$model = $this->getModel();
