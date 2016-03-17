@@ -5,6 +5,12 @@ namespace Craft;
 
 class TagSproutImportImporter extends ElementSproutImportImporter
 {
+
+	public function isElement()
+	{
+		return true;
+	}
+
 	public function getModel()
 	{
 		$model = 'Craft\\TagModel';

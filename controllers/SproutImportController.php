@@ -58,16 +58,28 @@ class SproutImportController extends BaseController
 		$elementSelect['Category'] = 'Categories';
 		$elementSelect['Tag']      = 'Tags';
 
+		$importers = sproutImport()->getSproutImporImporters();
+
+		$settingElements = "";
+
+		if (!empty($importers))
+		{
+			foreach ($importers as $importer)
+			{
+				if ($importer->isElement())
+				{
+					$settingElements.= $importer->getMockSettings() . "\n";
+				}
+			}
+		}
+
 		craft()->templates->includeJsResource('sproutimport/js/sproutimport.js');
-
-		$sections = sproutImport()->element->getChannelSections();
-		$single   = array('single' => 'Single');
-
-		$sections = array_merge($single, $sections);
 
 		$this->renderTemplate('sproutimport/generatedata', array(
 			'elements' => $elementSelect,
-			'sections' => $sections
+			'settings' => array(
+				'elements' => TemplateHelper::getRaw($settingElements)
+			)
 		));
 	}
 

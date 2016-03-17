@@ -14,6 +14,11 @@ abstract class SproutImportBaseImporter
 
 	protected $valid;
 
+	public function isElement()
+	{
+		return false;
+	}
+
 	public function __construct($settings = array())
 	{
 		require_once dirname(__FILE__) . '/../vendor/autoload.php';
@@ -102,5 +107,15 @@ abstract class SproutImportBaseImporter
 	public function resolveNestedSettings()
 	{
 		return true;
+	}
+
+	public function getMockSettings()
+	{
+		return "";
+	}
+
+	public function getName()
+	{
+		return str_replace('SproutImportImporter', '', $this->getId());
 	}
 }

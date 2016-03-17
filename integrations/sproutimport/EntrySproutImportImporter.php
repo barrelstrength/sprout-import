@@ -3,6 +3,12 @@
 namespace Craft;
 class EntrySproutImportImporter extends ElementSproutImportImporter
 {
+
+	public function isElement()
+	{
+		return true;
+	}
+
 	public function getModel()
 	{
 		$model = 'Craft\\EntryModel';
@@ -12,6 +18,18 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 	public function save()
 	{
 		return craft()->entries->saveEntry($this->model);
+	}
+
+	public function getMockSettings()
+	{
+
+		$sections   = array('single' => 'Single', 'channel' => 'Channel');
+
+		return craft()->templates->render('sproutimport/settings/_entry', array(
+			'id'       => $this->getName(),
+			'sections' => $sections,
+			'channels' => sproutImport()->element->getChannelSections()
+		));
 	}
 
 	public function getMockData($settings)
@@ -53,7 +71,7 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 	{
 		$faker = \Faker\Factory::create();
 		$faker->addProvider(new \Faker\Provider\Lorem($faker));
-	
+
 		$name = $faker->word;
 
 		$handle = lcfirst(str_replace(' ', '', ucwords($name)));

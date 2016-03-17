@@ -15,7 +15,7 @@ class SproutImportService extends BaseApplicationComponent
 	/**
 	 * @var SproutImportBaseImporter[]
 	 */
-	protected $importers;
+	protected $importers = array();
 
 	/** Sub Services
 	 * @var
@@ -67,7 +67,15 @@ class SproutImportService extends BaseApplicationComponent
 				}
 			}
 		}
+	}
 
+	/**
+	 * Get all buil-in and called importers
+	 *
+	 * @return SproutImportBaseImporter[]
+	 */
+	public function getSproutImporImporters()
+	{
 		$importersToLoad = craft()->plugins->call('registerSproutImportImporters');
 
 		if ($importersToLoad)
@@ -86,6 +94,8 @@ class SproutImportService extends BaseApplicationComponent
 				}
 			}
 		}
+
+		return $this->importers;
 	}
 
 	/**

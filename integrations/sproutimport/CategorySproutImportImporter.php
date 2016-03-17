@@ -5,6 +5,18 @@ namespace Craft;
 
 class CategorySproutImportImporter extends ElementSproutImportImporter
 {
+
+	public function isElement()
+	{
+		return true;
+	}
+
+	public function getMockSettings()
+	{
+		$variables = array();
+		return craft()->templates->render('sproutimport/settings/_category', $variables);
+	}
+
 	public function getModel()
 	{
 		$model = 'Craft\\CategoryModel';

@@ -40,17 +40,7 @@
 			}) }}
 
 		</div>
-
-		<div class="field element-options Entry" style="display: none">
-			{{ forms.selectField({
-				id: "sectionType",
-				name: "settings[sectionType]",
-				label: "Section Types"|t,
-				options: [{label: "Select section type..."|t, value: null}]|merge(sections),
-				value: sectionType is defined ? sectionType : null,
-			}) }}
-		</div>
-
+		{{ settings.elements }}
 		<div class="buttons">
 			<button class="btn submit actions">Generate</button>
 		</div>
