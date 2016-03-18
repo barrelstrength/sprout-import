@@ -11,11 +11,25 @@
 </div>
 
 <div class="field section-options channel" style="display: none">
-	{{ forms.selectField({
-		id: "channel",
-		name: "settings[channel]",
-		label: "Channels"|t,
-		options: [{label: "Select a channel..."|t, value: null}]|merge(channels),
-		value: settings.channel is defined ? settings.channel : null,
-	}) }}
+	<div class="input">
+		{{ forms.select({
+			id: "channel",
+			name: "settings[channel]",
+			label: "Channels"|t,
+			options: [{label: "Select a channel..."|t, value: null}]|merge(channels),
+			value: settings.channel is defined ? settings.channel : null,
+		}) }}
+
+		{{ forms.text({
+			id: 'channelNumber',
+			name: 'settings[channelNumber]',
+			value: '',
+			placeholder: 'Number'|t,
+			title: 'Minimum allowed quantity'|t,
+			size: 3
+		}) }}
+		<span> {{ 'Enter a number of fake entries.'|t }}</span>
+	</div>
+
 </div>
+

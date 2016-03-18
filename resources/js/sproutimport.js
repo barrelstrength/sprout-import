@@ -13,7 +13,6 @@ var SproutImport = {
 		$('#sectionType').change(function() {
 			SproutImport.selectSectionEvent();
 		});
-
 	},
 	selectElementTypeEvent: function()
 	{
