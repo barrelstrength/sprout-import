@@ -14,6 +14,8 @@ abstract class SproutImportBaseImporter
 
 	protected $valid;
 
+	protected $fakerService;
+
 	public function isElement()
 	{
 		return false;
@@ -30,6 +32,11 @@ abstract class SproutImportBaseImporter
 			$this->populateModel($model, $settings);
 			$this->validate();
 		}
+
+		$faker = \Faker\Factory::create();
+		$faker->addProvider(new \Faker\Provider\Lorem($faker));
+
+		$this->fakerService = $faker;
 	}
 
 	public function getErrors()

@@ -52,6 +52,9 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 
 					$entryTypes = $latestSection->getEntryTypes();
 					$typeId = $entryTypes[0]->id;
+
+					$entry = EntryRecord::model()->findByAttributes(array('sectionId' => $latestSection->id));
+					$entryId = $entry->id;
 				}
 
 			}
@@ -59,29 +62,36 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 		$data = array();
 
 		$data['@model'] = 'Entry';
+
+		$fakerDate = $this->fakerService->dateTimeThisYear($max = 'now');
+
 		$data['attributes']['sectionId']  = $sectionId;
 		$data['attributes']['typeId']     = $typeId;
 		$data['attributes']['authorId']   = 2;
 		$data['attributes']['locale']     = "en_us";
-		$data['attributes']['slug']       = "modi-et-in-libero-sint-quaerat";
-		$data['attributes']['postDate']   = "2014-04-15 11:04:28";
+		//$data['attributes']['slug']       = "modi-et-in-libero-sint-quaerat";
+		$data['attributes']['postDate']   = $fakerDate;
 		$data['attributes']['expiryDate'] = null;
-		$data['attributes']['dateCreated'] = "2014-04-15 11:04:28";
-		$data['attributes']['dateUpdated'] = "2014-04-15 11:04:28";
+		$data['attributes']['dateCreated'] = $fakerDate;
+		$data['attributes']['dateUpdated'] = $fakerDate;
 		$data['attributes']['enabled']     = true;
 
-		$data['content']['title'] = "Quia sapiente eum aut neque dolor.";
-		$data['content']['fields']['title']      = "Quia sapiente eum aut neque dolor.";
-		$data['content']['fields']['body']       = "Quia sapiente eum aut neque dolor.";
+	//	$data['content']['title'] = "Quia sapiente eum aut neque dolor.";
+		//$data['content']['fields']['title']      = "Quia sapiente eum aut neque dolor.";
+		$data['content']['fields']['body']       = $this->fakerService->paragraph();
+
+		$data['content']['beforeSave']['matchBy']    = "id";
+		$data['content']['beforeSave']['matchValue'] = $entryId;
+		$data['content']['beforeSave']['matchCriteria'] = array("section" => $latestSection->handle);
 
 		return sproutImport()->element->saveElement($data);
 	}
 
 	private function generateSingleSection()
 	{
-		$faker = \Faker\Factory::create();
-		$faker->addProvider(new \Faker\Provider\Lorem($faker));
+		$result = false;
 
+		$faker = $this->fakerService;
 		$name = $faker->word;
 
 		$handle = lcfirst(str_replace(' ', '', ucwords($name)));
@@ -94,33 +104,26 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 		$settings['template']  = ElementHelper::createSlug($name);
 		$settings['urlFormat'] = ElementHelper::createSlug($name) . '/{slug}';
 
-		$entryTypes = array();
-		$entryTypes["@model"] = "EntryTypeModel";
-		$entryTypes["name"]   = $name;
-		$entryTypes["handle"] = $handle;
-		$entryTypes["showTitles"] = true;
-		$entryTypes["titleLabel"] = "Title";
-		$entryTypes["fieldLayout"] = array(
-			"fieldLayoutTab" => array(
-				"name" => "Content",
-				"fields" => array(
-					array (
-						"@model" => "FieldModel",
-						"@groupId" => 1,
-						"name" => "Body",
-						"handle" => "body",
-						"type" => "RichText",
-					)
-				)
-			)
-		);
-
-		$settings['entryTypes'] = $entryTypes;
-
 		$sectionImporter = new SectionSproutImportImporter($settings);
 
 		$section = $sectionImporter->save();
 
-		return $section;
+		$findEntryType = EntryTypeRecord::model()->findByAttributes(array('handle' => $handle));
+		$entryTypeModel = EntryTypeModel::populateModel($findEntryType);
+
+		// Get default body field
+		$fieldLayoutSettings = array
+		(
+			'Content' => array
+			(
+				0 => '1'
+			)
+		);
+		$fieldLayout = craft()->fields->assembleLayout($fieldLayoutSettings);
+		$entryTypeModel->setFieldLayout($fieldLayout);
+
+		$result = craft()->sections->saveEntryType($entryTypeModel);
+
+		return $result;
 	}
 }
