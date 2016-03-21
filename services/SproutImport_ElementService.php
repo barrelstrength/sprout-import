@@ -399,10 +399,29 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 				if ($section->type == 'single') continue;
 
-				$selects[$section->id] = $section->name;
+				$selects[$section->handle] = $section->name;
 			}
 		}
 
 		return $selects;
+	}
+
+	public function getFieldsByType($type = "RichText")
+	{
+		$fields = craft()->fields->getAllFields();
+
+		$texts = array();
+		if (!empty($fields))
+		{
+			foreach ($fields as $field)
+			{
+				if ($field->type == $type)
+				{
+					$texts[] = $field;
+				}
+			}
+		}
+
+		return $texts;
 	}
 }

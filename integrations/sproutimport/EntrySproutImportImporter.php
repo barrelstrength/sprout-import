@@ -17,6 +17,7 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 
 	public function save()
 	{
+
 		return craft()->entries->saveEntry($this->model);
 	}
 
@@ -25,10 +26,12 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 
 		$sections   = array('single' => 'Single', 'channel' => 'Channel');
 
+		$channels = sproutImport()->element->getChannelSections();
+
 		return craft()->templates->render('sproutimport/settings/_entry', array(
 			'id'       => $this->getName(),
 			'sections' => $sections,
-			'channels' => sproutImport()->element->getChannelSections()
+			'channels' => $channels
 		));
 	}
 
@@ -48,43 +51,56 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 				{
 					$latestSection = sproutImport()->getLatestSingleSection();
 
-					$sectionId = $latestSection->id;
+					$sectionId     = $latestSection->id;
+					$entryTypes    = $latestSection->getEntryTypes();
+					$entryTypeId   = $entryTypes[0]->id;
+					$sectionHandle = $latestSection->handle;
 
-					$entryTypes = $latestSection->getEntryTypes();
-					$typeId = $entryTypes[0]->id;
-
-					$entry = EntryRecord::model()->findByAttributes(array('sectionId' => $latestSection->id));
+					$entry = EntryRecord::model()->findByAttributes(array('sectionId' => $sectionId));
 					$entryId = $entry->id;
-				}
 
+					$entryParams = array(
+						'sectionId'     => $sectionId,
+						'entryTypeId'   => $entryTypeId,
+						'sectionHandle' => $sectionHandle,
+						'entryId'       => $entryId,
+						'title'         => $latestSection->name
+					);
+
+					return $this->generateEntry($entryParams);
+				}
+			}
+			else
+			{
+
+				$channelNumber = $settings['channelNumber'];
+
+				$sectionHandle = $settings['channel'];
+
+				$section = craft()->sections->getSectionByHandle($sectionHandle);
+
+				$entryTypes = $section->getEntryTypes();
+
+				// Get random entry type
+				$entryTypeKey = array_rand($entryTypes);
+
+				$entryTypeId = $entryTypes[$entryTypeKey]->id;
+
+				$entryParams = array(
+					'sectionId'     => $section->id,
+					'entryTypeId'   => $entryTypeId
+				);
+
+				if (!empty($channelNumber))
+				{
+					for ($i = 1; $i <= $channelNumber; $i++)
+					{
+						$entry = $this->generateEntry($entryParams);
+
+					}
+				}
 			}
 		}
-		$data = array();
-
-		$data['@model'] = 'Entry';
-
-		$fakerDate = $this->fakerService->dateTimeThisYear($max = 'now');
-
-		$data['attributes']['sectionId']  = $sectionId;
-		$data['attributes']['typeId']     = $typeId;
-		$data['attributes']['authorId']   = 2;
-		$data['attributes']['locale']     = "en_us";
-		//$data['attributes']['slug']       = "modi-et-in-libero-sint-quaerat";
-		$data['attributes']['postDate']   = $fakerDate;
-		$data['attributes']['expiryDate'] = null;
-		$data['attributes']['dateCreated'] = $fakerDate;
-		$data['attributes']['dateUpdated'] = $fakerDate;
-		$data['attributes']['enabled']     = true;
-
-	//	$data['content']['title'] = "Quia sapiente eum aut neque dolor.";
-		//$data['content']['fields']['title']      = "Quia sapiente eum aut neque dolor.";
-		$data['content']['fields']['body']       = $this->fakerService->paragraph();
-
-		$data['content']['beforeSave']['matchBy']    = "id";
-		$data['content']['beforeSave']['matchValue'] = $entryId;
-		$data['content']['beforeSave']['matchCriteria'] = array("section" => $latestSection->handle);
-
-		return sproutImport()->element->saveElement($data);
 	}
 
 	private function generateSingleSection()
@@ -111,19 +127,69 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 		$findEntryType = EntryTypeRecord::model()->findByAttributes(array('handle' => $handle));
 		$entryTypeModel = EntryTypeModel::populateModel($findEntryType);
 
-		// Get default body field
-		$fieldLayoutSettings = array
-		(
-			'Content' => array
+		$fields = sproutImport()->element->getFieldsByType();
+
+		if (!empty($fields))
+		{
+			// Get default body field
+			$fieldLayoutSettings = array
 			(
-				0 => '1'
-			)
-		);
-		$fieldLayout = craft()->fields->assembleLayout($fieldLayoutSettings);
-		$entryTypeModel->setFieldLayout($fieldLayout);
+				'FakeFieldContent' => array
+				(
+					0 => $fields[0]->id
+				)
+			);
+			$fieldLayout = craft()->fields->assembleLayout($fieldLayoutSettings);
+			$entryTypeModel->setFieldLayout($fieldLayout);
 
-		$result = craft()->sections->saveEntryType($entryTypeModel);
+			$result = craft()->sections->saveEntryType($entryTypeModel);
 
-		return $result;
+			return $result;
+		}
+
+	}
+
+	public function generateEntry($entryParams = array())
+	{
+
+		$fakerDate = $this->fakerService->dateTimeThisYear($max = 'now');
+
+		$data = array();
+		$data['@model'] = 'Entry';
+		$data['attributes']['sectionId']   = $entryParams['sectionId'];
+		$data['attributes']['typeId']      = $entryParams['entryTypeId'];
+
+		$user = craft()->userSession->getUser();
+		$data['attributes']['authorId']    = $user->id;
+		$data['attributes']['locale']      = "en_us";
+
+		$data['attributes']['postDate']    = $fakerDate;
+		$data['attributes']['expiryDate']  = null;
+		$data['attributes']['dateCreated'] = $fakerDate;
+		$data['attributes']['dateUpdated'] = $fakerDate;
+		$data['attributes']['enabled']     = true;
+
+		$title = isset($entryParams['title']) ? $entryParams['title'] : $this->fakerService->word;
+
+		$data['content']['title'] = $title;
+		$data['content']['fields']['title'] = $title;
+
+		$fields = sproutImport()->element->getFieldsByType();
+
+		if (!empty($fields))
+		{
+			$richTextHandle = $fields[0]->handle;
+			$data['content']['fields'][$richTextHandle]  = $this->fakerService->paragraph();
+		}
+
+
+		if (isset($entryParams['entryId']))
+		{
+			$data['content']['beforeSave']['matchBy']    = "id";
+			$data['content']['beforeSave']['matchValue'] = $entryParams['entryId'];
+			$data['content']['beforeSave']['matchCriteria'] = array("section" => $entryParams['sectionHandle']);
+		}
+
+		return sproutImport()->element->saveElement($data);
 	}
 }
