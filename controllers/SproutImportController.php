@@ -99,7 +99,7 @@ class SproutImportController extends BaseController
 			$importerClass->getMockData($settings);
 		}
 
-		craft()->userSession->setNotice(Craft::t('Elements generated.' . $elementType));
+		craft()->userSession->setNotice(Craft::t('Elements generated.'));
 
 		$this->redirectToPostedUrl();
 	}

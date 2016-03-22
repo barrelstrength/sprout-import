@@ -37,7 +37,6 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 
 	public function getMockData($settings)
 	{
-		$faker = \Faker\Factory::create();
 
 		$sectionType = $settings['sectionType'];
 

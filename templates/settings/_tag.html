@@ -4,16 +4,16 @@
 
 	<div class="input">
 		{{ forms.select({
-			id: "categoryGroup",
-			name: "settings[categoryGroup]",
-			label: "Category Group"|t,
-			options: [{label: "Select a group..."|t, value: null}]|merge(categoryGroups),
-			value: settings.categoryGroup is defined ? settings.categoryGroup : null,
+			id: "tagGroup",
+			name: "settings[tagGroup]",
+			label: "Tag Group"|t,
+			options: [{label: "Select a group..."|t, value: null}]|merge(tagGroups),
+			value: settings.tagGroup is defined ? settings.tagGroup : null,
 		}) }}
 
 		{{ forms.text({
-			id: 'categoryNumber',
-			name: 'settings[categoryNumber]',
+			id: 'tagNumber',
+			name: 'settings[tagNumber]',
 			value: '',
 			placeholder: 'Number'|t,
 			size: 3
