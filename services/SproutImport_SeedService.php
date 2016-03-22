@@ -20,20 +20,22 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		$record->save();
 	}
 
-	public function getAllSeeds()
+	public function getAllSeeds($type)
 	{
 		$seeds = craft()->db->createCommand()
 										->select('itemId, importerClass')
+										->where("type = '$type'")
 										->from('sproutimport_seeds')
 										->queryAll();
 
 		return $seeds;
 	}
 
-	public function weed()
+	public function weed($type)
 	{
 		$results = craft()->db->createCommand()
 			->select('id, itemId, importerClass')
+			->where("type = '$type'")
 			->from('sproutimport_seeds')
 			->queryAll();
 

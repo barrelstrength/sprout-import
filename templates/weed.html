@@ -20,7 +20,8 @@
 	}
 } %}
 
-{% set hasSeeds = craft.sproutImport.hasSeeds() %}
+{% set hasSeeds = craft.sproutImport.hasSeeds('import') %}
+{% set hasSeedsFake = craft.sproutImport.hasSeeds('fake') %}
 
 {% set content %}
 
@@ -28,16 +29,42 @@
 
 	{% if hasSeeds > 0 %}
 
-		<p>There are <strong>{{ hasSeeds }}</strong> seeds to weed.</p>
+		<p>There are <strong>{{ hasSeeds }} IMPORT </strong> seeds to weed.</p>
 
 		<form method="post" accept-charset="UTF-8">
 			<input type="hidden" name="action" value="sproutImport/seed/weed">
 			<input type="hidden" name="redirect" value="sproutimport/weed">
+			<input type="hidden" name="type" value="import">
 
 			<p>Remove all imported data that was marked as seed content.</p>
 
 			<div class="buttons">
-				<input class="btn submit" type="submit" value="Weed database">
+				<input class="btn submit" type="submit" value="Weed Imported data">
+			</div>
+
+		</form>
+
+	{% else %}
+
+		<p>Currently, there are no seeded elements in your database.</p>
+
+	{% endif %}
+
+<hr />
+
+	{% if hasSeedsFake > 0 %}
+
+		<p>There are <strong>{{ hasSeedsFake }} FAKE </strong> seeds to weed.</p>
+
+		<form method="post" accept-charset="UTF-8">
+			<input type="hidden" name="action" value="sproutImport/seed/weed">
+			<input type="hidden" name="redirect" value="sproutimport/weed">
+			<input type="hidden" name="type" value="fake">
+
+			<p>Remove all imported data that was marked as seed content.</p>
+
+			<div class="buttons">
+				<input class="btn submit" type="submit" value="Weed Fake data">
 			</div>
 
 		</form>

@@ -133,7 +133,8 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 		$findEntryType = EntryTypeRecord::model()->findByAttributes(array('handle' => $handle));
 		$entryTypeModel = EntryTypeModel::populateModel($findEntryType);
 
-		$fields = sproutImport()->element->getFieldsByType();
+		$element = $this->getName();
+		$fields = sproutImport()->element->getFieldsByType($element);
 
 		if (!empty($fields))
 		{
@@ -180,7 +181,8 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 		$data['content']['title'] = $title;
 		$data['content']['fields']['title'] = $title;
 
-		$fields = sproutImport()->element->getFieldsByType();
+		$element = $this->getName();
+		$fields = sproutImport()->element->getFieldsByType($element);
 
 		if (!empty($fields))
 		{
