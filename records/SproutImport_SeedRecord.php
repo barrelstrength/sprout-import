@@ -20,8 +20,9 @@ class SproutImport_SeedRecord extends BaseRecord
 	public function defineAttributes()
 	{
 		return array(
-			'itemId' => array(AttributeType::Number, 'required' => true),
+			'itemId'        => array(AttributeType::Number, 'required' => true),
 			'importerClass' => array(AttributeType::String, 'required' => true),
+			'type'          => array(AttributeType::String, 'required' => true)
 		);
 	}
 }

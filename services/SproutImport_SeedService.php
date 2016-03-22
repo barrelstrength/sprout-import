@@ -5,7 +5,7 @@ class SproutImport_SeedService extends BaseApplicationComponent
 {
 	public $seed = false;
 
-	public function trackSeed($itemId = null, $importerClass = null)
+	public function trackSeed($itemId = null, $importerClass = null, $type = 'import')
 	{
 		if (!$itemId OR !$importerClass)
 		{
@@ -15,6 +15,7 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		$record                = new SproutImport_SeedRecord;
 		$record->itemId        = $itemId;
 		$record->importerClass = $importerClass;
+		$record->type          = $type;
 
 		$record->save();
 	}

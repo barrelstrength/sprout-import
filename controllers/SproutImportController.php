@@ -96,7 +96,15 @@ class SproutImportController extends BaseController
 
 			$importerClass = new $className;
 
-			$importerClass->getMockData($settings);
+			$ids = $importerClass->getMockData($settings);
+
+			if (!empty($ids))
+			{
+				foreach ($ids as $id)
+				{
+					sproutImport()->seed->trackSeed($id, $elementType, 'fake');
+				}
+			}
 		}
 
 		craft()->userSession->setNotice(Craft::t('Elements generated.'));

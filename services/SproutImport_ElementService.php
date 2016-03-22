@@ -85,6 +85,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 		sproutImport()->log("Begin validation of Element Model.");
 
+		$saved = false;
 		if ($model->validate())
 		{
 			$isNewElement = !$model->id;
@@ -141,6 +142,12 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 			sproutImport()->error('Unable to validate.', $model->getErrors());
 		}
+
+		if ($saved)
+		{
+			return $model->id;
+		}
+
 	}
 
 	public function getSavedResults($returnSavedElementIds = false)
@@ -406,9 +413,9 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		return $selects;
 	}
 
-	public function getFieldsByType($type = "RichText")
+	public function getFieldsByType($type = "RichText", $element = "Entry")
 	{
-		$fields = craft()->fields->getAllFields();
+		$fields = craft()->fields->getFieldsByElementType($element);
 
 		$texts = array();
 		if (!empty($fields))

@@ -40,6 +40,8 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 
 		$sectionType = $settings['sectionType'];
 
+		$saveIds = array();
+
 		if (!empty($sectionType))
 		{
 			if ($sectionType == 'single')
@@ -66,7 +68,9 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 						'title'         => $latestSection->name
 					);
 
-					return $this->generateEntry($entryParams);
+					$id = $this->generateEntry($entryParams);
+
+					$saveIds[] = $id;
 				}
 			}
 			else
@@ -94,12 +98,15 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 				{
 					for ($i = 1; $i <= $channelNumber; $i++)
 					{
-						$entry = $this->generateEntry($entryParams);
+						$id = $this->generateEntry($entryParams);
 
+						$saveIds[] = $id;
 					}
 				}
 			}
 		}
+
+		return $saveIds;
 	}
 
 	private function generateSingleSection()
@@ -151,7 +158,7 @@ class EntrySproutImportImporter extends ElementSproutImportImporter
 	public function generateEntry($entryParams = array())
 	{
 
-		$fakerDate = $this->fakerService->dateTimeThisYear($max = 'now');
+		$fakerDate = $this->fakerService->dateTimeThisYear('now');
 
 		$data = array();
 		$data['@model'] = 'Entry';
