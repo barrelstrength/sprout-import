@@ -149,6 +149,7 @@ class SproutImportService extends BaseApplicationComponent
 			foreach ($rows as $row)
 			{
 				$model = $this->getImporterModel($row);
+
 				try
 				{
 					if($this->isElementType($model))

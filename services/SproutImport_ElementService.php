@@ -6,6 +6,10 @@ namespace Craft;
 class SproutImport_ElementService extends BaseApplicationComponent
 {
 
+	private $type;
+
+	private $element;
+
 	/**
 	 * Elements saved during the length of the import job
 	 *
@@ -42,10 +46,15 @@ class SproutImport_ElementService extends BaseApplicationComponent
 	 */
 	public function saveElement(array $element, $seed = false)
 	{
+		$type = sproutImport()->getImporterModel($element);
 
-		$model = $this->getElementModel(sproutImport()->getValueByKey('content.beforeSave', $element), $element);
+		$this->element = $element;
+		$this->type    = $type;
 
-		$type       = sproutImport()->getValueByKey('@model', $element);
+		$beforeSave = sproutImport()->getValueByKey('content.beforeSave', $element);
+
+		$model = $this->getElementModel($beforeSave);
+
 		$content    = sproutImport()->getValueByKey('content', $element);
 		$fields     = sproutImport()->getValueByKey('content.fields', $element);
 		$related    = sproutImport()->getValueByKey('content.related', $element);
@@ -221,7 +230,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 					continue;
 				}
 
-				$type                  = sproutImport()->getValueByKey('@model', $definition);
+				$type                  = sproutImport()-ImporterModel($definition);
 				$matchBy               = sproutImport()->getValueByKey('matchBy', $definition);
 				$matchValue            = sproutImport()->getValueByKey('matchValue', $definition);
 				$matchCriteria         = sproutImport()->getValueByKey('matchCriteria', $definition);
@@ -343,9 +352,9 @@ class SproutImport_ElementService extends BaseApplicationComponent
 	 * @return BaseElementModel|EntryModel|CategoryModel|UserModel
 	 * @throws Exception
 	 */
-	protected function getElementModel($beforeSave = null, array $data = array())
+	protected function getElementModel($beforeSave = null)
 	{
-		$type  = sproutImport()->getValueByKey('@model', $data);
+		$type  = $this->type;
 		$name  = sproutImport()->getModelClass($type);
 
 		$model = new $name();
