@@ -46,7 +46,7 @@ class SproutImportService extends BaseApplicationComponent
 	 *
 	 * @return SproutImportBaseImporter[]
 	 */
-	public function getSproutImporImporters()
+	public function getSproutImportImporters()
 	{
 		$importersToLoad = craft()->plugins->call('registerSproutImportImporters');
 

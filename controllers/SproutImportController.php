@@ -60,7 +60,7 @@ class SproutImportController extends BaseController
 		$elementSelect['Category'] = 'Categories';
 		$elementSelect['Tag']      = 'Tags';
 
-		$importers = sproutImport()->getSproutImporImporters();
+		$importers = sproutImport()->getSproutImportImporters();
 
 		$settingElements = "";
 
