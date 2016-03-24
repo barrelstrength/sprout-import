@@ -23,6 +23,9 @@
 {% set content %}
 
 	<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
+
+		{{ getCsrfInput() }}
+
 		<input type="hidden" name="action" value="sproutImport/importElements">
 
 		<div class="field first" id="files-field">

@@ -32,6 +32,9 @@
 		<p>There are <strong>{{ hasSeeds }} IMPORT </strong> seeds to weed.</p>
 
 		<form method="post" accept-charset="UTF-8">
+
+			{{ getCsrfInput() }}
+
 			<input type="hidden" name="action" value="sproutImport/seed/weed">
 			<input type="hidden" name="redirect" value="sproutimport/weed">
 			<input type="hidden" name="type" value="import">
@@ -57,6 +60,9 @@
 		<p>There are <strong>{{ hasSeedsFake }} FAKE </strong> seeds to weed.</p>
 
 		<form method="post" accept-charset="UTF-8">
+
+			{{ getCsrfInput() }}
+
 			<input type="hidden" name="action" value="sproutImport/seed/weed">
 			<input type="hidden" name="redirect" value="sproutimport/weed">
 			<input type="hidden" name="type" value="fake">

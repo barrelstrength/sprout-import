@@ -28,6 +28,8 @@
 	<h2>Generate Fake Data</h2>
 	<form method="post" accept-charset="UTF-8">
 
+		{{ getCsrfInput() }}
+
 		<input type="hidden" name="action" value="sproutImport/generateElements">
 
 		<div class="field first">
