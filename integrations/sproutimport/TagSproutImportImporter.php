@@ -1,9 +1,7 @@
 <?php
-
 namespace Craft;
 
-
-class TagSproutImportImporter extends ElementSproutImportImporter
+class TagSproutImportImporter extends SproutImportBaseElementImporter
 {
 
 	public function isElement()

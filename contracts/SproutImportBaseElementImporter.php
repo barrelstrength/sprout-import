@@ -2,7 +2,7 @@
 
 namespace Craft;
 
-abstract class ElementSproutImportImporter extends SproutImportBaseImporter
+abstract class SproutImportBaseElementImporter extends SproutImportBaseImporter
 {
 	public function setModel($model)
 	{
