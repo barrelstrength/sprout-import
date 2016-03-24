@@ -1,22 +1,22 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
-{% set title = 'Generate Data' %}
+{% set title = 'Seed' %}
 
-{% set selectedTab = 'mock' %}
+{% set selectedTab = 'seed' %}
 
 {% set tabs = {
-	data: {
-		label: "Import Data"|t,
+import: {
+		label: "Import"|t,
 		url: url('sproutimport/index')
+	},
+	seed: {
+		label: "Seed"|t,
+		url: url('sproutimport/seed')
 	},
 	weed: {
 		label: "Weed"|t,
 		url: url('sproutimport/weed')
-	},
-	mock: {
-		label: "Generate Data"|t,
-		url: url('sproutimport/generatedata')
 	}
 } %}
 
@@ -25,7 +25,8 @@
 
 {% set content %}
 
-	<h2>Generate Fake Data</h2>
+	<p>Generated content and settings will be marked as seed data and can be removed using the Weed tab later.</p>
+
 	<form method="post" accept-charset="UTF-8">
 
 		{{ getCsrfInput() }}
@@ -36,7 +37,8 @@
 			{{ forms.selectField({
 				id: "elementType",
 				name: "elementType",
-				label: "Elements"|t,
+				label: "Element"|t,
+				instructions: "Select the type of content you wish to seed in your database.",
 				options: [{label: "Select element..."|t, value: null}]|merge(elements),
 				value: elementType is defined ? elementType : null,
 			}) }}

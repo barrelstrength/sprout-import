@@ -53,39 +53,6 @@ class SproutImportController extends BaseController
 		craft()->end();
 	}
 
-	public function actionGenerateData()
-	{
-		$elementSelect = array();
-
-		$elementSelect['Entry']    = 'Entries';
-		$elementSelect['Category'] = 'Categories';
-		$elementSelect['Tag']      = 'Tags';
-
-		$importers = sproutImport()->getSproutImportImporters();
-
-		$settingElements = "";
-
-		if (!empty($importers))
-		{
-			foreach ($importers as $importer)
-			{
-				if ($importer->isElement())
-				{
-					$settingElements .= $importer->getMockSettings() . "\n";
-				}
-			}
-		}
-
-		craft()->templates->includeJsResource('sproutimport/js/sproutimport.js');
-
-		$this->renderTemplate('sproutimport/generatedata', array(
-			'elements' => $elementSelect,
-			'settings' => array(
-				'elements' => TemplateHelper::getRaw($settingElements)
-			)
-		));
-	}
-
 	public function actionGenerateElements()
 	{
 		$this->requirePostRequest();
@@ -113,5 +80,38 @@ class SproutImportController extends BaseController
 		craft()->userSession->setNotice(Craft::t('Elements generated.'));
 
 		$this->redirectToPostedUrl();
+	}
+
+	public function actionSeedTemplate()
+	{
+		$elementSelect = array();
+
+		$elementSelect['Entry']    = 'Entries';
+		$elementSelect['Category'] = 'Categories';
+		$elementSelect['Tag']      = 'Tags';
+
+		$importers = sproutImport()->getSproutImportImporters();
+
+		$settingElements = "";
+
+		if (!empty($importers))
+		{
+			foreach ($importers as $importer)
+			{
+				if ($importer->isElement())
+				{
+					$settingElements .= $importer->getMockSettings() . "\n";
+				}
+			}
+		}
+
+		craft()->templates->includeJsResource('sproutimport/js/sproutimport.js');
+
+		$this->renderTemplate('sproutimport/seed', array(
+			'elements' => $elementSelect,
+			'settings' => array(
+				'elements' => TemplateHelper::getRaw($settingElements)
+			)
+		));
 	}
 }
