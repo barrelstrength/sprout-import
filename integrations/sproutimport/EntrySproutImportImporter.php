@@ -18,8 +18,10 @@ class EntrySproutImportImporter extends SproutImportBaseElementImporter
 
 	public function getMockSettings()
 	{
-
-		$sections = array('single' => 'Single', 'channel' => 'Channel');
+		$sections = array(
+			'single' => 'Single',
+			'channel' => 'Channel'
+		);
 
 		$channels = sproutImport()->element->getChannelSections();
 
@@ -32,7 +34,6 @@ class EntrySproutImportImporter extends SproutImportBaseElementImporter
 
 	public function getMockData($settings)
 	{
-
 		$sectionType = $settings['sectionType'];
 
 		$saveIds = array();
@@ -70,7 +71,6 @@ class EntrySproutImportImporter extends SproutImportBaseElementImporter
 			}
 			else
 			{
-
 				$channelNumber = $settings['channelNumber'];
 
 				$sectionHandle = $settings['channel'];

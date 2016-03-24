@@ -3,6 +3,18 @@ namespace Craft;
 
 class TagSproutImportImporter extends SproutImportBaseElementImporter
 {
+	public function getModel()
+	{
+		$model = 'Craft\\TagModel';
+
+		return new $model;
+	}
+
+	public function save()
+	{
+		return craft()->tags->saveTag($this->model);
+	}
+
 	public function getMockSettings()
 	{
 		$variables = array();
@@ -38,18 +50,6 @@ class TagSproutImportImporter extends SproutImportBaseElementImporter
 				$this->generateTag($tagGroup);
 			}
 		}
-	}
-
-	public function getModel()
-	{
-		$model = 'Craft\\TagModel';
-
-		return new $model;
-	}
-
-	public function save()
-	{
-		return craft()->tags->saveTag($this->model);
 	}
 
 	private function generateTag($tagGroup)

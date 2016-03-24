@@ -3,6 +3,18 @@ namespace Craft;
 
 class CategorySproutImportImporter extends SproutImportBaseElementImporter
 {
+	public function getModel()
+	{
+		$model = 'Craft\\CategoryModel';
+
+		return new $model;
+	}
+
+	public function save()
+	{
+		return craft()->categories->saveCategory($this->model);
+	}
+
 	public function getMockSettings()
 	{
 		$variables = array();
@@ -38,18 +50,6 @@ class CategorySproutImportImporter extends SproutImportBaseElementImporter
 				$this->generateCategory($categoryGroup);
 			}
 		}
-	}
-
-	public function getModel()
-	{
-		$model = 'Craft\\CategoryModel';
-
-		return new $model;
-	}
-
-	public function save()
-	{
-		return craft()->categories->saveCategory($this->model);
 	}
 
 	private function generateCategory($categoryGroup)
