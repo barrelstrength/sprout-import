@@ -3,15 +3,10 @@ namespace Craft;
 
 class UserSproutImportImporter extends SproutImportBaseElementImporter
 {
-
-	public function isElement()
-	{
-		return true;
-	}
-
 	public function getModel()
 	{
 		$model = 'Craft\\UserModel';
+
 		return new $model;
 	}
 
