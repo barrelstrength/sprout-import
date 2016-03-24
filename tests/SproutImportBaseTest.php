@@ -68,7 +68,6 @@ class SproutImportBaseTest extends BaseTest
 		$pluginService->shouldReceive('getPlugin')->with('sproutimport')->andReturn($plugin);
 
 		$this->setComponent(craft(), 'plugins', $pluginService);
-
 	}
 
 	public function tearDown()

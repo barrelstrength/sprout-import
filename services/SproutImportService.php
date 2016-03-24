@@ -10,6 +10,7 @@ class SproutImportService extends BaseApplicationComponent
 	protected $importers = array();
 
 	/** Sub Services
+	 *
 	 * @var
 	 */
 	public $setting;
@@ -18,7 +19,6 @@ class SproutImportService extends BaseApplicationComponent
 
 	protected $elementsService;
 
-
 	/**
 	 * Gives third party plugins a chance to register custom elements to import into
 	 */
@@ -26,7 +26,7 @@ class SproutImportService extends BaseApplicationComponent
 	{
 		parent::init();
 
-		if($elementsService != null)
+		if ($elementsService != null)
 		{
 			$this->elementsService = $elementsService;
 		}
@@ -84,7 +84,7 @@ class SproutImportService extends BaseApplicationComponent
 		}
 
 		return craft()->tasks->createTask('SproutImport', Craft::t("Importing elements"), array('files' => $tasks,
-		                                                                                        'seed'  => $seed ));
+		                                                                                        'seed'  => $seed));
 	}
 
 	public function enqueueTasksByPost(array $tasks)
@@ -102,7 +102,7 @@ class SproutImportService extends BaseApplicationComponent
 
 	/**
 	 * @param array $elements
-	 * @param bool $returnSavedElementIds
+	 * @param bool  $returnSavedElementIds
 	 *
 	 * @return array
 	 * @throws Exception
@@ -113,7 +113,7 @@ class SproutImportService extends BaseApplicationComponent
 	{
 		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 
-		if(!empty($rows))
+		if (!empty($rows))
 		{
 
 			$results = array();
@@ -124,13 +124,13 @@ class SproutImportService extends BaseApplicationComponent
 
 				try
 				{
-					if($this->isElementType($model))
+					if ($this->isElementType($model))
 					{
 						$result = $this->element->saveElement($row, $seed);
 					}
 					else
 					{
-							$result = $this->setting->saveSetting($row, $seed);
+						$result = $this->setting->saveSetting($row, $seed);
 					}
 				}
 				catch (\Exception $e)
@@ -166,6 +166,7 @@ class SproutImportService extends BaseApplicationComponent
 
 	/**
 	 * Check if name given is an element type
+	 *
 	 * @param $name
 	 *
 	 * @return bool
@@ -183,8 +184,6 @@ class SproutImportService extends BaseApplicationComponent
 
 		return false;
 	}
-
-
 
 	public function getImporterModel($settings)
 	{
@@ -235,11 +234,10 @@ class SproutImportService extends BaseApplicationComponent
 		return $this->getValueByKey("{$type}.method", $this->mapping);
 	}
 
-
 	/**
 	 * @param string $key
-	 * @param mixed $data
-	 * @param mixed $default
+	 * @param mixed  $data
+	 * @param mixed  $default
 	 *
 	 * @return mixed
 	 */
@@ -280,8 +278,8 @@ class SproutImportService extends BaseApplicationComponent
 
 	/**
 	 * @param string|mixed $message
-	 * @param array|mixed $data
-	 * @param string $level
+	 * @param array|mixed  $data
+	 * @param string       $level
 	 */
 	public function log($message, $data = null, $level = LogLevel::Info)
 	{
@@ -300,7 +298,7 @@ class SproutImportService extends BaseApplicationComponent
 
 	/**
 	 * @param        $message
-	 * @param null $data
+	 * @param null   $data
 	 * @param string $level
 	 */
 	public function error($message, $data = null, $level = LogLevel::Error)
@@ -330,8 +328,10 @@ class SproutImportService extends BaseApplicationComponent
 
 	/**
 	 * Divide array by sections
+	 *
 	 * @param $array
 	 * @param $step
+	 *
 	 * @return array
 	 */
 	function sectionArray($array, $step)
@@ -339,24 +339,29 @@ class SproutImportService extends BaseApplicationComponent
 		$sectioned = array();
 
 		$k = 0;
-		for ( $i=0;$i < count($array); $i++ ) {
-			if ( !($i % $step) ) {
+		for ($i = 0; $i < count($array); $i++)
+		{
+			if (!($i % $step))
+			{
 				$k++;
 			}
 
 			$sectioned[$k][] = $array[$i];
 		}
+
 		return array_values($sectioned);
 	}
 
 	/**
-	* @author		Chris Smith <code+php@chris.cs278.org>
-	* @copyright	Copyright (c) 2009 Chris Smith (http://www.cs278.org/)
-	* @license		http://sam.zoy.org/wtfpl/ WTFPL
-	* @param		string	$value	Value to test for serialized form
-	* @param		mixed	$result	Result of unserialize() of the $value
-	* @return		boolean			True if $value is serialized data, otherwise false
-	*/
+	 * @author     Chris Smith <code+php@chris.cs278.org>
+	 * @copyright  Copyright (c) 2009 Chris Smith (http://www.cs278.org/)
+	 * @license    http://sam.zoy.org/wtfpl/ WTFPL
+	 *
+	 * @param    string $value  Value to test for serialized form
+	 * @param    mixed  $result Result of unserialize() of the $value
+	 *
+	 * @return    boolean      True if $value is serialized data, otherwise false
+	 */
 	function isSerialized($value, &$result = null)
 	{
 		// Bit of a give away this one
@@ -370,10 +375,11 @@ class SproutImportService extends BaseApplicationComponent
 		if ($value === 'b:0;')
 		{
 			$result = false;
+
 			return true;
 		}
-		$length	= strlen($value);
-		$end	= '';
+		$length = strlen($value);
+		$end    = '';
 		switch ($value[0])
 		{
 			case 's':
@@ -422,23 +428,26 @@ class SproutImportService extends BaseApplicationComponent
 		if (($result = @unserialize($value)) === false)
 		{
 			$result = null;
+
 			return false;
 		}
+
 		return true;
 	}
 
 	/** Migrate elements to Craft
+	 *
 	 * @param $elements
+	 *
 	 * @throws Exception
 	 */
 	public function setEnqueueTasksByPost($elements)
 	{
 
 		// support serialize format
-		if(sproutImport()->isSerialized($elements))
+		if (sproutImport()->isSerialized($elements))
 		{
 			$elements = unserialize($elements);
-
 		}
 
 		// Divide array for the tasks service
@@ -450,7 +459,7 @@ class SproutImportService extends BaseApplicationComponent
 		{
 			craft()->userSession->setNotice(Craft::t('({tasks}) Tasks queued successfully.', array('tasks' => count($tasks))));
 		}
-		catch(\Exception $e)
+		catch (\Exception $e)
 		{
 			craft()->userSession->setError($e->getMessage());
 		}

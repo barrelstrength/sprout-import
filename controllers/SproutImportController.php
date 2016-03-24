@@ -15,7 +15,8 @@ class SproutImportController extends BaseController
 		foreach ($files as $file)
 		{
 			if (!$file->getHasError() && $file->getType() == 'application/json'
-			|| $file->getType() == 'application/octet-stream')
+				|| $file->getType() == 'application/octet-stream'
+			)
 			{
 				$path = $folderPath . $file->getName();
 
@@ -36,7 +37,7 @@ class SproutImportController extends BaseController
 				'tasks' => count($tasks)
 			)));
 		}
-		catch(\Exception $e)
+		catch (\Exception $e)
 		{
 			craft()->userSession->setError($e->getMessage());
 		}
@@ -70,7 +71,7 @@ class SproutImportController extends BaseController
 			{
 				if ($importer->isElement())
 				{
-					$settingElements.= $importer->getMockSettings() . "\n";
+					$settingElements .= $importer->getMockSettings() . "\n";
 				}
 			}
 		}
@@ -90,9 +91,9 @@ class SproutImportController extends BaseController
 		$this->requirePostRequest();
 
 		$elementType = craft()->request->getRequiredPost('elementType');
-		$settings = craft()->request->getRequiredPost('settings');
+		$settings    = craft()->request->getRequiredPost('settings');
 
-		if(!empty($elementType))
+		if (!empty($elementType))
 		{
 			$className = sproutImport()->getImporterByName($elementType);
 

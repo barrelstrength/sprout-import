@@ -1,7 +1,5 @@
 <?php
-
 namespace Craft;
-
 
 class SproutImport_ElementService extends BaseApplicationComponent
 {
@@ -75,9 +73,9 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		{
 			if (is_array($attributes['authorId']) && !empty($attributes['authorId']['email']))
 			{
-				$userEmail = $attributes['authorId']['email'];
-				$userModel = craft()->users->getUserByUsernameOrEmail($userEmail);
-				$authorId = $userModel->getAttribute('id');
+				$userEmail              = $attributes['authorId']['email'];
+				$userModel              = craft()->users->getUserByUsernameOrEmail($userEmail);
+				$authorId               = $userModel->getAttribute('id');
 				$attributes['authorId'] = $authorId;
 			}
 		}
@@ -110,7 +108,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				if ($saved && $isNewElement)
 				{
 					$this->savedElementIds[] = $model->id;
-					$this->savedElements[] = $model->getTitle();
+					$this->savedElements[]   = $model->getTitle();
 
 					$event = new Event($this, array('element' => $model, 'seed' => $seed, '@model' => $type));
 
@@ -136,8 +134,8 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			catch (\Exception $e)
 			{
 				$this->unsavedElements[] = array('title' => $model->getTitle(), 'error' => $e->getMessage());
-				$title = sproutImport()->getValueByKey('content.title', $element);
-				$msg = $title . ' ' . implode(', ', array_keys($fields)) . ' Check field values if it exists.';
+				$title                   = sproutImport()->getValueByKey('content.title', $element);
+				$msg                     = $title . ' ' . implode(', ', array_keys($fields)) . ' Check field values if it exists.';
 				sproutImport()->error($msg);
 				sproutImport()->error($e->getMessage());
 			}
@@ -156,7 +154,6 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		{
 			return $model->id;
 		}
-
 	}
 
 	public function getSavedResults($returnSavedElementIds = false)
@@ -230,7 +227,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 					continue;
 				}
 
-				$type                  = sproutImport()-ImporterModel($definition);
+				$type                  = sproutImport() - ImporterModel($definition);
 				$matchBy               = sproutImport()->getValueByKey('matchBy', $definition);
 				$matchValue            = sproutImport()->getValueByKey('matchValue', $definition);
 				$matchCriteria         = sproutImport()->getValueByKey('matchCriteria', $definition);
@@ -295,9 +292,9 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 						if (!$foundAll && $createIfNotFound && is_array($newElementDefinitions) && count($newElementDefinitions))
 						{
-							if(!empty($newElementDefinitions))
+							if (!empty($newElementDefinitions))
 							{
-								foreach($newElementDefinitions as $definition)
+								foreach ($newElementDefinitions as $definition)
 								{
 									$this->saveElement($definition);
 								}
@@ -307,7 +304,8 @@ class SproutImport_ElementService extends BaseApplicationComponent
 							// Do we need to create the element?
 							$ids = array_merge($ids, $elementIds);
 						}
-					} catch (\Exception $e)
+					}
+					catch (\Exception $e)
 					{
 						sproutImport()->error($e->getMessage(), $e);
 
@@ -344,9 +342,8 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		}
 	}
 
-
 	/**
-	 * @param null $beforeSave
+	 * @param null  $beforeSave
 	 * @param array $data
 	 *
 	 * @return BaseElementModel|EntryModel|CategoryModel|UserModel
@@ -394,7 +391,8 @@ class SproutImport_ElementService extends BaseApplicationComponent
 					{
 						return $element;
 					}
-				} catch (\Exception $e)
+				}
+				catch (\Exception $e)
 				{
 					sproutImport()->error($e->getMessage());
 				}
@@ -406,14 +404,17 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 	public function getChannelSections()
 	{
-		$selects = array();
+		$selects  = array();
 		$sections = craft()->sections->getAllSections();
 		if (!empty($sections))
 		{
 			foreach ($sections as $section)
 			{
 
-				if ($section->type == 'single') continue;
+				if ($section->type == 'single')
+				{
+					continue;
+				}
 
 				$selects[$section->handle] = $section->name;
 			}

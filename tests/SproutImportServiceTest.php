@@ -14,7 +14,7 @@ class SproutImportServiceTest extends SproutImportBaseTest
 
 	public function testIsElementType()
 	{
-		$types = array('Entry' => '', 'User' => '', 'Asset' => '', 'Category' => '', 'Tag' => '');
+		$types           = array('Entry' => '', 'User' => '', 'Asset' => '', 'Category' => '', 'Tag' => '');
 		$elementsService = m::mock('Craft\ElementsService')
 			->shouldReceive('getAllElementTypes')
 			->andReturn($types)
@@ -32,13 +32,13 @@ class SproutImportServiceTest extends SproutImportBaseTest
 	public function testGetImporterModel()
 	{
 		// Accepts with suffix Model or without
-		$row = array('@model' => 'FieldModel', 'groupId' => 1, 'name' => 'Field Name' );
+		$row = array('@model' => 'FieldModel', 'groupId' => 1, 'name' => 'Field Name');
 
 		$model = sproutImport()->getImporterModel($row);
 
 		$this->assertEquals('Field', $model);
 
-		$row = array('@model' => 'Entry', 'attributes' => 1 );
+		$row = array('@model' => 'Entry', 'attributes' => 1);
 
 		$model = sproutImport()->getImporterModel($row);
 

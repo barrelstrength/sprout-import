@@ -12,9 +12,10 @@ class SproutImport_SeedRecord extends BaseRecord
 	{
 		return 'sproutimport_seeds';
 	}
-	
+
 	/**
 	 * These have to be explicitly defined in order for the plugin to install
+	 *
 	 * @return array
 	 */
 	public function defineAttributes()

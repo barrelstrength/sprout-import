@@ -22,7 +22,7 @@ class SproutImportTask extends BaseTask
 
 				IOHelper::deleteFile($file);
 
-				sproutImport()->log('Task result for '.$file, $result);
+				sproutImport()->log('Task result for ' . $file, $result);
 
 				return true;
 			}

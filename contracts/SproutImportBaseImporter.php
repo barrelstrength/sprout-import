@@ -31,7 +31,7 @@ abstract class SproutImportBaseImporter
 		require_once dirname(__FILE__) . '/../vendor/autoload.php';
 		if (count($settings))
 		{
-			$model = $this->getModel();
+			$model       = $this->getModel();
 			$this->model = $model;
 
 			$this->populateModel($model, $settings);

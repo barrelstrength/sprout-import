@@ -15,7 +15,8 @@ class SproutImportPlugin extends BasePlugin
 			craft()->templates->includeJsResource("sproutimport/js/sproutimport.js");
 		}
 
-		craft()->on('sproutImport.onAfterMigrateElement', function(Event $event) {
+		craft()->on('sproutImport.onAfterMigrateElement', function (Event $event)
+		{
 
 			$element = $event->params['element'];
 			$seed    = $event->params['seed'];
@@ -27,7 +28,6 @@ class SproutImportPlugin extends BasePlugin
 			{
 				sproutImport()->seed->trackSeed($id, $type);
 			}
-
 		});
 	}
 
