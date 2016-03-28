@@ -65,32 +65,11 @@ class SproutImportPlugin extends BasePlugin
 		);
 	}
 
-	public function registerSproutImportElements()
-	{
-		return array(
-			'user'     => array(
-				'model'   => 'Craft\\UserModel',
-				'method'  => 'saveUser',
-				'service' => 'users',
-			),
-			'entry'    => array(
-				'model'   => 'Craft\\EntryModel',
-				'method'  => 'saveEntry',
-				'service' => 'entries',
-			),
-			'category' => array(
-				'model'   => 'Craft\\CategoryModel',
-				'method'  => 'saveCategory',
-				'service' => 'categories',
-			),
-			'tag'      => array(
-				'model'   => 'Craft\\TagModel',
-				'method'  => 'saveTag',
-				'service' => 'tags',
-			)
-		);
-	}
-
+	/**
+	 * Register built in importers and the method for the integration
+	 *
+	 * @return array
+	 */
 	public function registerSproutImportImporters()
 	{
 		return array(

@@ -3,14 +3,6 @@ namespace Craft;
 
 class SproutImportService extends BaseApplicationComponent
 {
-	/**
-	 * Maps the element we support importing into
-	 *
-	 * @note Custom elements can be registered by defining registerSproutImportElements
-	 * () in your plugin
-	 * @var array
-	 */
-	protected $mapping = array();
 
 	/**
 	 * @var SproutImportBaseImporter[]
@@ -47,26 +39,6 @@ class SproutImportService extends BaseApplicationComponent
 		$this->element = Craft::app()->getComponent('sproutImport_element');
 		$this->setting = Craft::app()->getComponent('sproutImport_setting');
 
-		$results = craft()->plugins->call('registerSproutImportElements');
-
-		if ($results)
-		{
-			foreach ($results as $elements)
-			{
-				if (is_array($elements) && count($elements))
-				{
-					foreach ($elements as $type => $element)
-					{
-						// @todo - Add validation and enforce rules
-						if (isset($element['model']) && isset($element['method']) && isset($element['service']))
-						{
-							// @todo - Think about adding checks to replace isset() checks
-							$this->mapping[$type] = $element;
-						}
-					}
-				}
-			}
-		}
 	}
 
 	/**
