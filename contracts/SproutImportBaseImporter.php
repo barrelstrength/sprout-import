@@ -16,6 +16,8 @@ abstract class SproutImportBaseImporter
 
 	protected $fakerService;
 
+	protected $settings;
+
 	public function isElement()
 	{
 		return false;
@@ -23,6 +25,9 @@ abstract class SproutImportBaseImporter
 
 	public function __construct($settings = array())
 	{
+
+		$this->settings = $settings;
+
 		require_once dirname(__FILE__) . '/../vendor/autoload.php';
 		if (count($settings))
 		{

@@ -5,8 +5,18 @@ class FieldSproutImportImporter extends SproutImportBaseImporter
 {
 	public function getModel()
 	{
-		$model = 'Craft\\FieldModel';
-		return new $model;
+		$handle = $this->settings['handle'];
+		$exist = craft()->fields->getFieldByHandle($handle);
+
+		if($exist != null)
+		{
+			return $exist;
+		}
+		else
+		{
+			$model = 'Craft\\FieldModel';
+			return new $model;
+		}
 	}
 
 	//public function populateModel($model, $settings)

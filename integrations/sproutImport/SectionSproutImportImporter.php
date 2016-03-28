@@ -114,34 +114,35 @@ class SectionSproutImportImporter extends SproutImportBaseImporter
 		{
 			$settings['entryTypes'][$key]['sectionId'] = $sectionId;
 
-			$entryType = craft()->sproutImport->saveSetting($settings['entryTypes'][$key]);
+			$entryType = sproutImport()->setting->saveSetting($settings['entryTypes'][$key]);
 
 			// ------------------------------------------------------------
 
 			$entryTypeId   = $entryType->id;
 			$fieldLayoutId = $entryType->fieldLayoutId;
-			
+
 			// @TODO - make fieldContext and contentTable dynamic
 			craft()->content->fieldContext = 'global';
 			// craft()->content->contentTable = 'content';
 
 			//------------------------------------------------------------
 
-			// Do we have a new field that doesn't exist yet?  
-			// If so, save it and grab the id.		
+			// Do we have a new field that doesn't exist yet?
+			// If so, save it and grab the id.
 
 			$fieldLayoutTabs = $entryTypeSettings['fieldLayout'];
 			$fieldLayout = array();
 			$requiredFields = array();
 
+
 			foreach ($fieldLayoutTabs as $tab)
-			{	
+			{
 				$tabName = $tab['name'];
 				$fields = $tab['fields'];
-				
-				foreach ($fields as $fieldSettings) 
+
+				foreach ($fields as $fieldSettings)
 				{
-					$field = craft()->sproutImport->saveSetting($fieldSettings);
+					$field = sproutImport()->setting->saveSetting($fieldSettings);
 					
 					$fieldLayout[$tabName][] = $field->id;
 					
