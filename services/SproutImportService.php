@@ -525,4 +525,20 @@ class SproutImportService extends BaseApplicationComponent
 
 		return $result;
 	}
+
+	/** Ensures that sprout import temp folder is created
+	 *
+	 * @return string
+	 */
+	public function createTempFolder()
+	{
+
+		$folderPath = craft()->path->getTempUploadsPath().'sproutimport/';
+
+		IOHelper::clearFolder($folderPath);
+
+		IOHelper::ensureFolderExists($folderPath);
+
+		return $folderPath;
+	}
 }

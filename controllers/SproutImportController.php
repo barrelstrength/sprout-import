@@ -10,12 +10,14 @@ class SproutImportController extends BaseController
 		$tasks = array();
 		$files = UploadedFile::getInstancesByName('files');
 
+		$folderPath = sproutImport()->createTempFolder();
+
 		foreach ($files as $file)
 		{
 			if (!$file->getHasError() && $file->getType() == 'application/json'
 			|| $file->getType() == 'application/octet-stream')
 			{
-				$path = craft()->path->getStoragePath() . $file->getName();
+				$path = $folderPath . $file->getName();
 
 				if (move_uploaded_file($file->getTempName(), $path))
 				{
