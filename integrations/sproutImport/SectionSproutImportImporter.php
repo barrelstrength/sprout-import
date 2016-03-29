@@ -5,10 +5,14 @@ class SectionSproutImportImporter extends SproutImportBaseImporter
 {
 	public $isNewSection;
 
-	public function getModel()
+	public function getObjectByHandle($handle)
 	{
-		$model = 'Craft\\SectionModel';
-		return new $model;
+		return craft()->sections->getSectionByHandle($handle);
+	}
+
+	public function defineModel()
+	{
+		return 'Craft\\SectionModel';
 	}
 
 	public function populateModel($model, $settings)

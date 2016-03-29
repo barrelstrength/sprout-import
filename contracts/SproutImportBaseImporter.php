@@ -44,6 +44,11 @@ abstract class SproutImportBaseImporter
 		$this->fakerService = $faker;
 	}
 
+	public function setSettings($settings)
+	{
+		$this->settings = $settings;
+	}
+
 	public function getErrors()
 	{
 		return $this->model->getErrors();
@@ -64,10 +69,30 @@ abstract class SproutImportBaseImporter
 		return $this->id;
 	}
 
+	public function getObjectByHandle($handle = null)
+	{
+		return null;
+	}
+
 	/**
 	 * @return string
 	 */
-	abstract public function getModel();
+	public function getModel()
+	{
+		$handle = $this->settings['handle'];
+
+		$exist = $this->getObjectByHandle($handle);
+
+		if($exist != null)
+		{
+			return $exist;
+		}
+		else
+		{
+			$model = $this->defineModel();
+			return new $model;
+		}
+	}
 
 	/**
 	 * @return string

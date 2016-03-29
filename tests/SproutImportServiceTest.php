@@ -44,4 +44,22 @@ class SproutImportServiceTest extends SproutImportBaseTest
 
 		$this->assertEquals('Entry', $model);
 	}
+
+	public function testGetModelExist()
+	{
+		$fieldModel = new \Craft\FieldModel;
+
+		$settings = array('handle' => 'test');
+
+		$importer = m::mock('Craft\FieldSproutImportImporter[getObjectByHandle]')
+			->shouldReceive('setSettings')
+			->andReturn($settings)
+			->shouldReceive('getObjectByHandle')
+			->andReturn(null)
+			->mock();
+
+		$model = $importer->getModel();
+
+		$this->assertInstanceOf('\Craft\FieldModel', $model);
+	}
 }

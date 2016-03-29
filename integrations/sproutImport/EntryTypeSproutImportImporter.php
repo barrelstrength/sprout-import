@@ -3,10 +3,15 @@ namespace Craft;
 
 class EntryTypeSproutImportImporter extends SproutImportBaseImporter
 {
+
+	//public function getObjectByHandle()
+	//{
+	//
+	//}
+
 	public function getModel()
 	{
-		$model = 'Craft\\EntryTypeModel';
-		return new $model;
+		return 'Craft\\EntryTypeModel';
 	}
 
 	public function populateModel($model, $settings)

@@ -3,21 +3,38 @@ namespace Craft;
 
 class FieldSproutImportImporter extends SproutImportBaseImporter
 {
-	public function getModel()
-	{
-		$handle = $this->settings['handle'];
-		$exist = craft()->fields->getFieldByHandle($handle);
 
-		if($exist != null)
-		{
-			return $exist;
-		}
-		else
-		{
-			$model = 'Craft\\FieldModel';
-			return new $model;
-		}
+	public function getObjectByHandle($handle)
+	{
+		return craft()->fields->getFieldByHandle($handle);
 	}
+
+	public function defineModel()
+	{
+		return 'Craft\\FieldModel';
+	}
+	//
+	//public function getModel($fieldService = null)
+	//{
+	//	$handle = $this->settings['handle'];
+	//
+	//	if ($fieldService == null)
+	//	{
+	//		$fieldService = craft()->fields;
+	//	}
+	//
+	//	$exist = $fieldService->getFieldByHandle($handle);
+	//
+	//	if($exist != null)
+	//	{
+	//		return $exist;
+	//	}
+	//	else
+	//	{
+	//		$model = 'Craft\\FieldModel';
+	//		return new $model;
+	//	}
+	//}
 
 	//public function populateModel($model, $settings)
 	//{

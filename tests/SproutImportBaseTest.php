@@ -81,7 +81,9 @@ class SproutImportBaseTest extends BaseTest
 		$map = array(
 			'\\Craft\\SproutImportPlugin'       => '../SproutImportPlugin.php',
 			'\\Craft\\SproutImportService'      => '../services/SproutImportService.php',
-			'\\Craft\\SproutImport_SeedService' => '../services/SproutImport_SeedService.php'
+			'\\Craft\\SproutImport_SeedService' => '../services/SproutImport_SeedService.php',
+			'\\Craft\\SproutImportBaseImporter' => '../contracts/SproutImportBaseImporter.php',
+			'\\Craft\\FieldSproutImportImporter' => '../integrations/sproutimport/FieldSproutImportImporter.php'
 		);
 
 		foreach ($map as $classPath => $filePath)
