@@ -100,9 +100,9 @@ class SectionSproutImportImporter extends SproutImportBaseImporter
 			$entryTypes = $model->getEntryTypes();
 
 			$firstEntryType = $entryTypes[0];
-			$firstEntryType = $firstEntryType->getFieldLayout()->getFields();
+			$firstEntryTypeFields = $firstEntryType->getFieldLayout()->getFields();
 
-			if (count($entryTypes) && empty($firstEntryType))
+			if (count($entryTypes) && empty($firstEntryTypeFields))
 			{
 				$entryTypeId = $firstEntryType->id;
 				craft()->sections->deleteEntryTypeById($entryTypeId);
