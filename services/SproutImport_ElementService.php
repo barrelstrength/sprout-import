@@ -355,7 +355,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 	protected function getElementModel($beforeSave = null)
 	{
 		$type  = $this->type;
-		$name  = sproutImport()->getModelClass($type);
+		$name  = 'Craft\\' . $type . "Model";
 
 		$model = new $name();
 
