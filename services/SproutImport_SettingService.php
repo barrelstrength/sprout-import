@@ -1,7 +1,5 @@
 <?php
-
 namespace Craft;
-
 
 class SproutImport_SettingService extends BaseApplicationComponent
 {

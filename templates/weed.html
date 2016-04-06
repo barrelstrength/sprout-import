@@ -1,22 +1,22 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
-{% set title = 'Import Data' %}
+{% set title = 'Weed' %}
 
 {% set selectedTab = 'weed' %}
 
 {% set tabs = {
-	data: {
-		label: "Import Data"|t,
+	import: {
+		label: "Import"|t,
 		url: url('sproutimport/index')
+	},
+	seed: {
+		label: "Seed"|t,
+		url: url('sproutimport/seed')
 	},
 	weed: {
 		label: "Weed"|t,
 		url: url('sproutimport/weed')
-	},
-	mock: {
-		label: "Generate Data"|t,
-		url: url('sproutimport/generatedata')
 	}
 } %}
 

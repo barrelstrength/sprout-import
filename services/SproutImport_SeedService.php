@@ -23,10 +23,10 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	public function getAllSeeds($type)
 	{
 		$seeds = craft()->db->createCommand()
-										->select('itemId, importerClass')
-										->where("type = '$type'")
-										->from('sproutimport_seeds')
-										->queryAll();
+			->select('itemId, importerClass')
+			->where("type = '$type'")
+			->from('sproutimport_seeds')
+			->queryAll();
 
 		return $seeds;
 	}
@@ -53,7 +53,6 @@ class SproutImport_SeedService extends BaseApplicationComponent
 				$importer->deleteById($row['itemId']);
 
 				$this->deleteSeedById($row['id']);
-
 			}
 			catch (\Exception $e)
 			{
@@ -67,15 +66,14 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		}
 
 		return true;
-
 	}
 
 	public function deleteSeedById($id)
 	{
 		return craft()->db->createCommand()->delete(
-				'sproutimport_seeds',
-				'id=:id',
-				array(':id'=>$id)
+			'sproutimport_seeds',
+			'id=:id',
+			array(':id' => $id)
 		);
 	}
 

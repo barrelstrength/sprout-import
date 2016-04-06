@@ -1,14 +1,18 @@
 <?php
-
 namespace Craft;
 
-
-class TagSproutImportImporter extends ElementSproutImportImporter
+class TagSproutImportImporter extends SproutImportBaseElementImporter
 {
-
-	public function isElement()
+	public function getModel()
 	{
-		return true;
+		$model = 'Craft\\TagModel';
+
+		return new $model;
+	}
+
+	public function save()
+	{
+		return craft()->tags->saveTag($this->model);
 	}
 
 	public function getMockSettings()
@@ -48,21 +52,10 @@ class TagSproutImportImporter extends ElementSproutImportImporter
 		}
 	}
 
-	public function getModel()
-	{
-		$model = 'Craft\\TagModel';
-		return new $model;
-	}
-
-	public function save()
-	{
-		return craft()->tags->saveTag($this->model);
-	}
-
 	private function generateTag($tagGroup)
 	{
 		$faker = $this->fakerService;
-		$name = $faker->word;
+		$name  = $faker->word;
 
 		$tag          = new TagModel();
 		$tag->groupId = $tagGroup;

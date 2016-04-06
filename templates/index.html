@@ -1,22 +1,22 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
-{% set title = 'Import Data' %}
+{% set title = 'Import' %}
 
-{% set selectedTab = 'data' %}
+{% set selectedTab = 'import' %}
 
 {% set tabs = {
-	data: {
-		label: "Import Data"|t,
+	import: {
+		label: "Import"|t,
 		url: url('sproutimport/index')
+	},
+	seed: {
+		label: "Seed"|t,
+		url: url('sproutimport/seed')
 	},
 	weed: {
 		label: "Weed"|t,
 		url: url('sproutimport/weed')
-	},
-	mock: {
-		label: "Generate Data"|t,
-		url: url('sproutimport/generatedata')
 	}
 } %}
 
@@ -39,8 +39,8 @@
 		</div>
 
 		{{ forms.lightswitchField({
-			label: "Seed database"|t,
-			instructions: "Mark your import as Seed content if you want to log each item you import so it can be
+			label: "Seed data"|t,
+			instructions: "Mark your import as Seed data if you want to log each item you import so it can be
 			removed later via the Weed tab."|t,
 			on: false,
 			name: 'seed'

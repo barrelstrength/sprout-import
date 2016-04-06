@@ -17,17 +17,17 @@ class SectionSproutImportImporter extends SproutImportBaseImporter
 
 	public function populateModel($model, $settings)
 	{
-		if (!isset($settings['urlFormat'])) 
+		if (!isset($settings['urlFormat']))
 		{
 			return;
 		}
 
 		$locales = array();
 
-		if (empty($settings['locales'])) 
+		if (empty($settings['locales']))
 		{
 			$primaryLocaleId = craft()->i18n->getPrimarySiteLocaleId();
-			$localeIds = array($primaryLocaleId);
+			$localeIds       = array($primaryLocaleId);
 
 			// @TODO - homepage check is hard coded
 			$isHomepage = false;
@@ -38,11 +38,11 @@ class SectionSproutImportImporter extends SproutImportBaseImporter
 				if ($isHomepage)
 				{
 					$settings['urlFormat'] = '__home__';
-					$nestedUrlFormat = null;
+					$nestedUrlFormat       = null;
 				}
 				else
 				{
-					$urlFormat       = (isset($settings['urlFormat'][$localeId])) ? $settings['urlFormat'][$localeId] : $settings['urlFormat'];
+					$urlFormat = (isset($settings['urlFormat'][$localeId])) ? $settings['urlFormat'][$localeId] : $settings['urlFormat'];
 
 					// @TODO - improve this, hard coded fake data
 					$nestedUrlFormat = 'NOT WORKING';
@@ -85,7 +85,7 @@ class SectionSproutImportImporter extends SproutImportBaseImporter
 	public function resolveNestedSettings($model, $settings)
 	{
 		// Check to see if we have any Entry Types we should also save
-		if (!isset($settings['entryTypes']) OR empty($settings['entryTypes'])) 
+		if (!isset($settings['entryTypes']) OR empty($settings['entryTypes']))
 		{
 			return true;
 		}
@@ -114,7 +114,7 @@ class SectionSproutImportImporter extends SproutImportBaseImporter
 		}
 
 		// Add our new sectionId to our Entry Type settings
-		foreach ($settings['entryTypes'] as $key => $entryTypeSettings) 
+		foreach ($settings['entryTypes'] as $key => $entryTypeSettings)
 		{
 			$settings['entryTypes'][$key]['sectionId'] = $sectionId;
 
@@ -135,8 +135,8 @@ class SectionSproutImportImporter extends SproutImportBaseImporter
 			// If so, save it and grab the id.
 
 			$fieldLayoutTabs = $entryTypeSettings['fieldLayout'];
-			$fieldLayout = array();
-			$requiredFields = array();
+			$fieldLayout     = array();
+			$requiredFields  = array();
 
 
 			foreach ($fieldLayoutTabs as $tab)
@@ -149,8 +149,8 @@ class SectionSproutImportImporter extends SproutImportBaseImporter
 					$field = sproutImport()->setting->saveSetting($fieldSettings);
 					
 					$fieldLayout[$tabName][] = $field->id;
-					
-					if ($field->required) 
+
+					if ($field->required)
 					{
 						$requiredFields[] = $field->id;
 					}
@@ -158,13 +158,12 @@ class SectionSproutImportImporter extends SproutImportBaseImporter
 			}
 
 			// @TODO - move this to a different place to save?
-			
+
 			// Set the field layout
 			$fieldLayout = craft()->fields->assembleLayout($fieldLayout, $requiredFields);
 
 			// @todo FieldLayout Type should be dynamic
 			$fieldLayout->type = 'Entry';
-
 
 			// @todo - get the parent SECTION (or Field Layout Container and resave things...)
 			// Should I be using the MODEL or the JSON Settings? 

@@ -1,14 +1,18 @@
 <?php
-
 namespace Craft;
 
-
-class CategorySproutImportImporter extends ElementSproutImportImporter
+class CategorySproutImportImporter extends SproutImportBaseElementImporter
 {
-
-	public function isElement()
+	public function getModel()
 	{
-		return true;
+		$model = 'Craft\\CategoryModel';
+
+		return new $model;
+	}
+
+	public function save()
+	{
+		return craft()->categories->saveCategory($this->model);
 	}
 
 	public function getMockSettings()
@@ -29,7 +33,7 @@ class CategorySproutImportImporter extends ElementSproutImportImporter
 		}
 
 		return craft()->templates->render('sproutimport/settings/_category', array(
-			'id'       => $this->getName(),
+			'id'             => $this->getName(),
 			'categoryGroups' => $groupsSelect
 		));
 	}
@@ -48,21 +52,10 @@ class CategorySproutImportImporter extends ElementSproutImportImporter
 		}
 	}
 
-	public function getModel()
-	{
-		$model = 'Craft\\CategoryModel';
-		return new $model;
-	}
-
-	public function save()
-	{
-		return craft()->categories->saveCategory($this->model);
-	}
-
 	private function generateCategory($categoryGroup)
 	{
 		$faker = $this->fakerService;
-		$name = $faker->word;
+		$name  = $faker->word;
 
 		$category          = new CategoryModel();
 		$category->groupId = $categoryGroup;
