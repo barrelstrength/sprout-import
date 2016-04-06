@@ -16,6 +16,7 @@ class SproutImportService extends BaseApplicationComponent
 	public $setting;
 	public $element;
 	public $seed;
+	public $faker;
 
 	protected $elementsService;
 
@@ -38,6 +39,7 @@ class SproutImportService extends BaseApplicationComponent
 		$this->seed    = Craft::app()->getComponent('sproutImport_seed');
 		$this->element = Craft::app()->getComponent('sproutImport_element');
 		$this->setting = Craft::app()->getComponent('sproutImport_setting');
+		$this->faker   = Craft::app()->getComponent('sproutImport_faker');
 
 	}
 

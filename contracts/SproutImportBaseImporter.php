@@ -23,12 +23,11 @@ abstract class SproutImportBaseImporter
 		return false;
 	}
 
-	public function __construct($settings = array())
+	public function __construct($settings = array(), $fakerService = null)
 	{
 
 		$this->settings = $settings;
 
-		require_once dirname(__FILE__) . '/../vendor/autoload.php';
 		if (count($settings))
 		{
 			$model       = $this->getModel();
@@ -38,10 +37,15 @@ abstract class SproutImportBaseImporter
 			$this->validate();
 		}
 
-		$faker = \Faker\Factory::create();
-		$faker->addProvider(new \Faker\Provider\Lorem($faker));
+		if ($fakerService == null)
+		{
+			$this->fakerService = sproutImport()->faker->getGenerator();
+		}
+		else
+		{
+			$this->fakerService = $fakerService;
+		}
 
-		$this->fakerService = $faker;
 	}
 
 	public function setSettings($settings)
