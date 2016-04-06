@@ -9,4 +9,11 @@ class SproutImportVariable
 
 		return count($seeds);
 	}
+
+	public function fakeDataGenerator()
+	{
+		$generator = sproutImport()->faker->getGenerator();
+
+		return $generator;
+	}
 }
