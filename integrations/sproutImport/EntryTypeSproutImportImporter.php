@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class EntryTypeSproutImportImporter extends SproutImportBaseImporter
+class EntryTypeSproutImportImporter extends BaseSproutImportImporter
 {
 
 	//public function getObjectByHandle()

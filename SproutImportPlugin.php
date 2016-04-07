@@ -9,6 +9,7 @@ class SproutImportPlugin extends BasePlugin
 
 		Craft::import('plugins.sproutimport.contracts.*');
 		Craft::import('plugins.sproutimport.integrations.sproutimport.*');
+		Craft::import('plugins.sproutimport.integrations.sproutimport.fields.*');
 
 		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutimport')
 		{
@@ -19,8 +20,8 @@ class SproutImportPlugin extends BasePlugin
 		{
 
 			$element = $event->params['element'];
-			$seed    = $event->params['seed'];
-			$type    = $event->params['@model'];
+			$seed = $event->params['seed'];
+			$type = $event->params['@model'];
 
 			$id = $element->id;
 
@@ -80,6 +81,15 @@ class SproutImportPlugin extends BasePlugin
 			new EntryTypeSproutImportImporter(),
 			new FieldSproutImportImporter(),
 			new SectionSproutImportImporter()
+		);
+	}
+
+	public function registerSproutImportFields()
+	{
+		return array(
+			new RichTextFieldSproutImport(),
+			new PlainTextFieldSproutImport(),
+			new SproutFields_EmailFieldSproutImport()
 		);
 	}
 }

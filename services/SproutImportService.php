@@ -5,9 +5,14 @@ class SproutImportService extends BaseApplicationComponent
 {
 
 	/**
-	 * @var SproutImportBaseImporter[]
+	 * @var BaseSproutImportImporter[]
 	 */
 	protected $importers = array();
+
+	/**
+	 * @var BaseFieldSproutImport[]
+	 */
+	protected $fieldImports = array();
 
 	/** Sub Services
 	 *
@@ -46,7 +51,7 @@ class SproutImportService extends BaseApplicationComponent
 	/**
 	 * Get all buil-in and called importers
 	 *
-	 * @return SproutImportBaseImporter[]
+	 * @return BaseSproutImportImporter[]
 	 */
 	public function getSproutImportImporters()
 	{
@@ -59,10 +64,8 @@ class SproutImportService extends BaseApplicationComponent
 
 				foreach ($importers as $importer)
 				{
-					if ($importer && $importer instanceof SproutImportBaseImporter)
+					if ($importer && $importer instanceof BaseSproutImportImporter)
 					{
-						$importer->setId($plugin, $importer);
-
 						$this->importers[$importer->getId()] = $importer;
 					}
 				}
@@ -70,6 +73,32 @@ class SproutImportService extends BaseApplicationComponent
 		}
 
 		return $this->importers;
+	}
+
+	/**
+	 * Get all buil-in and called Field imports
+	 *
+	 * @return BaseSproutImport[]
+	 */
+	public function getSproutImportFields()
+	{
+		$fieldsToLoad = craft()->plugins->call('registerSproutImportFields');
+
+		if ($fieldsToLoad)
+		{
+			foreach ($fieldsToLoad as $plugin => $fieldClasses)
+			{
+				foreach ($fieldClasses as $fieldClass)
+				{
+					if ($fieldClass && $fieldClass instanceof BaseFieldSproutImport)
+					{
+						$this->fieldImports[$fieldClass->getId()] = $fieldClass;
+					}
+				}
+			}
+		}
+
+		return $this->fieldImports;
 	}
 
 	/**

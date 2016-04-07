@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-abstract class SproutImportBaseElementImporter extends SproutImportBaseImporter
+abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 {
 	public function isElement()
 	{

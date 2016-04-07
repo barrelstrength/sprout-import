@@ -2,13 +2,13 @@
 namespace Craft;
 
 /**
- * Class SproutImportBaseImporter
+ * Class BaseSproutImportImporter
  *
  * @package Craft
  */
-abstract class SproutImportBaseImporter
+abstract class BaseSproutImportImporter
 {
-	protected $id;
+	protected $id = null;
 
 	public $model;
 
@@ -61,16 +61,13 @@ abstract class SproutImportBaseImporter
 	/**
 	 * @param string $pluginHandle
 	 */
-	final public function setId($plugin, $importer)
+	final public function getId()
 	{
 		$importerClass = str_replace('Craft\\', '', get_class($this));
 
 		$this->id = $importerClass;
-	}
 
-	final public function getId()
-	{
-		return $this->id;
+		return $importerClass;
 	}
 
 	public function getObjectByHandle($handle = null)

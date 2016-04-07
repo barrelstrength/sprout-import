@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class EntrySproutImportImporter extends SproutImportBaseElementImporter
+class EntrySproutImportImporter extends BaseSproutImportElementImporter
 {
 	public function getModel()
 	{
@@ -12,7 +12,6 @@ class EntrySproutImportImporter extends SproutImportBaseElementImporter
 
 	public function save()
 	{
-
 		return craft()->entries->saveEntry($this->model);
 	}
 
@@ -65,8 +64,8 @@ class EntrySproutImportImporter extends SproutImportBaseElementImporter
 					);
 
 					$id = $this->generateEntry($entryParams);
-
 					$saveIds[] = $id;
+
 				}
 			}
 			else
@@ -79,25 +78,50 @@ class EntrySproutImportImporter extends SproutImportBaseElementImporter
 
 				$entryTypes = $section->getEntryTypes();
 
-				// Get random entry type
-				$entryTypeKey = array_rand($entryTypes);
 
-				$entryTypeId = $entryTypes[$entryTypeKey]->id;
+				// Get random entry type
+				//$entryTypeKey = array_rand($entryTypes);
+
+				//$entryTypeId = $entryTypes[$entryTypeKey]->id;
 
 				$entryParams = array(
-					'sectionId'   => $section->id,
-					'entryTypeId' => $entryTypeId
+					'sectionId'     => $section->id,
+					'sectionHandle' => $section->handle,
+					//'entryTypeId' => $entryTypeId
 				);
 
 				if (!empty($channelNumber))
 				{
 					for ($i = 1; $i <= $channelNumber; $i++)
 					{
-						$id = $this->generateEntry($entryParams);
+						$entryId = null;
+						if (!empty($entryTypes))
+						{
+							// Loop all entry types for this element
+							foreach ($entryTypes as $entryType)
+							{
+								$entryParams['entryTypeId'] = $entryType->id;
 
-						$saveIds[] = $id;
+								// Update entry prevent duplicate
+								if ($entryId != null)
+								{
+									$entryParams['entryId'] = $entryId;
+								}
+								else
+								{
+									$entryParams['entryId'] = null;
+								}
+
+								$id = $this->generateEntry($entryParams);
+
+								$entryId = $id;
+
+								$saveIds[] = $id;
+							}
+						}
 					}
 				}
+
 			}
 		}
 
@@ -129,7 +153,9 @@ class EntrySproutImportImporter extends SproutImportBaseElementImporter
 		$entryTypeModel = EntryTypeModel::populateModel($findEntryType);
 
 		$element = $this->getName();
-		$fields  = sproutImport()->element->getFieldsByType($element);
+
+		$richTextClass = new RichTextFieldSproutImport();
+		$fields  = sproutImport()->element->getFieldsByType($element, $richTextClass );
 
 		if (!empty($fields))
 		{
@@ -176,13 +202,35 @@ class EntrySproutImportImporter extends SproutImportBaseElementImporter
 		$data['content']['fields']['title'] = $title;
 
 		$element = $this->getName();
-		$fields  = sproutImport()->element->getFieldsByType($element);
 
-		if (!empty($fields))
+		$fieldClasses = sproutImport()->getSproutImportFields();
+
+		if (!empty($fieldClasses))
 		{
-			$richTextHandle                             = $fields[0]->handle;
-			$data['content']['fields'][$richTextHandle] = $this->fakerService->paragraph();
+			// Get only declared field classes
+			foreach ($fieldClasses as $fieldClass)
+			{
+				$fields  = sproutImport()->element->getFieldsByType($element, $fieldClass);
+
+				if (!empty($fields))
+				{
+					// Loop through all attach fields on this element
+					foreach ($fields as $field)
+					{
+						$fieldHandle = $field->handle;
+						$data['content']['fields'][$fieldHandle] = $fieldClass->getMockData();
+					}
+				}
+			}
 		}
+	//	Craft::dd($data['content']);
+		//$fields  = sproutImport()->element->getFieldsByType($element);
+		//
+		//if (!empty($fields))
+		//{
+		//	$fieldHandle                             = $fields[0]->handle;
+		//	$data['content']['fields'][$fieldHandle] = $this->fakerService->paragraph();
+		//}
 
 		if (isset($entryParams['entryId']))
 		{

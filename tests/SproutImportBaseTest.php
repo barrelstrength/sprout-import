@@ -81,7 +81,7 @@ class SproutImportBaseTest extends BaseTest
 			'\\Craft\\SproutImportPlugin'       => '../SproutImportPlugin.php',
 			'\\Craft\\SproutImportService'      => '../services/SproutImportService.php',
 			'\\Craft\\SproutImport_SeedService' => '../services/SproutImport_SeedService.php',
-			'\\Craft\\SproutImportBaseImporter' => '../contracts/SproutImportBaseImporter.php',
+			'\\Craft\\BaseSproutImportImporter' => '../contracts/BaseSproutImportImporter.php',
 			'\\Craft\\FieldSproutImportImporter' => '../integrations/sproutimport/FieldSproutImportImporter.php'
 		);
 

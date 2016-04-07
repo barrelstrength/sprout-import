@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SectionSproutImportImporter extends SproutImportBaseImporter
+class SectionSproutImportImporter extends BaseSproutImportImporter
 {
 	public $isNewSection;
 
