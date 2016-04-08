@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutFields_EmailFieldSproutImport extends BaseFieldSproutImport
+class SproutFields_EmailSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 
 	public function getMockData()

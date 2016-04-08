@@ -10,7 +10,7 @@ class SproutImportService extends BaseApplicationComponent
 	protected $importers = array();
 
 	/**
-	 * @var BaseFieldSproutImport[]
+	 * @var BaseSproutImportFieldImporter[]
 	 */
 	protected $fieldImports = array();
 
@@ -90,7 +90,7 @@ class SproutImportService extends BaseApplicationComponent
 			{
 				foreach ($fieldClasses as $fieldClass)
 				{
-					if ($fieldClass && $fieldClass instanceof BaseFieldSproutImport)
+					if ($fieldClass && $fieldClass instanceof BaseSproutImportFieldImporter)
 					{
 						$this->fieldImports[$fieldClass->getId()] = $fieldClass;
 					}
@@ -498,11 +498,21 @@ class SproutImportService extends BaseApplicationComponent
 
 	public function getImporter($row)
 	{
-		$importerModel = sproutImport()->getImporterModel($row);
+		$importerModel = $this->getImporterModel($row);
 
 		$importerClassName = $this->getImporterByName($importerModel);
 
-		$importerClass = new $importerClassName($row);
+		// If not exists then its an element
+		if (!class_exists($importerClassName))
+		{
+			$namespace = 'Craft\\' . $importerModel . 'SproutImportElementImporter';
+
+			$importerClass = new $namespace($row);
+		}
+		else
+		{
+			$importerClass = new $importerClassName($row);
+		}
 
 		return $importerClass;
 	}

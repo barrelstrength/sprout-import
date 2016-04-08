@@ -23,7 +23,7 @@ class SproutImport_FakerService extends BaseApplicationComponent
 
 	public function generateFakeField($name)
 	{
-		$namespace  = 'Craft\\' . $name . "FieldSproutImport";
+		$namespace  = 'Craft\\' . $name . "SproutImportFieldImporter";
 
 		$fieldClass = new $namespace();
 

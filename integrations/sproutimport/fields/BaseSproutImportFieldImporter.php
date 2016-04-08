@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-abstract class BaseFieldSproutImport
+abstract class BaseSproutImportFieldImporter
 {
 
 	protected $fakerService;

@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class PlainTextFieldSproutImport extends BaseFieldSproutImport
+class PlainTextSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 
 	public function getMockData()

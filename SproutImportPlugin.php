@@ -74,10 +74,10 @@ class SproutImportPlugin extends BasePlugin
 	public function registerSproutImportImporters()
 	{
 		return array(
-			new EntrySproutImportImporter(),
-			new TagSproutImportImporter(),
-			new UserSproutImportImporter(),
-			new CategorySproutImportImporter(),
+			new EntrySproutImportElementImporter(),
+			new TagSproutImportElementImporter(),
+			new UserSproutImportElementImporter(),
+			new CategorySproutImportElementImporter(),
 			new EntryTypeSproutImportImporter(),
 			new FieldSproutImportImporter(),
 			new SectionSproutImportImporter()

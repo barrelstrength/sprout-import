@@ -4,7 +4,7 @@ namespace Craft;
 class FieldSproutImportImporter extends BaseSproutImportImporter
 {
 
-	public function getObjectByHandle($handle)
+	public function getObjectByHandle($handle = null)
 	{
 		return craft()->fields->getFieldByHandle($handle);
 	}

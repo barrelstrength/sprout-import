@@ -423,7 +423,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		return $selects;
 	}
 
-	public function getFieldsByType($element = "Entry", BaseFieldSproutImport $fieldClass)
+	public function getFieldsByType($element = "Entry", BaseSproutImportFieldImporter $fieldClass)
 	{
 		$fields = craft()->fields->getFieldsByElementType($element);
 

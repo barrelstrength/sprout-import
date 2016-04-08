@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class UserSproutImportImporter extends BaseSproutImportElementImporter
+class UserSproutImportElementImporter extends BaseSproutImportElementImporter
 {
 	public function getModel()
 	{
