@@ -10,16 +10,16 @@ class PlainTextSproutImportFieldImporter extends BaseSproutImportFieldImporter
 
 		if ($settings != null && $settings['multiline'] == 1)
 		{
-			$rows = $settings['initialRows'];
-			if ($rows > 1)
-			{
-				$sentences = $this->fakerService->sentences($rows);
+			$lines = rand(1, 3);
+			$paragraphs = $this->fakerService->paragraphs($lines);
 
-				return implode("\n", $sentences);
-			}
+			return implode("\n\n", $paragraphs);
 		}
 
-		return $this->fakerService->word;
+		$lines = rand(2, 4);
+		$sentences = $this->fakerService->sentences($lines);
+
+		return implode("\n ", $sentences);
 	}
 
 }
