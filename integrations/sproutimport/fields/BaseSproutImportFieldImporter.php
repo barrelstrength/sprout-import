@@ -39,7 +39,7 @@ abstract class BaseSproutImportFieldImporter
 
 	public function getName()
 	{
-		return str_replace('FieldSproutImport', '', $this->getId());
+		return str_replace('SproutImportFieldImporter', '', $this->getId());
 	}
 
 	public abstract function getMockData();
