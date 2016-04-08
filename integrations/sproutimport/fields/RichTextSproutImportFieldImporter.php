@@ -6,7 +6,11 @@ class RichTextSproutImportFieldImporter extends BaseSproutImportFieldImporter
 
 	public function getMockData()
 	{
-		return $this->fakerService->paragraph();
+
+		$lines = rand(3, 5);
+		$paragraphs = $this->fakerService->paragraphs($lines);
+
+		return implode("\n\n", $paragraphs);
 	}
 
 }
