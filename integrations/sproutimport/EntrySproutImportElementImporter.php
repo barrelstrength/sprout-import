@@ -78,16 +78,9 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 
 				$entryTypes = $section->getEntryTypes();
 
-
-				// Get random entry type
-				//$entryTypeKey = array_rand($entryTypes);
-
-				//$entryTypeId = $entryTypes[$entryTypeKey]->id;
-
 				$entryParams = array(
 					'sectionId'     => $section->id,
-					'sectionHandle' => $section->handle,
-					//'entryTypeId' => $entryTypeId
+					'sectionHandle' => $section->handle
 				);
 
 				if (!empty($channelNumber))
@@ -216,21 +209,13 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 				{
 					// Loop through all attach fields on this element
 					foreach ($fields as $field)
-					{
+					{Craft::dd($field);
 						$fieldHandle = $field->handle;
 						$data['content']['fields'][$fieldHandle] = $fieldClass->getMockData();
 					}
 				}
 			}
 		}
-	//	Craft::dd($data['content']);
-		//$fields  = sproutImport()->element->getFieldsByType($element);
-		//
-		//if (!empty($fields))
-		//{
-		//	$fieldHandle                             = $fields[0]->handle;
-		//	$data['content']['fields'][$fieldHandle] = $this->fakerService->paragraph();
-		//}
 
 		if (isset($entryParams['entryId']))
 		{

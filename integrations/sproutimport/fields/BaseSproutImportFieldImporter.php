@@ -6,6 +6,7 @@ abstract class BaseSproutImportFieldImporter
 
 	protected $fakerService;
 	protected $id;
+	protected $fieldModel;
 
 	public function __construct($fakerService = null)
 	{
@@ -17,6 +18,11 @@ abstract class BaseSproutImportFieldImporter
 		{
 			$this->fakerService = $fakerService;
 		}
+	}
+
+	public function setField(FieldModel $fieldModel)
+	{
+		$this->fieldModel = $fieldModel;
 	}
 
 	/**

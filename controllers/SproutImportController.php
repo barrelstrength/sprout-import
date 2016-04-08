@@ -62,9 +62,9 @@ class SproutImportController extends BaseController
 
 		if (!empty($elementType))
 		{
-			$className = sproutImport()->getImporterByName($elementType);
+			$namespace = 'Craft\\' . $elementType . 'SproutImportElementImporter';
 
-			$importerClass = new $className;
+			$importerClass = new $namespace;
 
 			$ids = $importerClass->getMockData($settings);
 
