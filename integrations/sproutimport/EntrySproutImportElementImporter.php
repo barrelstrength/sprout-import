@@ -210,6 +210,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 					// Loop through all attach fields on this element
 					foreach ($fields as $field)
 					{
+						$fieldClass->setField($field);
 						$fieldHandle = $field->handle;
 						$data['content']['fields'][$fieldHandle] = $fieldClass->getMockData();
 					}
