@@ -3,7 +3,6 @@ namespace Craft;
 
 class SproutImportService extends BaseApplicationComponent
 {
-
 	/**
 	 * @var BaseSproutImportImporter[]
 	 */
@@ -76,7 +75,7 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get all buil-in and called Field imports
+	 * Get all built-in and registered FieldImporters
 	 *
 	 * @return BaseSproutImport[]
 	 */
@@ -118,6 +117,12 @@ class SproutImportService extends BaseApplicationComponent
 		                                                                                        'seed'  => $seed));
 	}
 
+	/**
+	 * @param array $tasks
+	 *
+	 * @return TaskModel
+	 * @throws Exception
+	 */
 	public function enqueueTasksByPost(array $tasks)
 	{
 		if (!count($tasks))
@@ -183,6 +188,11 @@ class SproutImportService extends BaseApplicationComponent
 		return array_merge($elementResults, $settingResults);
 	}
 
+	/**
+	 * @param $file
+	 *
+	 * @return bool
+	 */
 	public function getJson($file)
 	{
 		$content = file_get_contents($file);
@@ -216,6 +226,11 @@ class SproutImportService extends BaseApplicationComponent
 		return false;
 	}
 
+	/**
+	 * @param $settings
+	 *
+	 * @return null
+	 */
 	public function getImporterModel($settings)
 	{
 		if (!$settings['@model'])
@@ -496,6 +511,11 @@ class SproutImportService extends BaseApplicationComponent
 		}
 	}
 
+	/**
+	 * @param $row
+	 *
+	 * @return mixed
+	 */
 	public function getImporter($row)
 	{
 		$importerModel = $this->getImporterModel($row);
@@ -517,6 +537,11 @@ class SproutImportService extends BaseApplicationComponent
 		return $importerClass;
 	}
 
+	/**
+	 * @param $name
+	 *
+	 * @return string
+	 */
 	public function getImporterByName($name)
 	{
 		$importerClassName = 'Craft\\' . $name . 'SproutImportImporter';
@@ -524,6 +549,9 @@ class SproutImportService extends BaseApplicationComponent
 		return $importerClassName;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getLatestSingleSection()
 	{
 		$result = array();
@@ -554,7 +582,6 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	public function createTempFolder()
 	{
-
 		$folderPath = craft()->path->getTempUploadsPath().'sproutimport/';
 
 		IOHelper::clearFolder($folderPath);
