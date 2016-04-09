@@ -3,6 +3,11 @@ namespace Craft;
 
 class SproutImportController extends BaseController
 {
+	/**
+	 * Import Elements
+	 *
+	 * @throws HttpException
+	 */
 	public function actionImportElements()
 	{
 		$this->requirePostRequest();
@@ -45,73 +50,14 @@ class SproutImportController extends BaseController
 		$this->redirectToPostedUrl();
 	}
 
+	/**
+	 * Queue Elements for import via a task
+	 */
 	public function actionEnqueueTasksByPost()
 	{
 		$elements = craft()->request->getPost('elements');
 
 		sproutImport()->setEnqueueTasksByPost($elements);
 		craft()->end();
-	}
-
-	public function actionGenerateElements()
-	{
-		$this->requirePostRequest();
-
-		$elementType = craft()->request->getRequiredPost('elementType');
-		$settings    = craft()->request->getRequiredPost('settings');
-
-		if (!empty($elementType))
-		{
-			$namespace = 'Craft\\' . $elementType . 'SproutImportElementImporter';
-
-			$importerClass = new $namespace;
-
-			$ids = $importerClass->getMockData($settings);
-
-			if (!empty($ids))
-			{
-				foreach ($ids as $id)
-				{
-					sproutImport()->seed->trackSeed($id, $elementType, 'fake');
-				}
-			}
-		}
-
-		craft()->userSession->setNotice(Craft::t('Elements generated.'));
-
-		$this->redirectToPostedUrl();
-	}
-
-	public function actionSeedTemplate()
-	{
-		$elementSelect = array();
-
-		$elementSelect['Entry']    = 'Entries';
-		$elementSelect['Category'] = 'Categories';
-		$elementSelect['Tag']      = 'Tags';
-
-		$importers = sproutImport()->getSproutImportImporters();
-
-		$settingElements = "";
-
-		if (!empty($importers))
-		{
-			foreach ($importers as $importer)
-			{
-				if ($importer->isElement())
-				{
-					$settingElements .= $importer->getSettingsHtml() . "\n";
-				}
-			}
-		}
-
-		craft()->templates->includeJsResource('sproutimport/js/sproutimport.js');
-
-		$this->renderTemplate('sproutimport/seed', array(
-			'elements' => $elementSelect,
-			'settings' => array(
-				'elements' => TemplateHelper::getRaw($settingElements)
-			)
-		));
 	}
 }
