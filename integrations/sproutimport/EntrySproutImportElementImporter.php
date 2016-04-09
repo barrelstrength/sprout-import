@@ -24,7 +24,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 
 		$channels = sproutImport()->element->getChannelSections();
 
-		return craft()->templates->render('sproutimport/settings/_entry', array(
+		return craft()->templates->render('sproutimport/_settings/entry', array(
 			'id'       => $this->getName(),
 			'sections' => $sections,
 			'channels' => $channels

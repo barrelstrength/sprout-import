@@ -32,7 +32,7 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 			}
 		}
 
-		return craft()->templates->render('sproutimport/settings/_category', array(
+		return craft()->templates->render('sproutimport/_settings/category', array(
 			'id'             => $this->getName(),
 			'categoryGroups' => $groupsSelect
 		));

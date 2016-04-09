@@ -1,28 +1,9 @@
-{% extends "_layouts/cp" %}
+{% extends "sproutimport/_layouts/base" %}
 {% import "_includes/forms" as forms %}
 
 {% set title = 'Seed' %}
 
-{% set selectedTab = 'seed' %}
-
-{% set tabs = {
-import: {
-		label: "Import"|t,
-		url: url('sproutimport/index')
-	},
-	seed: {
-		label: "Seed"|t,
-		url: url('sproutimport/seed')
-	},
-	weed: {
-		label: "Weed"|t,
-		url: url('sproutimport/weed')
-	}
-} %}
-
 {% set content %}
-
-	<p>Generated content and settings will be marked as seed data and can be removed later using the Weed tab.</p>
 
 	<form method="post" accept-charset="UTF-8">
 
@@ -34,14 +15,15 @@ import: {
 			{{ forms.selectField({
 				id: "elementType",
 				name: "elementType",
-				label: "Element"|t,
-				instructions: "Select the type of content you wish to seed in your database.",
+				label: "Type of Content"|t,
+				instructions: "Select the type of content you wish to seed in your database. Seeded content and can be removed later using the Weed tab.",
 				options: [{label: "Select element..."|t, value: null}]|merge(elements),
 				value: elementType is defined ? elementType : null,
 			}) }}
-
 		</div>
+
 		{{ settings.elements }}
+
 		<div class="buttons">
 			<button class="btn submit actions">Generate</button>
 		</div>

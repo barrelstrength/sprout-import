@@ -1,0 +1,19 @@
+{% extends "_layouts/cp" %}
+
+{% set selectedTab = craft.request.getSegment(2) ?? 'index' %}
+
+{% set tabs = {
+	index: {
+		label: "Import"|t,
+		url: url('sproutimport/index')
+	},
+	seed: {
+		label: "Seed"|t,
+		url: url('sproutimport/seed')
+	},
+	weed: {
+		label: "Weed"|t,
+		url: url('sproutimport/weed')
+	}
+} %}
+
