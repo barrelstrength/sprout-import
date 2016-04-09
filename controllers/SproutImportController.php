@@ -8,7 +8,7 @@ class SproutImportController extends BaseController
 	 *
 	 * @throws HttpException
 	 */
-	public function actionImportElements()
+	public function actionRunImport()
 	{
 		$this->requirePostRequest();
 
