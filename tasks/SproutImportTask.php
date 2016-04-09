@@ -3,6 +3,30 @@ namespace Craft;
 
 class SproutImportTask extends BaseTask
 {
+	/**
+	 * @return string
+	 */
+	protected function getDescription()
+	{
+		return 'Sprout Import Task';
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function defineSettings()
+	{
+		return array(
+			'files' => AttributeType::Mixed,
+			'seed'  => AttributeType::Bool
+		);
+	}
+
+	/**
+	 * @param int $step
+	 *
+	 * @return bool
+	 */
 	public function runStep($step)
 	{
 		craft()->config->maxPowerCaptain();
@@ -42,18 +66,5 @@ class SproutImportTask extends BaseTask
 	public function getTotalSteps()
 	{
 		return count($this->getSettings()->getAttribute('files'));
-	}
-
-	protected function defineSettings()
-	{
-		return array(
-			'files' => AttributeType::Mixed,
-			'seed'  => AttributeType::Bool
-		);
-	}
-
-	protected function getDescriptions()
-	{
-		return 'Sprout Import Task';
 	}
 }
