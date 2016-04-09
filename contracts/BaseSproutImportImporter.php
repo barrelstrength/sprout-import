@@ -8,9 +8,9 @@ namespace Craft;
  */
 abstract class BaseSproutImportImporter
 {
-	protected $id = null;
-
 	public $model;
+
+	protected $id = null;
 
 	protected $valid;
 
@@ -18,14 +18,14 @@ abstract class BaseSproutImportImporter
 
 	protected $settings;
 
-	public function isElement()
-	{
-		return false;
-	}
-
+	/**
+	 * BaseSproutImportImporter constructor.
+	 *
+	 * @param array $settings
+	 * @param null  $fakerService
+	 */
 	public function __construct($settings = array(), $fakerService = null)
 	{
-
 		$this->settings = $settings;
 
 		if (count($settings))
@@ -45,17 +45,14 @@ abstract class BaseSproutImportImporter
 		{
 			$this->fakerService = $fakerService;
 		}
-
 	}
 
-	public function setSettings($settings)
+	/**
+	 * @return mixed
+	 */
+	public function getName()
 	{
-		$this->settings = $settings;
-	}
-
-	public function getErrors()
-	{
-		return $this->model->getErrors();
+		return str_replace('SproutImportImporter', '', $this->getId());
 	}
 
 	/**
@@ -70,13 +67,29 @@ abstract class BaseSproutImportImporter
 		return $importerClass;
 	}
 
-	public function getObjectByHandle($handle = null)
+	/**
+	 * @todo - do we need this anymore?
+	 *         We now have a BaseSproutImportElementImporter class
+	 *
+	 * @return bool
+	 */
+	public function isElement()
 	{
-		return null;
+		return false;
+	}
+
+	public function setSettings($settings)
+	{
+		$this->settings = $settings;
+	}
+
+	public function getErrors()
+	{
+		return $this->model->getErrors();
 	}
 
 	/**
-	 * @return string
+	 * @return null
 	 */
 	public function getModel()
 	{
@@ -84,15 +97,26 @@ abstract class BaseSproutImportImporter
 
 		$exist = $this->getObjectByHandle($handle);
 
-		if($exist != null)
+		if ($exist != null)
 		{
 			return $exist;
 		}
 		else
 		{
 			$model = $this->defineModel();
+
 			return new $model;
 		}
+	}
+
+	/**
+	 * @param null $handle
+	 *
+	 * @return null
+	 */
+	public function getObjectByHandle($handle = null)
+	{
+		return null;
 	}
 
 	/**
@@ -105,6 +129,14 @@ abstract class BaseSproutImportImporter
 	}
 
 	/**
+	 * @return mixed
+	 */
+	public function isValid()
+	{
+		return $this->valid;
+	}
+
+	/**
 	 * @return bool
 	 */
 	public function validate()
@@ -112,24 +144,17 @@ abstract class BaseSproutImportImporter
 		$this->valid = $this->model->validate();
 	}
 
-	public function isValid()
-	{
-		return $this->valid;
-	}
-
 	/**
 	 * @return string
 	 */
 	abstract public function save();
 
+	/**
+	 * @param $id
+	 *
+	 * @return mixed
+	 */
 	abstract public function deleteById($id);
-
-	//final public function run($model, $settings)
-	//{
-	//	$this->populateModel($model);
-	//	$this->validate($model);
-	//	$this->save($model);
-	//}
 
 	/**
 	 * @return bool
@@ -147,13 +172,11 @@ abstract class BaseSproutImportImporter
 		return true;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getMockSettings()
 	{
 		return "";
-	}
-
-	public function getName()
-	{
-		return str_replace('SproutImportImporter', '', $this->getId());
 	}
 }

@@ -3,11 +3,17 @@ namespace Craft;
 
 abstract class BaseSproutImportFieldImporter
 {
-
-	protected $fakerService;
 	protected $id;
+
 	protected $fieldModel;
 
+	protected $fakerService;
+
+	/**
+	 * BaseSproutImportFieldImporter constructor.
+	 *
+	 * @param null $fakerService
+	 */
 	public function __construct($fakerService = null)
 	{
 		if ($fakerService == null)
@@ -20,9 +26,12 @@ abstract class BaseSproutImportFieldImporter
 		}
 	}
 
-	public function setField(FieldModel $fieldModel)
+	/**
+	 * @return mixed
+	 */
+	public function getName()
 	{
-		$this->fieldModel = $fieldModel;
+		return str_replace('SproutImportFieldImporter', '', $this->getId());
 	}
 
 	/**
@@ -37,10 +46,16 @@ abstract class BaseSproutImportFieldImporter
 		return $importerClass;
 	}
 
-	public function getName()
+	/**
+	 * @param FieldModel $fieldModel
+	 */
+	public function setField(FieldModel $fieldModel)
 	{
-		return str_replace('SproutImportFieldImporter', '', $this->getId());
+		$this->fieldModel = $fieldModel;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public abstract function getMockData();
 }
