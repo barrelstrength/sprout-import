@@ -36,7 +36,7 @@ class SproutImportController extends BaseController
 
 		try
 		{
-			sproutImport()->createImportTasks($tasks, $seed);
+			sproutImport()->tasks->createImportTasks($tasks, $seed);
 
 			craft()->userSession->setNotice(Craft::t('Files queued for import. Total: {tasks}', array(
 				'tasks' => count($tasks)
@@ -51,13 +51,15 @@ class SproutImportController extends BaseController
 	}
 
 	/**
-	 * Queue Elements for import via a task
+	 * Queue Posted Elements for import via a task
+	 *
+	 * @todo - should this method be updated to accept elements and settings?
 	 */
 	public function actionEnqueueTasksByPost()
 	{
 		$elements = craft()->request->getPost('elements');
 
-		sproutImport()->setEnqueueTasksByPost($elements);
+		sproutImport()->tasks->setEnqueueTasksByPost($elements);
 		craft()->end();
 	}
 }

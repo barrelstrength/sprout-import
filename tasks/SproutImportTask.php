@@ -23,6 +23,14 @@ class SproutImportTask extends BaseTask
 	}
 
 	/**
+	 * @return mixed
+	 */
+	public function getTotalSteps()
+	{
+		return count($this->getSettings()->getAttribute('files'));
+	}
+
+	/**
 	 * @param int $step
 	 *
 	 * @return bool
@@ -61,10 +69,5 @@ class SproutImportTask extends BaseTask
 		}
 
 		return false;
-	}
-
-	public function getTotalSteps()
-	{
-		return count($this->getSettings()->getAttribute('files'));
 	}
 }
