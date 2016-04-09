@@ -1,28 +1,35 @@
-$(document).ready( function() {
-	SproutImport.init();
-});
+if (typeof Craft.SproutImport === typeof undefined)
+{
+	Craft.SproutImport = {};
+}
 
-var SproutImport = {
+Craft.SproutImport.Seed = {
 
 	init: function()
 	{
 		$('#elementType').change(function() {
-			SproutImport.selectElementTypeEvent();
+			Craft.SproutImport.Seed.selectElementTypeEvent();
 		});
 
 		$('#sectionType').change(function() {
-			SproutImport.selectSectionEvent();
+			Craft.SproutImport.Seed.selectSectionEvent();
 		});
 	},
+
 	selectElementTypeEvent: function()
 	{
 		$('.element-options').hide();
 		$('.' + $('#elementType').val()).show();
 	},
+
 	selectSectionEvent: function()
 	{
 		$('.section-options').hide();
 		$('.' + $('#sectionType').val()).show();
-	},
+	}
 
 }
+
+$(document).ready(function() {
+	Craft.SproutImport.Seed.init();
+});
