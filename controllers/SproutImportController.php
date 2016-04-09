@@ -100,7 +100,7 @@ class SproutImportController extends BaseController
 			{
 				if ($importer->isElement())
 				{
-					$settingElements .= $importer->getMockSettings() . "\n";
+					$settingElements .= $importer->getSettingsHtml() . "\n";
 				}
 			}
 		}

@@ -89,6 +89,16 @@ abstract class BaseSproutImportImporter
 	}
 
 	/**
+	 * @param null $handle
+	 *
+	 * @return null
+	 */
+	public function getObjectByHandle($handle = null)
+	{
+		return null;
+	}
+
+	/**
 	 * @return null
 	 */
 	public function getModel()
@@ -107,16 +117,6 @@ abstract class BaseSproutImportImporter
 
 			return new $model;
 		}
-	}
-
-	/**
-	 * @param null $handle
-	 *
-	 * @return null
-	 */
-	public function getObjectByHandle($handle = null)
-	{
-		return null;
 	}
 
 	/**
@@ -175,7 +175,7 @@ abstract class BaseSproutImportImporter
 	/**
 	 * @return string
 	 */
-	public function getMockSettings()
+	public function getSettingsHtml()
 	{
 		return "";
 	}

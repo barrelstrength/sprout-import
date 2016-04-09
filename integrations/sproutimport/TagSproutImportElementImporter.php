@@ -3,6 +3,9 @@ namespace Craft;
 
 class TagSproutImportElementImporter extends BaseSproutImportElementImporter
 {
+	/**
+	 * @return mixed
+	 */
 	public function getModel()
 	{
 		$model = 'Craft\\TagModel';
@@ -10,15 +13,21 @@ class TagSproutImportElementImporter extends BaseSproutImportElementImporter
 		return new $model;
 	}
 
+	/**
+	 * @return bool
+	 * @throws Exception
+	 * @throws \Exception
+	 */
 	public function save()
 	{
 		return craft()->tags->saveTag($this->model);
 	}
 
-	public function getMockSettings()
+	/**
+	 * @return string
+	 */
+	public function getSettingsHtml()
 	{
-		$variables = array();
-
 		$groupsSelect = array();
 
 		$groups = craft()->tags->getAllTagGroups();
@@ -38,6 +47,9 @@ class TagSproutImportElementImporter extends BaseSproutImportElementImporter
 		));
 	}
 
+	/**
+	 * @param $settings
+	 */
 	public function getMockData($settings)
 	{
 		$tagGroup  = $settings['tagGroup'];
@@ -52,6 +64,12 @@ class TagSproutImportElementImporter extends BaseSproutImportElementImporter
 		}
 	}
 
+	/**
+	 * @param $tagGroup
+	 *
+	 * @throws Exception
+	 * @throws \Exception
+	 */
 	private function generateTag($tagGroup)
 	{
 		$faker = $this->fakerService;
@@ -65,6 +83,6 @@ class TagSproutImportElementImporter extends BaseSproutImportElementImporter
 
 		$tag->getContent()->title = $name;
 
-		$result = craft()->tags->saveTag($tag);
+		craft()->tags->saveTag($tag);
 	}
 }
