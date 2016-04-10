@@ -3,6 +3,9 @@ namespace Craft;
 
 class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 {
+	/**
+	 * @return mixed
+	 */
 	public function getModel()
 	{
 		$model = 'Craft\\EntryModel';
@@ -10,27 +13,40 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 		return new $model;
 	}
 
+	/**
+	 * @return bool
+	 * @throws Exception
+	 * @throws \Exception
+	 */
 	public function save()
 	{
 		return craft()->entries->saveEntry($this->model);
 	}
 
-	public function getMockSettings()
+	/**
+	 * @return string
+	 */
+	public function getSettingsHtml()
 	{
 		$sections = array(
-			'single' => 'Single',
+			'single'  => 'Single',
 			'channel' => 'Channel'
 		);
 
 		$channels = sproutImport()->element->getChannelSections();
 
-		return craft()->templates->render('sproutimport/settings/_entry', array(
+		return craft()->templates->render('sproutimport/_settings/entry', array(
 			'id'       => $this->getName(),
 			'sections' => $sections,
 			'channels' => $channels
 		));
 	}
 
+	/**
+	 * @param $settings
+	 *
+	 * @return array
+	 */
 	public function getMockData($settings)
 	{
 		$sectionType = $settings['sectionType'];
@@ -63,9 +79,8 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 						'title'         => $latestSection->name
 					);
 
-					$id = $this->generateEntry($entryParams);
+					$id        = $this->generateEntry($entryParams);
 					$saveIds[] = $id;
-
 				}
 			}
 			else
@@ -114,13 +129,17 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 						}
 					}
 				}
-
 			}
 		}
 
 		return $saveIds;
 	}
 
+	/**
+	 * @return bool
+	 * @throws Exception
+	 * @throws \Exception
+	 */
 	private function generateSingleSection()
 	{
 		$result = false;
@@ -148,7 +167,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 		$element = $this->getName();
 
 		$richTextClass = new RichTextFieldSproutImport();
-		$fields  = sproutImport()->element->getFieldsByType($element, $richTextClass );
+		$fields        = sproutImport()->element->getFieldsByType($element, $richTextClass);
 
 		if (!empty($fields))
 		{
@@ -160,7 +179,8 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 					0 => $fields[0]->id
 				)
 			);
-			$fieldLayout         = craft()->fields->assembleLayout($fieldLayoutSettings);
+
+			$fieldLayout = craft()->fields->assembleLayout($fieldLayoutSettings);
 			$entryTypeModel->setFieldLayout($fieldLayout);
 
 			$result = craft()->sections->saveEntryType($entryTypeModel);
@@ -169,9 +189,13 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 		}
 	}
 
+	/**
+	 * @param array $entryParams
+	 *
+	 * @return mixed
+	 */
 	public function generateEntry($entryParams = array())
 	{
-
 		$fakerDate = $this->fakerService->dateTimeThisYear('now');
 
 		$data                            = array();
@@ -203,7 +227,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 			// Get only declared field classes
 			foreach ($fieldClasses as $fieldClass)
 			{
-				$fields  = sproutImport()->element->getFieldsByType($element, $fieldClass);
+				$fields = sproutImport()->element->getFieldsByType($element, $fieldClass);
 
 				if (!empty($fields))
 				{
@@ -211,7 +235,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 					foreach ($fields as $field)
 					{
 						$fieldClass->setField($field);
-						$fieldHandle = $field->handle;
+						$fieldHandle                             = $field->handle;
 						$data['content']['fields'][$fieldHandle] = $fieldClass->getMockData();
 					}
 				}

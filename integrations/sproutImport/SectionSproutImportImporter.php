@@ -5,16 +5,28 @@ class SectionSproutImportImporter extends BaseSproutImportImporter
 {
 	public $isNewSection;
 
+	/**
+	 * @param null $handle
+	 *
+	 * @return SectionModel|null
+	 */
 	public function getObjectByHandle($handle)
 	{
 		return craft()->sections->getSectionByHandle($handle);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function defineModel()
 	{
 		return 'Craft\\SectionModel';
 	}
 
+	/**
+	 * @param $model
+	 * @param $settings
+	 */
 	public function populateModel($model, $settings)
 	{
 		if (!isset($settings['urlFormat']))
@@ -70,6 +82,11 @@ class SectionSproutImportImporter extends BaseSproutImportImporter
 		$this->model = $model;
 	}
 
+	/**
+	 * @return bool
+	 * @throws Exception
+	 * @throws \Exception
+	 */
 	public function save()
 	{
 		$this->isNewSection = ($this->model->id) ? false : true;
@@ -77,11 +94,25 @@ class SectionSproutImportImporter extends BaseSproutImportImporter
 		return craft()->sections->saveSection($this->model);
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return bool
+	 * @throws \Exception
+	 */
 	public function deleteById($id)
 	{
 		return craft()->sections->deleteSectionById($id);
 	}
 
+	/**
+	 * @param $model
+	 * @param $settings
+	 *
+	 * @return bool
+	 * @throws Exception
+	 * @throws \Exception
+	 */
 	public function resolveNestedSettings($model, $settings)
 	{
 		// Check to see if we have any Entry Types we should also save

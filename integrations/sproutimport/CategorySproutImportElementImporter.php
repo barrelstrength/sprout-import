@@ -3,6 +3,9 @@ namespace Craft;
 
 class CategorySproutImportElementImporter extends BaseSproutImportElementImporter
 {
+	/**
+	 * @return mixed
+	 */
 	public function getModel()
 	{
 		$model = 'Craft\\CategoryModel';
@@ -10,15 +13,21 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 		return new $model;
 	}
 
+	/**
+	 * @return bool
+	 * @throws Exception
+	 * @throws \Exception
+	 */
 	public function save()
 	{
 		return craft()->categories->saveCategory($this->model);
 	}
 
-	public function getMockSettings()
+	/**
+	 * @return string
+	 */
+	public function getSettingsHtml()
 	{
-		$variables = array();
-
 		$groupsSelect = array();
 
 		$groups = craft()->categories->getAllGroups();
@@ -32,12 +41,15 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 			}
 		}
 
-		return craft()->templates->render('sproutimport/settings/_category', array(
+		return craft()->templates->render('sproutimport/_settings/category', array(
 			'id'             => $this->getName(),
 			'categoryGroups' => $groupsSelect
 		));
 	}
 
+	/**
+	 * @param $settings
+	 */
 	public function getMockData($settings)
 	{
 		$categoryGroup  = $settings['categoryGroup'];
@@ -52,7 +64,13 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 		}
 	}
 
-	private function generateCategory($categoryGroup)
+	/**
+	 * @param $categoryGroup
+	 *
+	 * @throws Exception
+	 * @throws \Exception
+	 */
+	protected function generateCategory($categoryGroup)
 	{
 		$faker = $this->fakerService;
 		$name  = $faker->word;
@@ -65,6 +83,6 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 
 		$category->getContent()->title = $name;
 
-		$result = craft()->categories->saveCategory($category);
+		craft()->categories->saveCategory($category);
 	}
 }

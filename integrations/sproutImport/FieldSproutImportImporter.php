@@ -3,55 +3,38 @@ namespace Craft;
 
 class FieldSproutImportImporter extends BaseSproutImportImporter
 {
+	/**
+	 * @return string
+	 */
+	public function defineModel()
+	{
+		return 'Craft\\FieldModel';
+	}
 
+	/**
+	 * @param null $handle
+	 *
+	 * @return FieldModel|null
+	 */
 	public function getObjectByHandle($handle = null)
 	{
 		return craft()->fields->getFieldByHandle($handle);
 	}
 
-	public function defineModel()
-	{
-		return 'Craft\\FieldModel';
-	}
-	//
-	//public function getModel($fieldService = null)
-	//{
-	//	$handle = $this->settings['handle'];
-	//
-	//	if ($fieldService == null)
-	//	{
-	//		$fieldService = craft()->fields;
-	//	}
-	//
-	//	$exist = $fieldService->getFieldByHandle($handle);
-	//
-	//	if($exist != null)
-	//	{
-	//		return $exist;
-	//	}
-	//	else
-	//	{
-	//		$model = 'Craft\\FieldModel';
-	//		return new $model;
-	//	}
-	//}
-
-	//public function populateModel($model, $settings)
-	//{
-	//	// @TODO - require groupId or set fallback.
-	//	// Let import override the field context
-	//
-	//	// Assign any setting values we can to the model
-	//	//$model->setAttributes($settings);
-	//	//
-	//	//return $model;
-	//}
-
+	/**
+	 * @return bool
+	 * @throws \Exception
+	 */
 	public function save()
 	{
 		return craft()->fields->saveField($this->model);
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return bool
+	 */
 	public function deleteById($id)
 	{
 		return craft()->fields->deleteFieldById($id);

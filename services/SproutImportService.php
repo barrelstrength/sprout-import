@@ -3,7 +3,6 @@ namespace Craft;
 
 class SproutImportService extends BaseApplicationComponent
 {
-
 	/**
 	 * @var BaseSproutImportImporter[]
 	 */
@@ -22,6 +21,7 @@ class SproutImportService extends BaseApplicationComponent
 	public $element;
 	public $seed;
 	public $faker;
+	public $tasks;
 
 	protected $elementsService;
 
@@ -45,6 +45,7 @@ class SproutImportService extends BaseApplicationComponent
 		$this->element = Craft::app()->getComponent('sproutImport_element');
 		$this->setting = Craft::app()->getComponent('sproutImport_setting');
 		$this->faker   = Craft::app()->getComponent('sproutImport_faker');
+		$this->tasks   = Craft::app()->getComponent('sproutImport_tasks');
 
 	}
 
@@ -76,7 +77,7 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get all buil-in and called Field imports
+	 * Get all built-in and registered FieldImporters
 	 *
 	 * @return BaseSproutImport[]
 	 */
@@ -99,36 +100,6 @@ class SproutImportService extends BaseApplicationComponent
 		}
 
 		return $this->fieldImports;
-	}
-
-	/**
-	 * @param array $tasks
-	 *
-	 * @throws Exception
-	 * @return TaskModel
-	 */
-	public function createImportTasks(array $tasks, $seed = false)
-	{
-		if (!count($tasks))
-		{
-			throw new Exception(Craft::t('Unable to create element import task. No tasks found.'));
-		}
-
-		return craft()->tasks->createTask('SproutImport', Craft::t("Importing elements"), array('files' => $tasks,
-		                                                                                        'seed'  => $seed));
-	}
-
-	public function enqueueTasksByPost(array $tasks)
-	{
-		if (!count($tasks))
-		{
-			throw new Exception(Craft::t('No tasks to enqueue'));
-		}
-
-		$taskName    = 'Craft Migration';
-		$description = 'Sprout Migrate By Post Request';
-
-		return craft()->tasks->createTask('SproutImport_Post', Craft::t($description), array('elements' => $tasks));
 	}
 
 	/**
@@ -183,6 +154,11 @@ class SproutImportService extends BaseApplicationComponent
 		return array_merge($elementResults, $settingResults);
 	}
 
+	/**
+	 * @param $file
+	 *
+	 * @return bool
+	 */
 	public function getJson($file)
 	{
 		$content = file_get_contents($file);
@@ -216,6 +192,11 @@ class SproutImportService extends BaseApplicationComponent
 		return false;
 	}
 
+	/**
+	 * @param $settings
+	 *
+	 * @return null
+	 */
 	public function getImporterModel($settings)
 	{
 		if (!$settings['@model'])
@@ -466,36 +447,11 @@ class SproutImportService extends BaseApplicationComponent
 		return true;
 	}
 
-	/** Migrate elements to Craft
+	/**
+	 * @param $row
 	 *
-	 * @param $elements
-	 *
-	 * @throws Exception
+	 * @return mixed
 	 */
-	public function setEnqueueTasksByPost($elements)
-	{
-
-		// support serialize format
-		if (sproutImport()->isSerialized($elements))
-		{
-			$elements = unserialize($elements);
-		}
-
-		// Divide array for the tasks service
-		$tasks = sproutImport()->sectionArray($elements, 10);
-
-		sproutImport()->enqueueTasksByPost($tasks);
-
-		try
-		{
-			craft()->userSession->setNotice(Craft::t('({tasks}) Tasks queued successfully.', array('tasks' => count($tasks))));
-		}
-		catch (\Exception $e)
-		{
-			craft()->userSession->setError($e->getMessage());
-		}
-	}
-
 	public function getImporter($row)
 	{
 		$importerModel = $this->getImporterModel($row);
@@ -517,6 +473,11 @@ class SproutImportService extends BaseApplicationComponent
 		return $importerClass;
 	}
 
+	/**
+	 * @param $name
+	 *
+	 * @return string
+	 */
 	public function getImporterByName($name)
 	{
 		$importerClassName = 'Craft\\' . $name . 'SproutImportImporter';
@@ -524,6 +485,9 @@ class SproutImportService extends BaseApplicationComponent
 		return $importerClassName;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getLatestSingleSection()
 	{
 		$result = array();
@@ -554,7 +518,6 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	public function createTempFolder()
 	{
-
 		$folderPath = craft()->path->getTempUploadsPath().'sproutimport/';
 
 		IOHelper::clearFolder($folderPath);

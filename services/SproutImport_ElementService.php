@@ -3,7 +3,6 @@ namespace Craft;
 
 class SproutImport_ElementService extends BaseApplicationComponent
 {
-
 	private $type;
 
 	private $element;
@@ -20,7 +19,6 @@ class SproutImport_ElementService extends BaseApplicationComponent
 	 *
 	 * @var array
 	 */
-
 	protected $savedElementIds = array();
 
 	/**
@@ -156,6 +154,11 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		}
 	}
 
+	/**
+	 * @param bool $returnSavedElementIds
+	 *
+	 * @return array
+	 */
 	public function getSavedResults($returnSavedElementIds = false)
 	{
 		$result = array(
@@ -402,6 +405,9 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		return $model;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getChannelSections()
 	{
 		$selects  = array();
@@ -423,6 +429,12 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		return $selects;
 	}
 
+	/**
+	 * @param string                        $element
+	 * @param BaseSproutImportFieldImporter $fieldClass
+	 *
+	 * @return array
+	 */
 	public function getFieldsByType($element = "Entry", BaseSproutImportFieldImporter $fieldClass)
 	{
 		$fields = craft()->fields->getFieldsByElementType($element);
@@ -430,7 +442,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		$type = $fieldClass->getName();
 
 		$texts = array();
-		$tempTypes = array();
+		
 		if (!empty($fields))
 		{
 			foreach ($fields as $field)

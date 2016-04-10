@@ -1,84 +1,62 @@
-{% extends "_layouts/cp" %}
+{% extends "sproutimport/_layouts/base" %}
 {% import "_includes/forms" as forms %}
 
 {% set title = 'Weed' %}
-
-{% set selectedTab = 'weed' %}
-
-{% set tabs = {
-	import: {
-		label: "Import"|t,
-		url: url('sproutimport/index')
-	},
-	seed: {
-		label: "Seed"|t,
-		url: url('sproutimport/seed')
-	},
-	weed: {
-		label: "Weed"|t,
-		url: url('sproutimport/weed')
-	}
-} %}
 
 {% set hasSeeds = craft.sproutImport.hasSeeds('import') %}
 {% set hasSeedsFake = craft.sproutImport.hasSeeds('fake') %}
 
 {% set content %}
 
-	<h2>Clean up database</h2>
+	<form method="post" accept-charset="UTF-8">
 
-	{% if hasSeeds > 0 %}
+		{{ getCsrfInput() }}
 
-		<p>There are <strong>{{ hasSeeds }} IMPORT </strong> seeds to weed.</p>
+		<input type="hidden" name="action" value="sproutImport/seed/weed">
+		<input type="hidden" name="redirect" value="sproutimport/weed">
+		<input type="hidden" name="type" value="fake">
 
-		<form method="post" accept-charset="UTF-8">
+		<table class="weed data fullwidth">
+			<tr>
+				<th>Type</th>
+				<th>Seeds</th>
+				<th></th>
+			</tr>
+			<tr>
+				<td>Entry</td>
+				<td>100</td>
+				<td>
+					<input class="btn small" type="submit" value="Weed">
+					<input class="btn small" type="submit" value="Keep">
+				</td>
+			</tr>
+			<tr>
+				<td>Category</td>
+				<td>12</td>
+				<td>
+					<input class="btn small" type="submit" value="Weed">
+					<input class="btn small" type="submit" value="Keep">
+				</td>
+			</tr>
+		</table>
 
-			{{ getCsrfInput() }}
+		<div class="buttons">
+			<input class="btn submit" type="submit" value="Weed All">
+			<input class="btn" type="submit" value="Keep All">
+		</div>
 
-			<input type="hidden" name="action" value="sproutImport/seed/weed">
-			<input type="hidden" name="redirect" value="sproutimport/weed">
-			<input type="hidden" name="type" value="import">
+	</form>
 
-			<p>Remove all imported data that was marked as seed content.</p>
+	<hr>
 
-			<div class="buttons">
-				<input class="btn submit" type="submit" value="Weed Imported data">
-			</div>
+	<p><strong>{{ "Weed"|t }}</strong> – {{ "Weeding can help clean up your database and remove all imported content that was marked as seed content."|t|raw }}</p>
 
-		</form>
+	<p><strong>{{ "Keep"|t }}</strong> – {{ "If you have imported content marked as seed content and you wish to keep it, using the Keep option will unmark it as seed content in the database so nobody can accidentally remove it using the weed feature. Content that you choose to keep will need to be deleted manually."|t|raw }}</p>
 
-	{% else %}
-
-		<p>Currently, there are no seeded elements in your database.</p>
-
-	{% endif %}
-
-<hr />
-
-	{% if hasSeedsFake > 0 %}
-
-		<p>There are <strong>{{ hasSeedsFake }} FAKE </strong> seeds to weed.</p>
-
-		<form method="post" accept-charset="UTF-8">
-
-			{{ getCsrfInput() }}
-
-			<input type="hidden" name="action" value="sproutImport/seed/weed">
-			<input type="hidden" name="redirect" value="sproutimport/weed">
-			<input type="hidden" name="type" value="fake">
-
-			<p>Remove all imported data that was marked as seed content.</p>
-
-			<div class="buttons">
-				<input class="btn submit" type="submit" value="Weed Fake data">
-			</div>
-
-		</form>
-
-	{% else %}
-
-		<p>Currently, there are no seeded elements in your database.</p>
-
-	{% endif %}
+	<style>
+		table.weed td:last-of-type {
+			text-align: right;
+		}
+	</style>
 
 {% endset %}

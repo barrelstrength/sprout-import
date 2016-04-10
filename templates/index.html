@@ -1,24 +1,7 @@
-{% extends "_layouts/cp" %}
+{% extends "sproutimport/_layouts/base" %}
 {% import "_includes/forms" as forms %}
 
 {% set title = 'Import' %}
-
-{% set selectedTab = 'import' %}
-
-{% set tabs = {
-	import: {
-		label: "Import"|t,
-		url: url('sproutimport/index')
-	},
-	seed: {
-		label: "Seed"|t,
-		url: url('sproutimport/seed')
-	},
-	weed: {
-		label: "Weed"|t,
-		url: url('sproutimport/weed')
-	}
-} %}
 
 {% set content %}
 
@@ -26,7 +9,7 @@
 
 		{{ getCsrfInput() }}
 
-		<input type="hidden" name="action" value="sproutImport/importElements">
+		<input type="hidden" name="action" value="sproutImport/import/runImport">
 
 		<div class="field first" id="files-field">
 			<div class="heading">
@@ -40,8 +23,7 @@
 
 		{{ forms.lightswitchField({
 			label: "Seed data"|t,
-			instructions: "Mark your import as Seed data if you want to log each item you import so it can be
-			removed later via the Weed tab."|t,
+			instructions: "Mark your imported data as seed data. Seed data can later be removed via the Weed tab."|t,
 			on: false,
 			name: 'seed'
 		}) }}

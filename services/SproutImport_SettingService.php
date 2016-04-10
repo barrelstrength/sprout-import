@@ -3,11 +3,17 @@ namespace Craft;
 
 class SproutImport_SettingService extends BaseApplicationComponent
 {
-
 	private $savedIds = array();
 
-	// Returns $model if saved, or false if failed
-	// This can be called in a loop, or called directly if we know we just have one setting and want and ID back.
+	/**
+	 * Returns $model if saved, or false if failed
+	 * This can be called in a loop, or called directly if we know we just have one setting and want and ID back.
+	 *
+	 * @param      $settings
+	 * @param bool $seed
+	 *
+	 * @return bool
+	 */
 	public function saveSetting($settings, $seed = false)
 	{
 		if ($seed)
@@ -43,6 +49,9 @@ class SproutImport_SettingService extends BaseApplicationComponent
 		}
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getSavedResults()
 	{
 		return array(

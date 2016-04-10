@@ -5,6 +5,13 @@ class SproutImport_SeedService extends BaseApplicationComponent
 {
 	public $seed = false;
 
+	/**
+	 * @param null   $itemId
+	 * @param null   $importerClass
+	 * @param string $type
+	 *
+	 * @return bool
+	 */
 	public function trackSeed($itemId = null, $importerClass = null, $type = 'import')
 	{
 		if (!$itemId OR !$importerClass)
@@ -20,6 +27,11 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		$record->save();
 	}
 
+	/**
+	 * @param $type
+	 *
+	 * @return array|\CDbDataReader
+	 */
 	public function getAllSeeds($type)
 	{
 		$seeds = craft()->db->createCommand()
@@ -31,6 +43,12 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		return $seeds;
 	}
 
+	/**
+	 * @param $type
+	 *
+	 * @return bool
+	 * @throws \CDbException
+	 */
 	public function weed($type)
 	{
 		$results = craft()->db->createCommand()
@@ -68,6 +86,11 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		return true;
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return int
+	 */
 	public function deleteSeedById($id)
 	{
 		return craft()->db->createCommand()->delete(
@@ -75,10 +98,5 @@ class SproutImport_SeedService extends BaseApplicationComponent
 			'id=:id',
 			array(':id' => $id)
 		);
-	}
-
-	public function test()
-	{
-		echo 'testas';
 	}
 }
