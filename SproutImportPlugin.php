@@ -88,8 +88,7 @@ class SproutImportPlugin extends BasePlugin
 	{
 		return array(
 			new RichTextSproutImportFieldImporter(),
-			new PlainTextSproutImportFieldImporter(),
-			new SproutFields_EmailSproutImportFieldImporter()
+			new PlainTextSproutImportFieldImporter()
 		);
 	}
 }
