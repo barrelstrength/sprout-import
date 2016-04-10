@@ -189,7 +189,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 		$data['attributes']['dateUpdated'] = $fakerDate;
 		$data['attributes']['enabled']     = true;
 
-		$title = isset($entryParams['title']) ? $entryParams['title'] : $this->fakerService->word;
+		$title = isset($entryParams['title']) ? $entryParams['title'] : $this->fakerService->text(60);
 
 		$data['content']['title']           = $title;
 		$data['content']['fields']['title'] = $title;
