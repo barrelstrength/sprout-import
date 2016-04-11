@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutImportController extends BaseController
+class SproutImport_ImportController extends BaseController
 {
 	/**
 	 * Import Elements
