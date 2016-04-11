@@ -6,7 +6,7 @@ class SproutImportTask extends BaseTask
 	/**
 	 * @return string
 	 */
-	protected function getDescription()
+	public function getDescription()
 	{
 		return 'Sprout Import Task';
 	}
