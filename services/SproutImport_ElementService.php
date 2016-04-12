@@ -103,6 +103,11 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 				$saved = $importer->save();
 
+				if ($saved)
+				{
+					$importer->resolveNestedSettings($model, $element);
+				}
+
 				if ($saved && $isNewElement)
 				{
 					$this->savedElementIds[] = $model->id;
