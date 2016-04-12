@@ -99,4 +99,18 @@ class SproutImport_SeedService extends BaseApplicationComponent
 			array(':id' => $id)
 		);
 	}
+
+	public function getSeedCountByElementType($handle)
+	{
+		$count = SproutImport_SeedRecord::model()->countByAttributes(array('importerClass' => $handle));
+
+		if ($count)
+		{
+			return $count;
+		}
+		else
+		{
+			return "0";
+		}
+	}
 }

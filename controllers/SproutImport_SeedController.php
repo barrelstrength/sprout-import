@@ -75,6 +75,15 @@ class SproutImport_SeedController extends BaseController
 		$this->redirectToPostedUrl();
 	}
 
+	public function actionWeedIndex()
+	{
+		$elementImporters = sproutImport()->getSproutImportImporters();
+
+		$this->renderTemplate('sproutimport/weed', array(
+			'elementImporters' => $elementImporters
+		));
+	}
+
 	/**
 	 * Remove all Seed entries from the database
 	 */

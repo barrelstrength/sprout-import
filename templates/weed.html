@@ -22,22 +22,20 @@
 				<th>Seeds</th>
 				<th></th>
 			</tr>
-			<tr>
-				<td>Entry</td>
-				<td>100</td>
-				<td>
-					<input class="btn small" type="submit" value="Weed">
-					<input class="btn small" type="submit" value="Keep">
-				</td>
-			</tr>
-			<tr>
-				<td>Category</td>
-				<td>12</td>
-				<td>
-					<input class="btn small" type="submit" value="Weed">
-					<input class="btn small" type="submit" value="Keep">
-				</td>
-			</tr>
+			{% if elementImporters is defined %}
+				{% for importer in elementImporters %}
+					{% if importer.getSeedCount() > 0 %}
+						<tr>
+							<td>{{ importer.getElementName() }}</td>
+							<td>{{ importer.getSeedCount() }}</td>
+							<td>
+								<input class="btn small" type="submit" value="Weed">
+								<input class="btn small" type="submit" value="Keep">
+							</td>
+						</tr>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
 		</table>
 
 		<div class="buttons">

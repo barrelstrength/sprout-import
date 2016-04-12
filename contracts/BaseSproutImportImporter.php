@@ -55,6 +55,25 @@ abstract class BaseSproutImportImporter
 		return str_replace('SproutImportImporter', '', $this->getId());
 	}
 
+	/** Get element importer label name
+	 * @return mixed|string
+	 */
+	public function getElementName()
+	{
+		$name = $this->getName();
+
+		$element = craft()->elements->getElementType($name);
+
+		if (method_exists($element, 'getName'))
+		{
+			return $element->getName();
+		}
+		else
+		{
+			return $this->getName();
+		}
+	}
+
 	/**
 	 * @param string $pluginHandle
 	 */
@@ -178,5 +197,14 @@ abstract class BaseSproutImportImporter
 	public function getSettingsHtml()
 	{
 		return "";
+	}
+
+	public function getSeedCount()
+	{
+		$name = $this->getName();
+
+		$count = sproutImport()->seed->getSeedCountByElementType($name);
+
+		return $count;
 	}
 }

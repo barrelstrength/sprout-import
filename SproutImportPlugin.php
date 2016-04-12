@@ -61,7 +61,8 @@ class SproutImportPlugin extends BasePlugin
 		return array(
 			'sproutimport/start/'                       => array('action' => 'sproutImport/start'),
 			'sproutimport/run/[a-zA-Z]+/[a-zA-Z0-9\-]+' => array('action' => 'sproutImport/runTask'),
-			'sproutimport/seed'                         => array('action' => 'sproutImport/seed/indexTemplate')
+			'sproutimport/seed'                         => array('action' => 'sproutImport/seed/indexTemplate'),
+			'sproutimport/weed'                         => array('action' => 'sproutImport/seed/weedIndex')
 		);
 	}
 
