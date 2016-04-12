@@ -55,13 +55,16 @@ class TagSproutImportElementImporter extends BaseSproutImportElementImporter
 		$tagGroup  = $settings['tagGroup'];
 		$tagNumber = $settings['tagNumber'];
 
+		$saveIds = array();
+
 		if (!empty($tagNumber))
 		{
 			for ($i = 1; $i <= $tagNumber; $i++)
 			{
-				$this->generateTag($tagGroup);
+				$saveIds[] = $this->generateTag($tagGroup);
 			}
 		}
+		return $saveIds;
 	}
 
 	/**
@@ -83,6 +86,9 @@ class TagSproutImportElementImporter extends BaseSproutImportElementImporter
 
 		$tag->getContent()->title = $name;
 
-		craft()->tags->saveTag($tag);
+		if(craft()->tags->saveTag($tag))
+		{
+			return $tag->id;
+		}
 	}
 }

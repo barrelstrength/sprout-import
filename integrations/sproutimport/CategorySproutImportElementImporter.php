@@ -55,13 +55,16 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 		$categoryGroup  = $settings['categoryGroup'];
 		$categoryNumber = $settings['categoryNumber'];
 
+		$saveIds = array();
+
 		if (!empty($categoryNumber))
 		{
 			for ($i = 1; $i <= $categoryNumber; $i++)
 			{
-				$this->generateCategory($categoryGroup);
+				$saveIds[] = $this->generateCategory($categoryGroup);
 			}
 		}
+		return $saveIds;
 	}
 
 	/**
@@ -83,6 +86,9 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 
 		$category->getContent()->title = $name;
 
-		craft()->categories->saveCategory($category);
+		if(craft()->categories->saveCategory($category))
+		{
+			return $category->id;
+		}
 	}
 }

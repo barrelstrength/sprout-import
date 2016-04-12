@@ -18,10 +18,9 @@ class SproutImportPlugin extends BasePlugin
 
 		craft()->on('sproutImport.onAfterMigrateElement', function (Event $event)
 		{
-
 			$element = $event->params['element'];
-			$seed = $event->params['seed'];
-			$type = $event->params['@model'];
+			$seed    = $event->params['seed'];
+			$type    = $event->params['@model'];
 
 			$id = $element->id;
 
