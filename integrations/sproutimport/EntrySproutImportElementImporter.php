@@ -124,7 +124,11 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 
 								$entryId = $id;
 
-								$saveIds[] = $id;
+								// Avoid duplication of saveIds
+								if (!in_array($id, $saveIds))
+								{
+									$saveIds[] = $id;
+								}
 							}
 						}
 					}

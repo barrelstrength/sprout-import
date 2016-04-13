@@ -40,7 +40,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 	 * @throws \CDbException
 	 * @throws \Exception
 	 */
-	public function saveElement(array $element, $seed = false)
+	public function saveElement(array $element, $seed = false, $source = null)
 	{
 		$type = sproutImport()->getImporterModel($element);
 
@@ -84,7 +84,13 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		$model->setContent($content);
 		$model->setContentFromPost($fields);
 
-		$event = new Event($this, array('element' => $model));
+		$eventParams = array('element' => $model,
+		                     'seed'    => $seed,
+		                     '@model'  => $type,
+		                     'source'  => $source
+												);
+
+		$event = new Event($this, $eventParams);
 
 		sproutImport()->onBeforeMigrateElement($event);
 
@@ -113,7 +119,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 					$this->savedElementIds[] = $model->id;
 					$this->savedElements[]   = $model->getTitle();
 
-					$event = new Event($this, array('element' => $model, 'seed' => $seed, '@model' => $type));
+					$event = new Event($this, $eventParams);
 
 					sproutImport()->onAfterMigrateElement($event);
 				}

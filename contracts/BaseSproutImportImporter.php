@@ -199,11 +199,11 @@ abstract class BaseSproutImportImporter
 		return "";
 	}
 
-	public function getSeedCount()
+	public function getSeedCount($type)
 	{
 		$name = $this->getName();
 
-		$count = sproutImport()->seed->getSeedCountByElementType($name);
+		$count = sproutImport()->seed->getSeedCountByElementType($name, $type);
 
 		return $count;
 	}

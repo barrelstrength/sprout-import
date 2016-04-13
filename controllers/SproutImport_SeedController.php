@@ -60,7 +60,7 @@ class SproutImport_SeedController extends BaseController
 			$importerClass = new $namespace;
 
 			$ids = $importerClass->getMockData($settings);
-
+			
 			if (!empty($ids))
 			{
 				foreach ($ids as $id)
@@ -75,10 +75,16 @@ class SproutImport_SeedController extends BaseController
 		$this->redirectToPostedUrl();
 	}
 
+	/**
+	 * Weed page index
+	 * @throws HttpException
+	 */
+
 	public function actionWeedIndex()
 	{
 		$elementImporters = sproutImport()->getSproutImportImporters();
 
+		craft()->templates->includeCssResource('sproutimport/css/sproutimport.css');
 		$this->renderTemplate('sproutimport/weed', array(
 			'elementImporters' => $elementImporters
 		));
@@ -87,17 +93,35 @@ class SproutImport_SeedController extends BaseController
 	/**
 	 * Remove all Seed entries from the database
 	 */
-	public function actionWeed()
+	public function actionRunWeed()
 	{
-		$type = craft()->request->getPost('type');
+		$this->requirePostRequest();
 
-		if (craft()->sproutImport_seed->weed($type))
+		$submit = craft()->request->getPost('submit');
+		$type   = craft()->request->getPost('type');
+		$class  = craft()->request->getPost('class');
+
+		if ($submit == "Weed")
 		{
-			craft()->userSession->setNotice(Craft::t('The garden is weeded!'));
+			if (craft()->sproutImport_seed->weed($class, $type))
+			{
+				craft()->userSession->setNotice(Craft::t('The garden is weeded!'));
+			}
+			else
+			{
+				craft()->userSession->setError(Craft::t('No luck weeding. Try again.'));
+			}
 		}
-		else
+		else if ($submit == "Keep")
 		{
-			craft()->userSession->setError(Craft::t('No luck weeding. Try again.'));
+			if (craft()->sproutImport_seed->weed($class, $type, true))
+			{
+				craft()->userSession->setNotice(Craft::t('Data Kept!'));
+			}
+			else
+			{
+				craft()->userSession->setError(Craft::t('There is a problem on keeping data. Try again.'));
+			}
 		}
 	}
 }

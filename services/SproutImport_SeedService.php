@@ -49,11 +49,12 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	 * @return bool
 	 * @throws \CDbException
 	 */
-	public function weed($type)
+	public function weed($handle, $type, $isKeep = false)
 	{
 		$results = craft()->db->createCommand()
 			->select('id, itemId, importerClass')
 			->where("type = '$type'")
+			->andWhere("importerClass = '$handle'")
 			->from('sproutimport_seeds')
 			->queryAll();
 
@@ -63,12 +64,15 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		{
 			try
 			{
-				// @todo - improve how we handle this setting...
-				// we're just appending 'Model' and adding it to the array here...
-				$row['@model'] = $row['importerClass'] . 'Model';
+				if (!$isKeep)
+				{
+					// @todo - improve how we handle this setting...
+					// we're just appending 'Model' and adding it to the array here...
+					$row['@model'] = $row['importerClass'] . 'Model';
 
-				$importer = sproutImport()->getImporter($row);
-				$importer->deleteById($row['itemId']);
+					$importer = sproutImport()->getImporter($row);
+					$importer->deleteById($row['itemId']);
+				}
 
 				$this->deleteSeedById($row['id']);
 			}
@@ -100,9 +104,9 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		);
 	}
 
-	public function getSeedCountByElementType($handle)
+	public function getSeedCountByElementType($handle, $type)
 	{
-		$count = SproutImport_SeedRecord::model()->countByAttributes(array('importerClass' => $handle));
+		$count = SproutImport_SeedRecord::model()->countByAttributes(array('importerClass' => $handle, 'type' => $type));
 
 		if ($count)
 		{

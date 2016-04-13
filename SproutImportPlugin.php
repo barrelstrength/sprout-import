@@ -21,10 +21,11 @@ class SproutImportPlugin extends BasePlugin
 			$element = $event->params['element'];
 			$seed    = $event->params['seed'];
 			$type    = $event->params['@model'];
+			$source  = $event->params['source'];
 
 			$id = $element->id;
 
-			if ($seed)
+			if ($seed && $source == "import")
 			{
 				sproutImport()->seed->trackSeed($id, $type);
 			}

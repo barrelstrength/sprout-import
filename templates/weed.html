@@ -8,42 +8,75 @@
 
 {% set content %}
 
-	<form method="post" accept-charset="UTF-8">
 
-		{{ getCsrfInput() }}
-
-		<input type="hidden" name="action" value="sproutImport/seed/weed">
-		<input type="hidden" name="redirect" value="sproutimport/weed">
-		<input type="hidden" name="type" value="fake">
-
-		<table class="weed data fullwidth">
-			<tr>
-				<th>Type</th>
-				<th>Seeds</th>
-				<th></th>
-			</tr>
-			{% if elementImporters is defined %}
-				{% for importer in elementImporters %}
-					{% if importer.getSeedCount() > 0 %}
+	<h2>Imported</h2>
+	<table class="weed data fullwidth">
+		<tr>
+			<th class="type">Type</th>
+			<th class="seeds">Seeds</th>
+			<th class="options">&nbsp;</th>
+		</tr>
+		{% if elementImporters is defined %}
+			{% for importer in elementImporters %}
+				{% if importer.getSeedCount('import') > 0 %}
 						<tr>
 							<td>{{ importer.getElementName() }}</td>
-							<td>{{ importer.getSeedCount() }}</td>
-							<td>
-								<input class="btn small" type="submit" value="Weed">
-								<input class="btn small" type="submit" value="Keep">
+							<td>{{ importer.getSeedCount('import') }}</td>
+							<td class="options">
+								<form method="post" accept-charset="UTF-8">
+									{{ getCsrfInput() }}
+									<input type="hidden" name="action" value="sproutImport/seed/runWeed">
+									<input type="hidden" name="redirect" value="sproutimport/weed">
+									<input type="hidden" name="class" value="{{ importer.getName() }}">
+									<input type="hidden" name="type" value="import">
+									<input class="btn small" name="submit" type="submit" value="Weed">
+									<input class="btn small" name="submit" type="submit" value="Keep">
+								</form>
 							</td>
 						</tr>
-					{% endif %}
-				{% endfor %}
-			{% endif %}
-		</table>
 
-		<div class="buttons">
-			<input class="btn submit" type="submit" value="Weed All">
-			<input class="btn" type="submit" value="Keep All">
-		</div>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+	</table>
+	<hr/>
+	<h2>Fake</h2>
+	<table class="weed data fullwidth">
+		<tr>
+			<th class="type">Type</th>
+			<th class="seeds">Seeds</th>
+			<th class="options">&nbsp;</th>
+		</tr>
+		{% if elementImporters is defined %}
+			{% for importer in elementImporters %}
+				{% if importer.getSeedCount('fake') > 0 %}
+						<tr>
+							<td>{{ importer.getElementName() }}</td>
+							<td>{{ importer.getSeedCount('fake') }}</td>
+							<td class="options">
+								<form method="post" accept-charset="UTF-8">
+									{{ getCsrfInput() }}
+									<input type="hidden" name="action" value="sproutImport/seed/runWeed">
+									<input type="hidden" name="redirect" value="sproutimport/weed">
+									<input type="hidden" name="class" value="{{ importer.getName() }}">
+									<input type="hidden" name="type" value="fake">
+									<input class="btn small" name="submit" type="submit" value="Weed">
+									<input class="btn small" name="submit" type="submit" value="Keep">
+								</form>
+							</td>
+						</tr>
 
-	</form>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+	</table>
+
+	<div class="buttons">
+		<input class="btn submit" type="submit" value="Weed All">
+		<input class="btn" type="submit" value="Keep All">
+	</div>
+
+
 
 	<hr>
 
