@@ -72,8 +72,15 @@
 	</table>
 
 	<div class="buttons">
-		<input class="btn submit" type="submit" value="Weed All">
-		<input class="btn" type="submit" value="Keep All">
+		<form method="post" accept-charset="UTF-8">
+			{{ getCsrfInput() }}
+			<input type="hidden" name="action" value="sproutImport/seed/runWeed">
+			<input type="hidden" name="redirect" value="sproutimport/weed">
+			<input type="hidden" name="type" value="all">
+			<input type="hidden" name="class" value="">
+			<input class="btn submit" name="submit" type="submit" value="Weed All">
+			<input class="btn" name="submit" type="submit" value="Keep All">
+		</form>
 	</div>
 
 

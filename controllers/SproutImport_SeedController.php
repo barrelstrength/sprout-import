@@ -60,7 +60,7 @@ class SproutImport_SeedController extends BaseController
 			$importerClass = new $namespace;
 
 			$ids = $importerClass->getMockData($settings);
-			
+
 			if (!empty($ids))
 			{
 				foreach ($ids as $id)
@@ -101,7 +101,7 @@ class SproutImport_SeedController extends BaseController
 		$type   = craft()->request->getPost('type');
 		$class  = craft()->request->getPost('class');
 
-		if ($submit == "Weed")
+		if ($submit == "Weed" || $submit == "Weed All")
 		{
 			if (craft()->sproutImport_seed->weed($class, $type))
 			{
@@ -112,7 +112,7 @@ class SproutImport_SeedController extends BaseController
 				craft()->userSession->setError(Craft::t('No luck weeding. Try again.'));
 			}
 		}
-		else if ($submit == "Keep")
+		else if ($submit == "Keep" || $submit == "Keep All")
 		{
 			if (craft()->sproutImport_seed->weed($class, $type, true))
 			{
@@ -123,5 +123,7 @@ class SproutImport_SeedController extends BaseController
 				craft()->userSession->setError(Craft::t('There is a problem on keeping data. Try again.'));
 			}
 		}
+
+
 	}
 }

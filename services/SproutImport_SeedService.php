@@ -49,14 +49,19 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	 * @return bool
 	 * @throws \CDbException
 	 */
-	public function weed($handle, $type, $isKeep = false)
+	public function weed($handle = '', $type = '', $isKeep = false)
 	{
-		$results = craft()->db->createCommand()
-			->select('id, itemId, importerClass')
-			->where("type = '$type'")
-			->andWhere("importerClass = '$handle'")
-			->from('sproutimport_seeds')
-			->queryAll();
+		$command = craft()->db->createCommand();
+		$command = $command->select('id, itemId, importerClass');
+
+		if ($type != "all")
+		{
+			$command = $command->where("type = '$type'");
+			$command = $command->andWhere("importerClass = '$handle'");
+		}
+
+		$command = $command->from('sproutimport_seeds');
+		$results = $command->queryAll();
 
 		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 
