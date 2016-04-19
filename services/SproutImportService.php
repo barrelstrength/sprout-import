@@ -211,42 +211,6 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param $type
-	 *
-	 * @return mixed
-	 */
-	public function getModelClass($type)
-	{
-		$type = strtolower($type);
-
-		return $this->getValueByKey("{$type}.model", $this->mapping);
-	}
-
-	/**
-	 * @param $type
-	 *
-	 * @return mixed
-	 */
-	public function getServiceName($type)
-	{
-		$type = strtolower($type);
-
-		return $this->getValueByKey("{$type}.service", $this->mapping);
-	}
-
-	/**
-	 * @param $type
-	 *
-	 * @return mixed
-	 */
-	public function getMethodName($type)
-	{
-		$type = strtolower($type);
-
-		return $this->getValueByKey("{$type}.method", $this->mapping);
-	}
-
-	/**
 	 * @param string $key
 	 * @param mixed  $data
 	 * @param mixed  $default
