@@ -12,7 +12,7 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	 *
 	 * @return bool
 	 */
-	public function trackSeed($itemId = null, $importerClass = null, $type = 'import')
+	public function trackSeed($itemId = null, $importerClass = null)
 	{
 		if (!$itemId OR !$importerClass)
 		{
@@ -22,7 +22,6 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		$record                = new SproutImport_SeedRecord;
 		$record->itemId        = $itemId;
 		$record->importerClass = $importerClass;
-		$record->type          = $type;
 
 		$record->save();
 	}
@@ -32,11 +31,10 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	 *
 	 * @return array|\CDbDataReader
 	 */
-	public function getAllSeeds($type)
+	public function getAllSeeds()
 	{
 		$seeds = craft()->db->createCommand()
 			->select('itemId, importerClass')
-			->where("type = '$type'")
 			->from('sproutimport_seeds')
 			->queryAll();
 
@@ -49,14 +47,13 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	 * @return bool
 	 * @throws \CDbException
 	 */
-	public function weed($handle = '', $type = '', $isKeep = false)
+	public function weed($handle = '', $isKeep = false)
 	{
 		$command = craft()->db->createCommand();
 		$command = $command->select('id, itemId, importerClass');
 
-		if ($type != "all")
+		if ($handle != "*")
 		{
-			$command = $command->where("type = '$type'");
 			$command = $command->andWhere("importerClass = '$handle'");
 		}
 
@@ -109,9 +106,9 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		);
 	}
 
-	public function getSeedCountByElementType($handle, $type)
+	public function getSeedCountByElementType($handle)
 	{
-		$count = SproutImport_SeedRecord::model()->countByAttributes(array('importerClass' => $handle, 'type' => $type));
+		$count = SproutImport_SeedRecord::model()->countByAttributes(array('importerClass' => $handle));
 
 		if ($count)
 		{

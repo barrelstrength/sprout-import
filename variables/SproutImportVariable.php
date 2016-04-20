@@ -8,9 +8,9 @@ class SproutImportVariable
 	 *
 	 * @return mixed
 	 */
-	public function hasSeeds($type = 'import')
+	public function hasSeeds()
 	{
-		$seeds = craft()->sproutImport_seed->getAllSeeds($type);
+		$seeds = craft()->sproutImport_seed->getAllSeeds();
 
 		return count($seeds);
 	}

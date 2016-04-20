@@ -65,7 +65,7 @@ class SproutImport_SeedController extends BaseController
 			{
 				foreach ($ids as $id)
 				{
-					sproutImport()->seed->trackSeed($id, $elementType, 'fake');
+					sproutImport()->seed->trackSeed($id, $elementType);
 				}
 			}
 		}
@@ -98,12 +98,11 @@ class SproutImport_SeedController extends BaseController
 		$this->requirePostRequest();
 
 		$submit = craft()->request->getPost('submit');
-		$type   = craft()->request->getPost('type');
 		$class  = craft()->request->getPost('class');
 
 		if ($submit == "Weed" || $submit == "Weed All")
 		{
-			if (craft()->sproutImport_seed->weed($class, $type))
+			if (craft()->sproutImport_seed->weed($class))
 			{
 				craft()->userSession->setNotice(Craft::t('The garden is weeded!'));
 			}
@@ -114,7 +113,7 @@ class SproutImport_SeedController extends BaseController
 		}
 		else if ($submit == "Keep" || $submit == "Keep All")
 		{
-			if (craft()->sproutImport_seed->weed($class, $type, true))
+			if (craft()->sproutImport_seed->weed($class, true))
 			{
 				craft()->userSession->setNotice(Craft::t('Data Kept!'));
 			}
