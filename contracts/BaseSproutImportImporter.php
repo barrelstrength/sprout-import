@@ -122,6 +122,10 @@ abstract class BaseSproutImportImporter
 	 */
 	public function getModel()
 	{
+		$model = $this->defineModel();
+
+		if (!isset($this->settings['handle'])) return new $model;
+
 		$handle = $this->settings['handle'];
 
 		$exist = $this->getObjectByHandle($handle);
@@ -132,8 +136,6 @@ abstract class BaseSproutImportImporter
 		}
 		else
 		{
-			$model = $this->defineModel();
-
 			return new $model;
 		}
 	}
