@@ -12,9 +12,9 @@ class SproutImport_SeedController extends BaseController
 	{
 		$elementSelect = array();
 
-		$elementSelect['Entry']    = 'Entries';
-		$elementSelect['Category'] = 'Categories';
-		$elementSelect['Tag']      = 'Tags';
+		$elementSelect['Entry']    = Craft::t('Entries');
+		$elementSelect['Category'] = Craft::t('Categories');
+		$elementSelect['Tag']      = Craft::t('Tags');
 
 		$importers = sproutImport()->getSproutImportImporters();
 

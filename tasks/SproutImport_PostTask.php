@@ -8,7 +8,7 @@ class SproutImport_PostTask extends BaseTask
 	 */
 	public function getDescription()
 	{
-		return 'Sprout Import Task By Post';
+		return Craft::t('Sprout Import Task By Post');
 	}
 
 	/**

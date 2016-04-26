@@ -1,7 +1,7 @@
 {% extends "sproutimport/_layouts/base" %}
 {% import "_includes/forms" as forms %}
 
-{% set title = 'Seed' %}
+{% set title = 'Seed'|t %}
 
 {% set content %}
 
@@ -16,7 +16,7 @@
 				id: "elementType",
 				name: "elementType",
 				label: "Type of Content"|t,
-				instructions: "Select the type of content you wish to seed in your database. Seeded content and can be removed later using the Weed tab.",
+				instructions: "Select the type of content you wish to seed in your database. Seeded content and can be removed later using the Weed tab."|t,
 				options: [{label: "Select element..."|t, value: null}]|merge(elements),
 				value: elementType is defined ? elementType : null,
 			}) }}
@@ -25,7 +25,7 @@
 		{{ settings.elements }}
 
 		<div class="buttons">
-			<button class="btn submit actions">Generate</button>
+			<button class="btn submit actions">{{ "Generate"|t }}</button>
 		</div>
 	</form>
 

@@ -38,8 +38,8 @@ class SproutImport_TasksService extends BaseApplicationComponent
 			throw new Exception(Craft::t('No tasks to enqueue'));
 		}
 
-		$taskName    = 'Craft Migration';
-		$description = 'Sprout Migrate By Post Request';
+		$taskName    = Craft::t('Craft Migration');
+		$description = Craft::t('Sprout Migrate By Post Request');
 
 		return craft()->tasks->createTask('SproutImport_Post', Craft::t($description), array(
 			'elements' => $tasks

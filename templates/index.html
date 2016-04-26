@@ -13,8 +13,8 @@
 
 		<div class="field first" id="files-field">
 			<div class="heading">
-				<label for="files">Files</label>
-			<div class="instructions"><p>Select one or more <strong>JSON</strong> encoded files.</p>
+				<label for="files">{{ 'Files'|t }}</label>
+			<div class="instructions"><p>{{ 'Select one or more'|t }} <strong>JSON</strong> {{ 'encoded files'|t }}.</p>
 		</div>
 
 		</div>
@@ -28,7 +28,7 @@
 			name: 'seed'
 		}) }}
 
-		<button class="btn submit" type="submit">Import Elements</button>
+		<button class="btn submit" type="submit">{{ 'Import Elements'|t }}</button>
 	</form>
 
 {% endset %}
