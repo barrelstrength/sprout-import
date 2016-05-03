@@ -29,7 +29,6 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 	public function getSettingsHtml()
 	{
 		$sections = array(
-			'single'  => 'Single',
 			'channel' => 'Channel'
 		);
 
@@ -49,86 +48,83 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 	 */
 	public function getMockData($settings)
 	{
-		$sectionType = $settings['sectionType'];
+		$sectionType = (isset($settings['sectionType'])) ? $settings['sectionType'] : '';
 
 		$saveIds = array();
 
-		if (!empty($sectionType))
+		if ($sectionType == 'single')
 		{
-			if ($sectionType == 'single')
+			$singleSection = $this->generateSingleSection();
+
+			if ($singleSection)
 			{
-				$singleSection = $this->generateSingleSection();
+				$latestSection = sproutImport()->getLatestSingleSection();
 
-				if ($singleSection)
-				{
-					$latestSection = sproutImport()->getLatestSingleSection();
+				$sectionId     = $latestSection->id;
+				$entryTypes    = $latestSection->getEntryTypes();
+				$entryTypeId   = $entryTypes[0]->id;
+				$sectionHandle = $latestSection->handle;
 
-					$sectionId     = $latestSection->id;
-					$entryTypes    = $latestSection->getEntryTypes();
-					$entryTypeId   = $entryTypes[0]->id;
-					$sectionHandle = $latestSection->handle;
-
-					$entry   = EntryRecord::model()->findByAttributes(array('sectionId' => $sectionId));
-					$entryId = $entry->id;
-
-					$entryParams = array(
-						'sectionId'     => $sectionId,
-						'entryTypeId'   => $entryTypeId,
-						'sectionHandle' => $sectionHandle,
-						'entryId'       => $entryId,
-						'title'         => $latestSection->name
-					);
-
-					$id        = $this->generateEntry($entryParams);
-					$saveIds[] = $id;
-				}
-			}
-			else
-			{
-				$channelNumber = $settings['channelNumber'];
-
-				$sectionHandle = $settings['channel'];
-
-				$section = craft()->sections->getSectionByHandle($sectionHandle);
-
-				$entryTypes = $section->getEntryTypes();
+				$entry   = EntryRecord::model()->findByAttributes(array('sectionId' => $sectionId));
+				$entryId = $entry->id;
 
 				$entryParams = array(
-					'sectionId'     => $section->id,
-					'sectionHandle' => $section->handle
+					'sectionId'     => $sectionId,
+					'entryTypeId'   => $entryTypeId,
+					'sectionHandle' => $sectionHandle,
+					'entryId'       => $entryId,
+					'title'         => $latestSection->name
 				);
 
-				if (!empty($channelNumber))
+				$id        = $this->generateEntry($entryParams);
+				$saveIds[] = $id;
+			}
+		}
+		else
+		{
+			$channelNumber = $settings['channelNumber'];
+
+			$sectionHandle = $settings['channel'];
+
+			$section = craft()->sections->getSectionByHandle($sectionHandle);
+
+			$entryTypes = $section->getEntryTypes();
+
+			$entryParams = array(
+				'sectionId'     => $section->id,
+				'sectionHandle' => $section->handle
+			);
+
+			if (!empty($channelNumber))
+			{
+				for ($i = 1; $i <= $channelNumber; $i++)
 				{
-					for ($i = 1; $i <= $channelNumber; $i++)
+					$entryId = null;
+					if (!empty($entryTypes))
 					{
-						$entryId = null;
-						if (!empty($entryTypes))
+						// Loop all entry types for this element
+						foreach ($entryTypes as $entryType)
 						{
-							// Loop all entry types for this element
-							foreach ($entryTypes as $entryType)
+							$entryParams['entryTypeId'] = $entryType->id;
+
+							// Update entry prevent duplicate
+							if ($entryId != null)
 							{
-								$entryParams['entryTypeId'] = $entryType->id;
+								$entryParams['entryId'] = $entryId;
+							}
+							else
+							{
+								$entryParams['entryId'] = null;
+							}
 
-								// Update entry prevent duplicate
-								if ($entryId != null)
-								{
-									$entryParams['entryId'] = $entryId;
-								}
-								else
-								{
-									$entryParams['entryId'] = null;
-								}
+							$id = $this->generateEntry($entryParams);
 
-								$id = $this->generateEntry($entryParams);
+							$entryId = $id;
 
-								$entryId = $id;
-
-								// Avoid duplication of saveIds
-								if (!in_array($id, $saveIds))
-								{
-									$saveIds[] = $id;
-								}
+							// Avoid duplication of saveIds
+							if (!in_array($id, $saveIds))
+							{
+								$saveIds[] = $id;
 							}
 						}
 					}

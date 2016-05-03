@@ -1,16 +1,6 @@
 {% import "_includes/forms" as forms %}
 
 <div class="field element-options {{ id }}" style="display: none">
-	{{ forms.selectField({
-		id: "sectionType",
-		name: "settings[sectionType]",
-		label: "Section Types"|t,
-		options: [{label: "Select section type..."|t, value: null}]|merge(sections),
-		value: settings.sectionType is defined ? settings.sectionType : null,
-	}) }}
-</div>
-
-<div class="field section-options channel" style="display: none">
 
 	<div class="input">
 		{{ forms.select({
