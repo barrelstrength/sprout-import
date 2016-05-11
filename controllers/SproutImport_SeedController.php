@@ -12,21 +12,78 @@ class SproutImport_SeedController extends BaseController
 	{
 		$elementSelect = array();
 
-		$elementSelect['Entry']    = Craft::t('Entries');
-		$elementSelect['Category'] = Craft::t('Categories');
-		$elementSelect['Tag']      = Craft::t('Tags');
-
-		$importers = sproutImport()->getSproutImportImporters();
+		//$elementSelect['Entry']    = Craft::t('Entries');
+		//$elementSelect['Category'] = Craft::t('Categories');
+		//$elementSelect['Tag']      = Craft::t('Tags');
 
 		$settingElements = "";
 
-		if (!empty($importers))
+		$builtInPlugin = 'SproutImport';
+
+		$sproutImportSeeds = craft()->plugins->call('registerSproutImportSeeds');
+
+		$seedClasses = $sproutImportSeeds['SproutImport'];
+
+		if (!empty($seedClasses))
 		{
-			foreach ($importers as $importer)
+
+			$elementSelect[] = array(
+				'optgroup' => Craft::t('Standard Elements')
+			);
+
+			foreach ($seedClasses as $seedClass)
 			{
-				if ($importer->isElement())
+				if ($seedClass->isElement())
 				{
-					$settingElements .= $importer->getSettingsHtml() . "\n";
+					$title = $seedClass->getElement()->getName();
+				}
+				else
+				{
+					$title = $seedClass->getName();
+				}
+
+				$classId = $builtInPlugin . '-' . $seedClass->getName();
+
+				$elementSelect[$classId] = array(
+														'label'    => $title,
+			                      'value'    => $seedClass->getName()
+													);
+
+				$settingElements .= $seedClass->getSettingsHtml() . "\n";
+			}
+		}
+
+		$pluginClasses = craft()->plugins->call('registerSproutImportSeeds');
+		unset($pluginClasses['SproutImport']);
+
+		if (!empty($pluginClasses))
+		{
+
+			$elementSelect[] = array(
+				'optgroup' => Craft::t('Custom Elements')
+			);
+
+			foreach ($pluginClasses as $customClasses)
+			{
+				foreach ($customClasses as $plugin => $customClass)
+				{
+					if ($customClass->isElement())
+					{
+						$title = $customClass->getElement()->getName();
+					}
+					else
+					{
+						$title = $customClass->getName();
+					}
+
+					$classId = $plugin . '-' . $customClass->getName();
+
+					$elementSelect[$classId] = array(
+						'label'    => $title,
+						'value'    => $customClass->getName()
+					);
+
+					$settingElements .= $customClass->getSettingsHtml() . "\n";
 				}
 			}
 		}

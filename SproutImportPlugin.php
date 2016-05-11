@@ -85,11 +85,30 @@ class SproutImportPlugin extends BasePlugin
 		);
 	}
 
+	/**
+	 * Register importer fields
+	 *
+	 * @return array
+	 */
 	public function registerSproutImportFields()
 	{
 		return array(
 			new RichTextSproutImportFieldImporter(),
 			new PlainTextSproutImportFieldImporter()
+		);
+	}
+
+	/**
+	 * Register classes that can be added on the seeding feature,
+	 *
+	 * @return array
+	 */
+	public function registerSproutImportSeeds()
+	{
+		return array(
+			new EntrySproutImportElementImporter(),
+			new CategorySproutImportElementImporter(),
+			new TagSproutImportElementImporter()
 		);
 	}
 }

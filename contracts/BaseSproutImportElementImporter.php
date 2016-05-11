@@ -40,4 +40,11 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	{
 		return craft()->elements->deleteElementById($id);
 	}
+
+	public function getElement()
+	{
+		$name = $this->getName();
+
+		return craft()->elements->getElementType($name);
+	}
 }

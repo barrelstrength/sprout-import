@@ -13,6 +13,8 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	protected $fieldImports = array();
 
+	protected $seedClasses  = array();
+
 	/** Sub Services
 	 *
 	 * @var
@@ -100,6 +102,29 @@ class SproutImportService extends BaseApplicationComponent
 		}
 
 		return $this->fieldImports;
+	}
+
+	public function getSproutImportSeeds($pluginHandle = '')
+	{
+		$seedsToLoad = craft()->plugins->call('registerSproutImportSeeds');
+
+		if ($seedsToLoad)
+		{
+			foreach ($seedsToLoad as $plugin => $seedClasses)
+			{
+				if (!empty($pluginHandle) && $pluginHandle != $plugin) continue;
+
+				foreach ($seedClasses as $seedClass)
+				{
+					if ($seedClass && $seedClass instanceof BaseSproutImportImporter)
+					{
+						$this->seedClasses[$plugin][] = $seedClass;
+					}
+				}
+			}
+		}
+
+		return $this->seedClasses;
 	}
 
 	/**
