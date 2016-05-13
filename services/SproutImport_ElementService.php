@@ -241,7 +241,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 					continue;
 				}
 
-				$type                  = sproutImport() - ImporterModel($definition);
+				$type                  = sproutImport()->getImporterModel($definition);
 				$matchBy               = sproutImport()->getValueByKey('matchBy', $definition);
 				$matchValue            = sproutImport()->getValueByKey('matchValue', $definition);
 				$matchCriteria         = sproutImport()->getValueByKey('matchCriteria', $definition);
