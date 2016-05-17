@@ -105,10 +105,12 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			{
 				$importer = sproutImport()->getImporter($element);
 
+				$importer->setData($element);
+
 				$importer->setModel($model);
-
+				sproutImport()->log("Before save.");
 				$saved = $importer->save();
-
+				sproutImport()->log("After save.");
 				if ($saved)
 				{
 					$importer->resolveNestedSettings($model, $element);

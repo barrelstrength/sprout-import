@@ -1,0 +1,36 @@
+[
+	{
+		"@model": "Commerce_ProductModel",
+		"attributes": {
+			"typeId": 1,
+			"title": "Product Two",
+			"slug": "product-two",
+			"postDate": {
+				"date": "5/14/2016",
+				"time": "9:45 AM"
+			},
+			"enabled": 1,
+			"taxCategoryId": 1,
+			"freeShipping": "",
+			"promotable": 1
+		},
+		"variants": {
+			"new1": {
+				"sku": "9878",
+				"title": "Product Two",
+				"price": 16,
+				"unlimitedStock": 1,
+				"minQty": "",
+				"maxQty": "",
+				"length": "",
+				"width": "",
+				"height": "",
+				"weight": ""
+			}
+		},
+		"content": {
+			"title": "Product Two",
+			"fields": []
+		}
+	}
+]
