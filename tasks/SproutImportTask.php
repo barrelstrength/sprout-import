@@ -54,6 +54,16 @@ class SproutImportTask extends BaseTask
 
 				IOHelper::deleteFile($file);
 
+				$errors = sproutImport()->getErrors();
+
+				if (!empty($errors))
+				{
+					$msg = implode("\n ", $errors);
+					sproutImport()->error($msg);
+
+					return false;
+				}
+
 				sproutImport()->log('Task result for ' . $file, $result);
 
 				return true;

@@ -15,6 +15,7 @@ class SproutImportService extends BaseApplicationComponent
 
 	protected $seedClasses  = array();
 
+	protected $error = array();
 	/** Sub Services
 	 *
 	 * @var
@@ -78,6 +79,21 @@ class SproutImportService extends BaseApplicationComponent
 		return $this->importers;
 	}
 
+	public function getSproutImportImportersByName()
+	{
+		$names = array();
+		$importers = $this->getSproutImportImporters();
+
+		if (!empty($importers))
+		{
+			foreach ($importers as $importer)
+			{
+				$names[] = $importer->getName();
+			}
+		}
+
+		return $names;
+	}
 	/**
 	 * Get all built-in and registered FieldImporters
 	 *
@@ -142,12 +158,18 @@ class SproutImportService extends BaseApplicationComponent
 
 		if (!empty($rows))
 		{
-
 			$results = array();
 
 			foreach ($rows as $row)
 			{
 				$model = $this->getImporterModel($row);
+
+				if (!$model)
+				{
+					$transaction->rollback();
+
+					return false;
+				}
 
 				try
 				{
@@ -231,6 +253,17 @@ class SproutImportService extends BaseApplicationComponent
 
 		// Remove the word 'Model' from the end of our setting
 		$importerModel = str_replace('Model', '', $settings['@model']);
+
+		$names = sproutImport()->getSproutImportImportersByName();
+
+		if (!in_array($importerModel, $names))
+		{
+			$msg = $importerModel  . Craft::t(" Model could not be found.");
+
+			$this->addError($msg, 'invalid-model');
+
+			return false;
+		}
 
 		return $importerModel;
 	}
@@ -514,5 +547,52 @@ class SproutImportService extends BaseApplicationComponent
 		IOHelper::ensureFolderExists($folderPath);
 
 		return $folderPath;
+	}
+
+	/**
+	 * Logs an error in cases where it makes more sense than to throw an exception
+	 *
+	 * @param mixed $msg
+	 * @param array $vars
+	 */
+	public function addError($msg, $key = '', array $vars = array())
+	{
+		if (is_string($msg))
+		{
+			$msg = Craft::t($msg, $vars);
+		}
+		else
+		{
+			$msg = print_r($msg, true);
+		}
+
+		if (!empty($key))
+		{
+			$this->error[$key] = $msg;
+		}
+		else
+		{
+			$this->error = $msg;
+		}
+	}
+
+	/**
+	 * @return mixed error
+	 */
+	public function getError($key = '')
+	{
+		if (!empty($key) && isset($this->error[$key]))
+		{
+			return $this->error[$key];
+		}
+		else
+		{
+			return $this->error;
+		}
+	}
+
+	public function getErrors()
+	{
+		return $this->error;
 	}
 }
