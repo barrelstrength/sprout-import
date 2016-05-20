@@ -54,8 +54,10 @@ class SproutImport_SettingService extends BaseApplicationComponent
 	 */
 	public function getSavedResults()
 	{
-		return array(
+		$result = array(
 			'savedSettingIds' => $this->savedIds
 		);
+
+		return $result;
 	}
 }

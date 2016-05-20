@@ -56,14 +56,25 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		$related    = sproutImport()->getValueByKey('content.related', $element);
 		$attributes = sproutImport()->getValueByKey('attributes', $element);
 
-		$this->resolveMatrixRelationships($fields);
-
-		// @todo - when trying to import Sprout Forms Form Models,
-		// which do not have any fields or content, running this method kills the script
-		// moving the $related check to before the method runs, works.
-		if (count($related))
+		if (!empty($fields))
 		{
-			$this->resolveRelationships($related, $fields);
+			// Catches invalid field handles stops the importing
+			$elementFieldHandles = sproutImport()->getAllFieldHandles($type);
+
+			// Merge default handle
+			$elementFieldHandles[] = 'title';
+
+			foreach ($fields as $fieldHandle => $fieldValue)
+			{
+				if (!in_array($fieldHandle, $elementFieldHandles))
+				{
+					$key = 'field-null-' . $fieldHandle;
+
+					$msg = Craft::t("Could not find the $fieldHandle field.");
+
+					sproutImport()->addError($msg, $key);
+				}
+			}
 		}
 
 		// Allows author email to add as author of the entry
@@ -73,9 +84,33 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			{
 				$userEmail              = $attributes['authorId']['email'];
 				$userModel              = craft()->users->getUserByUsernameOrEmail($userEmail);
-				$authorId               = $userModel->getAttribute('id');
-				$attributes['authorId'] = $authorId;
+
+				if ($userModel != null)
+				{
+					$authorId               = $userModel->getAttribute('id');
+					$attributes['authorId'] = $authorId;
+				}
 			}
+			else
+			{
+				$userModel = craft()->users->getUserById($attributes['authorId']);
+			}
+
+			if ($userModel == null)
+			{
+				$msg = Craft::t("Invalid author value");
+				sproutImport()->addError($msg, 'invalid-author');
+			}
+		}
+
+		$this->resolveMatrixRelationships($fields);
+
+		// @todo - when trying to import Sprout Forms Form Models,
+		// which do not have any fields or content, running this method kills the script
+		// moving the $related check to before the method runs, works.
+		if (count($related))
+		{
+			$this->resolveRelationships($related, $fields);
 		}
 
 		$model->setAttributes($attributes);
@@ -156,7 +191,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				'error' => print_r($model->getErrors(), true)
 			);
 
-			sproutImport()->error('Unable to validate.', $model->getErrors());
+			sproutImport()->addError($model->getErrors(), 'model-validate');
 		}
 
 		if ($saved)

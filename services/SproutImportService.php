@@ -15,7 +15,10 @@ class SproutImportService extends BaseApplicationComponent
 
 	protected $seedClasses  = array();
 
-	protected $error = array();
+	protected $filename;
+
+	protected $error   = array();
+
 	/** Sub Services
 	 *
 	 * @var
@@ -152,9 +155,9 @@ class SproutImportService extends BaseApplicationComponent
 	 * @throws \CDbException
 	 * @throws \Exception
 	 */
-	public function save(array $rows, $seed = false)
+	public function save(array $rows, $seed = false, $filename)
 	{
-		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
+		$this->filename = $filename;
 
 		if (!empty($rows))
 		{
@@ -166,39 +169,27 @@ class SproutImportService extends BaseApplicationComponent
 
 				if (!$model)
 				{
-					$transaction->rollback();
-
 					return false;
 				}
 
-				try
+				if ($this->isElementType($model))
 				{
-					if ($this->isElementType($model))
-					{
-						$result = $this->element->saveElement($row, $seed, 'import');
-					}
-					else
-					{
-						$result = $this->setting->saveSetting($row, $seed);
-					}
+					$result = $this->element->saveElement($row, $seed, 'import');
 				}
-				catch (\Exception $e)
+				else
 				{
-					// @todo clarify what happened more in errors
-					sproutImport()->error($e->getMessage());
+					$result = $this->setting->saveSetting($row, $seed);
 				}
 			}
 		}
 
-		if ($transaction && $transaction->active)
-		{
-			$transaction->commit();
-		}
-
 		$elementResults = $this->element->getSavedResults();
-		$settingResults = $this->setting->getSavedResults();
+		$this->addResults($elementResults);
 
-		return array_merge($elementResults, $settingResults);
+		$settingResults = $this->setting->getSavedResults();
+		$this->addResults($settingResults);
+
+		return true;
 	}
 
 	/**
@@ -534,6 +525,22 @@ class SproutImportService extends BaseApplicationComponent
 		return $result;
 	}
 
+	public function getAllFieldHandles($elementHandle)
+	{
+		$fields = craft()->fields->getFieldsByElementType($elementHandle);
+
+		$handles = array();
+		if (!empty($fields))
+		{
+			foreach ($fields as $field)
+			{
+				$handles[] = $field->handle;
+			}
+		}
+
+		return $handles;
+	}
+
 	/** Ensures that sprout import temp folder is created
 	 *
 	 * @return string
@@ -594,5 +601,12 @@ class SproutImportService extends BaseApplicationComponent
 	public function getErrors()
 	{
 		return $this->error;
+	}
+
+	public function addResults($result)
+	{
+		$filename = $this->filename;
+
+		sproutImport()->log('Task result for ' . $filename, $result);
 	}
 }

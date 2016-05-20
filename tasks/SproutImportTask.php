@@ -50,7 +50,11 @@ class SproutImportTask extends BaseTask
 		{
 			try
 			{
-				$result = sproutImport()->save($elements, $seed);
+				$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
+
+				$filename = substr($file, strrpos($file, '/') + 1);
+
+				sproutImport()->save($elements, $seed, $filename);
 
 				IOHelper::deleteFile($file);
 
@@ -58,13 +62,18 @@ class SproutImportTask extends BaseTask
 
 				if (!empty($errors))
 				{
-					$msg = implode("\n ", $errors);
+					$msg = implode("\n", $errors);
 					sproutImport()->error($msg);
+
+					$transaction->rollback();
 
 					return false;
 				}
 
-				sproutImport()->log('Task result for ' . $file, $result);
+				if ($transaction && $transaction->active)
+				{
+					$transaction->commit();
+				}
 
 				return true;
 			}
