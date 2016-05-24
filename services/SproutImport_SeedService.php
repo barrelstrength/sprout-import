@@ -19,11 +19,17 @@ class SproutImport_SeedService extends BaseApplicationComponent
 			return false;
 		}
 
-		$record                = new SproutImport_SeedRecord;
-		$record->itemId        = $itemId;
-		$record->importerClass = $importerClass;
+		$record = SproutImport_SeedRecord::model()->findByAttributes(array('itemId' => $itemId));
 
-		$record->save();
+		// Avoids duplicate tracking
+		if ($record == null)
+		{
+			$record                = new SproutImport_SeedRecord;
+			$record->itemId        = $itemId;
+			$record->importerClass = $importerClass;
+
+			$record->save();
+		}
 	}
 
 	/**

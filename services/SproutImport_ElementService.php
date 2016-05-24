@@ -73,6 +73,8 @@ class SproutImport_ElementService extends BaseApplicationComponent
 					$msg = Craft::t("Could not find the $fieldHandle field.");
 
 					sproutImport()->addError($msg, $key);
+
+					return false;
 				}
 			}
 		}
@@ -99,7 +101,10 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			if ($userModel == null)
 			{
 				$msg = Craft::t("Invalid author value");
+
 				sproutImport()->addError($msg, 'invalid-author');
+
+				return false;
 			}
 		}
 
@@ -153,10 +158,6 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				{
 					$this->savedElementIds[] = $model->id;
 					$this->savedElements[]   = $model->getTitle();
-
-					$event = new Event($this, $eventParams);
-
-					sproutImport()->onAfterMigrateElement($event);
 				}
 				elseif ($saved && !$isNewElement)
 				{
@@ -196,6 +197,13 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 		if ($saved)
 		{
+			// Pass the updated model after save
+			$eventParams['element'] = $model;
+
+			$event = new Event($this, $eventParams);
+
+			sproutImport()->onAfterMigrateElement($event);
+
 			return $model->id;
 		}
 	}
