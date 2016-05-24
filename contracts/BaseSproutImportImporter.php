@@ -18,6 +18,8 @@ abstract class BaseSproutImportImporter
 
 	protected $settings;
 
+	protected $data;
+
 	/**
 	 * BaseSproutImportImporter constructor.
 	 *
@@ -208,5 +210,10 @@ abstract class BaseSproutImportImporter
 		$count = sproutImport()->seed->getSeedCountByElementType($name);
 
 		return $count;
+	}
+
+	public function setData($data)
+	{
+		$this->data = $data;
 	}
 }

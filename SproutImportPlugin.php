@@ -81,7 +81,8 @@ class SproutImportPlugin extends BasePlugin
 			new CategorySproutImportElementImporter(),
 			new EntryTypeSproutImportImporter(),
 			new FieldSproutImportImporter(),
-			new SectionSproutImportImporter()
+			new SectionSproutImportImporter(),
+			new Commerce_ProductSproutImportElementImporter()
 		);
 	}
 
