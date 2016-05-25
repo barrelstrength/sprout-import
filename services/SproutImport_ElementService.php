@@ -50,8 +50,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		$beforeSave = sproutImport()->getValueByKey('content.beforeSave', $element);
 
 		$model = $this->getElementModel($beforeSave);
-		sproutImport()->log('aafds 1');
-		sproutImport()->log($type);
+
 		$content    = sproutImport()->getValueByKey('content', $element);
 		$fields     = sproutImport()->getValueByKey('content.fields', $element);
 		$related    = sproutImport()->getValueByKey('content.related', $element);
@@ -109,14 +108,23 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			}
 		}
 
-		$this->resolveMatrixRelationships($fields);
+		$fields = $this->resolveMatrixRelationships($fields);
 
+		if (!$fields)
+		{
+			return false;
+		}
 		// @todo - when trying to import Sprout Forms Form Models,
 		// which do not have any fields or content, running this method kills the script
 		// moving the $related check to before the method runs, works.
 		if (count($related))
 		{
 			$fields = $this->resolveRelationships($related, $fields);
+
+			if (!$fields)
+			{
+				return false;
+			}
 		}
 
 		$model->setAttributes($attributes);
@@ -149,9 +157,9 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				$importer->setData($element);
 
 				$importer->setModel($model);
-				sproutImport()->log("Before save.");
+
 				$saved = $importer->save();
-				sproutImport()->log("After save.");
+
 				if ($saved)
 				{
 					$importer->resolveNestedSettings($model, $element);
@@ -185,7 +193,6 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				$title                   = sproutImport()->getValueByKey('content.title', $element);
 				$msg                     = $title . ' ' . implode(', ', array_keys($fields)) . ' Check field values if it exists.';
 				sproutImport()->error($msg);
-				sproutImport()->log('fds 1');
 
 				sproutImport()->error($e->getMessage());
 			}
@@ -196,12 +203,12 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				'title' => $model->getTitle(),
 				'error' => print_r($model->getErrors(), true)
 			);
-			sproutImport()->log('fds 2');
+
 			sproutImport()->addError($model->getErrors(), 'model-validate');
 		}
 
 		if ($saved)
-		{sproutImport()->log('fds 3');
+		{
 			// Pass the updated model after save
 			$eventParams['element'] = $model;
 
@@ -210,7 +217,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			sproutImport()->onAfterMigrateElement($event);
 
 			return $model->id;
-		}sproutImport()->log('fds 4');
+		}
 	}
 
 	/**
@@ -235,7 +242,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 	 *
 	 * @param $fields
 	 */
-	public function resolveMatrixRelationships(&$fields)
+	public function resolveMatrixRelationships($fields)
 	{
 		if (empty($fields))
 		{
@@ -253,7 +260,12 @@ class SproutImport_ElementService extends BaseApplicationComponent
 						$blockFields   = isset($attributes['fields']) ? $attributes['fields'] : array();
 						$relatedFields = $attributes['related'];
 
-						$this->resolveRelationships($relatedFields, $blockFields);
+						$blockFields = $this->resolveRelationships($relatedFields, $blockFields);
+
+						if (!$blockFields)
+						{
+							return false;
+						}
 
 						unset($fields[$field][$block]['related']);
 
@@ -269,6 +281,8 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				}
 			}
 		}
+
+		return $fields;
 	}
 
 	/**
@@ -277,7 +291,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 	 *
 	 * @throws Exception
 	 */
-	protected function resolveRelationships(array $related = null, array &$fields)
+	protected function resolveRelationships(array $related = null, array $fields)
 	{
 		if (count($related))
 		{
@@ -290,6 +304,12 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				}
 
 				$type                  = sproutImport()->getImporterModel($definition);
+
+				if (!$type)
+				{
+					return false;
+				}
+
 				$matchBy               = sproutImport()->getValueByKey('matchBy', $definition);
 				$matchValue            = sproutImport()->getValueByKey('matchValue', $definition);
 				$matchCriteria         = sproutImport()->getValueByKey('matchCriteria', $definition);
@@ -402,8 +422,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				}
 			}
 		}
-		sproutImport()->log('fields 1');
-		sproutImport()->log($fields);
+
 		return $fields;
 	}
 

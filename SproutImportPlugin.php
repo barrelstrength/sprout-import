@@ -77,6 +77,7 @@ class SproutImportPlugin extends BasePlugin
 		return array(
 			new EntrySproutImportElementImporter(),
 			new TagSproutImportElementImporter(),
+			new AssetSproutImportElementImporter(),
 			new UserSproutImportElementImporter(),
 			new CategorySproutImportElementImporter(),
 			new EntryTypeSproutImportImporter(),
