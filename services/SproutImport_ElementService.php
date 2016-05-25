@@ -50,7 +50,8 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		$beforeSave = sproutImport()->getValueByKey('content.beforeSave', $element);
 
 		$model = $this->getElementModel($beforeSave);
-
+		sproutImport()->log('aafds 1');
+		sproutImport()->log($type);
 		$content    = sproutImport()->getValueByKey('content', $element);
 		$fields     = sproutImport()->getValueByKey('content.fields', $element);
 		$related    = sproutImport()->getValueByKey('content.related', $element);
@@ -115,7 +116,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		// moving the $related check to before the method runs, works.
 		if (count($related))
 		{
-			$this->resolveRelationships($related, $fields);
+			$fields = $this->resolveRelationships($related, $fields);
 		}
 
 		$model->setAttributes($attributes);
@@ -184,6 +185,8 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				$title                   = sproutImport()->getValueByKey('content.title', $element);
 				$msg                     = $title . ' ' . implode(', ', array_keys($fields)) . ' Check field values if it exists.';
 				sproutImport()->error($msg);
+				sproutImport()->log('fds 1');
+
 				sproutImport()->error($e->getMessage());
 			}
 		}
@@ -193,12 +196,12 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				'title' => $model->getTitle(),
 				'error' => print_r($model->getErrors(), true)
 			);
-
+			sproutImport()->log('fds 2');
 			sproutImport()->addError($model->getErrors(), 'model-validate');
 		}
 
 		if ($saved)
-		{
+		{sproutImport()->log('fds 3');
 			// Pass the updated model after save
 			$eventParams['element'] = $model;
 
@@ -207,7 +210,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			sproutImport()->onAfterMigrateElement($event);
 
 			return $model->id;
-		}
+		}sproutImport()->log('fds 4');
 	}
 
 	/**
@@ -399,6 +402,9 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				}
 			}
 		}
+		sproutImport()->log('fields 1');
+		sproutImport()->log($fields);
+		return $fields;
 	}
 
 	/**
@@ -454,6 +460,8 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				catch (\Exception $e)
 				{
 					sproutImport()->error($e->getMessage());
+
+					return false;
 				}
 			}
 		}
