@@ -108,12 +108,16 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			}
 		}
 
-		$fields = $this->resolveMatrixRelationships($fields);
-
-		if (!$fields)
+		if (!empty($fields))
 		{
-			return false;
+			$fields = $this->resolveMatrixRelationships($fields);
+
+			if (!$fields)
+			{
+				return false;
+			}
 		}
+
 		// @todo - when trying to import Sprout Forms Form Models,
 		// which do not have any fields or content, running this method kills the script
 		// moving the $related check to before the method runs, works.
@@ -244,11 +248,6 @@ class SproutImport_ElementService extends BaseApplicationComponent
 	 */
 	public function resolveMatrixRelationships($fields)
 	{
-		if (empty($fields))
-		{
-			return;
-		}
-
 		foreach ($fields as $field => $blocks)
 		{
 			if (is_array($blocks) && count($blocks))
