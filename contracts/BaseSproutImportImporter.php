@@ -216,4 +216,9 @@ abstract class BaseSproutImportImporter
 	{
 		$this->data = $data;
 	}
+
+	public function defineKeys()
+	{
+		return array();
+	}
 }

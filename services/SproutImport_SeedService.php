@@ -78,7 +78,7 @@ class SproutImport_SeedService extends BaseApplicationComponent
 					// we're just appending 'Model' and adding it to the array here...
 					$row['@model'] = $row['importerClass'] . 'Model';
 
-					$importer = sproutImport()->getImporter($row);
+					$importer = sproutImport()->getImporterByRow($row);
 					$importer->deleteById($row['itemId']);
 				}
 

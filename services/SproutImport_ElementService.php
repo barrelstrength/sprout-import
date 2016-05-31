@@ -42,8 +42,16 @@ class SproutImport_ElementService extends BaseApplicationComponent
 	 */
 	public function saveElement(array $element, $seed = false, $source = null)
 	{
+		$type = sproutImport()->getImporterModel($element);
+
+		// Adds extra element keys to pass validation
+		$importerClass = sproutImport()->getImporterByModelRow($type, $element);
+
+		$importerElementKeys = $importerClass->defineKeys();
+
+		$elementKeys = array_merge($this->getElementKeys(), $importerElementKeys);
+
 		$inputKeys   = array_keys($element);
-		$elementKeys = $this->getElementKeys();
 
 		// Catches invalid element keys
 		$elementDiff = array_diff($inputKeys, $elementKeys);
@@ -59,7 +67,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			return false;
 		}
 
-		$type = sproutImport()->getImporterModel($element);
+
 
 		$this->element = $element;
 		$this->type    = $type;
@@ -174,7 +182,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 			try
 			{
-				$importer = sproutImport()->getImporter($element);
+				$importer = sproutImport()->getImporterByRow($element);
 
 				$importer->setData($element);
 

@@ -49,4 +49,9 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 	{
 
 	}
+
+	public function defineKeys()
+	{
+		return array('variants');
+	}
 }

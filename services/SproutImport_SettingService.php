@@ -21,7 +21,7 @@ class SproutImport_SettingService extends BaseApplicationComponent
 			craft()->sproutImport_seed->seed = true;
 		}
 
-		$importer = sproutImport()->getImporter($settings);
+		$importer = sproutImport()->getImporterByRow($settings);
 
 		if ($importer->isValid() && $importer->save())
 		{

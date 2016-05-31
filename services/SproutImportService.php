@@ -234,7 +234,7 @@ class SproutImportService extends BaseApplicationComponent
 	 *
 	 * @return null
 	 */
-	public function getImporterModel($settings)
+	public function getImporterModel($settings, $names = null)
 	{
 		// Catches invalid model type key
 		if (!isset($settings['@model']))
@@ -249,7 +249,10 @@ class SproutImportService extends BaseApplicationComponent
 		// Remove the word 'Model' from the end of our setting
 		$importerModel = str_replace('Model', '', $settings['@model']);
 
-		$names = sproutImport()->getSproutImportImportersByName();
+		if ($names == null)
+		{
+			$names = sproutImport()->getSproutImportImportersByName();
+		}
 
 		if (!in_array($importerModel, $names))
 		{
@@ -469,10 +472,15 @@ class SproutImportService extends BaseApplicationComponent
 	 *
 	 * @return mixed
 	 */
-	public function getImporter($row)
+	public function getImporterByRow($row)
 	{
 		$importerModel = $this->getImporterModel($row);
 
+		return $this->getImporterByModelRow($importerModel, $row);
+	}
+
+	public function getImporterByModelRow($importerModel, $row)
+	{
 		$importerClassName = $this->getImporterByName($importerModel);
 
 		// If not exists then its an element
