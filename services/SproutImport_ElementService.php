@@ -42,6 +42,23 @@ class SproutImport_ElementService extends BaseApplicationComponent
 	 */
 	public function saveElement(array $element, $seed = false, $source = null)
 	{
+		$inputKeys   = array_keys($element);
+		$elementKeys = $this->getElementKeys();
+
+		// Catches invalid element keys
+		$elementDiff = array_diff($inputKeys, $elementKeys);
+
+		if (!empty($elementDiff))
+		{
+			$inputKeysText = implode(', ', $elementDiff);
+
+			$msg = Craft::t("Invalid element keys $inputKeysText.");
+
+			sproutImport()->addError($msg, $inputKeysText);
+
+			return false;
+		}
+
 		$type = sproutImport()->getImporterModel($element);
 
 		$this->element = $element;
@@ -55,6 +72,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		$fields     = sproutImport()->getValueByKey('content.fields', $element);
 		$related    = sproutImport()->getValueByKey('content.related', $element);
 		$attributes = sproutImport()->getValueByKey('attributes', $element);
+
 
 		if (!empty($fields))
 		{
@@ -84,8 +102,8 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		{
 			if (is_array($attributes['authorId']) && !empty($attributes['authorId']['email']))
 			{
-				$userEmail              = $attributes['authorId']['email'];
-				$userModel              = craft()->users->getUserByUsernameOrEmail($userEmail);
+				$userEmail = $attributes['authorId']['email'];
+				$userModel = craft()->users->getUserByUsernameOrEmail($userEmail);
 
 				if ($userModel != null)
 				{
@@ -537,5 +555,12 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		}
 
 		return $texts;
+	}
+
+	private function getElementKeys()
+	{
+		return array(
+			'@model', 'attributes', 'content'
+		);
 	}
 }

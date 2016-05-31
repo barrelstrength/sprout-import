@@ -52,7 +52,6 @@ class SproutImportService extends BaseApplicationComponent
 		$this->setting = Craft::app()->getComponent('sproutImport_setting');
 		$this->faker   = Craft::app()->getComponent('sproutImport_faker');
 		$this->tasks   = Craft::app()->getComponent('sproutImport_tasks');
-
 	}
 
 	/**
@@ -237,9 +236,14 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	public function getImporterModel($settings)
 	{
-		if (!$settings['@model'])
+		// Catches invalid model type key
+		if (!isset($settings['@model']))
 		{
-			return null;
+			$msg = Craft::t("Model key is invalid use @model.");
+
+			$this->addError($msg, 'invalid-model-key');
+
+			return false;
 		}
 
 		// Remove the word 'Model' from the end of our setting
