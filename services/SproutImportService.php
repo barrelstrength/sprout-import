@@ -67,7 +67,6 @@ class SproutImportService extends BaseApplicationComponent
 		{
 			foreach ($importersToLoad as $plugin => $importers)
 			{
-
 				foreach ($importers as $importer)
 				{
 					if ($importer && $importer instanceof BaseSproutImportImporter)

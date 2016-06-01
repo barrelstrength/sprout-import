@@ -92,6 +92,7 @@ class SproutImportPlugin extends BasePlugin
 		if (isset($commercePlugin->isEnabled) && $commercePlugin->isEnabled)
 		{
 			$importers[] = new Commerce_ProductSproutImportElementImporter();
+			$importers[] = new Commerce_ProductTypeSproutImportImporter();
 		}
 
 		return $importers;

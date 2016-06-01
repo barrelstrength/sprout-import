@@ -1,0 +1,19 @@
+[
+	{
+		"@model": "Commerce_ProductTypeModel",
+		"name": "Type Two",
+		"handle": "typeTwo",
+		"productFields": {
+			"content field": [
+				"blogField1",
+				"body"
+			]
+		},
+		"variantFields": {
+			"Content": [
+				"blogField2",
+				"fullName"
+			]
+		}
+	}
+]
