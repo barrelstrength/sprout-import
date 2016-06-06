@@ -153,7 +153,7 @@ class SproutImportService extends BaseApplicationComponent
 	 * @throws \CDbException
 	 * @throws \Exception
 	 */
-	public function save(array $rows, $seed = false, $filename)
+	public function save(array $rows, $seed = false, $filename = '')
 	{
 		$this->filename = $filename;
 
@@ -550,6 +550,37 @@ class SproutImportService extends BaseApplicationComponent
 		}
 
 		return $handles;
+	}
+
+	public function getFieldIdsByHandle($name, $fields, $fieldService = null)
+	{
+		if ($fieldService == null)
+		{
+			$fieldService = craft()->fields;
+		}
+
+		$entryFields = array();
+
+		if (!empty($fields))
+		{
+			foreach ($fields as $field)
+			{
+				if (!is_numeric($field))
+				{
+					$fieldId = $fieldService->getFieldByHandle($field)->id;
+				}
+				else
+				{
+					$fieldId = $field;
+				}
+
+				$nameKey = rawurlencode($name);
+
+				$entryFields[$nameKey][] = $fieldId;
+			}
+		}
+
+		return $entryFields;
 	}
 
 	/** Ensures that sprout import temp folder is created

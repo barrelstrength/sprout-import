@@ -64,4 +64,31 @@ class SproutImportServiceTest extends SproutImportBaseTest
 
 		$this->assertInstanceOf('\Craft\FieldModel', $model);
 	}
+
+	public function testGetFieldIdsByHandle()
+	{
+		$obj1 = new \stdClass;
+		$obj1->id = 11;
+
+		$obj2 = new \stdClass;
+		$obj2->id = 22;
+
+		$fieldsService = m::mock('Craft\FieldsService')
+			->shouldReceive('getFieldByHandle')
+			->andReturn($obj1, $obj2)
+			->mock();
+
+		$fields = array(
+			"blogField1",
+			"body"
+		);
+
+		$name = "Content One";
+
+		$entryFields = sproutImport()->getFieldIdsByHandle($name, $fields, $fieldsService);
+
+		$expected = array("Content%20One" => array(11,22));
+
+		$this->assertEquals($expected, $entryFields);
+	}
 }

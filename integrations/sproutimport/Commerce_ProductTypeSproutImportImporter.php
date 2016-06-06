@@ -22,8 +22,6 @@ class Commerce_ProductTypeSproutImportImporter extends BaseSproutImportImporter
 	{
 		$attributes = array_merge($this->defaultArgs, $settings);
 
-
-
 		if (isset($settings['urlFormat']))
 		{
 			$locales = [];
@@ -40,28 +38,12 @@ class Commerce_ProductTypeSproutImportImporter extends BaseSproutImportImporter
 
 		if (isset($settings['productFields']) && !empty($settings['productFields']))
 		{
-			$entryFields = array();
-
 			foreach ($settings['productFields'] as $name => $fields)
 			{
-				if (!empty($fields))
+				$entryFields = sproutImport()->getFieldIdsByHandle($name, $fields);
+
+				if (!empty($entryFields))
 				{
-					foreach ($fields as $field)
-					{
-						if (!is_numeric($field))
-						{
-							$fieldId = craft()->fields->getFieldByHandle($field)->id;
-						}
-						else
-						{
-							$fieldId = $field;
-						}
-
-						$nameKey = rawurlencode($name);
-
-						$entryFields[$nameKey][] = $fieldId;
-					}
-
 					$fieldLayout = craft()->fields->assembleLayout($entryFields);
 					$fieldLayout->type = 'Commerce_Product';
 

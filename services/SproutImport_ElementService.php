@@ -67,8 +67,6 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			return false;
 		}
 
-
-
 		$this->element = $element;
 		$this->type    = $type;
 
@@ -80,7 +78,6 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		$fields     = sproutImport()->getValueByKey('content.fields', $element);
 		$related    = sproutImport()->getValueByKey('content.related', $element);
 		$attributes = sproutImport()->getValueByKey('attributes', $element);
-
 
 		if (!empty($fields))
 		{
@@ -188,7 +185,19 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 				$importer->setModel($model);
 
-				$saved = $importer->save();
+				try
+				{
+					$saved = $importer->save();
+				}
+				catch (\Exception $e)
+				{
+					$message = Craft::t("Error on importer save method. \n ");
+					$message.= $e->getMessage();
+					sproutImport()->addError($message, 'save-importer');
+
+					return false;
+				}
+
 
 				if ($saved)
 				{
@@ -235,6 +244,8 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			);
 
 			sproutImport()->addError($model->getErrors(), 'model-validate');
+
+			return false;
 		}
 
 		if ($saved)
