@@ -79,8 +79,6 @@ class Commerce_ProductTypeSproutImportImporter extends BaseSproutImportImporter
 			$model->asa('variantFieldLayout')->setFieldLayout($variantFieldLayout);
 		}
 
-
-
 		$this->model = $model;
 	}
 

@@ -148,7 +148,13 @@ abstract class BaseSproutImportImporter
 	public function populateModel($model, $settings)
 	{
 		$model->setAttributes($settings);
+
 		$this->model = $model;
+	}
+
+	public function getPopulatedModel()
+	{
+		return $this->model;
 	}
 
 	/**

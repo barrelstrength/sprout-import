@@ -72,7 +72,9 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 		$beforeSave = sproutImport()->getValueByKey('content.beforeSave', $element);
 
-		$model = $this->getElementModel($beforeSave);
+		$populatedModel = $importerClass->getPopulatedModel();
+
+		$model = $this->getElementModel($beforeSave, $populatedModel);
 
 		$content    = sproutImport()->getValueByKey('content', $element);
 		$fields     = sproutImport()->getValueByKey('content.fields', $element);
@@ -113,7 +115,8 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				if ($userModel != null)
 				{
 					$authorId               = $userModel->getAttribute('id');
-					$attributes['authorId'] = $authorId;
+
+					$model->setAttribute('authorId', $authorId);
 				}
 			}
 			else
@@ -154,7 +157,6 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			}
 		}
 
-		$model->setAttributes($attributes);
 		unset($element['content']['related']);
 
 		$model->setContent($content);
@@ -179,15 +181,12 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 			try
 			{
-				$importer = sproutImport()->getImporterByRow($element);
-
-				$importer->setData($element);
-
-				$importer->setModel($model);
+				$importerClass->setData($element);
+			//	$importerClass->setModel($model);
 
 				try
 				{
-					$saved = $importer->save();
+					$saved = $importerClass->save();
 				}
 				catch (\Exception $e)
 				{
@@ -201,7 +200,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 				if ($saved)
 				{
-					$importer->resolveNestedSettings($model, $element);
+					$importerClass->resolveNestedSettings($model, $element);
 				}
 
 				if ($saved && $isNewElement)
@@ -469,12 +468,9 @@ class SproutImport_ElementService extends BaseApplicationComponent
 	 * @return BaseElementModel|EntryModel|CategoryModel|UserModel
 	 * @throws Exception
 	 */
-	protected function getElementModel($beforeSave = null)
+	protected function getElementModel($beforeSave = null, $populatedModel)
 	{
-		$type  = $this->type;
-		$name  = 'Craft\\' . $type . "Model";
-
-		$model = new $name();
+		$type = $this->type;
 
 		if ($beforeSave)
 		{
@@ -521,7 +517,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			}
 		}
 
-		return $model;
+		return $populatedModel;
 	}
 
 	/**

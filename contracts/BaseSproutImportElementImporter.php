@@ -47,4 +47,14 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 
 		return craft()->elements->getElementType($name);
 	}
+
+	/**
+	 * @return string
+	 */
+	public function populateModel($model, $settings)
+	{
+		$model->setAttributes($settings['attributes']);
+
+		$this->model = $model;
+	}
 }
