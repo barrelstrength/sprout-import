@@ -181,12 +181,6 @@ class SproutImportService extends BaseApplicationComponent
 			}
 		}
 
-		$elementResults = $this->element->getSavedResults();
-		$this->addResults($elementResults);
-
-		$settingResults = $this->setting->getSavedResults();
-		$this->addResults($settingResults);
-
 		return true;
 	}
 

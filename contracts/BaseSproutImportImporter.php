@@ -36,7 +36,6 @@ abstract class BaseSproutImportImporter
 			$this->model = $model;
 
 			$this->populateModel($model, $settings);
-			$this->validate();
 		}
 
 		if ($fakerService == null)

@@ -137,9 +137,8 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 		sproutImport()->onBeforeMigrateElement($event);
 
-		sproutImport()->log("Begin validation of Element Model.");
-
 		$saved = false;
+
 		if ($model->validate())
 		{
 			$isNewElement = !$model->id;
@@ -201,12 +200,13 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		}
 		else
 		{
-			$this->unsavedElements[] = array(
-				'title' => $model->getTitle(),
-				'error' => print_r($model->getErrors(), true)
-			);
+			$errorLog = array();
+			$errorLog['errors']     = $model->getErrors();
+			$errorLog['attributes'] = $model->getAttributes();
 
-			sproutImport()->addError($model->getErrors(), 'model-validate');
+			$errorKey = serialize($model->getAttributes());
+
+			sproutImport()->addError($errorLog, $errorKey);
 
 			return false;
 		}
