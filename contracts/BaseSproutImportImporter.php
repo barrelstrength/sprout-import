@@ -125,6 +125,11 @@ abstract class BaseSproutImportImporter
 	{
 		$model = $this->defineModel();
 
+		if (!strpos($model, "Craft"))
+		{
+			$model = "Craft\\" . $model;
+		}
+
 		if (!isset($this->settings['handle'])) return new $model;
 
 		$handle = $this->settings['handle'];
@@ -154,22 +159,6 @@ abstract class BaseSproutImportImporter
 	public function getPopulatedModel()
 	{
 		return $this->model;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function isValid()
-	{
-		return $this->valid;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function validate()
-	{
-		$this->valid = $this->model->validate();
 	}
 
 	/**

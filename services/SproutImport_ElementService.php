@@ -146,7 +146,6 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			try
 			{
 				$importerClass->setData($element);
-			//	$importerClass->setModel($model);
 
 				try
 				{

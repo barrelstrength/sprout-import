@@ -6,6 +6,14 @@ class SectionSproutImportImporter extends BaseSproutImportImporter
 	public $isNewSection;
 
 	/**
+	 * @return string
+	 */
+	public function defineModel()
+	{
+		return 'Craft\\SectionModel';
+	}
+
+	/**
 	 * @param null $handle
 	 *
 	 * @return SectionModel|null
@@ -15,13 +23,6 @@ class SectionSproutImportImporter extends BaseSproutImportImporter
 		return craft()->sections->getSectionByHandle($handle);
 	}
 
-	/**
-	 * @return string
-	 */
-	public function defineModel()
-	{
-		return 'Craft\\SectionModel';
-	}
 
 	/**
 	 * @param $model

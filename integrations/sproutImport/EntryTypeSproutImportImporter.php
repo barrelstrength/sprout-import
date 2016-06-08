@@ -6,7 +6,7 @@ class EntryTypeSproutImportImporter extends BaseSproutImportImporter
 	/**
 	 * @return string
 	 */
-	public function getModel()
+	public function defineModel()
 	{
 		return 'Craft\\EntryTypeModel';
 	}
@@ -17,8 +17,6 @@ class EntryTypeSproutImportImporter extends BaseSproutImportImporter
 	 */
 	public function populateModel($model, $settings)
 	{
-		// @TODO - require groupId or set fallback.
-
 		$model->setAttributes($settings);
 
 		$this->model = $model;

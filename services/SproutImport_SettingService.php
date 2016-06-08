@@ -21,29 +21,49 @@ class SproutImport_SettingService extends BaseApplicationComponent
 			craft()->sproutImport_seed->seed = true;
 		}
 
-		$importer = sproutImport()->getImporterByRow($settings);
+		$importerClass = sproutImport()->getImporterByRow($settings);
 
-		if ($importer->isValid() && $importer->save())
+		$model = $importerClass->getPopulatedModel();
+
+		if ($model->validate())
 		{
 			if (craft()->sproutImport_seed->seed)
 			{
-				craft()->sproutImport_seed->trackSeed($importer->model->id, sproutImport()->getImporterModel($settings));
+				craft()->sproutImport_seed->trackSeed($importerClass->model->id, sproutImport()->getImporterModel($settings));
 			}
 
-			// @todo - probably want to protect $importer->model and update to $importer->getModel()
-			$importer->resolveNestedSettings($importer->model, $settings);
+			try
+			{
+				$saved = $importerClass->save();
+			}
+			catch (\Exception $e)
+			{
+				$message = Craft::t("Error on importer save setting method. \n ");
+				$message.= $e->getMessage();
 
-			$this->savedIds[] = $importer->model->id;
+				sproutImport()->addError($message, 'save-setting-importer');
 
-			// @todo - keep track of what we've saved for reporting later.
-			sproutImport()->log('Saved ID: ' . $importer->model->id);
+				return false;
+			}
 
-			return $importer->model;
+			if ($saved)
+			{
+				$importerClass->resolveNestedSettings($model, $settings);
+			}
+
+			$this->savedIds[] = $model->id;
+
+			return $importerClass->model;
 		}
 		else
 		{
-			sproutImport()->error('Unable to validate.');
-			sproutImport()->error($importer->getErrors());
+			$errorKey = serialize($model->getAttributes());
+
+			$errorLog = array();
+			$errorLog['errors']     = Craft::t("Unable to save settings.");
+			$errorLog['attributes'] = $model->getAttributes();
+
+			sproutImport()->addError($errorLog, $errorKey);
 
 			return false;
 		}

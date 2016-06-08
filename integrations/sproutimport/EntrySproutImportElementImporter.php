@@ -6,11 +6,9 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 	/**
 	 * @return mixed
 	 */
-	public function getModel()
+	public function defineModel()
 	{
-		$model = 'Craft\\EntryModel';
-
-		return new $model;
+		return 'EntryModel';
 	}
 
 	/**
