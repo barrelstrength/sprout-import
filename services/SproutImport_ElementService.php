@@ -43,6 +43,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 	public function saveElement(array $element, $seed = false, $source = null)
 	{
 		$type = sproutImport()->getImporterModel($element);
+		$this->type    = $type;
 
 		// Adds extra element keys to pass validation
 		$importerClass = sproutImport()->getImporterByModelRow($type, $element);
@@ -68,13 +69,10 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		}
 
 		$this->element = $element;
-		$this->type    = $type;
 
 		$beforeSave = sproutImport()->getValueByKey('content.beforeSave', $element);
 
-		$populatedModel = $importerClass->getPopulatedModel();
-
-		$model = $this->getElementModel($beforeSave, $populatedModel);
+		$model = $importerClass->getPopulatedModel();
 
 		$content    = sproutImport()->getValueByKey('content', $element);
 		$fields     = sproutImport()->getValueByKey('content.fields', $element);
@@ -104,36 +102,6 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			}
 		}
 
-		// Allows author email to add as author of the entry
-		if (isset($attributes['authorId']))
-		{
-			if (is_array($attributes['authorId']) && !empty($attributes['authorId']['email']))
-			{
-				$userEmail = $attributes['authorId']['email'];
-				$userModel = craft()->users->getUserByUsernameOrEmail($userEmail);
-
-				if ($userModel != null)
-				{
-					$authorId               = $userModel->getAttribute('id');
-
-					$model->setAttribute('authorId', $authorId);
-				}
-			}
-			else
-			{
-				$userModel = craft()->users->getUserById($attributes['authorId']);
-			}
-
-			if ($userModel == null)
-			{
-				$msg = Craft::t("Invalid author value");
-
-				sproutImport()->addError($msg, 'invalid-author');
-
-				return false;
-			}
-		}
-
 		if (!empty($fields))
 		{
 			$fields = $this->resolveMatrixRelationships($fields);
@@ -158,9 +126,6 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		}
 
 		unset($element['content']['related']);
-
-		$model->setContent($content);
-		$model->setContentFromPost($fields);
 
 		$eventParams = array('element' => $model,
 		                     'seed'    => $seed,
@@ -196,7 +161,6 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 					return false;
 				}
-
 
 				if ($saved)
 				{
@@ -470,6 +434,16 @@ class SproutImport_ElementService extends BaseApplicationComponent
 	 */
 	protected function getElementModel($beforeSave = null, $populatedModel)
 	{
+		if ($this->getModelByMatches($beforeSave))
+		{
+			return $this->getModelByMatches($beforeSave);
+		}
+
+		return $populatedModel;
+	}
+
+	public function getModelByMatches($beforeSave)
+	{
 		$type = $this->type;
 
 		if ($beforeSave)
@@ -511,13 +485,11 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				catch (\Exception $e)
 				{
 					sproutImport()->error($e->getMessage());
-
-					return false;
 				}
 			}
 		}
 
-		return $populatedModel;
+		return false;
 	}
 
 	/**

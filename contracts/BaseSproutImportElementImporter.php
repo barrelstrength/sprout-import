@@ -53,7 +53,57 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	 */
 	public function populateModel($model, $settings)
 	{
-		$model->setAttributes($settings['attributes']);
+		$beforeSave = $settings['content']['beforeSave'];
+
+		$existModel = sproutImport()->element->getModelByMatches($beforeSave);
+
+		if ($existModel)
+		{
+			$model = $existModel;
+		}
+
+		$attributes = $settings['attributes'];
+
+		$model->setAttributes($attributes);
+
+		$model->setContent($settings['content']);
+
+		$fields = $settings['content']['fields'];
+		$model->setContentFromPost($fields);
+
+		if (isset($fields['title']))
+		{
+			$model->getContent()->title = $fields['title'];
+		}
+
+
+		// Allows author email to add as author of the entry
+		if (isset($attributes['authorId']))
+		{
+			if (is_array($attributes['authorId']) && !empty($attributes['authorId']['email']))
+			{
+				$userEmail = $attributes['authorId']['email'];
+				$userModel = craft()->users->getUserByUsernameOrEmail($userEmail);
+
+				if ($userModel != null)
+				{
+					$authorId               = $userModel->getAttribute('id');
+
+					$model->setAttribute('authorId', $authorId);
+				}
+			}
+			else
+			{
+				$userModel = craft()->users->getUserById($attributes['authorId']);
+			}
+
+			if ($userModel == null)
+			{
+				$msg = Craft::t("Invalid author value");
+
+				sproutImport()->addError($msg, 'invalid-author');
+			}
+		}
 
 		$this->model = $model;
 	}
