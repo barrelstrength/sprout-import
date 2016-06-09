@@ -249,4 +249,22 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 
 		return sproutImport()->element->saveElement($data);
 	}
+
+	public function getAllFieldHandles()
+	{
+		$elementHandle = $this->model->getClassHandle();
+
+		$fields = craft()->fields->getFieldsByElementType($elementHandle);
+
+		$handles = array();
+		if (!empty($fields))
+		{
+			foreach ($fields as $field)
+			{
+				$handles[] = $field->handle;
+			}
+		}
+
+		return $handles;
+	}
 }

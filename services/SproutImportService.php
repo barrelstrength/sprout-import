@@ -534,22 +534,6 @@ class SproutImportService extends BaseApplicationComponent
 		return $result;
 	}
 
-	public function getAllFieldHandles($elementHandle)
-	{
-		$fields = craft()->fields->getFieldsByElementType($elementHandle);
-
-		$handles = array();
-		if (!empty($fields))
-		{
-			foreach ($fields as $field)
-			{
-				$handles[] = $field->handle;
-			}
-		}
-
-		return $handles;
-	}
-
 	public function getFieldIdsByHandle($name, $fields, $fieldService = null)
 	{
 		if ($fieldService == null)

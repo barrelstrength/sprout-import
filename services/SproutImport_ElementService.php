@@ -79,10 +79,10 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		$related    = sproutImport()->getValueByKey('content.related', $element);
 		$attributes = sproutImport()->getValueByKey('attributes', $element);
 
-		if (!empty($fields))
+		if (!empty($fields) && method_exists($importerClass, 'getAllFieldHandles'))
 		{
 			// Catches invalid field handles stops the importing
-			$elementFieldHandles = sproutImport()->getAllFieldHandles($type);
+			$elementFieldHandles = $importerClass->getAllFieldHandles();
 
 			// Merge default handle
 			$elementFieldHandles[] = 'title';
