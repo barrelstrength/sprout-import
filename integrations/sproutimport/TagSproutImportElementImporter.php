@@ -6,11 +6,9 @@ class TagSproutImportElementImporter extends BaseSproutImportElementImporter
 	/**
 	 * @return mixed
 	 */
-	public function getModel()
+	public function defineModel()
 	{
-		$model = 'Craft\\TagModel';
-
-		return new $model;
+		return 'TagModel';
 	}
 
 	/**

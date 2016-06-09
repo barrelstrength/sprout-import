@@ -6,11 +6,9 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 	/**
 	 * @return mixed
 	 */
-	public function getModel()
+	public function defineModel()
 	{
-		$model = 'Craft\\Commerce_ProductModel';
-
-		return new $model;
+		return 'Commerce_ProductModel';
 	}
 
 	/**

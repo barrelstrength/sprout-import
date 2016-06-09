@@ -155,14 +155,6 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				{
 					$this->unsavedElements[] = $model->getTitle();
 				}
-
-				// @todo Ask Dale why the following is necessary
-				// Assign user to created groups
-				if (strtolower($type) == 'user' && !empty($attributes['groupId']))
-				{
-					$groupIds = $attributes['groupId'];
-					craft()->userGroups->assignUserToGroups($model->id, $groupIds);
-				}
 			}
 			catch (\Exception $e)
 			{

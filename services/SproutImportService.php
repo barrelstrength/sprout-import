@@ -633,4 +633,16 @@ class SproutImportService extends BaseApplicationComponent
 
 		sproutImport()->log('Task result for ' . $filename, $result);
 	}
+
+	public function getModelNameWithNamespace($name)
+	{
+		$findNamespace = strpos($name, "Craft");
+
+		if (!is_numeric($findNamespace))
+		{
+			$name = "Craft\\" . $name;
+		}
+
+		return $name;
+	}
 }

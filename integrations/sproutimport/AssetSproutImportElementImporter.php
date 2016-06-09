@@ -6,11 +6,9 @@ class AssetSproutImportElementImporter extends BaseSproutImportElementImporter
 	/**
 	 * @return mixed
 	 */
-	public function getModel()
+	public function defineModel()
 	{
-		$model = 'Craft\\AssetModel';
-
-		return new $model;
+		return 'AssetModel';
 	}
 
 	public function save()

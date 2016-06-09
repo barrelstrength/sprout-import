@@ -8,7 +8,7 @@ class FieldSproutImportImporter extends BaseSproutImportImporter
 	 */
 	public function defineModel()
 	{
-		return 'Craft\\FieldModel';
+		return 'FieldModel';
 	}
 
 	/**

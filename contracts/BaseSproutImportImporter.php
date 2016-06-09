@@ -125,10 +125,7 @@ abstract class BaseSproutImportImporter
 	{
 		$model = $this->defineModel();
 
-		if (!strpos($model, "Craft"))
-		{
-			$model = "Craft\\" . $model;
-		}
+		$model = sproutImport()->getModelNameWithNamespace($model);
 
 		if (!isset($this->settings['handle'])) return new $model;
 

@@ -6,11 +6,9 @@ class UserSproutImportElementImporter extends BaseSproutImportElementImporter
 	/**
 	 * @return mixed
 	 */
-	public function getModel()
+	public function defineModel()
 	{
-		$model = 'Craft\\UserModel';
-
-		return new $model;
+		return 'UserModel';
 	}
 
 	/**

@@ -91,4 +91,21 @@ class SproutImportServiceTest extends SproutImportBaseTest
 
 		$this->assertEquals($expected, $entryFields);
 	}
+
+	public function testGetModelNameWithNamespace()
+	{
+		$name = "FieldModel";
+
+		$modelName = sproutImport()->getModelNameWithNamespace($name);
+
+		$expected = "Craft\\FieldModel";
+		$this->assertEquals($expected, $modelName);
+
+		$name = "Craft\\FieldModel";
+
+		$modelName = sproutImport()->getModelNameWithNamespace($name);
+
+		$expected = "Craft\\FieldModel";
+		$this->assertEquals($expected, $modelName);
+	}
 }

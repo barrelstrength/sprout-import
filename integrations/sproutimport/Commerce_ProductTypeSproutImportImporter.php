@@ -13,9 +13,7 @@ class Commerce_ProductTypeSproutImportImporter extends BaseSproutImportImporter
 	 */
 	public function getModel()
 	{
-		$model = 'Craft\\Commerce_ProductTypeModel';
-
-		return new $model;
+		return 'Commerce_ProductTypeModel';
 	}
 
 	public function populateModel($model, $settings)
