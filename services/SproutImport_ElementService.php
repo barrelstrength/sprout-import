@@ -102,29 +102,6 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			}
 		}
 
-		if (!empty($fields))
-		{
-			$fields = $this->resolveMatrixRelationships($fields);
-
-			if (!$fields)
-			{
-				return false;
-			}
-		}
-
-		// @todo - when trying to import Sprout Forms Form Models,
-		// which do not have any fields or content, running this method kills the script
-		// moving the $related check to before the method runs, works.
-		if (count($related))
-		{
-			$fields = $this->resolveRelationships($related, $fields);
-
-			if (!$fields)
-			{
-				return false;
-			}
-		}
-
 		unset($element['content']['related']);
 
 		$eventParams = array('element' => $model,
@@ -289,7 +266,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 	 *
 	 * @throws Exception
 	 */
-	protected function resolveRelationships(array $related = null, array $fields)
+	public function resolveRelationships(array $related = null, array $fields)
 	{
 		if (count($related))
 		{

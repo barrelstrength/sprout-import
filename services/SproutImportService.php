@@ -234,7 +234,11 @@ class SproutImportService extends BaseApplicationComponent
 		{
 			$msg = Craft::t("Model key is invalid use @model.");
 
-			$this->addError($msg, 'invalid-model-key');
+			$errorLog = array();
+			$errorLog['message']    = $msg;
+			$errorLog['attributes'] = $settings;
+
+			$this->addError($errorLog, 'invalid-model-key');
 
 			return false;
 		}

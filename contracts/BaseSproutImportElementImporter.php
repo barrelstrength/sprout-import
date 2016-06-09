@@ -93,7 +93,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 
 				if ($userModel == null)
 				{
-					$msg = Craft::t("Invalid author value");
+					$msg = Craft::t("Could not find Author ID or Email.");
 
 					sproutImport()->addError($msg, 'invalid-author');
 				}
@@ -107,6 +107,44 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 			if (isset($settings['content']['fields']))
 			{
 				$fields = $settings['content']['fields'];
+
+				if (!empty($fields))
+				{
+					$fields = sproutImport()->element->resolveMatrixRelationships($fields);
+
+					if (!$fields)
+					{
+						$msg = Craft::t("Unable to resolve matrix relationships.");
+
+						$log = array();
+						$log['message'] = $msg;
+						$log['fields']  = $fields;
+
+						sproutImport()->log($log, 'invalid-matrix');
+					}
+				}
+
+				// @todo - when trying to import Sprout Forms Form Models,
+				// which do not have any fields or content, running this method kills the script
+				// moving the $related check to before the method runs, works.
+				if (isset($settings['content']['related']) && count($settings['content']['related']))
+				{
+					$related = $settings['content']['related'];
+
+					$fields = sproutImport()->element->resolveRelationships($related, $fields);
+
+					if (!$fields)
+					{
+						$msg = Craft::t("Unable to resolve related relationships.");
+
+						$log = array();
+						$log['message'] = $msg;
+						$log['fields']  = $fields;
+
+						sproutImport()->log($log, 'invalid-relation');
+					}
+				}
+
 				$model->setContentFromPost($fields);
 
 				if (isset($fields['title']))
