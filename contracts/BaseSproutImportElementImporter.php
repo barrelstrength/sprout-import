@@ -155,5 +155,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 		}
 
 		$this->model = $model;
+
+		return $this->model;
 	}
 }

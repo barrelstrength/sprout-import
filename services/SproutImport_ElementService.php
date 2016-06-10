@@ -172,6 +172,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 			$errorLog['errors']     = $model->getErrors();
 			$errorLog['attributes'] = $model->getAttributes();
 
+			// make error unique
 			$errorKey = serialize($model->getAttributes());
 
 			sproutImport()->addError($errorLog, $errorKey);
@@ -471,12 +472,10 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		{
 			foreach ($sections as $section)
 			{
-
 				if ($section->type == 'single')
 				{
 					continue;
 				}
-
 				$selects[$section->handle] = $section->name;
 			}
 		}
