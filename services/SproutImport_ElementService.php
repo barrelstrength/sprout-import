@@ -127,6 +127,17 @@ class SproutImport_ElementService extends BaseApplicationComponent
 				try
 				{
 					$saved = $importerClass->save();
+
+					// Get updated model after save
+					$model = $importerClass->getPopulatedModel();
+
+					// Check for field setting errors
+					if (!empty($model->getErrors()))
+					{
+						$this->logErrorByModel($model);
+
+						return false;
+					}
 				}
 				catch (\Exception $e)
 				{
@@ -137,11 +148,9 @@ class SproutImport_ElementService extends BaseApplicationComponent
 					return false;
 				}
 
+
 				if ($saved)
 				{
-					// Get updated model after save
-					$model = $importerClass->getPopulatedModel();
-
 					$importerClass->resolveNestedSettings($model, $element);
 				}
 
@@ -171,14 +180,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		}
 		else
 		{
-			$errorLog = array();
-			$errorLog['errors']     = $model->getErrors();
-			$errorLog['attributes'] = $model->getAttributes();
-
-			// make error unique
-			$errorKey = serialize($model->getAttributes());
-
-			sproutImport()->addError($errorLog, $errorKey);
+			$this->logErrorByModel($model);
 
 			return false;
 		}
@@ -512,6 +514,18 @@ class SproutImport_ElementService extends BaseApplicationComponent
 		}
 
 		return $texts;
+	}
+
+	public function logErrorByModel($model)
+	{
+		$errorLog = array();
+		$errorLog['errors']     = $model->getErrors();
+		$errorLog['attributes'] = $model->getAttributes();
+
+		// make error unique
+		$errorKey = serialize($model->getAttributes());
+
+		sproutImport()->addError($errorLog, $errorKey);
 	}
 
 	private function getElementKeys()
