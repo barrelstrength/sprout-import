@@ -112,7 +112,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 		$event = new Event($this, $eventParams);
 
-		sproutImport()->onBeforeMigrateElement($event);
+		sproutImport()->onBeforeImportElement($event);
 
 		$saved = false;
 
@@ -139,6 +139,9 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 				if ($saved)
 				{
+					// Get updated model after save
+					$model = $importerClass->getPopulatedModel();
+
 					$importerClass->resolveNestedSettings($model, $element);
 				}
 
@@ -187,7 +190,7 @@ class SproutImport_ElementService extends BaseApplicationComponent
 
 			$event = new Event($this, $eventParams);
 
-			sproutImport()->onAfterMigrateElement($event);
+			sproutImport()->onAfterImportElement($event);
 
 			return $model->id;
 		}

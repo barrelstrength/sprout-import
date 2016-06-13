@@ -305,6 +305,21 @@ class SproutImportService extends BaseApplicationComponent
 		return array_key_exists($key, $data) ? $data[$key] : $default;
 	}
 
+	public function trackImport($event)
+	{
+		$element = $event->params['element'];
+		$seed    = $event->params['seed'];
+		$type    = $event->params['@model'];
+		$source  = $event->params['source'];
+
+		$id = $element->id;
+
+		if ($seed && $source == "import")
+		{
+			sproutImport()->seed->trackSeed($id, $type);
+		}
+	}
+
 	/**
 	 * @param string|mixed $message
 	 * @param array|mixed  $data
@@ -336,23 +351,29 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param Event|SproutImport_onBeforeMigrateElement $event
+	 * @param Event|SproutImport_onBeforeImportElement $event
 	 *
 	 * @throws \CException
 	 */
-	public function onBeforeMigrateElement(Event $event)
+	public function onBeforeImportElement(Event $event)
 	{
-		$this->raiseEvent('onBeforeMigrateElement', $event);
+		$this->raiseEvent('onBeforeImportElement', $event);
 	}
 
 	/**
-	 * @param Event|SproutImport_onAfterMigrateElement $event
+	 * @param Event|SproutImport_onAfterImportElement $event
 	 *
 	 * @throws \CException
 	 */
-	public function onAfterMigrateElement(Event $event)
+	public function onAfterImportElement(Event $event)
 	{
-		$this->raiseEvent('onAfterMigrateElement', $event);
+		$this->raiseEvent('onAfterImportElement', $event);
+	}
+
+
+	public function onAfterImportSetting(Event $event)
+	{
+		$this->raiseEvent('onAfterImportSetting', $event);
 	}
 
 	/**

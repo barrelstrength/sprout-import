@@ -14,27 +14,35 @@ class SproutImport_SettingService extends BaseApplicationComponent
 	 *
 	 * @return bool
 	 */
-	public function saveSetting($settings, $seed = false)
+	public function saveSetting($settings, $seed = false, $source = 'import')
 	{
-		if ($seed)
-		{
-			craft()->sproutImport_seed->seed = true;
-		}
-
 		$importerClass = sproutImport()->getImporterByRow($settings);
 
 		$model = $importerClass->getPopulatedModel();
 
 		if ($model->validate())
 		{
-			if (craft()->sproutImport_seed->seed)
-			{
-				craft()->sproutImport_seed->trackSeed($importerClass->model->id, sproutImport()->getImporterModel($settings));
-			}
-
 			try
 			{
 				$saved = $importerClass->save();
+
+				if ($saved)
+				{
+					// Get updated model after save
+					$model = $importerClass->getPopulatedModel();
+
+					$importerModel = sproutImport()->getImporterModel($settings);
+
+					$eventParams = array('element' => $model,
+					                     'seed'    => $seed,
+					                     '@model'  => $importerModel,
+					                     'source'  => $source
+					);
+
+					$event = new Event($this, $eventParams);
+
+					sproutImport()->onAfterImportSetting($event);
+				}
 			}
 			catch (\Exception $e)
 			{
