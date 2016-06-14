@@ -120,10 +120,23 @@ class SproutImport_SeedController extends BaseController
 				{
 					sproutImport()->seed->trackSeed($id, $elementType);
 				}
+				craft()->userSession->setNotice(Craft::t('Elements generated.'));
+			}
+			else
+			{
+				$errors = sproutImport()->getErrors();
+
+				if (!empty($errors))
+				{
+					$msg = implode("\n", $errors);
+					sproutImport()->error($msg);
+
+					craft()->userSession->setError(Craft::t('Unable to generate data. Check logs.'));
+				}
 			}
 		}
 
-		craft()->userSession->setNotice(Craft::t('Elements generated.'));
+
 
 		$this->redirectToPostedUrl();
 	}

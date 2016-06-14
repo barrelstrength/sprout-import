@@ -108,4 +108,36 @@ class SproutImportServiceTest extends SproutImportBaseTest
 		$expected = "Craft\\FieldModel";
 		$this->assertEquals($expected, $modelName);
 	}
+
+	public function testGetRandomArray()
+	{
+		$values = array();
+		$values[] = array('value' => 'one');
+		$values[] = array('value' => 'two');
+		$values[] = array('value' => 'three');
+		$values[] = array('value' => 'four');
+
+		$length = count($values);
+		$number = rand(1, $length);
+
+		$randArrays = sproutImport()->getRandomArrays($values, $number);
+
+		$randCount = count($randArrays);
+
+		$this->assertEquals($number, $randCount);
+
+		$oneArray = sproutImport()->getRandomArrays($values, 1);
+
+		$isArray = is_array($oneArray);
+
+		$this->assertTrue($isArray);
+
+		$keys = array(1, 3);
+
+		$options = sproutImport()->getOptionValuesByKeys($keys, $values);
+
+		$expected = array('two', 'four');
+
+		$this->assertEquals($expected, $options);
+	}
 }

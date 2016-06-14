@@ -14,7 +14,7 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	 */
 	public function trackSeed($itemId = null, $importerClass = null)
 	{
-		if (!$itemId OR !$importerClass)
+		if (!$itemId || !$importerClass)
 		{
 			return false;
 		}
