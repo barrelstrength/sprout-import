@@ -92,20 +92,21 @@ class SproutImportServiceTest extends SproutImportBaseTest
 		$this->assertEquals($expected, $entryFields);
 	}
 
-	public function testGetModelNameWithNamespace()
+	public function namespaceProvider()
 	{
-		$name = "FieldModel";
+		return array(
+			array("FieldModel", "Craft\\FieldModel"),
+			array("Craft\\FieldModel", "Craft\\FieldModel")
+		);
+	}
 
-		$modelName = sproutImport()->getModelNameWithNamespace($name);
+	/**
+	 * @dataProvider namespaceProvider
+	 */
+	public function testGetModelNameWithNamespace($option, $expected)
+	{
+		$modelName = sproutImport()->getModelNameWithNamespace($option);
 
-		$expected = "Craft\\FieldModel";
-		$this->assertEquals($expected, $modelName);
-
-		$name = "Craft\\FieldModel";
-
-		$modelName = sproutImport()->getModelNameWithNamespace($name);
-
-		$expected = "Craft\\FieldModel";
 		$this->assertEquals($expected, $modelName);
 	}
 
@@ -120,13 +121,13 @@ class SproutImportServiceTest extends SproutImportBaseTest
 		$length = count($values);
 		$number = rand(1, $length);
 
-		$randArrays = sproutImport()->getRandomArrays($values, $number);
+		$randArrays = sproutImport()->seed->getRandomArrays($values, $number);
 
 		$randCount = count($randArrays);
 
 		$this->assertEquals($number, $randCount);
 
-		$oneArray = sproutImport()->getRandomArrays($values, 1);
+		$oneArray = sproutImport()->seed->getRandomArrays($values, 1);
 
 		$isArray = is_array($oneArray);
 
@@ -134,10 +135,33 @@ class SproutImportServiceTest extends SproutImportBaseTest
 
 		$keys = array(1, 3);
 
-		$options = sproutImport()->getOptionValuesByKeys($keys, $values);
+		$options = sproutImport()->seed->getOptionValuesByKeys($keys, $values);
 
 		$expected = array('two', 'four');
 
 		$this->assertEquals($expected, $options);
+	}
+
+	public function minutesProvider()
+	{
+		return array(
+			array(array('time' => strtotime("12:16 PM"), 'increment' => 15), "12:15 PM"),
+			array(array('time' => strtotime("12:35 AM"), 'increment' => 15), "12:30 AM"),
+			array(array('time' => strtotime("8:25 PM"),  'increment' => 30), "8:00 PM"),
+			array(array('time' => strtotime("8:34 AM"),  'increment' => 30), "8:30 AM"),
+			array(array('time' => strtotime("5:44 PM"),  'increment' => 60), "5:00 PM"),
+			array(array('time' => strtotime("5:14 AM"),  'increment' => 60), "5:00 AM"),
+		);
+	}
+
+	/**
+	 *
+	 * @dataProvider minutesProvider
+	 */
+	public function testGetMinutesByIncrement($option, $expected)
+	{
+		$convertedTime = sproutImport()->seed->getMinutesByIncrement($option['time'], $option['increment']);
+
+		$this->assertEquals($expected, $convertedTime);
 	}
 }

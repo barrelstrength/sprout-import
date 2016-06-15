@@ -125,4 +125,44 @@ class SproutImport_SeedService extends BaseApplicationComponent
 			return "0";
 		}
 	}
+
+	public function getRandomArrays($values, $number)
+	{
+		$rands = array_rand($values, $number);
+
+		if (!is_array($rands))
+		{
+			return array($rands);
+		}
+
+		return $rands;
+	}
+
+	public function getOptionValuesByKeys($keys, $options)
+	{
+		$values = array();
+
+		foreach ($keys as $key)
+		{
+			$values[] = $options[$key]['value'];
+		}
+
+		return $values;
+	}
+
+	public function getMinutesByIncrement($time, $increment)
+	{
+		$hour    = date('g', $time);
+		$minutes = date('i', $time);
+		$amPm    = date('A', $time);
+
+		$timeMinute = $minutes - ($minutes % $increment);
+
+		if ($timeMinute === 0)
+		{
+			$timeMinute = "00";
+		}
+
+		return $hour . ":" . $timeMinute . " " . $amPm;
+	}
 }
