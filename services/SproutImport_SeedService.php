@@ -150,13 +150,18 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		return $values;
 	}
 
-	public function getRandomOptionValue($options)
+	public function getRandomOptionValue($options, $key = 'value')
 	{
 		$randKey = array_rand($options, 1);
 
 		$value = $options[$randKey];
 
-		return $value['value'];
+		if ($key == false)
+		{
+			return $value;
+		}
+
+		return $value[$key];
 	}
 
 	public function getMinutesByIncrement($time, $increment)

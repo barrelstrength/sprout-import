@@ -109,7 +109,8 @@ class SproutImportPlugin extends BasePlugin
 			new ColorSproutImportFieldImporter(),
 			new DateSproutImportFieldImporter(),
 			new LightswitchSproutImportFieldImporter(),
-			new DropdownSproutImportFieldImporter()
+			new DropdownSproutImportFieldImporter(),
+			new PositionSelectSproutImportFieldImporter()
 		);
 	}
 
