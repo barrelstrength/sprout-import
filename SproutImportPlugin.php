@@ -107,7 +107,9 @@ class SproutImportPlugin extends BasePlugin
 			new CheckboxesSproutImportFieldImporter(),
 			new RadioButtonsSproutImportFieldImporter(),
 			new ColorSproutImportFieldImporter(),
-			new DateSproutImportFieldImporter()
+			new DateSproutImportFieldImporter(),
+			new LightswitchSproutImportFieldImporter(),
+			new DropdownSproutImportFieldImporter()
 		);
 	}
 

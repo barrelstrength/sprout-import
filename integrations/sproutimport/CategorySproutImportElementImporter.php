@@ -76,17 +76,28 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 		$faker = $this->fakerService;
 		$name  = $faker->word;
 
-		$category          = new CategoryModel();
-		$category->groupId = $categoryGroup;
-		$category->enabled = true;
-		$category->locale  = 'en_us';
-		$category->slug    = ElementHelper::createSlug($name);
+		$data                            = array();
+		$data['@model']                  = 'Category';
+		$data['attributes']['groupId']   = $categoryGroup;
+		$data['content']['title']        = $name;
 
-		$category->getContent()->title = $name;
+		$elementName = $this->getName();
 
-		if(craft()->categories->saveCategory($category))
-		{
-			return $category->id;
-		}
+		$data['content']['fields'] = sproutImport()->seed->getMockFieldsByElementName($elementName);
+
+		return sproutImport()->element->saveElement($data);
+
+		//$category          = new CategoryModel();
+		//$category->groupId = $categoryGroup;
+		//$category->enabled = true;
+		//$category->locale  = 'en_us';
+		//$category->slug    = ElementHelper::createSlug($name);
+		//
+		//$category->getContent()->title = $name;
+		//
+		//if(craft()->categories->saveCategory($category))
+		//{
+		//	return $category->id;
+		//}
 	}
 }

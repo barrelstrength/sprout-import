@@ -150,6 +150,15 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		return $values;
 	}
 
+	public function getRandomOptionValue($options)
+	{
+		$randKey = array_rand($options, 1);
+
+		$value = $options[$randKey];
+
+		return $value['value'];
+	}
+
 	public function getMinutesByIncrement($time, $increment)
 	{
 		$hour    = date('g', $time);
@@ -164,5 +173,34 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		}
 
 		return $hour . ":" . $timeMinute . " " . $amPm;
+	}
+
+	public function getMockFieldsByElementName($elementName)
+	{
+		$fieldClasses = sproutImport()->getSproutImportFields();
+
+		$fieldValues = array();
+
+		if (!empty($fieldClasses))
+		{
+			// Get only declared field classes
+			foreach ($fieldClasses as $fieldClass)
+			{
+				$fields = sproutImport()->element->getFieldsByType($elementName, $fieldClass);
+
+				if (!empty($fields))
+				{
+					// Loop through all attach fields on this element
+					foreach ($fields as $field)
+					{
+						$fieldClass->setField($field);
+						$fieldHandle                             = $field->handle;
+						$fieldValues[$fieldHandle] = $fieldClass->getMockData();
+					}
+				}
+			}
+		}
+
+		return $fieldValues;
 	}
 }

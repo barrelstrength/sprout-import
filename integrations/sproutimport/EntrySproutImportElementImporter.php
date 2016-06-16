@@ -214,31 +214,12 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 		$title = isset($entryParams['title']) ? $entryParams['title'] : $this->fakerService->text(60);
 
 		$data['content']['title']           = $title;
+
+		$elementName = $this->getName();
+
+		$data['content']['fields'] = sproutImport()->seed->getMockFieldsByElementName($elementName);
+
 		$data['content']['fields']['title'] = $title;
-
-		$element = $this->getName();
-
-		$fieldClasses = sproutImport()->getSproutImportFields();
-
-		if (!empty($fieldClasses))
-		{
-			// Get only declared field classes
-			foreach ($fieldClasses as $fieldClass)
-			{
-				$fields = sproutImport()->element->getFieldsByType($element, $fieldClass);
-
-				if (!empty($fields))
-				{
-					// Loop through all attach fields on this element
-					foreach ($fields as $field)
-					{
-						$fieldClass->setField($field);
-						$fieldHandle                             = $field->handle;
-						$data['content']['fields'][$fieldHandle] = $fieldClass->getMockData();
-					}
-				}
-			}
-		}
 
 		if (isset($entryParams['entryId']))
 		{
