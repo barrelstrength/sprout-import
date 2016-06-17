@@ -5,6 +5,8 @@ class SproutImport_SeedService extends BaseApplicationComponent
 {
 	public $seed = false;
 
+
+
 	/**
 	 * @param null   $itemId
 	 * @param null   $importerClass
@@ -207,5 +209,65 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		}
 
 		return $fieldValues;
+	}
+
+	public function generateColumns($columns)
+	{
+		$values = array();
+
+		foreach ($columns as $key => $column)
+		{
+			$values[$key] = $this->generateColumn($key, $column);
+		}
+
+		return $values;
+	}
+
+	public function generateColumn($key, $column)
+	{
+		$value = '';
+		$fakerService = sproutImport()->faker->getGenerator();
+
+		if (!empty($column))
+		{
+			$type = $column['type'];
+
+			switch ($type)
+			{
+				case "singleline":
+
+					$value = $fakerService->text(50);
+
+					break;
+
+				case "multiline":
+					$lines     = rand(2, 4);
+
+					$value = $fakerService->sentences($lines, true);
+
+					break;
+
+				case "number":
+
+					$value = $fakerService->randomDigit;
+
+					break;
+
+				case "checkbox":
+
+					$bool = rand(0,1);
+
+					if ($bool === 0)
+					{
+						$value = '';
+					}
+
+					$value = $bool;
+
+					break;
+			}
+		}
+
+		return $value;
 	}
 }

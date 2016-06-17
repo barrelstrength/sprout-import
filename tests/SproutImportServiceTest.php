@@ -164,4 +164,59 @@ class SproutImportServiceTest extends SproutImportBaseTest
 
 		$this->assertEquals($expected, $convertedTime);
 	}
+
+	public function testGenerateRandomColumns()
+	{
+		$columns = array();
+
+		$columns =	array(
+									'col1' => array
+									(
+										'heading' => 'column one',
+										'handle' => 'columnOne',
+										'width' => '',
+										'type' => 'singleline'
+									),
+									'col2' => array
+									(
+										'heading' => 'column two',
+										'handle' => 'columnTwo',
+										'width' => '',
+										'type' => 'singleline'
+									),
+									'col3' => array
+									(
+										'heading' => 'column three',
+										'handle' => 'columnThree',
+										'width' => '',
+										'type' => 'singleline'
+									),
+									'col4' => array
+									(
+										'heading' => 'column four',
+										'handle' => 'columnFour',
+										'width' => '',
+										'type' => 'singleline'
+									),
+									'col5' => array
+									(
+										'heading' => 'column five',
+										'handle' => 'columnFive',
+										'width' => '',
+										'type' => 'singleline'
+									)
+								);
+
+		$values = sproutImport()->seed->generateColumns($columns);
+
+		$expected = 5;
+		$length = count($values);
+
+		$this->assertEquals($expected, $length);
+
+		$tableKeys = array_keys($values);
+
+		$expected = array('col1','col2','col3','col4','col5');
+		$this->assertEquals($expected, $tableKeys);
+	}
 }
