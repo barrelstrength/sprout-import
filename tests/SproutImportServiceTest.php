@@ -219,4 +219,25 @@ class SproutImportServiceTest extends SproutImportBaseTest
 		$expected = array('col1','col2','col3','col4','col5');
 		$this->assertEquals($expected, $tableKeys);
 	}
+
+	public function testSeedElements()
+	{
+		$settings = array
+		(
+			'sources' => array
+			(
+				0 => 'section:33',
+        1 => 'section:2'
+      ),
+    'limit' => '4',
+    'selectionLabel' => 'Add an entry'
+		);
+
+		$find = sproutImport()->seed->getFindElementSettings($settings);
+
+		$expected = array(33,2);
+
+
+		$this->assertEquals($expected, $find);
+	}
 }

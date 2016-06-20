@@ -113,7 +113,9 @@ class SproutImportPlugin extends BasePlugin
 			new PositionSelectSproutImportFieldImporter(),
 			new MultiSelectSproutImportFieldImporter(),
 			new TableSproutImportFieldImporter(),
-			//new EntriesSproutImportFieldImporter()
+			new EntriesSproutImportFieldImporter(),
+			new CategoriesSproutImportFieldImporter(),
+			new TagsSproutImportFieldImporter()
 		);
 	}
 

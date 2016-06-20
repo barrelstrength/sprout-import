@@ -270,4 +270,62 @@ class SproutImport_SeedService extends BaseApplicationComponent
 
 		return $value;
 	}
+
+	public function getFindElementSettings(array $settings = array())
+	{
+		$ids = array();
+
+		$sources = $settings['sources'];
+
+		if (!empty($sources))
+		{
+			foreach ($sources as $source)
+			{
+				$ids[] = $this->getElementGroup($source);
+			}
+		}
+
+		return $ids;
+	}
+
+	public function getElementGroup($source)
+	{
+		$sourceExplode = explode(":", $source);
+		return $sourceExplode[1];
+	}
+
+	public function getMockFieldElements($elementName, array $find = array(), $limit)
+	{
+		$criteria = craft()->elements->getCriteria($elementName);
+
+		$results = $criteria->find($find);
+
+		$total   = $criteria->total();
+
+		// swap total elements if limit setting is greater than total find elements
+		if ($limit > $total || $limit === '')
+		{
+			$limit = $total;
+		}
+
+		$randomLimit = rand(1, $limit);
+
+		$keys = array();
+
+		$randKeys = array_rand($results, $randomLimit);
+
+		$keys = (!is_array($randKeys)) ? array($randKeys) : $randKeys;
+
+		$elementIds = array();
+
+		if (!empty($keys))
+		{
+			foreach ($keys as $key)
+			{
+				$elementIds[] = $results[$key]->id;
+			}
+		}
+
+		return $elementIds;
+	}
 }

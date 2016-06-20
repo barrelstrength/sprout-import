@@ -10,10 +10,15 @@ class EntriesSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	{
 		$settings = $this->fieldModel->settings;
 
-		$sources      = $settings['sources'];
 		$limit        = $settings['limit'];
 		$sectionLabel = $settings['selectionLabel'];
 
+		$sectionIds = sproutImport()->seed->getFindElementSettings($settings);
 
+		$find = array('sectionId' => $sectionIds);
+
+		$elementIds = sproutImport()->seed->getMockFieldElements("Entry", $find, $limit);
+
+		return $elementIds;
 	}
 }
