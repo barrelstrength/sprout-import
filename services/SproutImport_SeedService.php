@@ -279,6 +279,11 @@ class SproutImport_SeedService extends BaseApplicationComponent
 
 		if (!empty($sources))
 		{
+			if ($sources == "*")
+			{
+				return $sources;
+			}
+
 			foreach ($sources as $source)
 			{
 				$ids[] = $this->getElementGroup($source);

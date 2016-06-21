@@ -10,7 +10,6 @@ class TagsSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	{
 		$settings = $this->fieldModel->settings;
 
-		$sectionLabel = $settings['selectionLabel'];
 		$source       = $settings['source'];
 
 		$groupId = sproutImport()->seed->getElementGroup($source);

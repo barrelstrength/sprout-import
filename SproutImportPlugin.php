@@ -115,7 +115,8 @@ class SproutImportPlugin extends BasePlugin
 			new TableSproutImportFieldImporter(),
 			new EntriesSproutImportFieldImporter(),
 			new CategoriesSproutImportFieldImporter(),
-			new TagsSproutImportFieldImporter()
+			new TagsSproutImportFieldImporter(),
+			new AssetsSproutImportFieldImporter()
 		);
 	}
 

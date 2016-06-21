@@ -11,7 +11,6 @@ class EntriesSproutImportFieldImporter extends BaseSproutImportFieldImporter
 		$settings = $this->fieldModel->settings;
 
 		$limit        = $settings['limit'];
-		$sectionLabel = $settings['selectionLabel'];
 
 		$sectionIds = sproutImport()->seed->getFindElementSettings($settings);
 

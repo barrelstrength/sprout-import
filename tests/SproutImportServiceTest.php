@@ -237,6 +237,13 @@ class SproutImportServiceTest extends SproutImportBaseTest
 
 		$expected = array(33,2);
 
+		$this->assertEquals($expected, $find);
+
+		$settings['sources'] = "*";
+
+		$expected = "*";
+
+		$find = sproutImport()->seed->getFindElementSettings($settings);
 
 		$this->assertEquals($expected, $find);
 	}
