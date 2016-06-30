@@ -1,8 +1,8 @@
 {% extends "_layouts/cp" %}
 
-{% set selectedTab = craft.request.getSegment(2) ?? 'index' %}
+{% set bodyClass = craft.request.getSegments()|slice(0, 3)|join(' ') %}
 
-{% set tabs = {
+{% set subnav = {
 	index: {
 		label: "Import"|t,
 		url: url('sproutimport/index')
@@ -17,3 +17,4 @@
 	}
 } %}
 
+{% set selectedSubnavItem = craft.request.segment(2) %}
