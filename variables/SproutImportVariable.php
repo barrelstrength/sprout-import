@@ -4,9 +4,7 @@ namespace Craft;
 class SproutImportVariable
 {
 	/**
-	 * @param string $type
-	 *
-	 * @return mixed
+	 * @return int
 	 */
 	public function hasSeeds()
 	{
@@ -16,9 +14,11 @@ class SproutImportVariable
 	}
 
 	/**
-	 * @return mixed
+	 * Return an instance of the \Faker\Generator
+	 *
+	 * @return \Faker\Generator
 	 */
-	public function fakeDataGenerator()
+	public function getFaker()
 	{
 		$generator = sproutImport()->faker->getGenerator();
 
