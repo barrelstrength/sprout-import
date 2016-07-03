@@ -213,7 +213,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 
 		$title = isset($entryParams['title']) ? $entryParams['title'] : $this->fakerService->text(60);
 
-		$data['content']['title']           = $title;
+		$data['content']['title'] = $title;
 
 		$elementName = $this->getName();
 

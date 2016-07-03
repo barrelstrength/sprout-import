@@ -3,6 +3,9 @@ namespace Craft;
 
 class SproutImport_SettingsService extends BaseApplicationComponent
 {
+	/**
+	 * @type array
+	 */
 	private $savedIds = array();
 
 	/**
@@ -33,10 +36,11 @@ class SproutImport_SettingsService extends BaseApplicationComponent
 
 					$importerModel = sproutImport()->getImporterModel($settings);
 
-					$eventParams = array('element' => $model,
-					                     'seed'    => $seed,
-					                     '@model'  => $importerModel,
-					                     'source'  => $source
+					$eventParams = array(
+						'element' => $model,
+						'seed'    => $seed,
+						'@model'  => $importerModel,
+						'source'  => $source
 					);
 
 					$event = new Event($this, $eventParams);
@@ -47,7 +51,7 @@ class SproutImport_SettingsService extends BaseApplicationComponent
 			catch (\Exception $e)
 			{
 				$message = Craft::t("Error on importer save setting method. \n ");
-				$message.= $e->getMessage();
+				$message .= $e->getMessage();
 
 				sproutImport()->addError($message, 'save-setting-importer');
 
@@ -67,7 +71,7 @@ class SproutImport_SettingsService extends BaseApplicationComponent
 		{
 			$errorKey = serialize($model->getAttributes());
 
-			$errorLog = array();
+			$errorLog               = array();
 			$errorLog['errors']     = Craft::t("Unable to save settings.");
 			$errorLog['attributes'] = $model->getAttributes();
 

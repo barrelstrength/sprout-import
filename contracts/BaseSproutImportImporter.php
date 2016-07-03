@@ -56,7 +56,29 @@ abstract class BaseSproutImportImporter
 		return str_replace('SproutImportImporter', '', $this->getId());
 	}
 
-	/** Get element importer label name
+	/**
+	 * @return mixed
+	 */
+	final public function getId()
+	{
+		$importerClass = str_replace('Craft\\', '', get_class($this));
+
+		$this->id = $importerClass;
+
+		return $importerClass;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isElement()
+	{
+		return false;
+	}
+
+	/**
+	 * Get element importer label name
+	 *
 	 * @return mixed|string
 	 */
 	public function getElementName()
@@ -76,33 +98,16 @@ abstract class BaseSproutImportImporter
 	}
 
 	/**
-	 * @param string $pluginHandle
+	 * @param $settings
 	 */
-	final public function getId()
-	{
-		$importerClass = str_replace('Craft\\', '', get_class($this));
-
-		$this->id = $importerClass;
-
-		return $importerClass;
-	}
-
-	/**
-	 * @todo - do we need this anymore?
-	 *         We now have a BaseSproutImportElementImporter class
-	 *
-	 * @return bool
-	 */
-	public function isElement()
-	{
-		return false;
-	}
-
 	public function setSettings($settings)
 	{
 		$this->settings = $settings;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getErrors()
 	{
 		return $this->model->getErrors();
@@ -127,15 +132,18 @@ abstract class BaseSproutImportImporter
 
 		$model = sproutImport()->getModelNameWithNamespace($model);
 
-		if (!isset($this->settings['handle'])) return new $model;
+		if (!isset($this->settings['handle']))
+		{
+			return new $model;
+		}
 
 		$handle = $this->settings['handle'];
 
-		$exist = $this->getObjectByHandle($handle);
+		$object = $this->getObjectByHandle($handle);
 
-		if ($exist != null)
+		if ($object != null)
 		{
-			return $exist;
+			return $object;
 		}
 		else
 		{
@@ -153,6 +161,9 @@ abstract class BaseSproutImportImporter
 		$this->model = $model;
 	}
 
+	/**
+	 * @return null
+	 */
 	public function getPopulatedModel()
 	{
 		return $this->model;
@@ -194,6 +205,9 @@ abstract class BaseSproutImportImporter
 		return "";
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getSeedCount()
 	{
 		$name = $this->getName();
@@ -203,11 +217,17 @@ abstract class BaseSproutImportImporter
 		return $count;
 	}
 
+	/**
+	 * @param $data
+	 */
 	public function setData($data)
 	{
 		$this->data = $data;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function defineKeys()
 	{
 		return array();

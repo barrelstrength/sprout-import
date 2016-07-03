@@ -4,13 +4,13 @@ namespace Craft;
 class AssetsSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
-	 * @return mixed
+	 * @return array
 	 */
 	public function getMockData()
 	{
 		$settings = $this->fieldModel->settings;
 
-		$limit        = $settings['limit'];
+		$limit = $settings['limit'];
 
 		$sourceIds = sproutImport()->seed->getFindElementSettings($settings);
 

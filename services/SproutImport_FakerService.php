@@ -4,7 +4,10 @@ namespace Craft;
 
 class SproutImport_FakerService extends BaseApplicationComponent
 {
-	private $lib;
+	/**
+	 * @type \Faker\Generator
+	 */
+	private $fakerGenerator;
 
 	/**
 	 * SproutImport_FakerService constructor.
@@ -13,7 +16,7 @@ class SproutImport_FakerService extends BaseApplicationComponent
 	{
 		require_once dirname(__FILE__) . '/../vendor/autoload.php';
 
-		$this->lib = \Faker\Factory::create();
+		$this->fakerGenerator = \Faker\Factory::create();
 	}
 
 	/**
@@ -21,7 +24,7 @@ class SproutImport_FakerService extends BaseApplicationComponent
 	 */
 	public function getGenerator()
 	{
-		return $this->lib;
+		return $this->fakerGenerator;
 	}
 
 	/**

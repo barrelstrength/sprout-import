@@ -23,6 +23,5 @@ class MultiSelectSproutImportFieldImporter extends BaseSproutImportFieldImporter
 
 			return $values;
 		}
-
 	}
 }

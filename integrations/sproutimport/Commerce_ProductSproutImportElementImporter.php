@@ -18,7 +18,7 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 	 */
 	public function save()
 	{
-		$product = $this->model;
+		$product  = $this->model;
 		$variants = $this->data['variants'];
 
 		try
@@ -32,7 +32,6 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 			sproutImport()->log('Commerce Product Import Error:');
 			sproutImport()->log($e->getMessage());
 		}
-
 	}
 
 	/**
@@ -40,14 +39,18 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 	 */
 	public function getSettingsHtml()
 	{
-
 	}
 
+	/**
+	 * @param $settings
+	 */
 	public function getMockData($settings)
 	{
-
 	}
 
+	/**
+	 * @return array
+	 */
 	public function defineKeys()
 	{
 		return array('variants');

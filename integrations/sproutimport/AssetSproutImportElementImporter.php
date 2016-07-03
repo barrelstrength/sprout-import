@@ -11,6 +11,11 @@ class AssetSproutImportElementImporter extends BaseSproutImportElementImporter
 		return 'AssetModel';
 	}
 
+	/**
+	 * @return bool
+	 * @throws Exception
+	 * @throws \Exception
+	 */
 	public function save()
 	{
 		return craft()->assets->storeFile($this->model);

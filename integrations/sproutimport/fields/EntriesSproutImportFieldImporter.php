@@ -10,7 +10,7 @@ class EntriesSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	{
 		$settings = $this->fieldModel->settings;
 
-		$limit        = $settings['limit'];
+		$limit = $settings['limit'];
 
 		$sectionIds = sproutImport()->seed->getFindElementSettings($settings);
 

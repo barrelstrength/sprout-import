@@ -10,8 +10,8 @@ class CategoriesSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	{
 		$settings = $this->fieldModel->settings;
 
-		$limit        = $settings['limit'];
-		$source       = $settings['source'];
+		$limit  = $settings['limit'];
+		$source = $settings['source'];
 
 		$groupId = sproutImport()->seed->getElementGroup($source);
 

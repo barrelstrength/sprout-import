@@ -23,6 +23,28 @@ class SectionSproutImportImporter extends BaseSproutImportImporter
 		return craft()->sections->getSectionByHandle($handle);
 	}
 
+	/**
+	 * @return bool
+	 * @throws Exception
+	 * @throws \Exception
+	 */
+	public function save()
+	{
+		$this->isNewSection = ($this->model->id) ? false : true;
+
+		return craft()->sections->saveSection($this->model);
+	}
+
+	/**
+	 * @param $id
+	 *
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function deleteById($id)
+	{
+		return craft()->sections->deleteSectionById($id);
+	}
 
 	/**
 	 * @param $model
@@ -84,29 +106,6 @@ class SectionSproutImportImporter extends BaseSproutImportImporter
 	}
 
 	/**
-	 * @return bool
-	 * @throws Exception
-	 * @throws \Exception
-	 */
-	public function save()
-	{
-		$this->isNewSection = ($this->model->id) ? false : true;
-
-		return craft()->sections->saveSection($this->model);
-	}
-
-	/**
-	 * @param $id
-	 *
-	 * @return bool
-	 * @throws \Exception
-	 */
-	public function deleteById($id)
-	{
-		return craft()->sections->deleteSectionById($id);
-	}
-
-	/**
 	 * @param $model
 	 * @param $settings
 	 *
@@ -135,7 +134,7 @@ class SectionSproutImportImporter extends BaseSproutImportImporter
 		{
 			$entryTypes = $model->getEntryTypes();
 
-			$firstEntryType = $entryTypes[0];
+			$firstEntryType       = $entryTypes[0];
 			$firstEntryTypeFields = $firstEntryType->getFieldLayout()->getFields();
 
 			if (count($entryTypes) && empty($firstEntryTypeFields))
@@ -151,7 +150,6 @@ class SectionSproutImportImporter extends BaseSproutImportImporter
 			$settings['entryTypes'][$key]['sectionId'] = $sectionId;
 
 			$entryType = sproutImport()->settings->saveSetting($settings['entryTypes'][$key]);
-
 		}
 	}
 }

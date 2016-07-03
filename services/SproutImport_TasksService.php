@@ -46,7 +46,8 @@ class SproutImport_TasksService extends BaseApplicationComponent
 		));
 	}
 
-	/** Migrate elements to Craft
+	/**
+	 * Migrate elements to Craft
 	 *
 	 * @param $elements
 	 *

@@ -3,8 +3,14 @@ namespace Craft;
 
 class SproutImport_ElementsService extends BaseApplicationComponent
 {
+	/**
+	 * @type ImporterModel type
+	 */
 	private $type;
 
+	/**
+	 * @var ElementType
+	 */
 	private $element;
 
 	/**
@@ -42,8 +48,8 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 	 */
 	public function saveElement(array $element, $seed = false, $source = null)
 	{
-		$type = sproutImport()->getImporterModel($element);
-		$this->type    = $type;
+		$type       = sproutImport()->getImporterModel($element);
+		$this->type = $type;
 
 		// Adds extra element keys to pass validation
 		$importerClass = sproutImport()->getImporterByModelRow($type, $element);
@@ -52,7 +58,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 
 		$elementKeys = array_merge($this->getElementKeys(), $importerElementKeys);
 
-		$inputKeys   = array_keys($element);
+		$inputKeys = array_keys($element);
 
 		// Catches invalid element keys
 		$elementDiff = array_diff($inputKeys, $elementKeys);
@@ -104,11 +110,12 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 
 		unset($element['content']['related']);
 
-		$eventParams = array('element' => $model,
-		                     'seed'    => $seed,
-		                     '@model'  => $type,
-		                     'source'  => $source
-												);
+		$eventParams = array(
+			'element' => $model,
+			'seed'    => $seed,
+			'@model'  => $type,
+			'source'  => $source
+		);
 
 		$event = new Event($this, $eventParams);
 
@@ -142,12 +149,11 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 				catch (\Exception $e)
 				{
 					$message = Craft::t("Error on importer save method. \n ");
-					$message.= $e->getMessage();
+					$message .= $e->getMessage();
 					sproutImport()->addError($message, 'save-importer');
 
 					return false;
 				}
-
 
 				if ($saved)
 				{
@@ -276,7 +282,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 					continue;
 				}
 
-				$type                  = sproutImport()->getImporterModel($definition);
+				$type = sproutImport()->getImporterModel($definition);
 
 				if (!$type)
 				{
@@ -501,7 +507,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 		$type = $fieldClass->getName();
 
 		$texts = array();
-		
+
 		if (!empty($fields))
 		{
 			foreach ($fields as $field)
@@ -516,9 +522,12 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 		return $texts;
 	}
 
+	/**
+	 * @param $model
+	 */
 	public function logErrorByModel($model)
 	{
-		$errorLog = array();
+		$errorLog               = array();
 		$errorLog['errors']     = $model->getErrors();
 		$errorLog['attributes'] = $model->getAttributes();
 
@@ -528,6 +537,9 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 		sproutImport()->addError($errorLog, $errorKey);
 	}
 
+	/**
+	 * @return array
+	 */
 	private function getElementKeys()
 	{
 		return array(

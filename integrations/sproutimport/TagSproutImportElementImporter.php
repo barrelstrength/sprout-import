@@ -62,6 +62,7 @@ class TagSproutImportElementImporter extends BaseSproutImportElementImporter
 				$saveIds[] = $this->generateTag($tagGroup);
 			}
 		}
+
 		return $saveIds;
 	}
 
@@ -84,7 +85,7 @@ class TagSproutImportElementImporter extends BaseSproutImportElementImporter
 
 		$tag->getContent()->title = $name;
 
-		if(craft()->tags->saveTag($tag))
+		if (craft()->tags->saveTag($tag))
 		{
 			return $tag->id;
 		}

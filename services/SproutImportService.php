@@ -14,22 +14,44 @@ namespace Craft;
  */
 class SproutImportService extends BaseApplicationComponent
 {
-	protected $importers = array();
-	protected $fieldImports = array();
-	protected $seedClasses = array();
-	protected $error = array();
-	protected $filename;
-
 	public $elements;
 	public $faker;
 	public $seed;
 	public $settings;
 	public $tasks;
 
+	/**
+	 * @type array
+	 */
+	protected $importers = array();
+
+	/**
+	 * @type array
+	 */
+	protected $fieldImports = array();
+
+	/**
+	 * @type array
+	 */
+	protected $seedClasses = array();
+
+	/**
+	 * @type array
+	 */
+	protected $error = array();
+
+	/**
+	 * @type
+	 */
+	protected $filename;
+
+	/**
+	 * @type
+	 */
 	protected $elementsService;
 
 	/**
-	 * Allow third party plugins to register custom elements for importing
+	 * @param null $elementsService
 	 */
 	public function init($elementsService = null)
 	{
@@ -58,6 +80,7 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	public function getSproutImportImporters()
 	{
+		// Allow third party plugins to register custom elements importers
 		$importersToLoad = craft()->plugins->call('registerSproutImportImporters');
 
 		if ($importersToLoad)
@@ -77,6 +100,11 @@ class SproutImportService extends BaseApplicationComponent
 		return $this->importers;
 	}
 
+	/**
+	 * Return a list of importers by name
+	 *
+	 * @return array
+	 */
 	public function getSproutImportImportersByName()
 	{
 		$names     = array();
@@ -119,6 +147,13 @@ class SproutImportService extends BaseApplicationComponent
 		return $this->fieldImports;
 	}
 
+	/**
+	 * Get all native and third-party Seeds
+	 *
+	 * @param string $pluginHandle
+	 *
+	 * @return array
+	 */
 	public function getSproutImportSeeds($pluginHandle = '')
 	{
 		$seedsToLoad = craft()->plugins->call('registerSproutImportSeeds');
@@ -146,6 +181,8 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Save an imported Element or Setting
+	 *
 	 * @param array $elements
 	 * @param bool  $returnSavedElementIds
 	 *
@@ -224,6 +261,8 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Get the related SproutImportImporter for the given model
+	 *
 	 * @param $settings
 	 *
 	 * @return null
@@ -306,6 +345,11 @@ class SproutImportService extends BaseApplicationComponent
 		return array_key_exists($key, $data) ? $data[$key] : $default;
 	}
 
+	/**
+	 * Add a record of the imported item to the seed database
+	 *
+	 * @param $event
+	 */
 	public function trackImport($event)
 	{
 		$element = $event->params['element'];
@@ -352,6 +396,8 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
+	 * On Before Import Element Event
+	 *
 	 * @param Event|SproutImport_onBeforeImportElement $event
 	 *
 	 * @throws \CException
@@ -362,6 +408,8 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
+	 * On After Import Element Event
+	 *
 	 * @param Event|SproutImport_onAfterImportElement $event
 	 *
 	 * @throws \CException
@@ -371,6 +419,13 @@ class SproutImportService extends BaseApplicationComponent
 		$this->raiseEvent('onAfterImportElement', $event);
 	}
 
+	/**
+	 * On After Import Setting Event
+	 *
+	 * @param Event $event
+	 *
+	 * @throws \CException
+	 */
 	public function onAfterImportSetting(Event $event)
 	{
 		$this->raiseEvent('onAfterImportSetting', $event);
@@ -486,6 +541,7 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
+	 *
 	 * @param $row
 	 *
 	 * @return mixed
@@ -497,6 +553,12 @@ class SproutImportService extends BaseApplicationComponent
 		return $this->getImporterByModelRow($importerModel, $row);
 	}
 
+	/**
+	 * @param $importerModel
+	 * @param $row
+	 *
+	 * @return mixed
+	 */
 	public function getImporterByModelRow($importerModel, $row)
 	{
 		$importerClassName = $this->getImporterByName($importerModel);
@@ -529,7 +591,7 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @return array
+	 * @return array|mixed
 	 */
 	public function getLatestSingleSection()
 	{
@@ -555,6 +617,13 @@ class SproutImportService extends BaseApplicationComponent
 		return $result;
 	}
 
+	/**
+	 * @param      $name
+	 * @param      $fields
+	 * @param null $fieldService
+	 *
+	 * @return array
+	 */
 	public function getFieldIdsByHandle($name, $fields, $fieldService = null)
 	{
 		if ($fieldService == null)
@@ -586,7 +655,8 @@ class SproutImportService extends BaseApplicationComponent
 		return $entryFields;
 	}
 
-	/** Ensures that sprout import temp folder is created
+	/**
+	 * Make sure the Sprout Import temp folder is created
 	 *
 	 * @return string
 	 */
@@ -643,11 +713,17 @@ class SproutImportService extends BaseApplicationComponent
 		}
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getErrors()
 	{
 		return $this->error;
 	}
 
+	/**
+	 * @param $result
+	 */
 	public function addResults($result)
 	{
 		$filename = $this->filename;
@@ -655,6 +731,11 @@ class SproutImportService extends BaseApplicationComponent
 		sproutImport()->log('Task result for ' . $filename, $result);
 	}
 
+	/**
+	 * @param $name
+	 *
+	 * @return string
+	 */
 	public function getModelNameWithNamespace($name)
 	{
 		$findNamespace = strpos($name, "Craft");

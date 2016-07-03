@@ -10,7 +10,7 @@ class LightswitchSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	{
 		$settings = $this->fieldModel->settings;
 
-		$bool = rand(0,1);
+		$bool = rand(0, 1);
 
 		if ($bool === 0)
 		{

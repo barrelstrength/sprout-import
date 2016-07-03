@@ -3,11 +3,101 @@ namespace Craft;
 
 class SproutImportPlugin extends BasePlugin
 {
+	/**
+	 * @return string
+	 */
+	public function getName()
+	{
+		return 'Sprout Import';
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDescription()
+	{
+		return 'Everything is better in Craft. Import content and settings. Generate fake data.'|t;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getVersion()
+	{
+		return '0.4.0';
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSchemaVersion()
+	{
+		return '0.4.0';
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDeveloper()
+	{
+		return 'Barrel Strength Design';
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDeveloperUrl()
+	{
+		return 'http://barrelstrengthdesign.com';
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDocumentationUrl()
+	{
+		return 'http://sprout.barrelstrengthdesign.com/craft-plugins/import/docs';
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getReleaseFeedUrl()
+	{
+		return 'https://sprout.barrelstrengthdesign.com/craft-plugins/import/releases.json';
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasCpSection()
+	{
+		return true;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function registerCpRoutes()
+	{
+		return array(
+			'sproutimport/start/'                       => array('action' => 'sproutImport/start'),
+			'sproutimport/run/[a-zA-Z]+/[a-zA-Z0-9\-]+' => array('action' => 'sproutImport/runTask'),
+			'sproutimport/seed'                         => array('action' => 'sproutImport/seed/indexTemplate'),
+			'sproutimport/weed'                         => array('action' => 'sproutImport/seed/weedIndex')
+		);
+	}
+
+	/**
+	 * @throws \Exception
+	 */
 	public function init()
 	{
 		parent::init();
 
-		Craft::import('plugins.sproutimport.contracts.*');
+		Craft::import('plugins.sproutimport.contracts.BaseSproutImportElementImporter');
+		Craft::import('plugins.sproutimport.contracts.BaseSproutImportFieldImporter');
+		Craft::import('plugins.sproutimport.contracts.BaseSproutImportImporter');
 		Craft::import('plugins.sproutimport.integrations.sproutimport.*');
 		Craft::import('plugins.sproutimport.integrations.sproutimport.fields.*');
 
@@ -25,41 +115,6 @@ class SproutImportPlugin extends BasePlugin
 		{
 			sproutImport()->trackImport($event);
 		});
-	}
-
-	public function getName()
-	{
-		return 'Sprout Import';
-	}
-
-	public function getVersion()
-	{
-		return '0.4.0';
-	}
-
-	public function getDeveloper()
-	{
-		return 'Barrel Strength Design';
-	}
-
-	public function getDeveloperUrl()
-	{
-		return 'http://barrelstrengthdesign.com';
-	}
-
-	public function hasCpSection()
-	{
-		return true;
-	}
-
-	public function registerCpRoutes()
-	{
-		return array(
-			'sproutimport/start/'                       => array('action' => 'sproutImport/start'),
-			'sproutimport/run/[a-zA-Z]+/[a-zA-Z0-9\-]+' => array('action' => 'sproutImport/runTask'),
-			'sproutimport/seed'                         => array('action' => 'sproutImport/seed/indexTemplate'),
-			'sproutimport/weed'                         => array('action' => 'sproutImport/seed/weedIndex')
-		);
 	}
 
 	/**

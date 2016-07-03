@@ -3,11 +3,31 @@ namespace Craft;
 
 class SproutImport_SeedService extends BaseApplicationComponent
 {
+	/**
+	 * @type bool
+	 */
 	public $seed = false;
 
+	/**
+	 * Return all imported content and settings marked as seed data
+	 *
+	 * @param $type
+	 *
+	 * @return array|\CDbDataReader
+	 */
+	public function getAllSeeds()
+	{
+		$seeds = craft()->db->createCommand()
+			->select('itemId, importerClass')
+			->from('sproutimport_seeds')
+			->queryAll();
 
+		return $seeds;
+	}
 
 	/**
+	 * Mark an item being imported as seed data
+	 *
 	 * @param null   $itemId
 	 * @param null   $importerClass
 	 * @param string $type
@@ -35,21 +55,8 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param $type
+	 * Remove a group of items from the database that are marked as seed data as identified by their class handle
 	 *
-	 * @return array|\CDbDataReader
-	 */
-	public function getAllSeeds()
-	{
-		$seeds = craft()->db->createCommand()
-			->select('itemId, importerClass')
-			->from('sproutimport_seeds')
-			->queryAll();
-
-		return $seeds;
-	}
-
-	/**
 	 * @param $type
 	 *
 	 * @return bool
@@ -101,6 +108,8 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Delete seed data from the database by id
+	 *
 	 * @param $id
 	 *
 	 * @return int
@@ -114,6 +123,13 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		);
 	}
 
+	/**
+	 * Get the number of seed items in the database for element class type
+	 *
+	 * @param $handle
+	 *
+	 * @return string
+	 */
 	public function getSeedCountByElementType($handle)
 	{
 		$count = SproutImport_SeedRecord::model()->countByAttributes(array('importerClass' => $handle));
@@ -128,6 +144,17 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		}
 	}
 
+	// Various methods to help with importing mock seed data into fields and elements
+	// =========================================================================
+
+	/**
+	 * Return a random selection of items from an array for fields such as Multi-select and Checkboxes
+	 *
+	 * @param $values
+	 * @param $number
+	 *
+	 * @return array|mixed
+	 */
 	public function getRandomArrays($values, $number)
 	{
 		$rands = array_rand($values, $number);
@@ -140,6 +167,14 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		return $rands;
 	}
 
+	/**
+	 * Return selected values by keys for use with fields such as Multi-select and Checkboxes
+	 *
+	 * @param $keys
+	 * @param $options
+	 *
+	 * @return array
+	 */
 	public function getOptionValuesByKeys($keys, $options)
 	{
 		$values = array();
@@ -152,6 +187,14 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		return $values;
 	}
 
+	/**
+	 * Return a single random value for a set of given options
+	 *
+	 * @param        $options
+	 * @param string $key
+	 *
+	 * @return mixed
+	 */
 	public function getRandomOptionValue($options, $key = 'value')
 	{
 		$randKey = array_rand($options, 1);
@@ -166,6 +209,14 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		return $value[$key];
 	}
 
+	/**
+	 * Generate a fake time for the DateSproutImportFieldImporter Class
+	 *
+	 * @param $time
+	 * @param $increment
+	 *
+	 * @return string
+	 */
 	public function getMinutesByIncrement($time, $increment)
 	{
 		$hour    = date('g', $time);
@@ -182,35 +233,13 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		return $hour . ":" . $timeMinute . " " . $amPm;
 	}
 
-	public function getMockFieldsByElementName($elementName)
-	{
-		$fieldClasses = sproutImport()->getSproutImportFields();
-
-		$fieldValues = array();
-
-		if (!empty($fieldClasses))
-		{
-			// Get only declared field classes
-			foreach ($fieldClasses as $fieldClass)
-			{
-				$fields = sproutImport()->elements->getFieldsByType($elementName, $fieldClass);
-
-				if (!empty($fields))
-				{
-					// Loop through all attach fields on this element
-					foreach ($fields as $field)
-					{
-						$fieldClass->setField($field);
-						$fieldHandle                             = $field->handle;
-						$fieldValues[$fieldHandle] = $fieldClass->getMockData();
-					}
-				}
-			}
-		}
-
-		return $fieldValues;
-	}
-
+	/**
+	 * Generate columns for the TableSproutImportFieldImporter
+	 *
+	 * @param $columns
+	 *
+	 * @return array
+	 */
 	public function generateColumns($columns)
 	{
 		$values = array();
@@ -223,9 +252,17 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		return $values;
 	}
 
+	/**
+	 * Generate a specific column for the TableSproutImportFieldImporter
+	 *
+	 * @param $key
+	 * @param $column
+	 *
+	 * @return array|int|string
+	 */
 	public function generateColumn($key, $column)
 	{
-		$value = '';
+		$value        = '';
 		$fakerService = sproutImport()->faker->getGenerator();
 
 		if (!empty($column))
@@ -241,7 +278,7 @@ class SproutImport_SeedService extends BaseApplicationComponent
 					break;
 
 				case "multiline":
-					$lines     = rand(2, 4);
+					$lines = rand(2, 4);
 
 					$value = $fakerService->sentences($lines, true);
 
@@ -255,7 +292,7 @@ class SproutImport_SeedService extends BaseApplicationComponent
 
 				case "checkbox":
 
-					$bool = rand(0,1);
+					$bool = rand(0, 1);
 
 					if ($bool === 0)
 					{
@@ -271,41 +308,23 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		return $value;
 	}
 
-	public function getFindElementSettings(array $settings = array())
-	{
-		$ids = array();
-
-		$sources = $settings['sources'];
-
-		if (!empty($sources))
-		{
-			if ($sources == "*")
-			{
-				return $sources;
-			}
-
-			foreach ($sources as $source)
-			{
-				$ids[] = $this->getElementGroup($source);
-			}
-		}
-
-		return $ids;
-	}
-
-	public function getElementGroup($source)
-	{
-		$sourceExplode = explode(":", $source);
-		return $sourceExplode[1];
-	}
-
+	/**
+	 * Get a random sample of Relations for the given Element Relations field
+	 *
+	 * @param       $elementName
+	 * @param array $find
+	 * @param       $limit
+	 *
+	 * @return array
+	 * @throws Exception
+	 */
 	public function getMockFieldElements($elementName, array $find = array(), $limit)
 	{
 		$criteria = craft()->elements->getCriteria($elementName);
 
 		$results = $criteria->find($find);
 
-		$total   = $criteria->total();
+		$total = $criteria->total();
 
 		// swap total elements if limit setting is greater than total find elements
 		if ($limit > $total || $limit === '')
@@ -332,5 +351,84 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		}
 
 		return $elementIds;
+	}
+
+	/**
+	 * Get mock data for fields when generating a mock Element
+	 *
+	 * @param $elementName
+	 *
+	 * @return array
+	 */
+	public function getMockFieldsByElementName($elementName)
+	{
+		$fieldClasses = sproutImport()->getSproutImportFields();
+
+		$fieldValues = array();
+
+		if (!empty($fieldClasses))
+		{
+			// Get only declared field classes
+			foreach ($fieldClasses as $fieldClass)
+			{
+				$fields = sproutImport()->elements->getFieldsByType($elementName, $fieldClass);
+
+				if (!empty($fields))
+				{
+					// Loop through all attach fields on this element
+					foreach ($fields as $field)
+					{
+						$fieldClass->setField($field);
+						$fieldHandle               = $field->handle;
+						$fieldValues[$fieldHandle] = $fieldClass->getMockData();
+					}
+				}
+			}
+		}
+
+		return $fieldValues;
+	}
+
+	/**
+	 * Get Element Group settings
+	 *
+	 * @param array $settings
+	 *
+	 * @return array|mixed
+	 */
+	public function getFindElementSettings(array $settings = array())
+	{
+		$ids = array();
+
+		$sources = $settings['sources'];
+
+		if (!empty($sources))
+		{
+			if ($sources == "*")
+			{
+				return $sources;
+			}
+
+			foreach ($sources as $source)
+			{
+				$ids[] = $this->getElementGroup($source);
+			}
+		}
+
+		return $ids;
+	}
+
+	/**
+	 * Get Element Group
+	 *
+	 * @param $source
+	 *
+	 * @return mixed
+	 */
+	public function getElementGroup($source)
+	{
+		$sourceExplode = explode(":", $source);
+
+		return $sourceExplode[1];
 	}
 }

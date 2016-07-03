@@ -12,6 +12,27 @@ class EntryTypeSproutImportImporter extends BaseSproutImportImporter
 	}
 
 	/**
+	 * @return bool
+	 * @throws Exception
+	 * @throws \Exception
+	 */
+	public function save()
+	{
+		return craft()->sections->saveEntryType($this->model);
+	}
+
+	/**
+	 * @param $id
+	 *
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function deleteById($id)
+	{
+		return craft()->sections->deleteEntryTypeById($id);
+	}
+
+	/**
 	 * @param $model
 	 * @param $settings
 	 */
@@ -31,13 +52,13 @@ class EntryTypeSproutImportImporter extends BaseSproutImportImporter
 		if (isset($entryTypeSettings['fieldLayout']))
 		{
 			$fieldLayoutTabs = $entryTypeSettings['fieldLayout'];
-			$fieldLayout = array();
-			$requiredFields = array();
+			$fieldLayout     = array();
+			$requiredFields  = array();
 
 			foreach ($fieldLayoutTabs as $tab)
 			{
 				$tabName = $tab['name'];
-				$fields = $tab['fields'];
+				$fields  = $tab['fields'];
 
 				foreach ($fields as $fieldSettings)
 				{
@@ -67,26 +88,5 @@ class EntryTypeSproutImportImporter extends BaseSproutImportImporter
 		}
 
 		$this->model = $entryType;
-	}
-
-	/**
-	 * @return bool
-	 * @throws Exception
-	 * @throws \Exception
-	 */
-	public function save()
-	{
-		return craft()->sections->saveEntryType($this->model);
-	}
-
-	/**
-	 * @param $id
-	 *
-	 * @return bool
-	 * @throws \Exception
-	 */
-	public function deleteById($id)
-	{
-		return craft()->sections->deleteEntryTypeById($id);
 	}
 }

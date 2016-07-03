@@ -10,11 +10,8 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	{
 		return str_replace('SproutImportElementImporter', '', $this->getId());
 	}
-	
+
 	/**
-	 * @todo - do we need this anymore?
-	 *         We now have a BaseSproutImportElementImporter class
-	 *
 	 * @return bool
 	 */
 	public function isElement()
@@ -41,6 +38,9 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 		return craft()->elements->deleteElementById($id);
 	}
 
+	/**
+	 * @return IElementType|null
+	 */
 	public function getElement()
 	{
 		$name = $this->getName();
@@ -49,7 +49,10 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	}
 
 	/**
-	 * @return string
+	 * @param       $model
+	 * @param array $settings
+	 *
+	 * @return bool|BaseElementModel|null
 	 */
 	public function populateModel($model, $settings = array())
 	{
@@ -81,7 +84,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 
 					if ($userModel != null)
 					{
-						$authorId               = $userModel->getAttribute('id');
+						$authorId = $userModel->getAttribute('id');
 
 						$model->setAttribute('authorId', $authorId);
 					}
@@ -116,7 +119,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 					{
 						$msg = Craft::t("Unable to resolve matrix relationships.");
 
-						$log = array();
+						$log            = array();
 						$log['message'] = $msg;
 						$log['fields']  = $fields;
 
@@ -137,7 +140,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 					{
 						$msg = Craft::t("Unable to resolve related relationships.");
 
-						$log = array();
+						$log            = array();
 						$log['message'] = $msg;
 						$log['fields']  = $fields;
 

@@ -16,13 +16,12 @@ class TableSproutImportFieldImporter extends BaseSproutImportFieldImporter
 
 		$values = array();
 
-		for($inc = 1; $inc <= $randomLength; $inc++)
+		for ($inc = 1; $inc <= $randomLength; $inc++)
 		{
 			$values[] = sproutImport()->seed->generateColumns($columns);
 		}
 
 		return $values;
 	}
-
 
 }
