@@ -45,7 +45,7 @@ class SproutImportService extends BaseApplicationComponent
 		}
 
 		$this->seed     = Craft::app()->getComponent('sproutImport_seed');
-		$this->element  = Craft::app()->getComponent('sproutImport_elements');
+		$this->elements = Craft::app()->getComponent('sproutImport_elements');
 		$this->settings = Craft::app()->getComponent('sproutImport_settings');
 		$this->faker    = Craft::app()->getComponent('sproutImport_faker');
 		$this->tasks    = Craft::app()->getComponent('sproutImport_tasks');
