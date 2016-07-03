@@ -3,7 +3,12 @@
 
 {% set title = 'Import' %}
 
-{% set content %}
+{% block main %}
+
+<div class="grid first" data-max-cols="3">
+	<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
+		<div id="fields" class="pane">
+
 
 	<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
 
@@ -11,24 +16,59 @@
 
 		<input type="hidden" name="action" value="sproutImport/import/runImport">
 
+		{{ forms.textareaField({
+			label: "Import via Copy/Paste"|t,
+			instructions: "Paste JSON data to import."|t,
+			class: 'nicetext',
+			name: 'pastedJson',
+			value: '',
+			errors: '',
+			rows: 20,
+			first: true
+		}) }}
+
 		<div class="field first" id="files-field">
 			<div class="heading">
-				<label for="files">{{ 'Files'|t }}</label>
-			<div class="instructions"><p>{{ 'Select one or more'|t }} <strong>JSON</strong> {{ 'encoded files'|t }}.</p>
-		</div>
-
-		</div>
+				<label for="files">{{ 'Import via Files'|t }}</label>
+				<div class="instructions">
+					<p>{{ 'Select one or more JSON encoded files to import.'|t }}</p>
+				</div>
+			</div>
 			<div class="input"><input type="file" multiple id="files" name="files[]"></div>
 		</div>
 
 		{{ forms.lightswitchField({
 			label: "Seed data"|t,
-			instructions: "Mark your imported data as seed data. Seed data can later be removed via the Weed tab."|t,
+			instructions: "Mark your imported data as seed data. Seed data can be removed via the Weed tab."|t,
 			on: false,
 			name: 'seed'
 		}) }}
 
-		<button class="btn submit" type="submit">{{ 'Import Elements'|t }}</button>
+		<button class="btn submit" type="submit">{{ 'Run Import'|t }}</button>
 	</form>
 
-{% endset %}
+		</div>
+	</div>
+	<div class="item" data-position="right" data-colspan="1">
+		<div class="pane">
+
+			<h2>What can I import? <span class="info">If you need to import something that isn't supported, see our documentation on how to add custom integrations.</span></h2>
+
+			Can we dynamically display a list of all registered importers here?
+
+			<p><b>Content</b>: Entries, Categories, Tags, Users, Craft Commerce Products</p>
+
+			<p><b>Settings</b>: Fields, Sections, EntryTypes.</p>
+
+			<hr>
+
+			<h2>How do I import my data?</h2>
+
+			<p>Sprout Import supports importing content and settings via JSON. Examples are
+				provided of	all supported data types.</p>
+
+		</div>
+	</div>
+</div>
+
+{% endblock %}

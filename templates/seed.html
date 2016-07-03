@@ -3,31 +3,47 @@
 
 {% set title = 'Seed'|t %}
 
-{% set content %}
+{% block main %}
 
-	<form method="post" accept-charset="UTF-8">
+<div class="grid first" data-max-cols="3">
+	<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
+		<div id="fields" class="pane">
 
-		{{ getCsrfInput() }}
+			<form method="post" accept-charset="UTF-8">
 
-		<input type="hidden" name="action" value="sproutImport/seed/generateSeedElements">
+				{{ getCsrfInput() }}
 
-		<div class="field first">
-			{{ forms.select({
-				id: "elementType",
-				name: "elementType",
-				label: "Type of Content"|t,
-				instructions: "Select the type of content you wish to seed in your database. Seeded content and can be removed later using the Weed tab."|t,
-				options: [{label: "Select element..."|t, value: null}]|merge(elements),
-				value: elementType is defined ? elementType : null,
-				hasOptgroups: true
-			}) }}
+				<input type="hidden" name="action" value="sproutImport/seed/generateSeedElements">
+
+				<div class="field first">
+					{{ forms.selectField({
+						id: "elementType",
+						name: "elementType",
+						label: "Type of Content"|t,
+						instructions: "Select the type of content you wish to seed in your database. Seeded content and can be removed later using the Weed tab."|t,
+						options: [{label: "Select element..."|t, value: null}]|merge(elements),
+						value: elementType is defined ? elementType : null,
+						hasOptgroups: true
+					}) }}
+				</div>
+
+				{{ settings.elements }}
+
+				<div class="buttons">
+					<button class="btn submit actions">{{ "Generate Content"|t }}</button>
+				</div>
+			</form>
+
 		</div>
+	</div>
+	<div class="item" data-position="right" data-colspan="1">
+		<div class="pane">
 
-		{{ settings.elements }}
+			<h2>What is seeding?</h2>
 
-		<div class="buttons">
-			<button class="btn submit actions">{{ "Generate"|t }}</button>
 		</div>
-	</form>
+	</div>
+</div>
 
-{% endset %}
+
+{% endblock %}

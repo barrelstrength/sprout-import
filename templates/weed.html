@@ -5,62 +5,73 @@
 
 {% set hasSeeds = craft.sproutImport.hasSeeds() %}
 
-{% set content %}
+{% block main %}
 
-	{% if hasSeeds == true %}
-		<table class="weed data fullwidth">
-			<tr>
-				<th class="type">Type</th>
-				<th class="seeds">Seeds</th>
-				<th class="options">&nbsp;</th>
-			</tr>
-			{% if elementImporters is defined %}
-				{% for importer in elementImporters %}
-					{% if importer.getSeedCount('import') > 0 %}
-							<tr>
-								<td>{{ importer.getElementName() }}</td>
-								<td>{{ importer.getSeedCount() }}</td>
-								<td class="options">
-									<form method="post" accept-charset="UTF-8">
-										{{ getCsrfInput() }}
-										<input type="hidden" name="action" value="sproutImport/seed/runWeed">
-										<input type="hidden" name="redirect" value="sproutimport/weed">
-										<input type="hidden" name="class" value="{{ importer.getName() }}">
-										<input class="btn small" name="submit" type="submit" value="Weed">
-										<input class="btn small" name="submit" type="submit" value="Keep">
-									</form>
-								</td>
-							</tr>
+<div class="grid first" data-max-cols="3">
+	<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
+		<div id="fields" class="pane">
 
+			{% if hasSeeds == true %}
+				<table class="weed data fullwidth">
+					<tr>
+						<th class="type">Type</th>
+						<th class="seeds">Seeds</th>
+						<th class="options">&nbsp;</th>
+					</tr>
+					{% if elementImporters is defined %}
+						{% for importer in elementImporters %}
+							{% if importer.getSeedCount('import') > 0 %}
+									<tr>
+										<td>{{ importer.getElementName() }}</td>
+										<td>{{ importer.getSeedCount() }}</td>
+										<td class="options">
+											<form method="post" accept-charset="UTF-8">
+												{{ getCsrfInput() }}
+												<input type="hidden" name="action" value="sproutImport/seed/runWeed">
+												<input type="hidden" name="redirect" value="sproutimport/weed">
+												<input type="hidden" name="class" value="{{ importer.getName() }}">
+												<input class="btn small" name="submit" type="submit" value="Weed">
+												<input class="btn small" name="submit" type="submit" value="Keep">
+											</form>
+										</td>
+									</tr>
+
+							{% endif %}
+						{% endfor %}
 					{% endif %}
-				{% endfor %}
+				</table>
+
+				<div class="buttons">
+					<form method="post" accept-charset="UTF-8">
+						{{ getCsrfInput() }}
+						<input type="hidden" name="action" value="sproutImport/seed/runWeed">
+						<input type="hidden" name="redirect" value="sproutimport/weed">
+						<input type="hidden" name="class" value="*">
+						<input class="btn submit" name="submit" type="submit" value="Weed All">
+						<input class="btn" name="submit" type="submit" value="Keep All">
+					</form>
+				</div>
+			{% else %}
+				<p>{{ "Currently, there is no data to weed."|t }}</p>
 			{% endif %}
-		</table>
 
-		<div class="buttons">
-			<form method="post" accept-charset="UTF-8">
-				{{ getCsrfInput() }}
-				<input type="hidden" name="action" value="sproutImport/seed/runWeed">
-				<input type="hidden" name="redirect" value="sproutimport/weed">
-				<input type="hidden" name="class" value="*">
-				<input class="btn submit" name="submit" type="submit" value="Weed All">
-				<input class="btn" name="submit" type="submit" value="Keep All">
-			</form>
 		</div>
-	{% else %}
-		<p>{{ "Currently, there is no data to weed."|t }}</p>
-	{% endif %}
+	</div>
+	<div class="item" data-position="right" data-colspan="1">
+		<div class="pane">
 
-	<hr>
+			<p><strong>{{ "Weed"|t }}</strong> – {{ "Weeding can help clean up your database and remove all imported content that was marked as seed content."|t|raw }}</p>
 
-	<p><strong>{{ "Weed"|t }}</strong> – {{ "Weeding can help clean up your database and remove all imported content that was marked as seed content."|t|raw }}</p>
+			<p><strong>{{ "Keep"|t }}</strong> – {{ "If you have imported content marked as seed content and you wish to keep it, using the Keep option will unmark it as seed content in the database so nobody can accidentally remove it using the weed feature. Content that you choose to keep will need to be deleted manually."|t|raw }}</p>
 
-	<p><strong>{{ "Keep"|t }}</strong> – {{ "If you have imported content marked as seed content and you wish to keep it, using the Keep option will unmark it as seed content in the database so nobody can accidentally remove it using the weed feature. Content that you choose to keep will need to be deleted manually."|t|raw }}</p>
+			<style>
+				table.weed td:last-of-type {
+					text-align: right;
+				}
+			</style>
 
-	<style>
-		table.weed td:last-of-type {
-			text-align: right;
-		}
-	</style>
+		</div>
+	</div>
+</div>
 
-{% endset %}
+{% endblock %}
