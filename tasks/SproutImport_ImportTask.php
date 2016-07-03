@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutImportTask extends BaseTask
+class SproutImport_ImportTask extends BaseTask
 {
 	/**
 	 * @return string

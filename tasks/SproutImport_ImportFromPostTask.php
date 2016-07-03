@@ -1,14 +1,14 @@
 <?php
 namespace Craft;
 
-class SproutImport_PostTask extends BaseTask
+class SproutImport_ImportFromPostTask extends BaseTask
 {
 	/**
 	 * @return string
 	 */
 	public function getDescription()
 	{
-		return Craft::t('Sprout Import Task By Post');
+		return Craft::t('Sprout Import Task From Post');
 	}
 
 	/**

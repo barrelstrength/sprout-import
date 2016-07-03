@@ -4,7 +4,7 @@ namespace Craft;
 class SproutImport_ImportController extends BaseController
 {
 	/**
-	 * Import Elements
+	 * Import Content and Settings via JSON schema using the proper Craft Import Format
 	 *
 	 * @throws HttpException
 	 */
@@ -51,15 +51,26 @@ class SproutImport_ImportController extends BaseController
 	}
 
 	/**
-	 * Queue Posted Elements for import via a task
+	 * Import element content from a post request
 	 *
-	 * @todo - should this method be updated to accept elements and settings?
+	 * @todo - make this import method behave just like the standard actionRunImport method
 	 */
-	public function actionEnqueueTasksByPost()
+	public function actionRunImportFromPost()
 	{
 		$elements = craft()->request->getPost('elements');
 
-		sproutImport()->tasks->setEnqueueTasksByPost($elements);
+		sproutImport()->tasks->createImportTasksFromPost($elements);
+
 		craft()->end();
+	}
+
+	/**
+	 * @deprecated since 0.5.0. To be removed in 1.0.
+	 */
+	public function actionEnqueueTasksByPost()
+	{
+		craft()->deprecator->log('SproutImport_ImportController::actionEnqueueTasksByPost()', 'SproutImport_ImportController::actionEnqueueTasksByPost() has been deprecated. Use SproutImport_ImportController::actionRunImportFromPost() instead.');
+
+		$this->actionRunImportFromPost();
 	}
 }
