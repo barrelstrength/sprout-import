@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutImport_ElementService extends BaseApplicationComponent
+class SproutImport_ElementsService extends BaseApplicationComponent
 {
 	private $type;
 

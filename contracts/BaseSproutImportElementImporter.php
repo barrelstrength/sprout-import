@@ -57,7 +57,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 		{
 			$beforeSave = $settings['content']['beforeSave'];
 
-			$existModel = sproutImport()->element->getModelByMatches($beforeSave);
+			$existModel = sproutImport()->elements->getModelByMatches($beforeSave);
 
 			if ($existModel)
 			{
@@ -110,7 +110,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 
 				if (!empty($fields))
 				{
-					$fields = sproutImport()->element->resolveMatrixRelationships($fields);
+					$fields = sproutImport()->elements->resolveMatrixRelationships($fields);
 
 					if (!$fields)
 					{
@@ -131,7 +131,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 				{
 					$related = $settings['content']['related'];
 
-					$fields = sproutImport()->element->resolveRelationships($related, $fields);
+					$fields = sproutImport()->elements->resolveRelationships($related, $fields);
 
 					if (!$fields)
 					{

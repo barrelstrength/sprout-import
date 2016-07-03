@@ -1,38 +1,35 @@
 <?php
 namespace Craft;
 
+/**
+ * Class SproutImportService
+ *
+ * @package Craft
+ * --
+ * @property SproutImport_ElementsService $elements
+ * @property SproutImport_FakerService    $faker
+ * @property SproutImport_SeedService     $seed
+ * @property SproutImport_SettingsService $settings
+ * @property SproutImport_TasksService    $tasks
+ */
 class SproutImportService extends BaseApplicationComponent
 {
-	/**
-	 * @var BaseSproutImportImporter[]
-	 */
 	protected $importers = array();
-
-	/**
-	 * @var BaseSproutImportFieldImporter[]
-	 */
 	protected $fieldImports = array();
-
-	protected $seedClasses  = array();
-
+	protected $seedClasses = array();
+	protected $error = array();
 	protected $filename;
 
-	protected $error   = array();
-
-	/** Sub Services
-	 *
-	 * @var
-	 */
-	public $setting;
-	public $element;
-	public $seed;
+	public $elements;
 	public $faker;
+	public $seed;
+	public $settings;
 	public $tasks;
 
 	protected $elementsService;
 
 	/**
-	 * Gives third party plugins a chance to register custom elements to import into
+	 * Allow third party plugins to register custom elements for importing
 	 */
 	public function init($elementsService = null)
 	{
@@ -47,15 +44,15 @@ class SproutImportService extends BaseApplicationComponent
 			$this->elementsService = craft()->elements;
 		}
 
-		$this->seed    = Craft::app()->getComponent('sproutImport_seed');
-		$this->element = Craft::app()->getComponent('sproutImport_element');
-		$this->setting = Craft::app()->getComponent('sproutImport_setting');
-		$this->faker   = Craft::app()->getComponent('sproutImport_faker');
-		$this->tasks   = Craft::app()->getComponent('sproutImport_tasks');
+		$this->seed     = Craft::app()->getComponent('sproutImport_seed');
+		$this->element  = Craft::app()->getComponent('sproutImport_elements');
+		$this->settings = Craft::app()->getComponent('sproutImport_settings');
+		$this->faker    = Craft::app()->getComponent('sproutImport_faker');
+		$this->tasks    = Craft::app()->getComponent('sproutImport_tasks');
 	}
 
 	/**
-	 * Get all buil-in and called importers
+	 * Get all built-in and third-party importers
 	 *
 	 * @return BaseSproutImportImporter[]
 	 */
@@ -82,7 +79,7 @@ class SproutImportService extends BaseApplicationComponent
 
 	public function getSproutImportImportersByName()
 	{
-		$names = array();
+		$names     = array();
 		$importers = $this->getSproutImportImporters();
 
 		if (!empty($importers))
@@ -95,6 +92,7 @@ class SproutImportService extends BaseApplicationComponent
 
 		return $names;
 	}
+
 	/**
 	 * Get all built-in and registered FieldImporters
 	 *
@@ -129,7 +127,10 @@ class SproutImportService extends BaseApplicationComponent
 		{
 			foreach ($seedsToLoad as $plugin => $seedClasses)
 			{
-				if (!empty($pluginHandle) && $pluginHandle != $plugin) continue;
+				if (!empty($pluginHandle) && $pluginHandle != $plugin)
+				{
+					continue;
+				}
 
 				foreach ($seedClasses as $seedClass)
 				{
@@ -234,7 +235,7 @@ class SproutImportService extends BaseApplicationComponent
 		{
 			$msg = Craft::t("Model key is invalid use @model.");
 
-			$errorLog = array();
+			$errorLog               = array();
 			$errorLog['message']    = $msg;
 			$errorLog['attributes'] = $settings;
 
@@ -253,7 +254,7 @@ class SproutImportService extends BaseApplicationComponent
 
 		if (!in_array($importerModel, $names))
 		{
-			$msg = $importerModel  . Craft::t(" Model could not be found.");
+			$msg = $importerModel . Craft::t(" Model could not be found.");
 
 			$this->addError($msg, 'invalid-model');
 
@@ -320,7 +321,6 @@ class SproutImportService extends BaseApplicationComponent
 		}
 	}
 
-
 	/**
 	 * @param string|mixed $message
 	 * @param array|mixed  $data
@@ -370,7 +370,6 @@ class SproutImportService extends BaseApplicationComponent
 	{
 		$this->raiseEvent('onAfterImportElement', $event);
 	}
-
 
 	public function onAfterImportSetting(Event $event)
 	{
@@ -593,7 +592,7 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	public function createTempFolder()
 	{
-		$folderPath = craft()->path->getTempUploadsPath().'sproutimport/';
+		$folderPath = craft()->path->getTempUploadsPath() . 'sproutimport/';
 
 		IOHelper::clearFolder($folderPath);
 

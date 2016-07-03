@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutImport_SettingService extends BaseApplicationComponent
+class SproutImport_SettingsService extends BaseApplicationComponent
 {
 	private $savedIds = array();
 

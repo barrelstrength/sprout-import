@@ -193,7 +193,7 @@ class SproutImport_SeedService extends BaseApplicationComponent
 			// Get only declared field classes
 			foreach ($fieldClasses as $fieldClass)
 			{
-				$fields = sproutImport()->element->getFieldsByType($elementName, $fieldClass);
+				$fields = sproutImport()->elements->getFieldsByType($elementName, $fieldClass);
 
 				if (!empty($fields))
 				{

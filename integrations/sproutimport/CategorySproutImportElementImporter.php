@@ -85,7 +85,7 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 
 		$data['content']['fields'] = sproutImport()->seed->getMockFieldsByElementName($elementName);
 
-		return sproutImport()->element->saveElement($data);
+		return sproutImport()->elements->saveElement($data);
 
 		//$category          = new CategoryModel();
 		//$category->groupId = $categoryGroup;

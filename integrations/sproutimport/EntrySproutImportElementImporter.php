@@ -30,7 +30,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 			'channel' => 'Channel'
 		);
 
-		$channels = sproutImport()->element->getChannelSections();
+		$channels = sproutImport()->elements->getChannelSections();
 
 		return craft()->templates->render('sproutimport/_settings/entry', array(
 			'id'       => $this->getName(),
@@ -165,7 +165,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 		$element = $this->getName();
 
 		$richTextClass = new RichTextFieldSproutImport();
-		$fields        = sproutImport()->element->getFieldsByType($element, $richTextClass);
+		$fields        = sproutImport()->elements->getFieldsByType($element, $richTextClass);
 
 		if (!empty($fields))
 		{
@@ -228,7 +228,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 			$data['content']['beforeSave']['matchCriteria'] = array("section" => $entryParams['sectionHandle']);
 		}
 
-		return sproutImport()->element->saveElement($data);
+		return sproutImport()->elements->saveElement($data);
 	}
 
 	public function getAllFieldHandles()
