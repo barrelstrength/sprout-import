@@ -9,15 +9,16 @@ class CategoriesSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	public function getMockData()
 	{
 		$settings = $this->fieldModel->settings;
+		$limit    = $settings['limit'];
+		$source   = $settings['source'];
 
-		$limit  = $settings['limit'];
-		$source = $settings['source'];
+		$groupId = sproutImport()->seed->getElementGroupId($source);
 
-		$groupId = sproutImport()->seed->getElementGroup($source);
+		$attributes = array(
+			'groupId' => $groupId
+		);
 
-		$find = array('groupId' => $groupId);
-
-		$elementIds = sproutImport()->seed->getMockFieldElements("Category", $find, $limit);
+		$elementIds = sproutImport()->seed->getMockRelations("Category", $attributes, $limit);
 
 		return $elementIds;
 	}

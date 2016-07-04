@@ -67,10 +67,10 @@ class SproutImportServiceTest extends SproutImportBaseTest
 
 	public function testGetFieldIdsByHandle()
 	{
-		$obj1 = new \stdClass;
+		$obj1     = new \stdClass;
 		$obj1->id = 11;
 
-		$obj2 = new \stdClass;
+		$obj2     = new \stdClass;
 		$obj2->id = 22;
 
 		$fieldsService = m::mock('Craft\FieldsService')
@@ -87,7 +87,7 @@ class SproutImportServiceTest extends SproutImportBaseTest
 
 		$entryFields = sproutImport()->getFieldIdsByHandle($name, $fields, $fieldsService);
 
-		$expected = array("Content%20One" => array(11,22));
+		$expected = array("Content%20One" => array(11, 22));
 
 		$this->assertEquals($expected, $entryFields);
 	}
@@ -112,7 +112,7 @@ class SproutImportServiceTest extends SproutImportBaseTest
 
 	public function testGetRandomArray()
 	{
-		$values = array();
+		$values   = array();
 		$values[] = array('value' => 'one');
 		$values[] = array('value' => 'two');
 		$values[] = array('value' => 'three');
@@ -147,10 +147,10 @@ class SproutImportServiceTest extends SproutImportBaseTest
 		return array(
 			array(array('time' => strtotime("12:16 PM"), 'increment' => 15), "12:15 PM"),
 			array(array('time' => strtotime("12:35 AM"), 'increment' => 15), "12:30 AM"),
-			array(array('time' => strtotime("8:25 PM"),  'increment' => 30), "8:00 PM"),
-			array(array('time' => strtotime("8:34 AM"),  'increment' => 30), "8:30 AM"),
-			array(array('time' => strtotime("5:44 PM"),  'increment' => 60), "5:00 PM"),
-			array(array('time' => strtotime("5:14 AM"),  'increment' => 60), "5:00 AM"),
+			array(array('time' => strtotime("8:25 PM"), 'increment' => 30), "8:00 PM"),
+			array(array('time' => strtotime("8:34 AM"), 'increment' => 30), "8:30 AM"),
+			array(array('time' => strtotime("5:44 PM"), 'increment' => 60), "5:00 PM"),
+			array(array('time' => strtotime("5:14 AM"), 'increment' => 60), "5:00 AM"),
 		);
 	}
 
@@ -169,54 +169,54 @@ class SproutImportServiceTest extends SproutImportBaseTest
 	{
 		$columns = array();
 
-		$columns =	array(
-									'col1' => array
-									(
-										'heading' => 'column one',
-										'handle' => 'columnOne',
-										'width' => '',
-										'type' => 'singleline'
-									),
-									'col2' => array
-									(
-										'heading' => 'column two',
-										'handle' => 'columnTwo',
-										'width' => '',
-										'type' => 'singleline'
-									),
-									'col3' => array
-									(
-										'heading' => 'column three',
-										'handle' => 'columnThree',
-										'width' => '',
-										'type' => 'singleline'
-									),
-									'col4' => array
-									(
-										'heading' => 'column four',
-										'handle' => 'columnFour',
-										'width' => '',
-										'type' => 'singleline'
-									),
-									'col5' => array
-									(
-										'heading' => 'column five',
-										'handle' => 'columnFive',
-										'width' => '',
-										'type' => 'singleline'
-									)
-								);
+		$columns = array(
+			'col1' => array
+			(
+				'heading' => 'column one',
+				'handle'  => 'columnOne',
+				'width'   => '',
+				'type'    => 'singleline'
+			),
+			'col2' => array
+			(
+				'heading' => 'column two',
+				'handle'  => 'columnTwo',
+				'width'   => '',
+				'type'    => 'singleline'
+			),
+			'col3' => array
+			(
+				'heading' => 'column three',
+				'handle'  => 'columnThree',
+				'width'   => '',
+				'type'    => 'singleline'
+			),
+			'col4' => array
+			(
+				'heading' => 'column four',
+				'handle'  => 'columnFour',
+				'width'   => '',
+				'type'    => 'singleline'
+			),
+			'col5' => array
+			(
+				'heading' => 'column five',
+				'handle'  => 'columnFive',
+				'width'   => '',
+				'type'    => 'singleline'
+			)
+		);
 
 		$values = sproutImport()->seed->generateColumns($columns);
 
 		$expected = 5;
-		$length = count($values);
+		$length   = count($values);
 
 		$this->assertEquals($expected, $length);
 
 		$tableKeys = array_keys($values);
 
-		$expected = array('col1','col2','col3','col4','col5');
+		$expected = array('col1', 'col2', 'col3', 'col4', 'col5');
 		$this->assertEquals($expected, $tableKeys);
 	}
 
@@ -224,26 +224,27 @@ class SproutImportServiceTest extends SproutImportBaseTest
 	{
 		$settings = array
 		(
-			'sources' => array
+			'sources'        => array
 			(
 				0 => 'section:33',
-        1 => 'section:2'
-      ),
-    'limit' => '4',
-    'selectionLabel' => 'Add an entry'
+				1 => 'section:2'
+			),
+			'limit'          => '4',
+			'selectionLabel' => 'Add an entry'
 		);
 
-		$find = sproutImport()->seed->getFindElementSettings($settings);
+		$sources = $settings['sources'];
 
-		$expected = array(33,2);
+		$find = sproutImport()->seed->getElementGroupIds($sources);
+
+		$expected = array(33, 2);
 
 		$this->assertEquals($expected, $find);
 
-		$settings['sources'] = "*";
-
+		$allSources = "*";
 		$expected = "*";
 
-		$find = sproutImport()->seed->getFindElementSettings($settings);
+		$find = sproutImport()->seed->getElementGroupIds($allSources);
 
 		$this->assertEquals($expected, $find);
 	}

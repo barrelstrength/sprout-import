@@ -9,14 +9,16 @@ class AssetsSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	public function getMockData()
 	{
 		$settings = $this->fieldModel->settings;
+		$limit    = $settings['limit'];
+		$sources  = $settings['sources'];
 
-		$limit = $settings['limit'];
+		$sourceIds = sproutImport()->seed->getElementGroupIds($sources);
 
-		$sourceIds = sproutImport()->seed->getFindElementSettings($settings);
+		$attributes = array(
+			'sourceId' => $sourceIds
+		);
 
-		$find = array('sourceId' => $sourceIds);
-
-		$elementIds = sproutImport()->seed->getMockFieldElements("Asset", $find, $limit);
+		$elementIds = sproutImport()->seed->getMockRelations("Asset", $attributes, $limit);
 
 		return $elementIds;
 	}

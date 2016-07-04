@@ -12,11 +12,13 @@ class TagsSproutImportFieldImporter extends BaseSproutImportFieldImporter
 
 		$source = $settings['source'];
 
-		$groupId = sproutImport()->seed->getElementGroup($source);
+		$groupId = sproutImport()->seed->getElementGroupId($source);
 
-		$find = array('groupId' => $groupId);
+		$attributes = array(
+			'groupId' => $groupId
+		);
 
-		$elementIds = sproutImport()->seed->getMockFieldElements("Tag", $find, '');
+		$elementIds = sproutImport()->seed->getMockRelations("Tag", $attributes, '');
 
 		return $elementIds;
 	}

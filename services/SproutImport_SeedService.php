@@ -312,21 +312,20 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	 * Get a random sample of Relations for the given Element Relations field
 	 *
 	 * @param       $elementName
-	 * @param array $find
+	 * @param array $attributes
 	 * @param       $limit
 	 *
 	 * @return array
 	 * @throws Exception
 	 */
-	public function getMockFieldElements($elementName, array $find = array(), $limit)
+	public function getMockRelations($elementName, array $attributes = array(), $limit = 1)
 	{
 		$criteria = craft()->elements->getCriteria($elementName);
-
-		$results = $criteria->find($find);
+		$results  = $criteria->find($attributes);
 
 		$total = $criteria->total();
 
-		// swap total elements if limit setting is greater than total find elements
+		// If limit is greater than the total number of elements, use total
 		if ($limit > $total || $limit === '')
 		{
 			$limit = $total;
@@ -334,11 +333,9 @@ class SproutImport_SeedService extends BaseApplicationComponent
 
 		$randomLimit = rand(1, $limit);
 
-		$keys = array();
+		$randomKeys = array_rand($results, $randomLimit);
 
-		$randKeys = array_rand($results, $randomLimit);
-
-		$keys = (!is_array($randKeys)) ? array($randKeys) : $randKeys;
+		$keys = (!is_array($randomKeys)) ? array($randomKeys) : $randomKeys;
 
 		$elementIds = array();
 
@@ -390,17 +387,15 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get Element Group settings
+	 * Get Element Group IDs from sources setting
 	 *
-	 * @param array $settings
+	 * @param $sources
 	 *
-	 * @return array|mixed
+	 * @return array
 	 */
-	public function getFindElementSettings(array $settings = array())
+	public function getElementGroupIds($sources)
 	{
 		$ids = array();
-
-		$sources = $settings['sources'];
 
 		if (!empty($sources))
 		{
@@ -411,7 +406,7 @@ class SproutImport_SeedService extends BaseApplicationComponent
 
 			foreach ($sources as $source)
 			{
-				$ids[] = $this->getElementGroup($source);
+				$ids[] = $this->getElementGroupId($source);
 			}
 		}
 
@@ -425,7 +420,7 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	 *
 	 * @return mixed
 	 */
-	public function getElementGroup($source)
+	public function getElementGroupId($source)
 	{
 		$sourceExplode = explode(":", $source);
 

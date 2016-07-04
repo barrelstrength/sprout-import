@@ -9,14 +9,16 @@ class EntriesSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	public function getMockData()
 	{
 		$settings = $this->fieldModel->settings;
+		$limit    = $settings['limit'];
+		$sources  = $settings['sources'];
 
-		$limit = $settings['limit'];
+		$sectionIds = sproutImport()->seed->getElementGroupIds($sources);
 
-		$sectionIds = sproutImport()->seed->getFindElementSettings($settings);
+		$attributes = array(
+			'sectionId' => $sectionIds
+		);
 
-		$find = array('sectionId' => $sectionIds);
-
-		$elementIds = sproutImport()->seed->getMockFieldElements("Entry", $find, $limit);
+		$elementIds = sproutImport()->seed->getMockRelations("Entry", $attributes, $limit);
 
 		return $elementIds;
 	}
