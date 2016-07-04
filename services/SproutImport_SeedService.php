@@ -4,11 +4,6 @@ namespace Craft;
 class SproutImport_SeedService extends BaseApplicationComponent
 {
 	/**
-	 * @type bool
-	 */
-	public $seed = false;
-
-	/**
 	 * Return all imported content and settings marked as seed data
 	 *
 	 * @param $type
