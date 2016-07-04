@@ -52,7 +52,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 		$this->type = $type;
 
 		// Adds extra element keys to pass validation
-		$importerClass = sproutImport()->getImporterByModelRow($type, $element);
+		$importerClass = sproutImport()->getImporterByModel($type, $element);
 
 		$importerElementKeys = $importerClass->defineKeys();
 

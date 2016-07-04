@@ -520,7 +520,7 @@ class SproutImportService extends BaseApplicationComponent
 	{
 		$importerModel = $this->getImporterModel($row);
 
-		return $this->getImporterByModelRow($importerModel, $row);
+		return $this->getImporterByModel($importerModel, $row);
 	}
 
 	/**
@@ -529,7 +529,7 @@ class SproutImportService extends BaseApplicationComponent
 	 *
 	 * @return mixed
 	 */
-	public function getImporterByModelRow($importerModel, $row)
+	public function getImporterByModel($importerModel, $row)
 	{
 		$importerClassName = $this->getImporterByName($importerModel);
 
