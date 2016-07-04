@@ -40,90 +40,61 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 	}
 
 	/**
+	 * Generate mock data for a Channel or Structure.
+	 * 
+	 * Singles are not supported.
+	 * 
 	 * @param $settings
 	 *
 	 * @return array
 	 */
 	public function getMockData($settings)
 	{
-		$sectionType = (isset($settings['sectionType'])) ? $settings['sectionType'] : '';
-
 		$saveIds = array();
+		
+		$channelNumber = $settings['channelNumber'];
 
-		if ($sectionType == 'single')
+		$sectionHandle = $settings['channel'];
+
+		$section = craft()->sections->getSectionByHandle($sectionHandle);
+
+		$entryTypes = $section->getEntryTypes();
+
+		$entryParams = array(
+			'sectionId'     => $section->id,
+			'sectionHandle' => $section->handle
+		);
+
+		if (!empty($channelNumber))
 		{
-			$singleSection = $this->generateSingleSection();
-
-			if ($singleSection)
+			for ($i = 1; $i <= $channelNumber; $i++)
 			{
-				$latestSection = sproutImport()->getLatestSingleSection();
-
-				$sectionId     = $latestSection->id;
-				$entryTypes    = $latestSection->getEntryTypes();
-				$entryTypeId   = $entryTypes[0]->id;
-				$sectionHandle = $latestSection->handle;
-
-				$entry   = EntryRecord::model()->findByAttributes(array('sectionId' => $sectionId));
-				$entryId = $entry->id;
-
-				$entryParams = array(
-					'sectionId'     => $sectionId,
-					'entryTypeId'   => $entryTypeId,
-					'sectionHandle' => $sectionHandle,
-					'entryId'       => $entryId,
-					'title'         => $latestSection->name
-				);
-
-				$id        = $this->generateEntry($entryParams);
-				$saveIds[] = $id;
-			}
-		}
-		else
-		{
-			$channelNumber = $settings['channelNumber'];
-
-			$sectionHandle = $settings['channel'];
-
-			$section = craft()->sections->getSectionByHandle($sectionHandle);
-
-			$entryTypes = $section->getEntryTypes();
-
-			$entryParams = array(
-				'sectionId'     => $section->id,
-				'sectionHandle' => $section->handle
-			);
-
-			if (!empty($channelNumber))
-			{
-				for ($i = 1; $i <= $channelNumber; $i++)
+				$entryId = null;
+				if (!empty($entryTypes))
 				{
-					$entryId = null;
-					if (!empty($entryTypes))
+					// Loop all entry types for this element
+					foreach ($entryTypes as $entryType)
 					{
-						// Loop all entry types for this element
-						foreach ($entryTypes as $entryType)
+						$entryParams['entryTypeId'] = $entryType->id;
+
+						// Update entry prevent duplicate
+						if ($entryId != null)
 						{
-							$entryParams['entryTypeId'] = $entryType->id;
+							$entryParams['entryId'] = $entryId;
+						}
+						else
+						{
+							$entryParams['entryId'] = null;
+						}
 
-							// Update entry prevent duplicate
-							if ($entryId != null)
-							{
-								$entryParams['entryId'] = $entryId;
-							}
-							else
-							{
-								$entryParams['entryId'] = null;
-							}
+						$id = $this->generateEntry($entryParams);
 
-							$id = $this->generateEntry($entryParams);
+						$entryId = $id;
 
-							$entryId = $id;
-
-							// Avoid duplication of saveIds
-							if (!in_array($id, $saveIds) && $id !== false)
-							{
-								$saveIds[] = $id;
-							}
+						// Avoid duplication of saveIds
+						if (!in_array($id, $saveIds) && $id !== false)
+						{
+							$saveIds[] = $id;
 						}
 					}
 				}
@@ -131,60 +102,6 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 		}
 
 		return $saveIds;
-	}
-
-	/**
-	 * @return bool
-	 * @throws Exception
-	 * @throws \Exception
-	 */
-	private function generateSingleSection()
-	{
-		$result = false;
-
-		$faker = $this->fakerService;
-		$name  = $faker->word;
-
-		$handle = lcfirst(str_replace(' ', '', ucwords($name)));
-
-		$settings              = array();
-		$settings['name']      = $name;
-		$settings['handle']    = $handle;
-		$settings['type']      = SectionType::Single;
-		$settings['hasUrls']   = true;
-		$settings['template']  = ElementHelper::createSlug($name);
-		$settings['urlFormat'] = ElementHelper::createSlug($name) . '/{slug}';
-
-		$sectionImporter = new SectionSproutImportImporter($settings);
-
-		$section = $sectionImporter->save();
-
-		$findEntryType  = EntryTypeRecord::model()->findByAttributes(array('handle' => $handle));
-		$entryTypeModel = EntryTypeModel::populateModel($findEntryType);
-
-		$element = $this->getName();
-
-		$richTextClass = new RichTextFieldSproutImport();
-		$fields        = sproutImport()->elements->getFieldsByType($element, $richTextClass);
-
-		if (!empty($fields))
-		{
-			// Get default body field
-			$fieldLayoutSettings = array
-			(
-				'FakeFieldContent' => array
-				(
-					0 => $fields[0]->id
-				)
-			);
-
-			$fieldLayout = craft()->fields->assembleLayout($fieldLayoutSettings);
-			$entryTypeModel->setFieldLayout($fieldLayout);
-
-			$result = craft()->sections->saveEntryType($entryTypeModel);
-
-			return $result;
-		}
 	}
 
 	/**

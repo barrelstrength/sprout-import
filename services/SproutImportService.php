@@ -591,33 +591,6 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @return array|mixed
-	 */
-	public function getLatestSingleSection()
-	{
-		$result = array();
-
-		$sections = craft()->sections->getSectionsByType(SectionType::Single);
-
-		if (!empty($sections))
-		{
-			$singles = array();
-			foreach ($sections as $section)
-			{
-				$id = $section->id;
-
-				$singles[$id] = $section;
-			}
-
-			ksort($singles);
-
-			$result = end($singles);
-		}
-
-		return $result;
-	}
-
-	/**
 	 * @param      $name
 	 * @param      $fields
 	 * @param null $fieldService
