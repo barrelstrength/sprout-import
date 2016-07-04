@@ -17,9 +17,9 @@ class CheckboxesSproutImportFieldImporter extends BaseSproutImportFieldImporter
 			$length = count($options);
 			$number = rand(1, $length);
 
-			$randArrays = sproutImport()->seed->getRandomArrays($options, $number);
+			$randArrays = sproutImport()->mockData->getRandomArrays($options, $number);
 
-			$values = sproutImport()->seed->getOptionValuesByKeys($randArrays, $options);
+			$values = sproutImport()->mockData->getOptionValuesByKeys($randArrays, $options);
 
 			return $values;
 		}

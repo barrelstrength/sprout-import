@@ -18,7 +18,7 @@ class TableSproutImportFieldImporter extends BaseSproutImportFieldImporter
 
 		for ($inc = 1; $inc <= $randomLength; $inc++)
 		{
-			$values[] = sproutImport()->seed->generateColumns($columns);
+			$values[] = sproutImport()->mockData->generateColumns($columns);
 		}
 
 		return $values;

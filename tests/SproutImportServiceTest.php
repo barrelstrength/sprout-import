@@ -121,13 +121,13 @@ class SproutImportServiceTest extends SproutImportBaseTest
 		$length = count($values);
 		$number = rand(1, $length);
 
-		$randArrays = sproutImport()->seed->getRandomArrays($values, $number);
+		$randArrays = sproutImport()->mockData->getRandomArrays($values, $number);
 
 		$randCount = count($randArrays);
 
 		$this->assertEquals($number, $randCount);
 
-		$oneArray = sproutImport()->seed->getRandomArrays($values, 1);
+		$oneArray = sproutImport()->mockData->getRandomArrays($values, 1);
 
 		$isArray = is_array($oneArray);
 
@@ -135,7 +135,7 @@ class SproutImportServiceTest extends SproutImportBaseTest
 
 		$keys = array(1, 3);
 
-		$options = sproutImport()->seed->getOptionValuesByKeys($keys, $values);
+		$options = sproutImport()->mockData->getOptionValuesByKeys($keys, $values);
 
 		$expected = array('two', 'four');
 
@@ -160,7 +160,7 @@ class SproutImportServiceTest extends SproutImportBaseTest
 	 */
 	public function testGetMinutesByIncrement($option, $expected)
 	{
-		$convertedTime = sproutImport()->seed->getMinutesByIncrement($option['time'], $option['increment']);
+		$convertedTime = sproutImport()->mockData->getMinutesByIncrement($option['time'], $option['increment']);
 
 		$this->assertEquals($expected, $convertedTime);
 	}
@@ -207,7 +207,7 @@ class SproutImportServiceTest extends SproutImportBaseTest
 			)
 		);
 
-		$values = sproutImport()->seed->generateColumns($columns);
+		$values = sproutImport()->mockData->generateColumns($columns);
 
 		$expected = 5;
 		$length   = count($values);
@@ -235,7 +235,7 @@ class SproutImportServiceTest extends SproutImportBaseTest
 
 		$sources = $settings['sources'];
 
-		$find = sproutImport()->seed->getElementGroupIds($sources);
+		$find = sproutImport()->mockData->getElementGroupIds($sources);
 
 		$expected = array(33, 2);
 
@@ -244,7 +244,7 @@ class SproutImportServiceTest extends SproutImportBaseTest
 		$allSources = "*";
 		$expected = "*";
 
-		$find = sproutImport()->seed->getElementGroupIds($allSources);
+		$find = sproutImport()->mockData->getElementGroupIds($allSources);
 
 		$this->assertEquals($expected, $find);
 	}

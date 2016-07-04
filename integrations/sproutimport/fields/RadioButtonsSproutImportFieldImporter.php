@@ -14,7 +14,7 @@ class RadioButtonsSproutImportFieldImporter extends BaseSproutImportFieldImporte
 		{
 			$options = $settings['options'];
 
-			return sproutImport()->seed->getRandomOptionValue($options);
+			return sproutImport()->mockData->getRandomOptionValue($options);
 		}
 	}
 }

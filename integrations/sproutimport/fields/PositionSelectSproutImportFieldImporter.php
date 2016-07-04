@@ -14,7 +14,7 @@ class PositionSelectSproutImportFieldImporter extends BaseSproutImportFieldImpor
 		{
 			$options = $settings['options'];
 
-			return sproutImport()->seed->getRandomOptionValue($options, false);
+			return sproutImport()->mockData->getRandomOptionValue($options, false);
 		}
 	}
 }

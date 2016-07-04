@@ -138,7 +138,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 
 		$elementName = $this->getName();
 
-		$data['content']['fields'] = sproutImport()->seed->getMockFieldsByElementName($elementName);
+		$data['content']['fields'] = sproutImport()->mockData->getMockFieldsByElementName($elementName);
 
 		$data['content']['fields']['title'] = $title;
 

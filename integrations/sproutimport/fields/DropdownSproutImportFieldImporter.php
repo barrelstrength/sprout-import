@@ -14,7 +14,7 @@ class DropdownSproutImportFieldImporter extends BaseSproutImportFieldImporter
 		{
 			$options = $settings['options'];
 
-			return sproutImport()->seed->getRandomOptionValue($options);
+			return sproutImport()->mockData->getRandomOptionValue($options);
 		}
 	}
 }

@@ -8,6 +8,7 @@ namespace Craft;
  * --
  * @property SproutImport_ElementsService $elements
  * @property SproutImport_FakerService    $faker
+ * @property SproutImport_MockDataService $mockData
  * @property SproutImport_SeedService     $seed
  * @property SproutImport_SettingsService $settings
  * @property SproutImport_TasksService    $tasks
@@ -16,6 +17,7 @@ class SproutImportService extends BaseApplicationComponent
 {
 	public $elements;
 	public $faker;
+	public $mockData;
 	public $seed;
 	public $settings;
 	public $tasks;
@@ -66,10 +68,11 @@ class SproutImportService extends BaseApplicationComponent
 			$this->elementsService = craft()->elements;
 		}
 
-		$this->seed     = Craft::app()->getComponent('sproutImport_seed');
 		$this->elements = Craft::app()->getComponent('sproutImport_elements');
-		$this->settings = Craft::app()->getComponent('sproutImport_settings');
 		$this->faker    = Craft::app()->getComponent('sproutImport_faker');
+		$this->mockData = Craft::app()->getComponent('sproutImport_mockData');
+		$this->seed     = Craft::app()->getComponent('sproutImport_seed');
+		$this->settings = Craft::app()->getComponent('sproutImport_settings');
 		$this->tasks    = Craft::app()->getComponent('sproutImport_tasks');
 	}
 

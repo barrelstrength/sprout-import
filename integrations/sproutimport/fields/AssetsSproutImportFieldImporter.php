@@ -12,13 +12,13 @@ class AssetsSproutImportFieldImporter extends BaseSproutImportFieldImporter
 		$limit    = $settings['limit'];
 		$sources  = $settings['sources'];
 
-		$sourceIds = sproutImport()->seed->getElementGroupIds($sources);
+		$sourceIds = sproutImport()->mockData->getElementGroupIds($sources);
 
 		$attributes = array(
 			'sourceId' => $sourceIds
 		);
 
-		$elementIds = sproutImport()->seed->getMockRelations("Asset", $attributes, $limit);
+		$elementIds = sproutImport()->mockData->getMockRelations("Asset", $attributes, $limit);
 
 		return $elementIds;
 	}

@@ -90,7 +90,7 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 
 		$elementName = $this->getName();
 
-		$data['content']['fields'] = sproutImport()->seed->getMockFieldsByElementName($elementName);
+		$data['content']['fields'] = sproutImport()->mockData->getMockFieldsByElementName($elementName);
 
 		return sproutImport()->elements->saveElement($data);
 	}

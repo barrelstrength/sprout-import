@@ -27,7 +27,7 @@ class DateSproutImportFieldImporter extends BaseSproutImportFieldImporter
 		{
 			$randomTimestamp = strtotime($this->fakerService->time("g:i:s A"));
 
-			$values['time'] = sproutImport()->seed->getMinutesByIncrement($randomTimestamp, $minuteIncrement);
+			$values['time'] = sproutImport()->mockData->getMinutesByIncrement($randomTimestamp, $minuteIncrement);
 		}
 
 		return $values;

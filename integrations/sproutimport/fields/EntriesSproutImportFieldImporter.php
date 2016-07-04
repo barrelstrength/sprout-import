@@ -12,13 +12,13 @@ class EntriesSproutImportFieldImporter extends BaseSproutImportFieldImporter
 		$limit    = $settings['limit'];
 		$sources  = $settings['sources'];
 
-		$sectionIds = sproutImport()->seed->getElementGroupIds($sources);
+		$sectionIds = sproutImport()->mockData->getElementGroupIds($sources);
 
 		$attributes = array(
 			'sectionId' => $sectionIds
 		);
 
-		$elementIds = sproutImport()->seed->getMockRelations("Entry", $attributes, $limit);
+		$elementIds = sproutImport()->mockData->getMockRelations("Entry", $attributes, $limit);
 
 		return $elementIds;
 	}
