@@ -28,12 +28,12 @@ class SproutImportService extends BaseApplicationComponent
 	/**
 	 * @type array
 	 */
-	protected $fieldImports = array();
+	protected $seedImporters = array();
 
 	/**
 	 * @type array
 	 */
-	protected $seedClasses = array();
+	protected $fieldImporters = array();
 
 	/**
 	 * @type array
@@ -92,6 +92,11 @@ class SproutImportService extends BaseApplicationComponent
 					if ($importer && $importer instanceof BaseSproutImportImporter)
 					{
 						$this->importers[$importer->getId()] = $importer;
+
+						if ($importer->hasSeedGenerator())
+						{
+							$this->seedImporters[$plugin][] = $importer;
+						}
 					}
 				}
 			}
@@ -122,6 +127,18 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Get all native and third-party that have seed generators
+	 *
+	 * @return array
+	 */
+	public function getSproutImportSeedImporters()
+	{
+		$this->getSproutImportImporters();
+
+		return $this->seedImporters;
+	}
+
+	/**
 	 * Get all built-in and registered FieldImporters
 	 *
 	 * @return BaseSproutImport[]
@@ -138,46 +155,13 @@ class SproutImportService extends BaseApplicationComponent
 				{
 					if ($fieldClass && $fieldClass instanceof BaseSproutImportFieldImporter)
 					{
-						$this->fieldImports[$fieldClass->getId()] = $fieldClass;
+						$this->fieldImporters[$fieldClass->getId()] = $fieldClass;
 					}
 				}
 			}
 		}
 
-		return $this->fieldImports;
-	}
-
-	/**
-	 * Get all native and third-party Seeds
-	 *
-	 * @param string $pluginHandle
-	 *
-	 * @return array
-	 */
-	public function getSproutImportSeeds($pluginHandle = '')
-	{
-		$seedsToLoad = craft()->plugins->call('registerSproutImportSeeds');
-
-		if ($seedsToLoad)
-		{
-			foreach ($seedsToLoad as $plugin => $seedClasses)
-			{
-				if (!empty($pluginHandle) && $pluginHandle != $plugin)
-				{
-					continue;
-				}
-
-				foreach ($seedClasses as $seedClass)
-				{
-					if ($seedClass && $seedClass instanceof BaseSproutImportImporter)
-					{
-						$this->seedClasses[$plugin][] = $seedClass;
-					}
-				}
-			}
-		}
-
-		return $this->seedClasses;
+		return $this->fieldImporters;
 	}
 
 	/**

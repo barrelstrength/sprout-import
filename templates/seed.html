@@ -10,24 +10,26 @@
 		<div id="fields" class="pane">
 
 			<form method="post" accept-charset="UTF-8">
-
 				{{ getCsrfInput() }}
-
 				<input type="hidden" name="action" value="sproutImport/seed/generateSeedElements">
 
-				<div class="field first">
-					{{ forms.selectField({
-						id: "elementType",
-						name: "elementType",
-						label: "Type of Content"|t,
-						instructions: "Select the type of content you wish to seed in your database. Seeded content and can be removed later using the Weed tab."|t,
-						options: [{label: "Select element..."|t, value: null}]|merge(elements),
-						value: elementType is defined ? elementType : null,
-						hasOptgroups: true
-					}) }}
-				</div>
+				{{ forms.selectField({
+					label: "Type of Content"|t,
+					instructions: "Select the type of content you wish to seed in your database. Seeded content and can be removed later using the Weed tab."|t,
+					id: "elementType",
+					name: "elementType",
+					options: [{label: "Select element..."|t, value: null}]|merge(elements),
+					value: elementType is defined ? elementType : null,
+					hasOptgroups: true,
+					first: true
+				}) }}
 
-				{{ settings.elements }}
+				{# Output settings for each of our Importers #}
+				{% for plugin in importers %}
+					{% for importer in plugin %}
+						{{ importer.getSettingsHtml()|raw }}
+					{% endfor %}
+				{% endfor %}
 
 				<div class="buttons">
 					<button class="btn submit actions">{{ "Generate Content"|t }}</button>

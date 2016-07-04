@@ -98,6 +98,14 @@ abstract class BaseSproutImportImporter
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function hasSeedGenerator()
+	{
+		return false;
+	}
+
+	/**
 	 * @param $settings
 	 */
 	public function setSettings($settings)

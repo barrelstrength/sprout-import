@@ -174,20 +174,6 @@ class SproutImportPlugin extends BasePlugin
 			new AssetsSproutImportFieldImporter()
 		);
 	}
-
-	/**
-	 * Register classes that can be added on the seeding feature,
-	 *
-	 * @return array
-	 */
-	public function registerSproutImportSeeds()
-	{
-		return array(
-			new EntrySproutImportElementImporter(),
-			new CategorySproutImportElementImporter(),
-			new TagSproutImportElementImporter()
-		);
-	}
 }
 
 /**

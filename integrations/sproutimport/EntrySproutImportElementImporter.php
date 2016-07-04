@@ -13,6 +13,14 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 
 	/**
 	 * @return bool
+	 */
+	public function hasSeedGenerator()
+	{
+		return true;
+	}
+
+	/**
+	 * @return bool
 	 * @throws Exception
 	 * @throws \Exception
 	 */

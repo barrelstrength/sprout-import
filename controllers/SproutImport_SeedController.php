@@ -12,82 +12,74 @@ class SproutImport_SeedController extends BaseController
 	{
 		$elementSelect = array();
 
-		$settingElements = "";
+		$allSeedImporters        = sproutImport()->getSproutImportSeedImporters();
+		$registeredSeedImporters = $allSeedImporters;
 
-		$builtInPlugin = 'SproutImport';
+		// Create an array of all registered Sprout Import Importers
+		$defaultSeedImporters = $registeredSeedImporters['SproutImport'];
+		unset($registeredSeedImporters['SproutImport']);
 
-		$sproutImportSeeds = craft()->plugins->call('registerSproutImportSeeds');
+		// Create an array of all registered third-party Importers
+		$customSeedImporters = $registeredSeedImporters;
 
-		$seedClasses = $sproutImportSeeds['SproutImport'];
-
-		if (!empty($seedClasses))
+		if (!empty($defaultSeedImporters))
 		{
 			$elementSelect[] = array(
 				'optgroup' => Craft::t('Standard Elements')
 			);
 
-			foreach ($seedClasses as $seedClass)
+			foreach ($defaultSeedImporters as $importer)
 			{
-				if ($seedClass->isElement())
+				if ($importer->isElement())
 				{
-					$title = $seedClass->getElement()->getName();
+					$title = $importer->getElement()->getName();
 				}
 				else
 				{
-					$title = $seedClass->getName();
+					$title = $importer->getName();
 				}
 
-				$classId = $builtInPlugin . '-' . $seedClass->getName();
+				$classId = 'SproutImport-' . $importer->getName();
 
 				$elementSelect[$classId] = array(
 					'label' => $title,
-					'value' => $seedClass->getName()
+					'value' => $importer->getName()
 				);
-
-				$settingElements .= $seedClass->getSettingsHtml() . "\n";
 			}
 		}
 
-		$pluginClasses = craft()->plugins->call('registerSproutImportSeeds');
-		unset($pluginClasses['SproutImport']);
-
-		if (!empty($pluginClasses))
+		if (!empty($customSeedImporters))
 		{
-
 			$elementSelect[] = array(
 				'optgroup' => Craft::t('Custom Elements')
 			);
 
-			foreach ($pluginClasses as $customClasses)
+			foreach ($customSeedImporters as $importer)
 			{
-				foreach ($customClasses as $plugin => $customClass)
+				foreach ($importer as $plugin => $importerClass)
 				{
-					if ($customClass->isElement())
+					if ($importerClass->isElement())
 					{
-						$title = $customClass->getElement()->getName();
+						$title = $importerClass->getElement()->getName();
 					}
 					else
 					{
-						$title = $customClass->getName();
+						$title = $importerClass->getName();
 					}
 
-					$classId = $plugin . '-' . $customClass->getName();
+					$classId = $plugin . '-' . $importerClass->getName();
 
 					$elementSelect[$classId] = array(
 						'label' => $title,
-						'value' => $customClass->getName()
+						'value' => $importerClass->getName()
 					);
-
-					$settingElements .= $customClass->getSettingsHtml() . "\n";
 				}
 			}
 		}
 
 		$this->renderTemplate('sproutimport/seed', array(
-			'elements' => $elementSelect,
-			'settings' => array(
-				'elements' => TemplateHelper::getRaw($settingElements)
-			)
+			'elements'  => $elementSelect,
+			'importers' => $allSeedImporters
 		));
 	}
 
