@@ -48,11 +48,11 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 	 */
 	public function saveElement(array $element, $seed = false, $source = null)
 	{
-		$type       = sproutImport()->getImporterModel($element);
-		$this->type = $type;
+		$modelName  = sproutImport()->getImporterModelName($element);
+		$this->type = $modelName;
 
 		// Adds extra element keys to pass validation
-		$importerClass = sproutImport()->getImporterByModel($type, $element);
+		$importerClass = sproutImport()->getImporterByModelName($modelName, $element);
 
 		$importerElementKeys = $importerClass->defineKeys();
 
@@ -113,7 +113,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 		$eventParams = array(
 			'element' => $model,
 			'seed'    => $seed,
-			'@model'  => $type,
+			'@model'  => $modelName,
 			'source'  => $source
 		);
 
@@ -282,7 +282,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 					continue;
 				}
 
-				$type = sproutImport()->getImporterModel($definition);
+				$type = sproutImport()->getImporterModelName($definition);
 
 				if (!$type)
 				{

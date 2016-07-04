@@ -19,7 +19,8 @@ class SproutImport_SettingsService extends BaseApplicationComponent
 	 */
 	public function saveSetting($settings, $seed = false, $source = 'import')
 	{
-		$importerClass = sproutImport()->getImporterByRow($settings);
+		$modelName     = sproutImport()->getImporterModelName($settings);
+		$importerClass = sproutImport()->getImporterByModelName($modelName, $settings);
 
 		$model = $importerClass->getPopulatedModel();
 
@@ -34,7 +35,7 @@ class SproutImport_SettingsService extends BaseApplicationComponent
 					// Get updated model after save
 					$model = $importerClass->getPopulatedModel();
 
-					$importerModel = sproutImport()->getImporterModel($settings);
+					$importerModel = sproutImport()->getImporterModelName($settings);
 
 					$eventParams = array(
 						'element' => $model,

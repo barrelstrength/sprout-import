@@ -188,7 +188,7 @@ class SproutImportService extends BaseApplicationComponent
 
 			foreach ($rows as $row)
 			{
-				$model = $this->getImporterModel($row);
+				$model = $this->getImporterModelName($row);
 
 				if (!$model)
 				{
@@ -237,7 +237,7 @@ class SproutImportService extends BaseApplicationComponent
 	 *
 	 * @return null
 	 */
-	public function getImporterModel($settings, $names = null)
+	public function getImporterModelName($settings, $names = null)
 	{
 		// Catches invalid model type key
 		if (!isset($settings['@model']))
@@ -269,7 +269,7 @@ class SproutImportService extends BaseApplicationComponent
 
 			return false;
 		}
-
+		
 		return $importerModel;
 	}
 
@@ -511,53 +511,30 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Get an Importer from it's model name
 	 *
-	 * @param $row
-	 *
-	 * @return mixed
-	 */
-	public function getImporterByRow($row)
-	{
-		$importerModel = $this->getImporterModel($row);
-
-		return $this->getImporterByModel($importerModel, $row);
-	}
-
-	/**
-	 * @param $importerModel
-	 * @param $row
-	 *
-	 * @return mixed
-	 */
-	public function getImporterByModel($importerModel, $row)
-	{
-		$importerClassName = $this->getImporterByName($importerModel);
-
-		// If not exists then its an element
-		if (!class_exists($importerClassName))
-		{
-			$namespace = 'Craft\\' . $importerModel . 'SproutImportElementImporter';
-
-			$importerClass = new $namespace($row);
-		}
-		else
-		{
-			$importerClass = new $importerClassName($row);
-		}
-
-		return $importerClass;
-	}
-
-	/**
 	 * @param $name
+	 * @param $row
 	 *
-	 * @return string
+	 * @return mixed
 	 */
-	public function getImporterByName($name)
+	public function getImporterByModelName($name, $row)
 	{
 		$importerClassName = 'Craft\\' . $name . 'SproutImportImporter';
 
-		return $importerClassName;
+		// If it doesn't exists then it's an Element Importer
+		if (!class_exists($importerClassName))
+		{
+			$importerClassName = 'Craft\\' . $name . 'SproutImportElementImporter';
+
+			$importer = new $importerClassName($row);
+		}
+		else
+		{
+			$importer = new $importerClassName($row);
+		}
+
+		return $importer;
 	}
 
 	/**
