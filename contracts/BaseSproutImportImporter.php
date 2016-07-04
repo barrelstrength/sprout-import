@@ -77,7 +77,7 @@ abstract class BaseSproutImportImporter
 	}
 
 	/**
-	 * Get element importer label name
+	 * Get Element Importer label name
 	 *
 	 * @return mixed|string
 	 */
@@ -114,6 +114,12 @@ abstract class BaseSproutImportImporter
 	}
 
 	/**
+	 * A generic method that allows you to define how to retrieve the model of
+	 * an importable data type using it's handle.
+	 *
+	 * In the case for importing fields, this is the getFieldByHandle method in the Fields Service.
+	 * In the case for importing sections, this is the getSectionByHandle method in the Sections Service.
+	 *
 	 * @param null $handle
 	 *
 	 * @return null
