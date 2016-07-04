@@ -2,23 +2,13 @@
 
 <div class="field element-options {{ id }}" style="display: none">
 
-	<div class="input">
-		{{ forms.select({
-			id: "tagGroup",
-			name: "settings[tagGroup]",
-			label: "Tag Group"|t,
-			options: [{label: "Select a group..."|t, value: null}]|merge(tagGroups),
-			value: settings.tagGroup is defined ? settings.tagGroup : null,
-		}) }}
-
-		{{ forms.text({
-			id: 'tagNumber',
-			name: 'settings[tagNumber]',
-			value: '',
-			placeholder: 'Number'|t,
-			size: 3
-		}) }}
-		<span> {{ 'Enter a number of fake entries.'|t }}</span>
-	</div>
+	{{ forms.selectField({
+		label: "Tag Group"|t,
+		instructions: "The tag group to import content."|t,
+		id: "tagGroup",
+		name: "settings[tagGroup]",
+		options: [{label: "Select a group..."|t, value: null}]|merge(tagGroups),
+		value: settings.tagGroup is defined ? settings.tagGroup : null,
+	}) }}
 
 </div>

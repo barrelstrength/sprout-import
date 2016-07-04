@@ -2,23 +2,13 @@
 
 <div class="field element-options {{ id }}" style="display: none">
 
-	<div class="input">
-		{{ forms.select({
-			id: "categoryGroup",
-			name: "settings[categoryGroup]",
-			label: "Category Group"|t,
-			options: [{label: "Select a group..."|t, value: null}]|merge(categoryGroups),
-			value: settings.categoryGroup is defined ? settings.categoryGroup : null,
-		}) }}
-
-		{{ forms.text({
-			id: 'categoryNumber',
-			name: 'settings[categoryNumber]',
-			value: '',
-			placeholder: 'Number'|t,
-			size: 3
-		}) }}
-		<span> {{ 'Enter a number of fake entries.'|t }}</span>
-	</div>
+	{{ forms.selectField({
+		label: "Category Group"|t,
+		instructions: "The category group to import content."|t,
+		id: "categoryGroup",
+		name: "settings[categoryGroup]",
+		options: [{label: "Select a group..."|t, value: null}]|merge(categoryGroups),
+		value: settings.categoryGroup is defined ? settings.categoryGroup : null,
+	}) }}
 
 </div>

@@ -56,16 +56,14 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 	/**
 	 * @param $settings
 	 */
-	public function getMockData($settings)
+	public function getMockData($quantity, $settings)
 	{
-		$categoryGroup  = $settings['categoryGroup'];
-		$categoryNumber = $settings['categoryNumber'];
+		$saveIds       = array();
+		$categoryGroup = $settings['categoryGroup'];
 
-		$saveIds = array();
-
-		if (!empty($categoryNumber))
+		if (!empty($quantity))
 		{
-			for ($i = 1; $i <= $categoryNumber; $i++)
+			for ($i = 1; $i <= $quantity; $i++)
 			{
 				$saveIds[] = $this->generateCategory($categoryGroup);
 			}

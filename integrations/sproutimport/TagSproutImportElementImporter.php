@@ -56,16 +56,14 @@ class TagSproutImportElementImporter extends BaseSproutImportElementImporter
 	/**
 	 * @param $settings
 	 */
-	public function getMockData($settings)
+	public function getMockData($quantity, $settings)
 	{
-		$tagGroup  = $settings['tagGroup'];
-		$tagNumber = $settings['tagNumber'];
+		$saveIds  = array();
+		$tagGroup = $settings['tagGroup'];
 
-		$saveIds = array();
-
-		if (!empty($tagNumber))
+		if (!empty($quantity))
 		{
-			for ($i = 1; $i <= $tagNumber; $i++)
+			for ($i = 1; $i <= $quantity; $i++)
 			{
 				$saveIds[] = $this->generateTag($tagGroup);
 			}

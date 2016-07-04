@@ -16,7 +16,7 @@ class SproutImportPlugin extends BasePlugin
 	 */
 	public function getDescription()
 	{
-		return 'Everything is better in Craft. Import content and settings. Generate fake data.'|t;
+		return 'Import content and settings. Generate fake data.'|t;
 	}
 
 	/**

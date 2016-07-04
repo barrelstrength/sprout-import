@@ -2,24 +2,14 @@
 
 <div class="field element-options {{ id }}" style="display: none">
 
-	<div class="input">
-		{{ forms.select({
-			id: "channel",
-			name: "settings[channel]",
-			label: "Channels"|t,
-			options: [{label: "Select a channel..."|t, value: null}]|merge(channels),
-			value: settings.channel is defined ? settings.channel : null,
-		}) }}
-
-		{{ forms.text({
-			id: 'channelNumber',
-			name: 'settings[channelNumber]',
-			value: '',
-			placeholder: 'Number'|t,
-			size: 3
-		}) }}
-		<span> {{ 'Enter a number of fake entries.'|t }}</span>
-	</div>
+	{{ forms.selectField({
+		label: "Section"|t,
+		instructions: "The section to import content."|t,
+		id: "channel",
+		name: "settings[channel]",
+		options: [{label: "Select a section..."|t, value: null}]|merge(channels),
+		value: settings.channel is defined ? settings.channel : null,
+	}) }}
 
 </div>
 

@@ -49,23 +49,19 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 
 	/**
 	 * Generate mock data for a Channel or Structure.
-	 * 
+	 *
 	 * Singles are not supported.
-	 * 
+	 *
 	 * @param $settings
 	 *
 	 * @return array
 	 */
-	public function getMockData($settings)
+	public function getMockData($quantity, $settings)
 	{
-		$saveIds = array();
-		
-		$channelNumber = $settings['channelNumber'];
-
+		$saveIds       = array();
 		$sectionHandle = $settings['channel'];
 
-		$section = craft()->sections->getSectionByHandle($sectionHandle);
-
+		$section    = craft()->sections->getSectionByHandle($sectionHandle);
 		$entryTypes = $section->getEntryTypes();
 
 		$entryParams = array(
@@ -73,9 +69,9 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 			'sectionHandle' => $section->handle
 		);
 
-		if (!empty($channelNumber))
+		if (!empty($quantity))
 		{
-			for ($i = 1; $i <= $channelNumber; $i++)
+			for ($i = 1; $i <= $quantity; $i++)
 			{
 				$entryId = null;
 				if (!empty($entryTypes))

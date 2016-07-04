@@ -93,6 +93,7 @@ class SproutImport_SeedController extends BaseController
 		$this->requirePostRequest();
 
 		$elementType = craft()->request->getRequiredPost('elementType');
+		$quantity    = craft()->request->getRequiredPost('quantity');
 		$settings    = craft()->request->getRequiredPost('settings');
 
 		if (!empty($elementType))
@@ -101,7 +102,7 @@ class SproutImport_SeedController extends BaseController
 
 			$importerClass = new $namespace;
 
-			$ids = $importerClass->getMockData($settings);
+			$ids = $importerClass->getMockData($quantity, $settings);
 
 			if (!empty($ids))
 			{

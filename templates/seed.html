@@ -13,15 +13,25 @@
 				{{ getCsrfInput() }}
 				<input type="hidden" name="action" value="sproutImport/seed/generateSeedElements">
 
+				{{ forms.textField({
+					label: 'How many items to seed?'|t,
+					instructions: 'Total number of content items to import.'|t,
+					name: 'quantity',
+					placeholder: '11'|t,
+					value: '11',
+					errors: '',
+					size: 4,
+					first: true
+				}) }}
+
 				{{ forms.selectField({
 					label: "Type of Content"|t,
-					instructions: "Select the type of content you wish to seed in your database. Seeded content and can be removed later using the Weed tab."|t,
+					instructions: "Select the type of content to seed in your database."|t,
 					id: "elementType",
 					name: "elementType",
 					options: [{label: "Select element..."|t, value: null}]|merge(elements),
 					value: elementType is defined ? elementType : null,
-					hasOptgroups: true,
-					first: true
+					hasOptgroups: true
 				}) }}
 
 				{# Output settings for each of our Importers #}
@@ -42,6 +52,8 @@
 		<div class="pane">
 
 			<h2>What is seeding?</h2>
+
+			<p>Seed content allows you to generate fake data to populate your database. Seeded content can be removed using the Weed tab.</p>
 
 		</div>
 	</div>
