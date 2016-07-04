@@ -223,23 +223,6 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param $file
-	 *
-	 * @return bool
-	 */
-	public function getJson($file)
-	{
-		$content = file_get_contents($file);
-
-		if ($content && ($content = json_decode($content, true)) && !json_last_error())
-		{
-			return $content;
-		}
-
-		return false;
-	}
-
-	/**
 	 * Check if name given is an element type
 	 *
 	 * @param $name
