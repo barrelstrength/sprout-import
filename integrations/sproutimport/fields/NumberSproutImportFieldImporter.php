@@ -10,9 +10,9 @@ class NumberSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	{
 		$settings = $this->fieldModel->settings;
 
-		$min     = $settings['min'];
-		$max     = $settings['max'];
-		$decimal = $settings['decimals'];
+		$min     = is_numeric($settings['min']) ? $settings['min'] : 0;
+		$max     = is_numeric($settings['max']) ? $settings['max'] : 100;
+		$decimal = is_numeric($settings['decimals']) ? $settings['decimals'] : 0;
 
 		if (!empty($decimal))
 		{
