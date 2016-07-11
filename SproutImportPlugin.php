@@ -16,7 +16,7 @@ class SproutImportPlugin extends BasePlugin
 	 */
 	public function getDescription()
 	{
-		return 'Import content and settings. Generate fake data.'|t;
+		return Craft::t('Import content and settings. Generate fake data.');
 	}
 
 	/**
