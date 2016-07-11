@@ -42,9 +42,10 @@ class SproutImport_ImportTask extends BaseTask
 		$seed = $this->getSettings()->getAttribute('seed');
 
 		$files = $this->getSettings()->getAttribute('files');
-		$file  = $step ? $files[$step] : $files[0];
+		$data  = $step ? $files[$step] : $files[0];
 
-		$content = file_get_contents($file);
+		$content = $data['content'];
+		$file    = $data['path'];
 
 		if ($content && ($elements = json_decode($content, true)) && !json_last_error())
 		{

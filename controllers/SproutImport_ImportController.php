@@ -17,6 +17,8 @@ class SproutImport_ImportController extends BaseController
 
 		$folderPath = sproutImport()->createTempFolder();
 
+		$count = 0;
+
 		foreach ($files as $file)
 		{
 			if (!$file->getHasError() && $file->getType() == 'application/json'
@@ -27,9 +29,30 @@ class SproutImport_ImportController extends BaseController
 
 				if (move_uploaded_file($file->getTempName(), $path))
 				{
-					$tasks[] = $path;
+					$content = file_get_contents($path);
+
+					$tasks[$count]['path']    = $path;
+					$tasks[$count]['content'] = $content;
 				}
 			}
+
+			$count++;
+		}
+
+		$pastedJson = craft()->request->getPost('pastedJson');
+
+		if (!empty($pastedJson) && json_decode($pastedJson, true) == true && !json_last_error())
+		{
+			$tasks[$count]['path']    = 'pastedJson';
+			$tasks[$count]['content'] = $pastedJson;
+		}
+		elseif (!empty($pastedJson))
+		{
+			$errorMsg = Craft::t('Unable to parse pasted JSON.');
+
+			craft()->userSession->setError($errorMsg);
+
+			$this->redirectToPostedUrl();
 		}
 
 		$seed = craft()->request->getPost('seed');
