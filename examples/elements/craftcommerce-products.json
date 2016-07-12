@@ -2,9 +2,8 @@
 	{
 		"@model": "Commerce_ProductModel",
 		"attributes": {
-			"typeId": 1,
-			"title": "Product Two",
-			"slug": "product-two",
+			"typeId": 2,
+			"slug": "shoes-one",
 			"postDate": {
 				"date": "5/14/2016",
 				"time": "9:45 AM"
@@ -16,8 +15,8 @@
 		},
 		"variants": {
 			"new1": {
-				"sku": "9878",
-				"title": "Product Two",
+				"sku": "shoes-1",
+				"title": "Shoes One",
 				"price": 16,
 				"unlimitedStock": 1,
 				"minQty": "",
@@ -29,7 +28,52 @@
 			}
 		},
 		"content": {
-			"title": "Product Two",
+			"title": "Shoes One",
+			"fields": []
+		}
+	},
+	{
+		"@model": "Commerce_ProductModel",
+		"attributes": {
+			"typeId": 1,
+			"slug": "clothes-one",
+			"postDate": {
+				"date": "5/14/2016",
+				"time": "9:45 AM"
+			},
+			"enabled": 1,
+			"taxCategoryId": 1,
+			"freeShipping": "",
+			"promotable": 1
+		},
+		"variants": {
+			"new1": {
+				"sku": "clothes-1",
+				"title": "Clothes One",
+				"price": 16,
+				"unlimitedStock": 1,
+				"minQty": "",
+				"maxQty": "",
+				"length": "",
+				"width": "",
+				"height": "",
+				"weight": ""
+			},
+			"new2": {
+				"sku": "clothes-2",
+				"title": "Clothes One",
+				"price": 22,
+				"unlimitedStock": 1,
+				"minQty": "",
+				"maxQty": "",
+				"length": "",
+				"width": "",
+				"height": "",
+				"weight": ""
+			}
+		},
+		"content": {
+			"title": "Clothes One",
 			"fields": []
 		}
 	}

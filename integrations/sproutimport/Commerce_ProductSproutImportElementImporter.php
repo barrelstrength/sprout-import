@@ -19,18 +19,26 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 	public function save()
 	{
 		$product  = $this->model;
-		$variants = $this->data['variants'];
 
 		try
 		{
+			if (empty($this->data['variants']))
+			{
+				sproutImport()->error('Variants input is required');
+
+				return false;
+			}
+
+			$variants = $this->data['variants'];
+
 			\Commerce\Helpers\CommerceProductHelper::populateProductVariantModels($product, $variants);
 
 			return craft()->commerce_products->saveProduct($product);
 		}
 		catch (\Exception $e)
 		{
-			sproutImport()->log('Commerce Product Import Error:');
-			sproutImport()->log($e->getMessage());
+			sproutImport()->error('Commerce Product Import Error:');
+			sproutImport()->error($e->getMessage());
 		}
 	}
 
