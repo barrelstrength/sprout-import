@@ -23,7 +23,13 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 	public function getMockRelations($elementName, array $attributes = array(), $limit = 1)
 	{
 		$criteria = craft()->elements->getCriteria($elementName);
+
 		$results  = $criteria->find($attributes);
+
+		if (!$results)
+		{
+			return false;
+		}
 
 		$total = $criteria->total();
 
@@ -77,8 +83,10 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 					// Loop through all attach fields on this element
 					foreach ($fields as $field)
 					{
+
 						$fieldClass->setField($field);
 						$fieldHandle               = $field->handle;
+
 						$fieldValues[$fieldHandle] = $fieldClass->getMockData();
 					}
 				}
