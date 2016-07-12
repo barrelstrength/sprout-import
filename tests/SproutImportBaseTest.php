@@ -54,12 +54,14 @@ class SproutImportBaseTest extends BaseTest
 
 		$this->setComponent(craft(), 'config', $this->config);
 
-		$mainService = new SproutImportService();
-		$seedService = new SproutImport_SeedService();
-		$fakerService = new SproutImport_FakerService();
+		$mainService     = new SproutImportService();
+		$seedService     = new SproutImport_SeedService();
+		$fakerService    = new SproutImport_FakerService();
+		$mockDataService = new SproutImport_MockDataService();
 
 		$this->setComponent(craft(), 'sproutImport_seed', $seedService);
 		$this->setComponent(craft(), 'sproutImport_faker', $fakerService);
+		$this->setComponent(craft(), 'sproutImport_mockData', $mockDataService);
 
 		$plugin = new SproutImportPlugin();
 
@@ -84,6 +86,7 @@ class SproutImportBaseTest extends BaseTest
 			'\\Craft\\SproutImportService'      => '../services/SproutImportService.php',
 			'\\Craft\\SproutImport_SeedService' => '../services/SproutImport_SeedService.php',
 			'\\Craft\\SproutImport_FakerService' => '../services/SproutImport_FakerService.php',
+			'\\Craft\\SproutImport_MockDataService' => '../services/SproutImport_MockDataService.php',
 			'\\Craft\\BaseSproutImportImporter' => '../contracts/BaseSproutImportImporter.php',
 			'\\Craft\\FieldSproutImportImporter' => '../integrations/sproutimport/FieldSproutImportImporter.php'
 		);
