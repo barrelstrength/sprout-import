@@ -171,7 +171,9 @@ class SproutImportPlugin extends BasePlugin
 			new EntriesSproutImportFieldImporter(),
 			new CategoriesSproutImportFieldImporter(),
 			new TagsSproutImportFieldImporter(),
-			new AssetsSproutImportFieldImporter()
+			new AssetsSproutImportFieldImporter(),
+			new Commerce_ProductsSproutImportFieldImporter(),
+			new UsersSproutImportFieldImporter()
 		);
 	}
 }

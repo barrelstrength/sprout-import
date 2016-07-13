@@ -83,7 +83,6 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 					// Loop through all attach fields on this element
 					foreach ($fields as $field)
 					{
-
 						$fieldClass->setField($field);
 						$fieldHandle               = $field->handle;
 
