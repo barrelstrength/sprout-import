@@ -1,0 +1,20 @@
+[ 
+  {
+    "@model": "SproutSeo_Redirect",
+    "attributes": {
+      "oldUrl": "/old-url",
+      "newUrl": "/new-url",
+      "method": "302",
+      "regex": 1
+    }
+  },
+	{
+    "@model": "SproutSeo_Redirect",
+    "attributes": {
+      "oldUrl": "/prev-url",
+      "newUrl": "/next-url",
+      "method": "301",
+      "regex": 0
+    }
+  }
+]
