@@ -667,4 +667,23 @@ class SproutImportService extends BaseApplicationComponent
 
 		return $name;
 	}
+
+
+	/**
+	 * @param $name
+	 *
+	 * @return mixed
+	 */
+	public function getFieldImporterClassByType($name)
+	{
+		$fieldClass = null;
+		$namespace  = $name . "SproutImportFieldImporter";
+
+		if (isset($this->fieldImporters[$namespace]))
+		{
+			$fieldClass = $this->fieldImporters[$namespace];
+		}
+
+		return $fieldClass;
+	}
 }
