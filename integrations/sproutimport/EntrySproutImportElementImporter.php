@@ -3,6 +3,8 @@ namespace Craft;
 
 class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 {
+	private $entryTypes;
+
 	/**
 	 * @return mixed
 	 */
@@ -63,6 +65,8 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 
 		$section    = craft()->sections->getSectionByHandle($sectionHandle);
 		$entryTypes = $section->getEntryTypes();
+
+		$this->entryTypes = $entryTypes;
 
 		$entryParams = array(
 			'sectionId'     => $section->id,
@@ -138,7 +142,9 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 
 		$elementName = $this->getName();
 
-		$data['content']['fields'] = sproutImport()->mockData->getMockFieldsByElementName($elementName);
+		$fieldLayouts = $this->getFieldLayouts();
+
+		$data['content']['fields'] = sproutImport()->mockData->getMockFields($fieldLayouts);
 
 		$data['content']['fields']['title'] = $title;
 
@@ -168,5 +174,26 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 		}
 
 		return $handles;
+	}
+
+	private function getFieldLayouts()
+	{
+		$entryTypes = $this->entryTypes;
+
+		$fieldLayouts = array();
+
+		if (!empty($entryTypes))
+		{
+			foreach ($entryTypes as $entryType)
+			{
+				$fieldLayoutId = $entryType->fieldLayoutId;
+
+				$layouts = craft()->fields->getLayoutFieldsById($fieldLayoutId);
+
+				$fieldLayouts = array_merge($fieldLayouts, $layouts);
+			}
+		}
+
+		return $fieldLayouts;
 	}
 }

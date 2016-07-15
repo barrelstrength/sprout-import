@@ -3,6 +3,8 @@ namespace Craft;
 
 class CategorySproutImportElementImporter extends BaseSproutImportElementImporter
 {
+	private $categoryGroup;
+
 	/**
 	 * @return mixed
 	 */
@@ -90,8 +92,25 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 
 		$elementName = $this->getName();
 
-		$data['content']['fields'] = sproutImport()->mockData->getMockFieldsByElementName($elementName);
+		$this->categoryGroup = $categoryGroup;
+
+		$fieldLayouts = $this->getFieldLayoutsByGroupId();
+
+		$data['content']['fields'] = sproutImport()->mockData->getMockFields($fieldLayouts);
 
 		return sproutImport()->elements->saveElement($data);
+	}
+
+	private function getFieldLayoutsByGroupId()
+	{
+		$groupId = $this->categoryGroup;
+
+		$categoryGroup = craft()->categories->getGroupById($groupId);
+
+		$fieldLayoutId = $categoryGroup->fieldLayoutId;
+
+		$fieldLayouts = craft()->fields->getLayoutFieldsById($fieldLayoutId);
+
+		return $fieldLayouts;
 	}
 }

@@ -33,27 +33,9 @@ class MatrixSproutImportFieldImporter extends BaseSproutImportFieldImporter
 
 				$fieldLayoutId = $block->fieldLayoutId;
 
-				$fields = craft()->fields->getLayoutFieldsById($fieldLayoutId);
+				$fieldLayouts = craft()->fields->getLayoutFieldsById($fieldLayoutId);
 
-				if (!empty($fields))
-				{
-					$handles = array();
-
-					foreach ($fields as $field)
-					{
-						$fieldHandle = $field->field->handle;
-						$fieldType   = $field->field->type;
-						$handles[] = $fieldType;
-						$fieldClass = sproutImport()->getFieldImporterClassByType($fieldType);
-
-						if ($fieldClass != null)
-						{
-							$fieldClass->setField($field->field);
-
-							$values[$key]['fields'][$fieldHandle] = $fieldClass->getMockData();
-						}
-					}
-				}
+				$values[$key]['fields'] = sproutImport()->mockData->getMockFields($fieldLayouts);
 
 				$count++;
 			}

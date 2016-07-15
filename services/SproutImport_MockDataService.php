@@ -95,6 +95,34 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 		return $fieldValues;
 	}
 
+	public function getMockFields($fields)
+	{
+		$values = array();
+
+		if (!empty($fields))
+		{
+			$handles = array();
+
+			foreach ($fields as $field)
+			{
+				$fieldHandle = $field->field->handle;
+				$fieldType   = $field->field->type;
+				$handles[] = $fieldType;
+				$fieldClass = sproutImport()->getFieldImporterClassByType($fieldType);
+
+				if ($fieldClass != null)
+				{
+					$fieldClass->setField($field->field);
+
+					$values[$fieldHandle] = $fieldClass->getMockData();
+				}
+			}
+		}
+
+		return $values;
+	}
+
+
 	/**
 	 * Get Element Group IDs from sources setting
 	 *
