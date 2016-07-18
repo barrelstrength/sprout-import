@@ -1,0 +1,15 @@
+{% import "_includes/forms" as forms %}
+
+<div class="field element-options {{ id }}" style="display: none">
+
+	{{ forms.selectField({
+		label: "Groups"|t,
+		instructions: "All User Groups."|t,
+		id: "userGroup",
+		name: "settings[userGroup]",
+		options: [{label: "Select a group..."|t, value: null}]|merge(groups),
+		value: settings.group is defined ? settings.group : null,
+	}) }}
+
+</div>
+

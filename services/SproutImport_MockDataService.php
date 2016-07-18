@@ -58,43 +58,6 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 		return $elementIds;
 	}
 
-	/**
-	 * Get mock data for fields when generating a mock Element
-	 *
-	 * @param $elementName
-	 *
-	 * @return array
-	 */
-	public function getMockFieldsByElementName($elementName)
-	{
-		$fieldClasses = sproutImport()->getSproutImportFields();
-
-		$fieldValues = array();
-
-		if (!empty($fieldClasses))
-		{
-			// Get only declared field classes
-			foreach ($fieldClasses as $fieldClass)
-			{
-				$fields = sproutImport()->elements->getFieldsByType($elementName, $fieldClass);
-
-				if (!empty($fields))
-				{
-					// Loop through all attach fields on this element
-					foreach ($fields as $field)
-					{
-						$fieldClass->setField($field);
-						$fieldHandle               = $field->handle;
-
-						$fieldValues[$fieldHandle] = $fieldClass->getMockData();
-					}
-				}
-			}
-		}
-
-		return $fieldValues;
-	}
-
 	public function getMockFields($fields)
 	{
 		$values = array();
@@ -323,5 +286,30 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 		}
 
 		return $value;
+	}
+
+
+	public function generateUsernameOrEmail($nameOrEmail, $faker, $isEmail = false, $usersService = null)
+	{
+		if ($usersService == null)
+		{
+			$usersService = craft()->users;
+		}
+
+		if ($usersService->getUserByUsernameOrEmail($nameOrEmail) != null)
+		{
+			if ($isEmail == true)
+			{
+				$fakeParam = $faker->email;
+			}
+			else
+			{
+				$fakeParam = $faker->userName;
+			}
+
+			return $this->generateUsernameOrEmail($fakeParam, $faker, $isEmail);
+		}
+
+		return $nameOrEmail;
 	}
 }

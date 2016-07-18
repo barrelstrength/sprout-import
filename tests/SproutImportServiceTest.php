@@ -248,4 +248,45 @@ class SproutImportServiceTest extends SproutImportBaseTest
 
 		$this->assertEquals($expected, $find);
 	}
+
+	public function nameOrEmailProvider()
+	{
+		return array(
+			array('username1', true),
+			array('username2', null)
+		);
+	}
+
+	public function testGenerateUsernameOrEmail()
+	{
+		$usersService = m::mock('Craft\UsersService')
+			->shouldReceive('getUserByUsernameOrEmail')
+			->andReturn(null)
+			->mock();
+
+		$faker = \Faker\Factory::create();
+
+		$nameOrEmail = 'username1';
+
+		$result = sproutImport()->mockData->generateUsernameOrEmail($nameOrEmail, $faker, false, $usersService);
+
+		$expected = $nameOrEmail;
+
+		$this->assertEquals($expected, $result);
+
+		$usersService = m::mock('Craft\UsersService')
+			->shouldReceive('getUserByUsernameOrEmail')
+			->andReturn(true, null)
+			->mock();
+
+		$faker = \Faker\Factory::create();
+
+		$nameOrEmail = 'username2';
+
+		$result = sproutImport()->mockData->generateUsernameOrEmail($nameOrEmail, $faker, false, $usersService);
+
+		$expected = $nameOrEmail;
+
+		$this->assertNotEquals($expected, $result);
+	}
 }

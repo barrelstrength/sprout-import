@@ -90,8 +90,6 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 		$data['attributes']['groupId'] = $categoryGroup;
 		$data['content']['title']      = $name;
 
-		$elementName = $this->getName();
-
 		$this->categoryGroup = $categoryGroup;
 
 		$fieldLayouts = $this->getFieldLayoutsByGroupId();
