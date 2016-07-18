@@ -87,11 +87,10 @@ class UserSproutImportElementImporter extends BaseSproutImportElementImporter
 		$data['attributes']['lastName']  = $lastName;
 		$data['attributes']['email']     = $faker->email;
 
-		//$this->categoryGroup = $categoryGroup;
+		$fieldLayout = craft()->fields->getLayoutByType('User');
+		$fieldLayoutFieldModel = $fieldLayout->fields;
 
-	//	$fieldLayouts = $this->getFieldLayoutsByGroupId();
-
-		//$data['content']['fields'] = sproutImport()->mockData->getMockFields($fieldLayouts);
+		$data['content']['fields'] = sproutImport()->mockData->getMockFields($fieldLayoutFieldModel);
 
 		return sproutImport()->elements->saveElement($data);
 	}
