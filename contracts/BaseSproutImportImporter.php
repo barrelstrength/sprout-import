@@ -195,6 +195,8 @@ abstract class BaseSproutImportImporter
 	 */
 	abstract public function deleteById($id);
 
+	abstract public function defineModel();
+
 	/**
 	 * @return bool
 	 */

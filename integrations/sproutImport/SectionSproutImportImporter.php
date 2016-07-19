@@ -10,7 +10,7 @@ class SectionSproutImportImporter extends BaseSproutImportImporter
 	 */
 	public function defineModel()
 	{
-		return 'Craft\\SectionModel';
+		return 'SectionModel';
 	}
 
 	/**
