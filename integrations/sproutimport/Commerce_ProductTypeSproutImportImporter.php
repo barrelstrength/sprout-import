@@ -11,7 +11,7 @@ class Commerce_ProductTypeSproutImportImporter extends BaseSproutImportImporter
 	/**
 	 * @return mixed
 	 */
-	public function getModel()
+	public function defineModel()
 	{
 		return 'Commerce_ProductTypeModel';
 	}
