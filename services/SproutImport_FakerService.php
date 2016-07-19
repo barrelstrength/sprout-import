@@ -26,18 +26,4 @@ class SproutImport_FakerService extends BaseApplicationComponent
 	{
 		return $this->fakerGenerator;
 	}
-
-	/**
-	 * @param $name
-	 *
-	 * @return mixed
-	 */
-	public function generateFakeField($name)
-	{
-		$namespace  = 'Craft\\' . $name . "SproutImportFieldImporter";
-
-		$fieldClass = new $namespace();
-
-		return $fieldClass->getMockData();
-	}
 }

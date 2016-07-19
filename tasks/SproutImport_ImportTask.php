@@ -64,7 +64,7 @@ class SproutImport_ImportTask extends BaseTask
 				if (!empty($errors))
 				{
 					$msg = implode("\n", $errors);
-					sproutImport()->error($msg);
+					sproutImport()->errorLog($msg);
 
 					$transaction->rollback();
 
@@ -80,12 +80,12 @@ class SproutImport_ImportTask extends BaseTask
 			}
 			catch (\Exception $e)
 			{
-				sproutImport()->error($e->getMessage());
+				sproutImport()->errorLog($e->getMessage());
 			}
 		}
 		else
 		{
-			sproutImport()->error('Unable to parse file.', compact('file'));
+			sproutImport()->errorLog('Unable to parse file.', compact('file'));
 		}
 
 		return false;

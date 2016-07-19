@@ -24,7 +24,7 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 		{
 			if (empty($this->data['variants']))
 			{
-				sproutImport()->error('Variants input is required');
+				sproutImport()->errorLog('Variants input is required');
 
 				return false;
 			}
@@ -37,8 +37,8 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 		}
 		catch (\Exception $e)
 		{
-			sproutImport()->error('Commerce Product Import Error:');
-			sproutImport()->error($e->getMessage());
+			sproutImport()->errorLog('Commerce Product Import Error:');
+			sproutImport()->errorLog($e->getMessage());
 		}
 	}
 

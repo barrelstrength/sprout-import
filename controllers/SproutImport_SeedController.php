@@ -119,7 +119,7 @@ class SproutImport_SeedController extends BaseController
 				if (!empty($errors))
 				{
 					$msg = implode("\n", $errors);
-					sproutImport()->error($msg);
+					sproutImport()->errorLog($msg);
 
 					craft()->userSession->setError(Craft::t('Unable to generate data. Check logs.'));
 				}

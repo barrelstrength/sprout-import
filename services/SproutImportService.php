@@ -284,7 +284,7 @@ class SproutImportService extends BaseApplicationComponent
 	{
 		if (!is_array($data))
 		{
-			sproutImport()->error('getValueByKey() was passed in a non-array as data.');
+			sproutImport()->errorLog('getValueByKey() was passed in a non-array as data.');
 
 			return $default;
 		}
@@ -355,51 +355,6 @@ class SproutImportService extends BaseApplicationComponent
 		SproutImportPlugin::log(PHP_EOL . $message . PHP_EOL . PHP_EOL . $data, $level);
 	}
 
-	/**
-	 * @param        $message
-	 * @param null   $data
-	 * @param string $level
-	 */
-	public function error($message, $data = null, $level = LogLevel::Error)
-	{
-		$this->log($message, $data, $level);
-	}
-
-	/**
-	 * On Before Import Element Event
-	 *
-	 * @param Event|SproutImport_onBeforeImportElement $event
-	 *
-	 * @throws \CException
-	 */
-	public function onBeforeImportElement(Event $event)
-	{
-		$this->raiseEvent('onBeforeImportElement', $event);
-	}
-
-	/**
-	 * On After Import Element Event
-	 *
-	 * @param Event|SproutImport_onAfterImportElement $event
-	 *
-	 * @throws \CException
-	 */
-	public function onAfterImportElement(Event $event)
-	{
-		$this->raiseEvent('onAfterImportElement', $event);
-	}
-
-	/**
-	 * On After Import Setting Event
-	 *
-	 * @param Event $event
-	 *
-	 * @throws \CException
-	 */
-	public function onAfterImportSetting(Event $event)
-	{
-		$this->raiseEvent('onAfterImportSetting', $event);
-	}
 
 	/**
 	 * Divide array by sections
@@ -592,6 +547,55 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
+	 * @param $name
+	 *
+	 * @return string
+	 */
+	public function getModelNameWithNamespace($name)
+	{
+		$findNamespace = strpos($name, "Craft");
+
+		if (!is_numeric($findNamespace))
+		{
+			$name = "Craft\\" . $name;
+		}
+
+		return $name;
+	}
+
+
+	/**
+	 * @param $name
+	 *
+	 * @return mixed
+	 */
+	public function getFieldImporterClassByType($name)
+	{
+		$this->getSproutImportFields();
+
+		$fieldClass = null;
+		$namespace  = $name . "SproutImportFieldImporter";
+
+		if (isset($this->fieldImporters[$namespace]))
+		{
+			$fieldClass = $this->fieldImporters[$namespace];
+		}
+
+		return $fieldClass;
+	}
+
+	/**
+	 * @param        $message
+	 * @param null   $data
+	 * @param string $level
+	 */
+	public function errorLog($message, $data = null, $level = LogLevel::Error)
+	{
+		$this->log($message, $data, $level);
+	}
+
+
+	/**
 	 * Logs an error in cases where it makes more sense than to throw an exception
 	 *
 	 * @param mixed $msg
@@ -641,51 +645,41 @@ class SproutImportService extends BaseApplicationComponent
 		return $this->error;
 	}
 
-	/**
-	 * @param $result
-	 */
-	public function addResults($result)
-	{
-		$filename = $this->filename;
 
-		sproutImport()->log('Task result for ' . $filename, $result);
+
+	/**
+	 * On Before Import Element Event
+	 *
+	 * @param Event|SproutImport_onBeforeImportElement $event
+	 *
+	 * @throws \CException
+	 */
+	public function onBeforeImportElement(Event $event)
+	{
+		$this->raiseEvent('onBeforeImportElement', $event);
 	}
 
 	/**
-	 * @param $name
+	 * On After Import Element Event
 	 *
-	 * @return string
+	 * @param Event|SproutImport_onAfterImportElement $event
+	 *
+	 * @throws \CException
 	 */
-	public function getModelNameWithNamespace($name)
+	public function onAfterImportElement(Event $event)
 	{
-		$findNamespace = strpos($name, "Craft");
-
-		if (!is_numeric($findNamespace))
-		{
-			$name = "Craft\\" . $name;
-		}
-
-		return $name;
+		$this->raiseEvent('onAfterImportElement', $event);
 	}
 
-
 	/**
-	 * @param $name
+	 * On After Import Setting Event
 	 *
-	 * @return mixed
+	 * @param Event $event
+	 *
+	 * @throws \CException
 	 */
-	public function getFieldImporterClassByType($name)
+	public function onAfterImportSetting(Event $event)
 	{
-		$this->getSproutImportFields();
-
-		$fieldClass = null;
-		$namespace  = $name . "SproutImportFieldImporter";
-
-		if (isset($this->fieldImporters[$namespace]))
-		{
-			$fieldClass = $this->fieldImporters[$namespace];
-		}
-
-		return $fieldClass;
+		$this->raiseEvent('onAfterImportSetting', $event);
 	}
 }
