@@ -1,0 +1,21 @@
+[
+	{
+		"@model": "Commerce_OrderModel",
+		"attributes": {
+			"typeId": 2,
+			"slug": "shoes-one",
+			"postDate": {
+				"date": "5/14/2016",
+				"time": "9:45 AM"
+			},
+			"enabled": 1,
+			"taxCategoryId": 1,
+			"freeShipping": "",
+			"promotable": 1
+		}
+		"content": {
+			"title": "Shoes One",
+			"fields": []
+		}
+	}
+]
