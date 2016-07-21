@@ -2,19 +2,23 @@
 	{
 		"@model": "Commerce_OrderModel",
 		"attributes": {
-			"typeId": 2,
-			"slug": "shoes-one",
-			"postDate": {
-				"date": "5/14/2016",
-				"time": "9:45 AM"
-			},
-			"enabled": 1,
-			"taxCategoryId": 1,
-			"freeShipping": "",
-			"promotable": 1
-		}
+			"email": "dale+order@barrelstrengthdesign.com",
+			"currentcy": "USD",
+			"billingAddressId": "4",
+			"shippingAddressId": "4",
+			"shippingMethod": "freeShipping",
+			"paymentMethodId": 1,
+			"customerId": 1,
+			"orderStatusId": 1,
+			"isCompleted": 1,
+			"dateOrdered": "2016-05-21 01:08:38",
+			"datePaid": "2016-05-21 01:09:38",
+			"returnUrl": "/commerce/customer/order?number={number}",
+			"cancelUrl": "/commerce/checkout/payment"
+
+		},
 		"content": {
-			"title": "Shoes One",
+			"title": "Order One",
 			"fields": []
 		}
 	}

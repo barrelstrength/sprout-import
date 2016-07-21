@@ -143,6 +143,7 @@ class SproutImportPlugin extends BasePlugin
 		{
 			$importers[] = new Commerce_ProductSproutImportElementImporter();
 			$importers[] = new Commerce_ProductTypeSproutImportImporter();
+			$importers[] = new Commerce_OrderSproutImportElementImporter();
 		}
 
 		return $importers;

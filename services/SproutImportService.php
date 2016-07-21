@@ -206,7 +206,7 @@ class SproutImportService extends BaseApplicationComponent
 			}
 		}
 
-		return true;
+		return $result;
 	}
 
 	/**
@@ -269,7 +269,7 @@ class SproutImportService extends BaseApplicationComponent
 
 			return false;
 		}
-		
+
 		return $importerModel;
 	}
 
