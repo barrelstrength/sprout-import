@@ -68,9 +68,37 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 
 		craft()->commerce_orders->saveOrder($order);
 
+		$paymentData = $this->data['payments'];
+
+		$paymentMethod = $order->getPaymentMethod();
+
+		$paymentForm = $paymentMethod->getPaymentFormModel();
+
+		// Needed for the base class populateModelFromPost
+		$_POST = $paymentData;
+
+		$paymentForm->populateModelFromPost($paymentData);
+
+		$paymentForm->validate();
+		if (!$paymentForm->hasErrors())
+		{
+			//Craft::dd($paymentForm);
+			$success = craft()->commerce_payments->processPayment($order, $paymentForm);
+		}
+		else
+		{
+		//	Craft::dd($paymentForm->getErrors());
+			$customError = Craft::t('Payment information submitted is invalid.');
+
+			sproutImport()->addError($customError, 'payment-invalid');
+
+			$success = false;
+		}
+
+		return $success;
 		// Update the order again for isCompleted attribute only after adjustments
-		$order->isCompleted = $isCompleted;
-		return craft()->commerce_orders->updateOrderPaidTotal($order);
+		//$order->isCompleted = $isCompleted;
+		//return craft()->commerce_orders->updateOrderPaidTotal($order);
 	}
 
 	/**
@@ -99,7 +127,7 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 
 	public function defineKeys()
 	{
-		return array('lineItems');
+		return array('lineItems', 'payments');
 	}
 
 	/**

@@ -2,8 +2,7 @@
 	{
 		"@model": "Commerce_OrderModel",
 		"attributes": {
-			"email": "dale+order@barrelstrengthdesign.com",
-			"currentcy": "USD",
+			"currency": "USD",
 			"billingAddressId": "4",
 			"shippingAddressId": "4",
 			"shippingMethod": "freeShipping",
@@ -15,11 +14,30 @@
 			"datePaid": "2016-05-21 01:09:38",
 			"returnUrl": "/commerce/customer/order?number={number}",
 			"cancelUrl": "/commerce/checkout/payment"
-
 		},
 		"content": {
 			"title": "Order One",
 			"fields": []
+		},
+		"lineItems": [
+			{
+				"purchasableId": "3082",
+				"qty": "3",
+				"options": []
+			},
+			{
+				"purchasableId": "3084",
+				"qty": "1",
+				"options": []
+			}
+		],
+		"payments": {
+			"firstName": "Johnny",
+			"lastName": "Doe",
+			"number": "4929000000006",
+			"month": "1",
+			"year": "2017",
+			"cvv": "123"
 		}
 	}
 ]

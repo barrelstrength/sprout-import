@@ -24,7 +24,7 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 		{
 			if (empty($this->data['variants']))
 			{
-				sproutImport()->errorLog('Variants input is required');
+				sproutImport()->addError('Variants input is required', 'variant-required');
 
 				return false;
 			}
@@ -37,8 +37,8 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 		}
 		catch (\Exception $e)
 		{
-			sproutImport()->errorLog('Commerce Product Import Error:');
-			sproutImport()->errorLog($e->getMessage());
+			sproutImport()->addError('Commerce Product Import Error:', 'commerce-import-error');
+			sproutImport()->addError($e->getMessage(), 'commerce-import-error-message');
 		}
 	}
 

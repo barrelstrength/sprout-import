@@ -179,9 +179,10 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 				$this->unsavedElements[] = array('title' => $model->getTitle(), 'error' => $e->getMessage());
 				$title                   = sproutImport()->getValueByKey('content.title', $element);
 				$msg                     = $title . ' ' . implode(', ', array_keys($fields)) . ' Check field values if it exists.';
-				sproutImport()->errorLog($msg);
 
-				sproutImport()->errorLog($e->getMessage());
+				sproutImport()->addError($msg, 'save-element-error');
+
+				sproutImport()->addError($e->getMessage(), 'save-element-error-message');
 			}
 		}
 		else
@@ -464,7 +465,9 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 				}
 				catch (\Exception $e)
 				{
-					sproutImport()->errorLog($e->getMessage());
+					sproutImport()->addError($e->getMessage(), 'invalid-model-match');
+
+					return false;
 				}
 			}
 		}

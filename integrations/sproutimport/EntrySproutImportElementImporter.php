@@ -28,7 +28,25 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 	 */
 	public function save()
 	{
-		return craft()->entries->saveEntry($this->model);
+		try
+		{
+			$sectionId = $this->model->sectionId;
+
+			if (craft()->sections->getSectionById($sectionId) == null)
+			{
+				sproutImport()->addError("Invalid section ID", 'invalid-section');
+				return false;
+			}
+
+			return craft()->entries->saveEntry($this->model);
+		}
+		catch (\Exception $e)
+		{
+			sproutImport()->addError($e->getMessage(), 'invalid-entry-model');
+
+			return false;
+		}
+
 	}
 
 	/**
