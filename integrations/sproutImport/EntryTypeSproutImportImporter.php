@@ -32,6 +32,16 @@ class EntryTypeSproutImportImporter extends BaseSproutImportImporter
 		return craft()->sections->deleteEntryTypeById($id);
 	}
 
+	public function getObjectByHandle($handle = null)
+	{
+		$types = craft()->sections->getEntryTypesByHandle($handle);
+
+		if (!empty($types))
+		{
+			return $types[0];
+		}
+	}
+
 	/**
 	 * @param $model
 	 * @param $settings
@@ -73,17 +83,17 @@ class EntryTypeSproutImportImporter extends BaseSproutImportImporter
 				}
 			}
 
-			// @TODO - move this to a different place to save?
+			if ($entryType->getFieldLayout() != null)
+			{
+				// Remove previous field layout and update layout
 
-			// Set the field layout
+				craft()->fields->deleteLayoutById($entryType->fieldLayoutId);
+			}
+
 			$fieldLayout = craft()->fields->assembleLayout($fieldLayout, $requiredFields);
 
-			// @todo FieldLayout Type should be dynamic
 			$fieldLayout->type = 'Entry';
 
-			// @todo - get the parent SECTION (or Field Layout Container and resave things...)
-			// Should I be using the MODEL or the JSON Settings?
-			// How do I know?  Hrmm....
 			$entryType->setFieldLayout($fieldLayout);
 		}
 
