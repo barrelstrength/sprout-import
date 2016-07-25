@@ -27,7 +27,35 @@ class FieldSproutImportImporter extends BaseSproutImportImporter
 	 */
 	public function save()
 	{
-		return craft()->fields->saveField($this->model);
+		try
+		{
+			$type = $this->model['type'];
+			$field = craft()->fields->getFieldType($type);
+
+			if ($field != null)
+			{
+				if ($this->model->settings == null)
+				{
+					// Some fields require options setting to work
+					$this->model->settings = array('options' => array());
+				}
+
+				return craft()->fields->saveField($this->model);
+			}
+			else
+			{
+				sproutImport()->addError($type . ' field importer not supported', 'field-importer-null');
+
+				return false;
+			}
+		}
+		catch (\Exception $e)
+		{
+			sproutImport()->addError($e->getMessage(), 'field-importer-error');
+
+			return false;
+		}
+
 	}
 
 	/**

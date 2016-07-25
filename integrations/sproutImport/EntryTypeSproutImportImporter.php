@@ -56,9 +56,6 @@ class EntryTypeSproutImportImporter extends BaseSproutImportImporter
 
 		//------------------------------------------------------------
 
-		// Do we have a new field that doesn't exist yet?
-		// If so, save it and grab the id.
-
 		if (isset($entryTypeSettings['fieldLayout']))
 		{
 			$fieldLayoutTabs = $entryTypeSettings['fieldLayout'];
@@ -86,7 +83,6 @@ class EntryTypeSproutImportImporter extends BaseSproutImportImporter
 			if ($entryType->getFieldLayout() != null)
 			{
 				// Remove previous field layout and update layout
-
 				craft()->fields->deleteLayoutById($entryType->fieldLayoutId);
 			}
 

@@ -1,0 +1,153 @@
+[
+	{
+		"@model": "Section",
+		"name": "All Fields",
+		"handle": "allFields",
+		"type": "channel",
+		"hasUrls": true,
+		"urlFormat": "allfields/{slug}",
+		"template": "allfields/_entry",
+		"entryTypes": [
+			{
+				"@model": "EntryTypeModel",
+				"name": "All Fields Entry",
+				"handle": "allFieldsEntryType",
+				"showTitles": true,
+				"titleLabel": "Title",
+				"fieldLayout": {
+					"fieldLayoutTab": {
+						"name": "Content",
+						"fields": [
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Commerce Products",
+								"handle": "commerceProducts",
+								"type": "Commerce_Products"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Plain Text",
+								"handle": "plainText",
+								"type": "PlainText"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Rich Text",
+								"handle": "richText",
+								"type": "RichText"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Categories",
+								"handle": "categories",
+								"type": "Categories"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Checkboxes",
+								"handle": "checkboxes",
+								"type": "Checkboxes"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Color",
+								"handle": "color",
+								"type": "Color"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Date",
+								"handle": "date",
+								"type": "Date"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Dropdown",
+								"handle": "dropdown",
+								"type": "Dropdown"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Lightswitch",
+								"handle": "lightswitch",
+								"type": "Lightswitch"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Matrix",
+								"handle": "matrix",
+								"type": "Matrix"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Number",
+								"handle": "number",
+								"type": "Number"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "PositionSelect",
+								"handle": "positionSelect",
+								"type": "PositionSelect"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "RadioButtons",
+								"handle": "radioButtons",
+								"type": "RadioButtons"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Table",
+								"handle": "table",
+								"type": "Table"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Entries",
+								"handle": "entries",
+								"type": "Entries"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Tags",
+								"handle": "tags",
+								"type": "Tags"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Users",
+								"handle": "users",
+								"type": "Users"
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": 5,
+								"name": "Assets",
+								"handle": "assets",
+								"type": "Assets"
+							}
+						]
+					}
+				}
+			}
+		]
+	}
+]
