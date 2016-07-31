@@ -24,4 +24,37 @@ class SproutImportVariable
 
 		return $generator;
 	}
+
+	/**
+	 * @return BaseSproutImportImporter[]
+	 */
+	public function getSproutImportImporters()
+	{
+		return sproutImport()->getSproutImportImporters();
+	}
+
+	/**
+	 * @return BaseSproutImport[]
+	 */
+	public function getSproutImportFieldImporters()
+	{
+		return sproutImport()->getSproutImportFields();
+	}
+
+	/**
+	 * @param string
+	 *
+	 * @return bool
+	 */
+	public function isPluginInstalled($plugin)
+	{
+		$plugins = craft()->plugins->getPlugins(false);
+
+		if (array_key_exists($plugin, $plugins))
+		{
+			return true;
+		}
+
+		return false;
+	}
 }
