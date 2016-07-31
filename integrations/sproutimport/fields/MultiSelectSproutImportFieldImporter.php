@@ -4,6 +4,22 @@ namespace Craft;
 class MultiSelectSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getFieldTypeModelName()
+	{
+		return 'MultiSelectFieldType';
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function canMockData()
+	{
+		return true;
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getMockData()

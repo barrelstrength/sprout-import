@@ -4,6 +4,22 @@ namespace Craft;
 class Commerce_ProductsSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getFieldTypeModelName()
+	{
+		return 'Commerce_ProductsFieldType';
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function canMockData()
+	{
+		return true;
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getMockData()

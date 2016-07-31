@@ -4,6 +4,22 @@ namespace Craft;
 class DateSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getFieldTypeModelName()
+	{
+		return 'DateFieldType';
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function canMockData()
+	{
+		return true;
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getMockData()

@@ -4,6 +4,22 @@ namespace Craft;
 class TableSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getFieldTypeModelName()
+	{
+		return 'TableFieldType';
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function canMockData()
+	{
+		return true;
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getMockData()

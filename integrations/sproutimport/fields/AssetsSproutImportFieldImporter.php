@@ -4,6 +4,22 @@ namespace Craft;
 class AssetsSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getFieldTypeModelName()
+	{
+		return 'AssetsFieldType';
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function canMockData()
+	{
+		return true;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function getMockData()
