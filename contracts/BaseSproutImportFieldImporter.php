@@ -29,6 +29,21 @@ abstract class BaseSproutImportFieldImporter
 	/**
 	 * @return mixed
 	 */
+	public abstract function getFieldTypeModelName();
+
+	/**
+	 * @return mixed
+	 */
+	public function getField()
+	{
+		$fieldModel = "\\Craft\\" . $this->getFieldTypeModelName();
+
+		return new $fieldModel;
+	}
+
+	/**
+	 * @return mixed
+	 */
 	public function getName()
 	{
 		return str_replace('SproutImportFieldImporter', '', $this->getId());
@@ -52,6 +67,14 @@ abstract class BaseSproutImportFieldImporter
 	public function setField(FieldModel $fieldModel)
 	{
 		$this->fieldModel = $fieldModel;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function canMockData()
+	{
+		return false;
 	}
 
 	/**
