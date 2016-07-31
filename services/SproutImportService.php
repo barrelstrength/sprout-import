@@ -105,6 +105,8 @@ class SproutImportService extends BaseApplicationComponent
 			}
 		}
 
+		ksort($this->importers, SORT_NATURAL);
+
 		return $this->importers;
 	}
 
@@ -126,6 +128,8 @@ class SproutImportService extends BaseApplicationComponent
 			}
 		}
 
+		ksort($names, SORT_NATURAL);
+
 		return $names;
 	}
 
@@ -137,6 +141,8 @@ class SproutImportService extends BaseApplicationComponent
 	public function getSproutImportSeedImporters()
 	{
 		$this->getSproutImportImporters();
+
+		ksort($this->seedImporters, SORT_NATURAL);
 
 		return $this->seedImporters;
 	}
@@ -163,6 +169,8 @@ class SproutImportService extends BaseApplicationComponent
 				}
 			}
 		}
+
+		ksort($this->fieldImporters, SORT_NATURAL);
 
 		return $this->fieldImporters;
 	}
