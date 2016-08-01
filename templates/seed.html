@@ -1,13 +1,32 @@
 {% extends "sproutimport/_layouts/base" %}
 {% import "_includes/forms" as forms %}
+{% import 'sproutimport/_includes/sproutbrand' as sprout %}
 
 {% set title = 'Seed'|t %}
 
 {% block main %}
 
+{{ sprout.helpVideo({
+	heading: "Thing or two about things."|t,
+	description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+			<a href="#" style="font-weight: bold;">Watch our video</a> nascetur ridiculus mus. Donec quam felis, ultricies
+			nec arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis
+			pretium. <a href="#" style="font-weight: bold;">Learn more&hellip;</a>'|t,
+	videoUrl: "http://barrelstrengthdesign.com"
+}) }}
+
 <div class="grid first" data-max-cols="3">
 	<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
 		<div id="fields" class="pane">
+
+			{{ sprout.helpVideo({
+				heading: "Thing or two about things."|t,
+				description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+						<a href="#" style="font-weight: bold;">Watch our video</a> nascetur ridiculus mus. Donec quam felis, ultricies
+						nec arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis
+						pretium. <a href="#" style="font-weight: bold;">Learn more&hellip;</a>'|t,
+				videoUrl: "http://barrelstrengthdesign.com"
+			}) }}
 
 			<form method="post" accept-charset="UTF-8">
 				{{ getCsrfInput() }}
@@ -51,6 +70,15 @@
 	<div class="item" data-position="right" data-colspan="1">
 		<div class="pane">
 
+			{{ sprout.helpVideo({
+				heading: "Thing or two about things."|t,
+				description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+						<a href="#" style="font-weight: bold;">Watch our video</a> nascetur ridiculus mus. Donec quam felis, ultricies
+						nec arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis
+						pretium. <a href="#" style="font-weight: bold;">Learn more&hellip;</a>'|t,
+				videoUrl: "http://barrelstrengthdesign.com"
+			}) }}
+			
 			<h2>{{ "Generate fake content"|t }}</h2>
 
 			<p>{{ "Generate content to work with for front-end prototyping, testing large amounts of content, and more. Any seed data generated will be marked and can later be unmarked or removed using the Weed tab."|t }}</p>
