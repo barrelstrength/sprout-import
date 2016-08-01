@@ -17,16 +17,17 @@
 
 <div class="grid first" data-max-cols="3">
 	<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
-		<div id="fields" class="pane">
 
-			{{ sprout.helpVideo({
-				heading: "Thing or two about things."|t,
-				description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+		{{ sprout.helpVideo({
+			heading: "Thing or two about things."|t,
+			description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
 						<a href="#" style="font-weight: bold;">Watch our video</a> nascetur ridiculus mus. Donec quam felis, ultricies
 						nec arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis
 						pretium. <a href="#" style="font-weight: bold;">Learn more&hellip;</a>'|t,
-				videoUrl: "http://barrelstrengthdesign.com"
-			}) }}
+			videoUrl: "http://barrelstrengthdesign.com"
+		}) }}
+		
+		<div id="fields" class="pane">
 
 			<form method="post" accept-charset="UTF-8">
 				{{ getCsrfInput() }}
@@ -68,16 +69,17 @@
 		</div>
 	</div>
 	<div class="item" data-position="right" data-colspan="1">
-		<div class="pane">
 
-			{{ sprout.helpVideo({
-				heading: "Thing or two about things."|t,
-				description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+		{{ sprout.helpVideo({
+			heading: "Thing or two about things."|t,
+			description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
 						<a href="#" style="font-weight: bold;">Watch our video</a> nascetur ridiculus mus. Donec quam felis, ultricies
 						nec arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis
 						pretium. <a href="#" style="font-weight: bold;">Learn more&hellip;</a>'|t,
-				videoUrl: "http://barrelstrengthdesign.com"
-			}) }}
+			videoUrl: "http://barrelstrengthdesign.com"
+		}) }}
+
+		<div class="pane">
 			
 			<h2>{{ "Generate fake content"|t }}</h2>
 
