@@ -10,7 +10,7 @@ namespace Craft;
  * @property SproutImport_FakerService    $faker
  * @property SproutImport_MockDataService $mockData
  * @property SproutImport_SeedService     $seed
- * @property SproutImport_SettingsService $settings
+ * @property SproutImport_SettingsService $settingsService
  * @property SproutImport_TasksService    $tasks
  */
 class SproutImportService extends BaseApplicationComponent
@@ -19,7 +19,7 @@ class SproutImportService extends BaseApplicationComponent
 	public $faker;
 	public $mockData;
 	public $seed;
-	public $settings;
+	public $settingsService;
 	public $tasks;
 
 	/**
@@ -49,6 +49,8 @@ class SproutImportService extends BaseApplicationComponent
 
 	/**
 	 * @type
+	 *
+	 * @todo - can probably remove $elementsService in favor of BaseSproutImportElementImporter::isElement
 	 */
 	protected $elementsService;
 
@@ -68,18 +70,18 @@ class SproutImportService extends BaseApplicationComponent
 			$this->elementsService = craft()->elements;
 		}
 
-		$this->elements = Craft::app()->getComponent('sproutImport_elements');
-		$this->faker    = Craft::app()->getComponent('sproutImport_faker');
-		$this->mockData = Craft::app()->getComponent('sproutImport_mockData');
-		$this->seed     = Craft::app()->getComponent('sproutImport_seed');
-		$this->settings = Craft::app()->getComponent('sproutImport_settings');
-		$this->tasks    = Craft::app()->getComponent('sproutImport_tasks');
+		$this->elements        = Craft::app()->getComponent('sproutImport_elements');
+		$this->faker           = Craft::app()->getComponent('sproutImport_faker');
+		$this->mockData        = Craft::app()->getComponent('sproutImport_mockData');
+		$this->seed            = Craft::app()->getComponent('sproutImport_seed');
+		$this->settingsService = Craft::app()->getComponent('sproutImport_settings');
+		$this->tasks           = Craft::app()->getComponent('sproutImport_tasks');
 	}
 
 	/**
 	 * Get all built-in and third-party importers
 	 *
-	 * @return BaseSproutImportImporter[]
+	 * @return array
 	 */
 	public function getSproutImportImporters()
 	{
@@ -94,7 +96,7 @@ class SproutImportService extends BaseApplicationComponent
 				{
 					if ($importer && $importer instanceof BaseSproutImportImporter)
 					{
-						$this->importers[$importer->getId()] = $importer;
+						$this->importers[$importer->getImporterClass()] = $importer;
 
 						if ($importer->hasSeedGenerator())
 						{
@@ -104,6 +106,8 @@ class SproutImportService extends BaseApplicationComponent
 				}
 			}
 		}
+
+		ksort($this->importers, SORT_NATURAL);
 
 		return $this->importers;
 	}
@@ -122,9 +126,11 @@ class SproutImportService extends BaseApplicationComponent
 		{
 			foreach ($importers as $importer)
 			{
-				$names[] = $importer->getName();
+				$names[] = $importer->getModelName();
 			}
 		}
+
+		ksort($names, SORT_NATURAL);
 
 		return $names;
 	}
@@ -138,6 +144,8 @@ class SproutImportService extends BaseApplicationComponent
 	{
 		$this->getSproutImportImporters();
 
+		ksort($this->seedImporters, SORT_NATURAL);
+
 		return $this->seedImporters;
 	}
 
@@ -148,27 +156,40 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	public function getSproutImportFields()
 	{
-		$fieldsToLoad = craft()->plugins->call('registerSproutImportFields');
-
-		if ($fieldsToLoad)
+		try
 		{
-			foreach ($fieldsToLoad as $plugin => $fieldClasses)
+
+			$fieldsToLoad = craft()->plugins->call('registerSproutImportFields');
+
+			if ($fieldsToLoad)
 			{
-				foreach ($fieldClasses as $fieldClass)
+				foreach ($fieldsToLoad as $plugin => $fieldClasses)
 				{
-					if ($fieldClass && $fieldClass instanceof BaseSproutImportFieldImporter)
+					foreach ($fieldClasses as $fieldClass)
 					{
-						$this->fieldImporters[$fieldClass->getId()] = $fieldClass;
+						if ($fieldClass && $fieldClass instanceof BaseSproutImportFieldImporter)
+						{
+							$this->fieldImporters[$fieldClass->getImporterClass()] = $fieldClass;
+						}
 					}
 				}
 			}
-		}
 
-		return $this->fieldImporters;
+			ksort($this->fieldImporters, SORT_NATURAL);
+
+			return $this->fieldImporters;
+		}
+		catch (Exception $e)
+		{
+			throw $e;
+		}
 	}
 
 	/**
 	 * Save an imported Element or Setting
+	 *
+	 * @todo - it appears the $filename variable may not be in use?
+	 *       Should be in use for error logs to communicate which filename had an issue.
 	 *
 	 * @param array $elements
 	 * @param bool  $returnSavedElementIds
@@ -180,16 +201,16 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	public function save(array $rows, $seed = false, $filename = '')
 	{
+		$result = "";
 		$this->filename = $filename;
 
 		if (!empty($rows))
 		{
-			$results = array();
-
 			foreach ($rows as $row)
 			{
 				$model = $this->getImporterModelName($row);
 
+				// Confirm model for this row of import data is supported
 				if (!$model)
 				{
 					return false;
@@ -197,11 +218,11 @@ class SproutImportService extends BaseApplicationComponent
 
 				if ($this->isElementType($model))
 				{
-					$result = $this->elements->saveElement($row, $seed, 'import');
+					$result = sproutImport()->elements->saveElement($row, $seed, 'import');
 				}
 				else
 				{
-					$result = $this->settings->saveSetting($row, $seed);
+					$result = sproutImport()->settingsService->saveSetting($row, $seed);
 				}
 			}
 		}
@@ -231,7 +252,8 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get the related SproutImportImporter for the given model
+	 * Get the Importer Model based on the "@model" key in the import data row
+	 * and return it if it exists
 	 *
 	 * @param $settings
 	 *
@@ -239,13 +261,13 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	public function getImporterModelName($settings, $names = null)
 	{
-		// Catches invalid model type key
+		// Log error if no '@model' key identifier is found
 		if (!isset($settings['@model']))
 		{
-			$msg = Craft::t("Model key is invalid use @model.");
+			$message = Craft::t("Model key is invalid. Each type of data being imported should be identified with a '@model' as the key.");
 
 			$errorLog               = array();
-			$errorLog['message']    = $msg;
+			$errorLog['message']    = $message;
 			$errorLog['attributes'] = $settings;
 
 			$this->addError($errorLog, 'invalid-model-key');
@@ -253,7 +275,10 @@ class SproutImportService extends BaseApplicationComponent
 			return false;
 		}
 
-		// Remove the word 'Model' from the end of our setting
+		// Allow Craft Import Format JSON to define a model with
+		// or without the Model suffix. i.e. Entry or EntryModel
+		//
+		// Remove the word 'Model' from the end of our setting if it exists
 		$importerModel = str_replace('Model', '', $settings['@model']);
 
 		if ($names == null)
@@ -263,9 +288,10 @@ class SproutImportService extends BaseApplicationComponent
 
 		if (!in_array($importerModel, $names))
 		{
-			$msg = $importerModel . Craft::t(" Model could not be found.");
+			$message = $importerModel . Craft::t(" Model could not be found.");
 
-			$this->addError($msg, 'invalid-model');
+			SproutImportPlugin::log($message, LogLevel::Error);
+			$this->addError($message, 'invalid-model');
 
 			return false;
 		}
@@ -354,7 +380,6 @@ class SproutImportService extends BaseApplicationComponent
 
 		SproutImportPlugin::log(PHP_EOL . $message . PHP_EOL . PHP_EOL . $data, $level);
 	}
-
 
 	/**
 	 * Divide array by sections
@@ -475,7 +500,7 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	public function getImporterByModelName($name, $row)
 	{
-		$importerClassName = 'Craft\\' . $name . 'SproutImportImporter';
+		$importerClassName = 'Craft\\' . $name . 'SproutImportSettingsImporter';
 
 		// If it doesn't exists then it's an Element Importer
 		if (!class_exists($importerClassName))
@@ -563,7 +588,6 @@ class SproutImportService extends BaseApplicationComponent
 		return $name;
 	}
 
-
 	/**
 	 * @param $name
 	 *
@@ -594,31 +618,30 @@ class SproutImportService extends BaseApplicationComponent
 		$this->log($message, $data, $level);
 	}
 
-
 	/**
 	 * Logs an error in cases where it makes more sense than to throw an exception
 	 *
-	 * @param mixed $msg
+	 * @param mixed $message
 	 * @param array $vars
 	 */
-	public function addError($msg, $key = '', array $vars = array())
+	public function addError($message, $key = '', array $vars = array())
 	{
-		if (is_string($msg))
+		if (is_string($message))
 		{
-			$msg = Craft::t($msg, $vars);
+			$message = Craft::t($message, $vars);
 		}
 		else
 		{
-			$msg = print_r($msg, true);
+			$message = print_r($message, true);
 		}
 
 		if (!empty($key))
 		{
-			$this->error[$key] = $msg;
+			$this->error[$key] = $message;
 		}
 		else
 		{
-			$this->error = $msg;
+			$this->error = $message;
 		}
 	}
 
@@ -644,8 +667,6 @@ class SproutImportService extends BaseApplicationComponent
 	{
 		return $this->error;
 	}
-
-
 
 	/**
 	 * On Before Import Element Event

@@ -4,11 +4,19 @@ namespace Craft;
 class PlainTextSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getModelName()
+	{
+		return 'PlainText';
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 
 		if ($settings != null && $settings['multiline'] == 1)
 		{

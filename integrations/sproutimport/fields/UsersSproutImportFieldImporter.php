@@ -4,12 +4,19 @@ namespace Craft;
 class UsersSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getModelName()
+	{
+		return 'Users';
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
-		$limit    = $settings['limit'];
+		$settings = $this->model->settings;
 		$sources  = $settings['sources'];
 
 		$groupIds = sproutImport()->mockData->getElementGroupIds($sources);
@@ -18,7 +25,7 @@ class UsersSproutImportFieldImporter extends BaseSproutImportFieldImporter
 			'groupIds' => $groupIds
 		);
 
-		$elementIds = sproutImport()->mockData->getMockRelations("User", $attributes, $limit);
+		$elementIds = sproutImport()->mockData->getMockRelations("User", $attributes);
 
 		return $elementIds;
 	}

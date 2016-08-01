@@ -89,16 +89,18 @@ class SproutImportPlugin extends BasePlugin
 	}
 
 	/**
-	 * @throws \Exception
+	 * Initialize Sprout Import
 	 */
 	public function init()
 	{
 		parent::init();
 
 		Craft::import('plugins.sproutimport.contracts.BaseSproutImportElementImporter');
+		Craft::import('plugins.sproutimport.contracts.BaseSproutImportSettingsImporter');
 		Craft::import('plugins.sproutimport.contracts.BaseSproutImportFieldImporter');
 		Craft::import('plugins.sproutimport.contracts.BaseSproutImportImporter');
-		Craft::import('plugins.sproutimport.integrations.sproutimport.*');
+		Craft::import('plugins.sproutimport.integrations.sproutimport.elements.*');
+		Craft::import('plugins.sproutimport.integrations.sproutimport.settings.*');
 		Craft::import('plugins.sproutimport.integrations.sproutimport.fields.*');
 
 		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutimport')
@@ -125,14 +127,17 @@ class SproutImportPlugin extends BasePlugin
 	public function registerSproutImportImporters()
 	{
 		$importers = array(
+			// Element Importers
+			new AssetFileSproutImportElementImporter(),
+			new CategorySproutImportElementImporter(),
 			new EntrySproutImportElementImporter(),
 			new TagSproutImportElementImporter(),
-			new AssetSproutImportElementImporter(),
 			new UserSproutImportElementImporter(),
-			new CategorySproutImportElementImporter(),
-			new EntryTypeSproutImportImporter(),
-			new FieldSproutImportImporter(),
-			new SectionSproutImportImporter()
+
+			// Settings Importers
+			new EntryTypeSproutImportSettingsImporter(),
+			new FieldSproutImportSettingsImporter(),
+			new SectionSproutImportSettingsImporter()
 		);
 
 		// Check if craft commerce plugin is installed and enabled
@@ -141,9 +146,9 @@ class SproutImportPlugin extends BasePlugin
 		// Commerce events goes here
 		if (isset($commercePlugin->isEnabled) && $commercePlugin->isEnabled)
 		{
-			$importers[] = new Commerce_ProductSproutImportElementImporter();
-			$importers[] = new Commerce_ProductTypeSproutImportImporter();
 			$importers[] = new Commerce_OrderSproutImportElementImporter();
+			$importers[] = new Commerce_ProductSproutImportElementImporter();
+			$importers[] = new Commerce_ProductTypeSproutImportSettingsImporter();
 		}
 
 		return $importers;

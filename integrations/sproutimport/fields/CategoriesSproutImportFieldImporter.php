@@ -4,11 +4,19 @@ namespace Craft;
 class CategoriesSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getModelName()
+	{
+		return 'Categories';
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 		$limit    = $settings['limit'];
 		$source   = $settings['source'];
 

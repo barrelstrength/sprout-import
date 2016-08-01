@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class Commerce_ProductTypeSproutImportImporter extends BaseSproutImportImporter
+class Commerce_ProductTypeSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 {
 	private $defaultArgs = array(
 		'hasVariantTitleField' => false,
@@ -9,11 +9,19 @@ class Commerce_ProductTypeSproutImportImporter extends BaseSproutImportImporter
 	);
 
 	/**
+	 * @return string
+	 */
+	public function getName()
+	{
+		return "Craft Commerce Product Type";
+	}
+
+	/**
 	 * @return mixed
 	 */
-	public function defineModel()
+	public function getModelName()
 	{
-		return 'Commerce_ProductTypeModel';
+		return 'Commerce_ProductType';
 	}
 
 	/**
@@ -42,7 +50,7 @@ class Commerce_ProductTypeSproutImportImporter extends BaseSproutImportImporter
 	 * @param $model
 	 * @param $settings
 	 */
-	public function populateModel($model, $settings)
+	public function setModel($model, $settings)
 	{
 		$attributes = array_merge($this->defaultArgs, $settings);
 

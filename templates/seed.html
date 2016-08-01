@@ -29,8 +29,8 @@
 					instructions: "Select the type of content to seed in your database."|t,
 					id: "elementType",
 					name: "elementType",
-					options: [{label: "Select element..."|t, value: null}]|merge(elements),
-					value: elementType is defined ? elementType : null,
+					options: elements,
+					value: elementType is defined ? elementType : 'null',
 					hasOptgroups: true
 				}) }}
 
@@ -51,9 +51,31 @@
 	<div class="item" data-position="right" data-colspan="1">
 		<div class="pane">
 
-			<h2>What is seeding?</h2>
+			<h2>{{ "Generate fake content"|t }}</h2>
 
-			<p>Seed content allows you to generate fake data to populate your database. Seeded content can be removed using the Weed tab.</p>
+			<p>{{ "Generate content to work with for front-end prototyping, testing large amounts of content, and more. Any seed data generated will be marked and can later be unmarked or removed using the Weed tab."|t }}</p>
+
+			<h6>{{ "Supported Elements"|t }}</h6>
+
+			{% set importers = craft.sproutImport.getSproutImportImporters() %}
+
+			<ul>
+			{% for importer in importers %}
+				{% if importer.hasSeedGenerator() %}
+					<li>{{ importer.getName() }}</li>
+				{% endif %}
+			{% endfor %}
+			</ul>
+
+			<h6>{{ "Supported Fields"|t }}</h6>
+
+			{% set fieldImporters = craft.sproutImport.getSproutImportFieldImporters() %}
+
+			<ul>
+				{% for importer in fieldImporters %}
+					<li>{{ importer.getName() }}</li>
+				{% endfor %}
+			</ul>
 
 		</div>
 	</div>

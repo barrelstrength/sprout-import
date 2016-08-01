@@ -52,22 +52,66 @@
 	<div class="item" data-position="right" data-colspan="1">
 		<div class="pane">
 
-			<h2>What can I import? <span class="info">If you need to import something that isn't supported, see our documentation on how to add custom integrations.</span></h2>
+			<h2>All aboard! <span class="info">If you need to import something that isn't supported, see our documentation on how to add custom integrations.</span></h2>
 
-			Can we dynamically display a list of all registered importers here?
+			<p>{{ 'Sprout Import provides a flexible and extensible framework to import your content and settings into Craft. A list of supported data types for this Craft install are below. Third-party plugins can add support for <a href="" target="_blank">additional data types</a>.'|t|raw }}</p>
 
-			<p><b>Content</b>: Entries, Categories, Tags, Users, Craft Commerce Products</p>
+			<h6>Supported Elements</h6>
 
-			<p><b>Settings</b>: Fields, Sections, EntryTypes.</p>
+			{% set importers = craft.sproutImport.getSproutImportImporters() %}
 
-			<hr>
+			<ul>
+			{% for importer in importers %}
+				{% if attribute(importer, 'getElement') is defined %}
+				<li>{{ importer.getName() }}</li>
+				{% endif %}
+			{% endfor %}
+			</ul>
 
-			<h2>How do I import my data?</h2>
+			<h6>Supported Settings</h6>
 
-			<p>Sprout Import supports importing content and settings via JSON. Examples are
-				provided of	all supported data types.</p>
+			<ul>
+			{% for importer in importers %}
+				{% if attribute(importer, 'getElement') is not defined %}
+					<li>{{ importer.getName() }}</li>
+				{% endif %}
+			{% endfor %}
+			</ul>
+
 
 		</div>
+
+		{% set sproutFormsIsInstalled  = craft.sproutImport.isPluginInstalled('sproutforms')%}
+		{% set sproutEmailIsInstalled  = craft.sproutImport.isPluginInstalled('sproutemail') %}
+		{% set sproutSeoIsInstalled    = craft.sproutImport.isPluginInstalled('sproutseo') %}
+		{% set sproutFieldsIsInstalled = craft.sproutImport.isPluginInstalled('sproutfields') %}
+
+		{% if sproutFieldsIsInstalled or not sproutFormsIsInstalled or not sproutEmailIsInstalled or not
+		sproutSeoIsInstalled %}
+
+			<div class="pane">
+				<h6>{{"Additional Sprout Integrations"|t}}</h6>
+
+				{% if sproutFormsIsInstalled %}
+					<p class="light"><a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms" target="_blank">Sprout Forms</a> &ndash; Import Contact Forms, Landing Page Forms, Feedback Forms, Surveys, and more. Generate fake Form Entries to test your workflows.</p>
+				{% endif %}
+
+				{% if sproutEmailIsInstalled %}
+					<p class="light"><a href="http://sprout.barrelstrengthdesign.com/craft-plugins/email" target="_blank">Sprout Email</a> &ndash; Import Email Templates to use for Newsletters, Marketing, Announcements, Notifications, and more.</p>
+				{% endif %}
+
+				{% if sproutSeoIsInstalled %}
+					<p class="light"><a href="http://sprout.barrelstrengthdesign.com/craft-plugins/seo" target="_blank">Sprout SEO</a> &ndash; Migrate your Meta Data and import and manage Redirects in bulk.</p>
+				{% endif %}
+
+				{% if sproutFieldsIsInstalled %}
+					<p class="light"><a href="http://sprout.barrelstrengthdesign.com/craft-plugins/fields" target="_blank">Sprout Fields</a> &ndash; Import content and generate fake data with custom fields for Email Addresses, Phone Numbers, and Links.</p>
+				{% endif %}
+
+			</div>
+
+		{% endif %}
+
 	</div>
 </div>
 

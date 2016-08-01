@@ -1,59 +1,47 @@
 <?php
 namespace Craft;
 
-abstract class BaseSproutImportFieldImporter
+abstract class BaseSproutImportFieldImporter extends BaseSproutImportImporter
 {
 	protected $id;
-
-	protected $fieldModel;
-
-	protected $fakerService;
-
-	/**
-	 * BaseSproutImportFieldImporter constructor.
-	 *
-	 * @param null $fakerService
-	 */
-	public function __construct($fakerService = null)
-	{
-		if ($fakerService == null)
-		{
-			$this->fakerService = sproutImport()->faker->getGenerator();
-		}
-		else
-		{
-			$this->fakerService = $fakerService;
-		}
-	}
 
 	/**
 	 * @return mixed
 	 */
 	public function getName()
 	{
-		return str_replace('SproutImportFieldImporter', '', $this->getId());
+		return $this->getModel()->getName();
 	}
 
 	/**
-	 * @param string $pluginHandle
+	 * @return bool
 	 */
-	final public function getId()
+	public function isField()
 	{
-		$importerClass = str_replace('Craft\\', '', get_class($this));
-
-		$this->id = $importerClass;
-
-		return $importerClass;
+		return true;
 	}
 
 	/**
-	 * @param FieldModel $fieldModel
+	 * Our setModel() Method for Fields will always use the FieldModel Class
+	 *
+	 * @param FieldModel $model
 	 */
-	public function setField(FieldModel $fieldModel)
+	public function setModel(FieldModel $model)
 	{
-		$this->fieldModel = $fieldModel;
+		$this->model = $model;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getModel()
+	{
+		$className = $this->getModelName() . "FieldType";
+
+		$this->model = sproutImport()->getModelNameWithNamespace($className);
+
+		return new $this->model;
+	}
 	/**
 	 * @return mixed
 	 */

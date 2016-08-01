@@ -4,11 +4,19 @@ namespace Craft;
 class TagsSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getModelName()
+	{
+		return 'Tags';
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 
 		$source = $settings['source'];
 

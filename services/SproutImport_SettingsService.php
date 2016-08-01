@@ -22,7 +22,7 @@ class SproutImport_SettingsService extends BaseApplicationComponent
 		$modelName     = sproutImport()->getImporterModelName($settings);
 		$importerClass = sproutImport()->getImporterByModelName($modelName, $settings);
 
-		$model = $importerClass->getPopulatedModel();
+		$model = $importerClass->getModel();
 
 		if ($model->validate())
 		{
@@ -33,7 +33,7 @@ class SproutImport_SettingsService extends BaseApplicationComponent
 				if ($saved)
 				{
 					// Get updated model after save
-					$model = $importerClass->getPopulatedModel();
+					$model = $importerClass->getModel();
 
 					$importerModel = sproutImport()->getImporterModelName($settings);
 
@@ -54,6 +54,7 @@ class SproutImport_SettingsService extends BaseApplicationComponent
 				$message = Craft::t("Error on importer save setting method. \n ");
 				$message .= $e->getMessage();
 
+				SproutImportPlugin::log($message, LogLevel::Error);
 				sproutImport()->addError($message, 'save-setting-importer');
 
 				return false;
@@ -76,6 +77,7 @@ class SproutImport_SettingsService extends BaseApplicationComponent
 			$errorLog['errors']     = Craft::t("Unable to save settings.");
 			$errorLog['attributes'] = $model->getAttributes();
 
+			SproutImportPlugin::log($errorLog['errors'], LogLevel::Error);
 			sproutImport()->addError($errorLog, $errorKey);
 
 			return false;

@@ -6,9 +6,9 @@ class UserSproutImportElementImporter extends BaseSproutImportElementImporter
 	/**
 	 * @return mixed
 	 */
-	public function defineModel()
+	public function getModelName()
 	{
-		return 'UserModel';
+		return 'User';
 	}
 
 	/**
@@ -38,7 +38,7 @@ class UserSproutImportElementImporter extends BaseSproutImportElementImporter
 		}
 
 		return craft()->templates->render('sproutimport/_settings/user', array(
-			'id'       => $this->getName(),
+			'id'       => $this->getModelName(),
 			'groups' => $groupsSelect
 		));
 	}

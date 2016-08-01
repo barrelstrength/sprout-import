@@ -4,11 +4,19 @@ namespace Craft;
 class Commerce_ProductsSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getModelName()
+	{
+		return 'Commerce_Products';
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 		$limit    = $settings['limit'];
 		$sources  = $settings['sources'];
 

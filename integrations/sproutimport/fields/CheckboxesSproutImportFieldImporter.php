@@ -4,11 +4,19 @@ namespace Craft;
 class CheckboxesSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getModelName()
+	{
+		return 'Checkboxes';
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 
 		if (!empty($settings['options']))
 		{

@@ -1,52 +1,29 @@
 <?php
 namespace Craft;
 
-class EntryTypeSproutImportImporter extends BaseSproutImportImporter
+class EntryTypeSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 {
 	/**
 	 * @return string
 	 */
-	public function defineModel()
+	public function getName()
 	{
-		return 'EntryTypeModel';
+		return "Entry Type";
 	}
 
 	/**
-	 * @return bool
-	 * @throws Exception
-	 * @throws \Exception
+	 * @return string
 	 */
-	public function save()
+	public function getModelName()
 	{
-		return craft()->sections->saveEntryType($this->model);
-	}
-
-	/**
-	 * @param $id
-	 *
-	 * @return bool
-	 * @throws \Exception
-	 */
-	public function deleteById($id)
-	{
-		return craft()->sections->deleteEntryTypeById($id);
-	}
-
-	public function getObjectByHandle($handle = null)
-	{
-		$types = craft()->sections->getEntryTypesByHandle($handle);
-
-		if (!empty($types))
-		{
-			return $types[0];
-		}
+		return 'EntryType';
 	}
 
 	/**
 	 * @param $model
 	 * @param $settings
 	 */
-	public function populateModel($entryType, $entryTypeSettings)
+	public function setModel($entryType, $entryTypeSettings)
 	{
 		$entryType->setAttributes($entryTypeSettings);
 
@@ -69,7 +46,7 @@ class EntryTypeSproutImportImporter extends BaseSproutImportImporter
 
 				foreach ($fields as $fieldSettings)
 				{
-					$field = sproutImport()->settings->saveSetting($fieldSettings);
+					$field = sproutImport()->settingsService->saveSetting($fieldSettings);
 
 					$fieldLayout[$tabName][] = $field->id;
 
@@ -94,5 +71,36 @@ class EntryTypeSproutImportImporter extends BaseSproutImportImporter
 		}
 
 		$this->model = $entryType;
+	}
+
+	/**
+	 * @return bool
+	 * @throws Exception
+	 * @throws \Exception
+	 */
+	public function save()
+	{
+		return craft()->sections->saveEntryType($this->model);
+	}
+
+	/**
+	 * @param $id
+	 *
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function deleteById($id)
+	{
+		return craft()->sections->deleteEntryTypeById($id);
+	}
+
+	public function getModelByHandle($handle = null)
+	{
+		$types = craft()->sections->getEntryTypesByHandle($handle);
+
+		if (!empty($types))
+		{
+			return $types[0];
+		}
 	}
 }

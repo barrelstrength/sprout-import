@@ -12,6 +12,7 @@
 		<div id="fields" class="pane">
 
 			{% if hasSeeds == true %}
+
 				<table class="weed data fullwidth">
 					<tr>
 						<th class="type">Type</th>
@@ -20,9 +21,9 @@
 					</tr>
 					{% if elementImporters is defined %}
 						{% for importer in elementImporters %}
-							{% if importer.getSeedCount('import') > 0 %}
+							{% if importer.getSeedCount() > 0 %}
 									<tr>
-										<td>{{ importer.getElementName() }}</td>
+										<td>{{ importer.getName() }}</td>
 										<td>{{ importer.getSeedCount() }}</td>
 										<td class="options">
 											<form method="post" accept-charset="UTF-8">
@@ -51,8 +52,25 @@
 						<input class="btn" name="submit" type="submit" value="Keep All">
 					</form>
 				</div>
+
 			{% else %}
-				<p>{{ "Currently, there is no data to weed."|t }}</p>
+
+				<div class="sprout-nocontent">
+					<div class="sprout-mediabox-wrapper">
+						<div class="sprout-mediabox">
+							<img src="{{ resourceUrl('sproutimport/icon.svg') }}" alt="Sprout Logo" />
+						</div>
+						<div class="sprout-mediabody">
+							<h2>{{ "The garden is weeded"|t }}</h2>
+							<hr>
+							<p>{{ "Currently, no content or settings in your database are marked as seed content. Get started and <a href='{importLink}'>import content and settings</a> or <a href='{seedLink}'>generate seed content</a>."|t({
+									importLink: "#",
+									seedLink: "#"
+								})|raw }}</p>
+						</div>
+					</div>
+				</div>
+
 			{% endif %}
 
 		</div>
@@ -60,18 +78,61 @@
 	<div class="item" data-position="right" data-colspan="1">
 		<div class="pane">
 
-			<p><strong>{{ "Weed"|t }}</strong> – {{ "Weeding can help clean up your database and remove all imported content that was marked as seed content."|t|raw }}</p>
+			<h2>{{ "Managing seed data"|t }}</h2>
 
-			<p><strong>{{ "Keep"|t }}</strong> – {{ "If you have imported content marked as seed content and you wish to keep it, using the Keep option will unmark it as seed content in the database so nobody can accidentally remove it using the weed feature. Content that you choose to keep will need to be deleted manually."|t|raw }}</p>
+			<p>{{ "This page lists all content and settings that have been imported into your database and marked as seed data. When seed data exists, you can choose to keep or remove this data."|t }}</p>
 
-			<style>
-				table.weed td:last-of-type {
-					text-align: right;
-				}
-			</style>
+			<h6>{{ "Weed"|t }}</h6>
+			<p class="first">{{ "Select weed to remove all imported content or settings of a particular type."|t|raw }}</p>
+
+			<h6>{{ "Keep"|t }}</h6>
+			<p class="first">{{ "Select keep to unmark seed data and continue to manage it as permanent content and settings in Craft."|t|raw }}</p>
 
 		</div>
 	</div>
 </div>
 
 {% endblock %}
+
+{% includecss %}
+
+table.weed td:last-of-type {
+	text-align: right;
+}
+
+{# Media box styles #}
+.sprout-nocontent {
+	display: flex;
+	justify-content: center;
+	margin: 2em auto;
+}
+.sprout-mediabox-wrapper {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+	align-content: space-between;
+	width: 70%;
+}
+.sprout-mediabox {
+	margin-right: 1em;
+}
+.sprout-mediabox img {
+	height: 140px;
+	opacity: .3;
+	width: 140px;
+}
+.sprout-mediabody h2 {
+	font-size: 18px;
+}
+.sprout-mediabody hr {
+	margin: 0;
+}
+.sprout-mediabody a {
+	font-weight: bold;
+}
+.sprout-mediabody {
+	flex-grow: 1;
+	width: 60%;
+}
+{% endincludecss %}

@@ -4,11 +4,19 @@ namespace Craft;
 class NumberSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getModelName()
+	{
+		return 'Number';
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 
 		$min     = is_numeric($settings['min']) ? $settings['min'] : 0;
 		$max     = is_numeric($settings['max']) ? $settings['max'] : 100;

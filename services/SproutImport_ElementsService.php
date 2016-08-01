@@ -51,7 +51,11 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 		$modelName  = sproutImport()->getImporterModelName($element);
 		$this->type = $modelName;
 
-		// Adds extra element keys to pass validation
+		/**
+		 * Adds extra element keys to pass validation
+		 *
+		 * @var BaseSproutImportElementImporter $importerClass
+		 */
 		$importerClass = sproutImport()->getImporterByModelName($modelName, $element);
 
 		$importerElementKeys = $importerClass->defineKeys();
@@ -67,9 +71,11 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 		{
 			$inputKeysText = implode(', ', $elementDiff);
 
-			$msg = Craft::t("Invalid element keys $inputKeysText.");
+			$message = Craft::t("Invalid element keys $inputKeysText.");
 
-			sproutImport()->addError($msg, $inputKeysText);
+			SproutImportPlugin::log($message, LogLevel::Error);
+
+			sproutImport()->addError($message, $inputKeysText);
 
 			return false;
 		}
@@ -78,7 +84,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 
 		$beforeSave = sproutImport()->getValueByKey('content.beforeSave', $element);
 
-		$model = $importerClass->getPopulatedModel();
+		$model = $importerClass->getModel();
 
 		$content    = sproutImport()->getValueByKey('content', $element);
 		$fields     = sproutImport()->getValueByKey('content.fields', $element);
@@ -99,9 +105,10 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 				{
 					$key = 'field-null-' . $fieldHandle;
 
-					$msg = Craft::t("Could not find the $fieldHandle field.");
+					$message = Craft::t("Could not find the $fieldHandle field.");
 
-					sproutImport()->addError($msg, $key);
+					SproutImportPlugin::log($message, LogLevel::Error);
+					sproutImport()->addError($message, $key);
 
 					return false;
 				}
@@ -136,7 +143,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 					$saved = $importerClass->save();
 
 					// Get updated model after save
-					$model = $importerClass->getPopulatedModel();
+					$model = $importerClass->getModel();
 
 					// Check for field setting errors
 					if (!empty($model->getErrors()))
@@ -150,6 +157,8 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 				{
 					$message = Craft::t("Error on importer save method. \n ");
 					$message .= $e->getMessage();
+
+					SproutImportPlugin::log($message, LogLevel::Error);
 					sproutImport()->addError($message, 'save-importer');
 
 					return false;
@@ -178,9 +187,11 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 			{
 				$this->unsavedElements[] = array('title' => $model->getTitle(), 'error' => $e->getMessage());
 				$title                   = sproutImport()->getValueByKey('content.title', $element);
-				$msg                     = $title . ' ' . implode(', ', array_keys($fields)) . ' Check field values if it exists.';
+				$message                     = $title . ' ' . implode(', ', array_keys($fields)) . ' Check field values if it exists.';
 
-				sproutImport()->addError($msg, 'save-element-error');
+				SproutImportPlugin::log($message, LogLevel::Error);
+
+				sproutImport()->addError($message, 'save-element-error');
 
 				sproutImport()->addError($e->getMessage(), 'save-element-error-message');
 			}
@@ -406,23 +417,6 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 		return $fields;
 	}
 
-	/**
-	 * @param null  $beforeSave
-	 * @param array $data
-	 *
-	 * @return BaseElementModel|EntryModel|CategoryModel|UserModel
-	 * @throws Exception
-	 */
-	protected function getElementModel($beforeSave = null, $populatedModel)
-	{
-		if ($this->getModelByMatches($beforeSave))
-		{
-			return $this->getModelByMatches($beforeSave);
-		}
-
-		return $populatedModel;
-	}
-
 	public function getModelByMatches($beforeSave)
 	{
 		$type = $this->type;
@@ -465,6 +459,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 				}
 				catch (\Exception $e)
 				{
+					SproutImportPlugin::log($e->getMessage(), LogLevel::Error);
 					sproutImport()->addError($e->getMessage(), 'invalid-model-match');
 
 					return false;
@@ -510,6 +505,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 		// make error unique
 		$errorKey = serialize($model->getAttributes());
 
+		SproutImportPlugin::log(Craft::t('Errors via logErrorByModel'), LogLevel::Error);
 		sproutImport()->addError($errorLog, $errorKey);
 	}
 

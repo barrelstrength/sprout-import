@@ -32,18 +32,18 @@ class SproutImport_SeedController extends BaseController
 			{
 				if ($importer->isElement())
 				{
-					$title = $importer->getElement()->getName();
+					$title = $importer->getName();
 				}
 				else
 				{
 					$title = $importer->getName();
 				}
 
-				$classId = 'SproutImport-' . $importer->getName();
+				$classId = 'SproutImport-' . $importer->getModelName();
 
 				$elementSelect[$classId] = array(
 					'label' => $title,
-					'value' => $importer->getName()
+					'value' => $importer->getModelName()
 				);
 			}
 		}
@@ -60,18 +60,18 @@ class SproutImport_SeedController extends BaseController
 				{
 					if ($importerClass->isElement())
 					{
-						$title = $importerClass->getElement()->getName();
+						$title = $importerClass->getName();
 					}
 					else
 					{
 						$title = $importerClass->getName();
 					}
 
-					$classId = $plugin . '-' . $importerClass->getName();
+					$classId = $plugin . '-' . $importerClass->getModelName();
 
 					$elementSelect[$classId] = array(
 						'label' => $title,
-						'value' => $importerClass->getName()
+						'value' => $importerClass->getModelName()
 					);
 				}
 			}
@@ -100,6 +100,9 @@ class SproutImport_SeedController extends BaseController
 		{
 			$namespace = 'Craft\\' . $elementType . 'SproutImportElementImporter';
 
+			/**
+			 * @var BaseSproutImportElementImporter $importerClass
+			 */
 			$importerClass = new $namespace;
 
 			$ids = $importerClass->getMockData($quantity, $settings);
@@ -118,8 +121,8 @@ class SproutImport_SeedController extends BaseController
 
 				if (!empty($errors))
 				{
-					$msg = implode("\n", $errors);
-					sproutImport()->errorLog($msg);
+					$message = implode("\n", $errors);
+					sproutImport()->errorLog($message);
 
 					craft()->userSession->setError(Craft::t('Unable to generate data. Check logs.'));
 				}

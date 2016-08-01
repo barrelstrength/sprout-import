@@ -63,8 +63,8 @@ class SproutImport_ImportTask extends BaseTask
 
 				if (!empty($errors))
 				{
-					$msg = implode("\n", $errors);
-					sproutImport()->errorLog($msg);
+					$message = implode("\n", $errors);
+					sproutImport()->errorLog($message);
 
 					$transaction->rollback();
 

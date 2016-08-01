@@ -48,9 +48,9 @@ class SproutImport_ImportController extends BaseController
 		}
 		elseif (!empty($pastedJson))
 		{
-			$errorMsg = Craft::t('Unable to parse pasted JSON.');
+			$message = Craft::t('Unable to parse pasted JSON.');
 
-			craft()->userSession->setError($errorMsg);
+			craft()->userSession->setError($message);
 
 			$this->redirectToPostedUrl();
 		}

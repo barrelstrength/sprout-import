@@ -4,11 +4,19 @@ namespace Craft;
 class AssetsSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getModelName()
+	{
+		return 'Assets';
+	}
+
+	/**
 	 * @return array
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 		$limit    = $settings['limit'];
 		$sources  = $settings['sources'];
 

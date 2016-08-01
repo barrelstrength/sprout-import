@@ -53,10 +53,10 @@ class SproutImportServiceTest extends SproutImportBaseTest
 
 		$settings = array('handle' => 'test');
 
-		$importer = m::mock('Craft\FieldSproutImportImporter[getObjectByHandle]')
+		$importer = m::mock('Craft\FieldSproutImportImporter[getModelByHandle]')
 			->shouldReceive('setSettings')
 			->andReturn($settings)
-			->shouldReceive('getObjectByHandle')
+			->shouldReceive('getModelByHandle')
 			->andReturn(null)
 			->mock();
 

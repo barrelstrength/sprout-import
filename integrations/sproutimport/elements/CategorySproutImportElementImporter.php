@@ -8,9 +8,9 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 	/**
 	 * @return mixed
 	 */
-	public function defineModel()
+	public function getModelName()
 	{
-		return 'CategoryModel';
+		return 'Category';
 	}
 
 	/**
@@ -50,7 +50,7 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 		}
 
 		return craft()->templates->render('sproutimport/_settings/category', array(
-			'id'             => $this->getName(),
+			'id'             => $this->getModelName(),
 			'categoryGroups' => $groupsSelect
 		));
 	}

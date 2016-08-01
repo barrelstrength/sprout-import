@@ -8,7 +8,10 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	 */
 	public function getName()
 	{
-		return str_replace('SproutImportElementImporter', '', $this->getId());
+		$elementTypeName = $this->getModel()->getElementType();
+		$elementType = craft()->elements->getElementType($elementTypeName);
+
+		return $elementType->getName();
 	}
 
 	/**
@@ -20,30 +23,11 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	}
 
 	/**
-	 * @param $model
-	 */
-	public function setModel($model)
-	{
-		$this->model = $model;
-	}
-
-	/**
-	 * @param $id
-	 *
-	 * @return bool
-	 * @throws \Exception
-	 */
-	public function deleteById($id)
-	{
-		return craft()->elements->deleteElementById($id);
-	}
-
-	/**
 	 * @return IElementType|null
 	 */
 	public function getElement()
 	{
-		$name = $this->getName();
+		$name = $this->getModelName() . "Model";
 
 		return craft()->elements->getElementType($name);
 	}
@@ -54,7 +38,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	 *
 	 * @return bool|BaseElementModel|null
 	 */
-	public function populateModel($model, $settings = array())
+	public function setModel($model, $settings = array())
 	{
 		if (isset($settings['content']['beforeSave']))
 		{
@@ -96,9 +80,11 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 
 				if ($userModel == null)
 				{
-					$msg = Craft::t("Could not find Author ID or Email.");
+					$message = Craft::t("Could not find Author ID or Email.");
 
-					sproutImport()->addError($msg, 'invalid-author');
+					SproutImportPlugin::log($message, LogLevel::Error);
+
+					sproutImport()->addError($message, 'invalid-author');
 				}
 			}
 		}
@@ -117,10 +103,10 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 
 					if (!$fields)
 					{
-						$msg = Craft::t("Unable to resolve matrix relationships.");
+						$message = Craft::t("Unable to resolve matrix relationships.");
 
 						$log            = array();
-						$log['message'] = $msg;
+						$log['message'] = $message;
 						$log['fields']  = $fields;
 
 						sproutImport()->log($log, 'invalid-matrix');
@@ -138,10 +124,10 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 
 					if (!$fields)
 					{
-						$msg = Craft::t("Unable to resolve related relationships.");
+						$message = Craft::t("Unable to resolve related relationships.");
 
 						$log            = array();
-						$log['message'] = $msg;
+						$log['message'] = $message;
 						$log['fields']  = $fields;
 
 						sproutImport()->log($log, 'invalid-relation');
@@ -160,5 +146,21 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 		$this->model = $model;
 
 		return $this->model;
+	}
+
+	/**
+	 * @return string
+	 */
+	abstract public function save();
+
+	/**
+	 * @param $id
+	 *
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function deleteById($id)
+	{
+		return craft()->elements->deleteElementById($id);
 	}
 }

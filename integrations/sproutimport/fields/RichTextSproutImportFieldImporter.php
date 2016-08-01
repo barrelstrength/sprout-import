@@ -4,6 +4,14 @@ namespace Craft;
 class RichTextSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getModelName()
+	{
+		return 'RichText';
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getMockData()

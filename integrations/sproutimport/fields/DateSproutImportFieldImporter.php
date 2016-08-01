@@ -4,11 +4,19 @@ namespace Craft;
 class DateSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getModelName()
+	{
+		return 'Date';
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 
 		$minuteIncrement = $settings['minuteIncrement'];
 		$showDate        = $settings['showDate'];

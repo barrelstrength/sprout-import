@@ -4,13 +4,21 @@ namespace Craft;
 class MatrixSproutImportFieldImporter extends BaseSproutImportFieldImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getModelName()
+	{
+		return 'Matrix';
+	}
+
+	/**
 	 * @return mixed
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 
-		$fieldId = $this->fieldModel->id;
+		$fieldId = $this->model->id;
 
 		$blocks = craft()->matrix->getBlockTypesByFieldId($fieldId);
 
