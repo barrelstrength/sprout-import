@@ -6,17 +6,9 @@ class MatrixSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	/**
 	 * @return string
 	 */
-	public function getFieldTypeModelName()
+	public function getModelName()
 	{
-		return 'MatrixFieldType';
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function canMockData()
-	{
-		return true;
+		return 'Matrix';
 	}
 
 	/**
@@ -24,9 +16,9 @@ class MatrixSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 
-		$fieldId = $this->fieldModel->id;
+		$fieldId = $this->model->id;
 
 		$blocks = craft()->matrix->getBlockTypesByFieldId($fieldId);
 

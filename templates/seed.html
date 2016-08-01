@@ -29,8 +29,8 @@
 					instructions: "Select the type of content to seed in your database."|t,
 					id: "elementType",
 					name: "elementType",
-					options: [{label: "Select element..."|t, value: null}]|merge(elements),
-					value: elementType is defined ? elementType : null,
+					options: elements,
+					value: elementType is defined ? elementType : 'null',
 					hasOptgroups: true
 				}) }}
 
@@ -62,7 +62,7 @@
 			<ul>
 			{% for importer in importers %}
 				{% if importer.hasSeedGenerator() %}
-					<li>{{ importer.getElement().getName() }}</li>
+					<li>{{ importer.getName() }}</li>
 				{% endif %}
 			{% endfor %}
 			</ul>
@@ -73,9 +73,7 @@
 
 			<ul>
 				{% for importer in fieldImporters %}
-					{% if importer.canMockData() %}
-						<li>{{ importer.getField().name }}</li>
-					{% endif %}
+					<li>{{ importer.getName() }}</li>
 				{% endfor %}
 			</ul>
 

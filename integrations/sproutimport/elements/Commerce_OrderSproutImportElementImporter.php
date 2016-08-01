@@ -4,11 +4,19 @@ namespace Craft;
 class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getName()
+	{
+		return "Craft Commerce Orders";
+	}
+
+	/**
 	 * @return mixed
 	 */
-	public function defineModel()
+	public function getModelName()
 	{
-		return 'Commerce_OrderModel';
+		return 'Commerce_Order';
 	}
 
 	/**
@@ -87,10 +95,11 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 		}
 		else
 		{
-		//	Craft::dd($paymentForm->getErrors());
-			$customError = Craft::t('Payment information submitted is invalid.');
+			$message = Craft::t('Payment information submitted is invalid.');
 
-			sproutImport()->addError($customError, 'payment-invalid');
+			SproutImportPlugin::log($message, LogLevel::Error);
+
+			sproutImport()->addError($message, 'payment-invalid');
 
 			$success = false;
 		}
@@ -109,20 +118,6 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 	public function deleteById($id)
 	{
 		return craft()->elements->deleteElementById($id);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getSettingsHtml()
-	{
-	}
-
-	/**
-	 * @param $settings
-	 */
-	public function getMockData($settings)
-	{
 	}
 
 	public function defineKeys()

@@ -6,17 +6,9 @@ class ColorSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	/**
 	 * @return string
 	 */
-	public function getFieldTypeModelName()
+	public function getModelName()
 	{
-		return 'ColorFieldType';
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function canMockData()
-	{
-		return true;
+		return 'Color';
 	}
 
 	/**

@@ -1,14 +1,14 @@
 <?php
 namespace Craft;
 
-class AssetSproutImportElementImporter extends BaseSproutImportElementImporter
+class AssetFileSproutImportElementImporter extends BaseSproutImportElementImporter
 {
 	/**
 	 * @return mixed
 	 */
-	public function defineModel()
+	public function getModelName()
 	{
-		return 'AssetModel';
+		return 'AssetFile';
 	}
 
 	/**

@@ -6,17 +6,9 @@ class PositionSelectSproutImportFieldImporter extends BaseSproutImportFieldImpor
 	/**
 	 * @return string
 	 */
-	public function getFieldTypeModelName()
+	public function getModelName()
 	{
-		return 'PositionSelectFieldType';
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function canMockData()
-	{
-		return true;
+		return 'PositionSelect';
 	}
 
 	/**
@@ -24,7 +16,7 @@ class PositionSelectSproutImportFieldImporter extends BaseSproutImportFieldImpor
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 
 		if (!empty($settings['options']))
 		{

@@ -4,11 +4,19 @@ namespace Craft;
 class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElementImporter
 {
 	/**
+	 * @return string
+	 */
+	public function getName()
+	{
+		return "Craft Commerce Products";
+	}
+
+	/**
 	 * @return mixed
 	 */
-	public function defineModel()
+	public function getModelName()
 	{
-		return 'Commerce_ProductModel';
+		return 'Commerce_Product';
 	}
 
 	/**
@@ -24,7 +32,11 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 		{
 			if (empty($this->data['variants']))
 			{
-				sproutImport()->addError('Variants input is required', 'variant-required');
+				$message = Craft::t('Variants input is required');
+
+				SproutImportPlugin::log($message, LogLevel::Error);
+
+				sproutImport()->addError($message, 'variant-required');
 
 				return false;
 			}
@@ -37,23 +49,11 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 		}
 		catch (\Exception $e)
 		{
+			SproutImportPlugin::log('Commerce Product Import Error:' . $e->getMessage(), LogLevel::Error);
+
 			sproutImport()->addError('Commerce Product Import Error:', 'commerce-import-error');
 			sproutImport()->addError($e->getMessage(), 'commerce-import-error-message');
 		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getSettingsHtml()
-	{
-	}
-
-	/**
-	 * @param $settings
-	 */
-	public function getMockData($settings)
-	{
 	}
 
 	/**

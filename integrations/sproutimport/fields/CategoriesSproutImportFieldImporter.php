@@ -6,17 +6,9 @@ class CategoriesSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	/**
 	 * @return string
 	 */
-	public function getFieldTypeModelName()
+	public function getModelName()
 	{
-		return 'CategoriesFieldType';
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function canMockData()
-	{
-		return true;
+		return 'Categories';
 	}
 
 	/**
@@ -24,7 +16,7 @@ class CategoriesSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 		$limit    = $settings['limit'];
 		$source   = $settings['source'];
 

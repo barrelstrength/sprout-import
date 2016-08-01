@@ -6,17 +6,9 @@ class Commerce_ProductsSproutImportFieldImporter extends BaseSproutImportFieldIm
 	/**
 	 * @return string
 	 */
-	public function getFieldTypeModelName()
+	public function getModelName()
 	{
-		return 'Commerce_ProductsFieldType';
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function canMockData()
-	{
-		return true;
+		return 'Commerce_Products';
 	}
 
 	/**
@@ -24,7 +16,7 @@ class Commerce_ProductsSproutImportFieldImporter extends BaseSproutImportFieldIm
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 		$limit    = $settings['limit'];
 		$sources  = $settings['sources'];
 

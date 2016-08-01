@@ -6,17 +6,9 @@ class DropdownSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	/**
 	 * @return string
 	 */
-	public function getFieldTypeModelName()
+	public function getModelName()
 	{
-		return 'DropdownFieldType';
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function canMockData()
-	{
-		return true;
+		return 'Dropdown';
 	}
 
 	/**
@@ -24,7 +16,7 @@ class DropdownSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 
 		if (!empty($settings['options']))
 		{

@@ -6,9 +6,9 @@ class TagSproutImportElementImporter extends BaseSproutImportElementImporter
 	/**
 	 * @return mixed
 	 */
-	public function defineModel()
+	public function getModelName()
 	{
-		return 'TagModel';
+		return 'Tag';
 	}
 
 	/**
@@ -48,7 +48,7 @@ class TagSproutImportElementImporter extends BaseSproutImportElementImporter
 		}
 
 		return craft()->templates->render('sproutimport/_settings/tag', array(
-			'id'        => $this->getName(),
+			'id'        => $this->getModelName(),
 			'tagGroups' => $groupsSelect
 		));
 	}

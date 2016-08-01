@@ -63,7 +63,7 @@
 			<ul>
 			{% for importer in importers %}
 				{% if attribute(importer, 'getElement') is defined %}
-				<li>{{ importer.getElement().getName() }}</li>
+				<li>{{ importer.getName() }}</li>
 				{% endif %}
 			{% endfor %}
 			</ul>

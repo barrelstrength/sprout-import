@@ -6,17 +6,9 @@ class RadioButtonsSproutImportFieldImporter extends BaseSproutImportFieldImporte
 	/**
 	 * @return string
 	 */
-	public function getFieldTypeModelName()
+	public function getModelName()
 	{
-		return 'RadioButtonsFieldType';
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function canMockData()
-	{
-		return true;
+		return 'RadioButtons';
 	}
 
 	/**
@@ -24,7 +16,7 @@ class RadioButtonsSproutImportFieldImporter extends BaseSproutImportFieldImporte
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 
 		if (!empty($settings['options']))
 		{

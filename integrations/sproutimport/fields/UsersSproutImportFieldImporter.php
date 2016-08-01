@@ -6,17 +6,9 @@ class UsersSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	/**
 	 * @return string
 	 */
-	public function getFieldTypeModelName()
+	public function getModelName()
 	{
-		return 'UsersFieldType';
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function canMockData()
-	{
-		return true;
+		return 'Users';
 	}
 
 	/**
@@ -24,7 +16,7 @@ class UsersSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 		$sources  = $settings['sources'];
 
 		$groupIds = sproutImport()->mockData->getElementGroupIds($sources);

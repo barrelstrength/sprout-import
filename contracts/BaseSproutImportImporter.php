@@ -10,15 +10,15 @@ abstract class BaseSproutImportImporter
 {
 	public $model;
 
-	protected $id = null;
+	protected $importerClass = null;
 
 	protected $valid;
-
-	protected $fakerService;
 
 	protected $settings;
 
 	protected $data;
+
+	protected $fakerService;
 
 	/**
 	 * BaseSproutImportImporter constructor.
@@ -32,10 +32,9 @@ abstract class BaseSproutImportImporter
 
 		if (count($settings))
 		{
-			$model       = $this->getModel();
-			$this->model = $model;
+			$model = $this->getModel();
 
-			$this->populateModel($model, $settings);
+			$this->setModel($model, $settings);
 		}
 
 		if ($fakerService == null)
@@ -51,22 +50,31 @@ abstract class BaseSproutImportImporter
 	/**
 	 * @return mixed
 	 */
-	public function getName()
-	{
-		return str_replace('SproutImportImporter', '', $this->getId());
-	}
-
-	/**
-	 * @return mixed
-	 */
-	final public function getId()
+	final public function getImporterClass()
 	{
 		$importerClass = str_replace('Craft\\', '', get_class($this));
 
-		$this->id = $importerClass;
+		$this->importerClass = $importerClass;
 
 		return $importerClass;
 	}
+
+	/**
+	 * The user-friendly name for the imported data type
+	 *
+	 * @return mixed
+	 */
+	abstract public function getName();
+
+	/**
+	 * The primary model that the Importer supports
+	 *
+	 * i.e. EntryModel => Entry
+	 * i.e. SproutForms_FormModel => SproutForms_Form
+	 *
+	 * @return mixed
+	 */
+	abstract public function getModelName();
 
 	/**
 	 * @return bool
@@ -77,24 +85,19 @@ abstract class BaseSproutImportImporter
 	}
 
 	/**
-	 * Get Element Importer label name
-	 *
-	 * @return mixed|string
+	 * @return bool
 	 */
-	public function getElementName()
+	public function isSettings()
 	{
-		$name = $this->getName();
+		return false;
+	}
 
-		$element = craft()->elements->getElementType($name);
-
-		if (method_exists($element, 'getName'))
-		{
-			return $element->getName();
-		}
-		else
-		{
-			return $this->getName();
-		}
+	/**
+	 * @return bool
+	 */
+	public function isField()
+	{
+		return false;
 	}
 
 	/**
@@ -106,96 +109,33 @@ abstract class BaseSproutImportImporter
 	}
 
 	/**
-	 * @param $settings
+	 * @param $model
 	 */
-	public function setSettings($settings)
+	public function setModel($model, $settings = array())
 	{
-		$this->settings = $settings;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getErrors()
-	{
-		return $this->model->getErrors();
-	}
-
-	/**
-	 * A generic method that allows you to define how to retrieve the model of
-	 * an importable data type using it's handle.
-	 *
-	 * In the case for importing fields, this is the getFieldByHandle method in the Fields Service.
-	 * In the case for importing sections, this is the getSectionByHandle method in the Sections Service.
-	 *
-	 * @param null $handle
-	 *
-	 * @return null
-	 */
-	public function getObjectByHandle($handle = null)
-	{
-		return null;
-	}
-
-	/**
-	 * @return null
-	 */
-	public function getModel()
-	{
-		$model = $this->defineModel();
-
-		$model = sproutImport()->getModelNameWithNamespace($model);
-
-		if (!isset($this->settings['handle']))
+		if (count($settings))
 		{
-			return new $model;
+			$model->setAttributes($settings);
 		}
-
-		$handle = $this->settings['handle'];
-
-		$object = $this->getObjectByHandle($handle);
-
-		if ($object != null)
-		{
-			return $object;
-		}
-		else
-		{
-			return new $model;
-		}
-	}
-
-	/**
-	 * @return string
-	 */
-	public function populateModel($model, $settings)
-	{
-		$model->setAttributes($settings);
 
 		$this->model = $model;
 	}
 
 	/**
-	 * @return null
-	 */
-	public function getPopulatedModel()
-	{
-		return $this->model;
-	}
-
-	/**
-	 * @return string
-	 */
-	abstract public function save();
-
-	/**
-	 * @param $id
-	 *
 	 * @return mixed
 	 */
-	abstract public function deleteById($id);
+	public function getModel()
+	{
+		if (!$this->model)
+		{
+			$className = $this->getModelName() . "Model";
+			$model     = sproutImport()->getModelNameWithNamespace($className);
 
-	abstract public function defineModel();
+			$this->model = new $model;
+		}
+
+		return $this->model;
+	}
 
 	/**
 	 * @return bool
@@ -214,6 +154,14 @@ abstract class BaseSproutImportImporter
 	}
 
 	/**
+	 * @param $settings
+	 */
+	public function setSettings($settings)
+	{
+		$this->settings = $settings;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getSettingsHtml()
@@ -226,7 +174,7 @@ abstract class BaseSproutImportImporter
 	 */
 	public function getSeedCount()
 	{
-		$name = $this->getName();
+		$name = $this->getModelName();
 
 		$count = sproutImport()->seed->getSeedCountByElementType($name);
 
@@ -248,4 +196,13 @@ abstract class BaseSproutImportImporter
 	{
 		return array();
 	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getErrors()
+	{
+		return $this->model->getErrors();
+	}
+
 }

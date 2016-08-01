@@ -6,17 +6,9 @@ class DateSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	/**
 	 * @return string
 	 */
-	public function getFieldTypeModelName()
+	public function getModelName()
 	{
-		return 'DateFieldType';
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function canMockData()
-	{
-		return true;
+		return 'Date';
 	}
 
 	/**
@@ -24,7 +16,7 @@ class DateSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 
 		$minuteIncrement = $settings['minuteIncrement'];
 		$showDate        = $settings['showDate'];

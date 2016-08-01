@@ -32,4 +32,7 @@ Craft.SproutImport.Seed = {
 
 $(document).ready(function() {
 	Craft.SproutImport.Seed.init();
+
+	$('#elementType').val('Entry');
+	$('.element-options.Entry').show();
 });

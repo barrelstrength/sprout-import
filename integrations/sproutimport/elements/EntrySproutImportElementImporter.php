@@ -8,9 +8,9 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 	/**
 	 * @return mixed
 	 */
-	public function defineModel()
+	public function getModelName()
 	{
-		return 'EntryModel';
+		return 'Entry';
 	}
 
 	/**
@@ -34,7 +34,12 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 
 			if (craft()->sections->getSectionById($sectionId) == null)
 			{
-				sproutImport()->addError("Invalid section ID", 'invalid-section');
+				$message = Craft::t("Invalid section ID");
+
+				SproutImportPlugin::log($message, LogLevel::Error);
+
+				sproutImport()->addError($message, 'invalid-section');
+
 				return false;
 			}
 
@@ -42,6 +47,8 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 		}
 		catch (\Exception $e)
 		{
+			SproutImportPlugin::log($e->getMessage(), LogLevel::Error);
+
 			sproutImport()->addError($e->getMessage(), 'invalid-entry-model');
 
 			return false;
@@ -61,7 +68,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 		$channels = sproutImport()->elements->getChannelSections();
 
 		return craft()->templates->render('sproutimport/_settings/entry', array(
-			'id'       => $this->getName(),
+			'id'       => $this->getModelName(),
 			'sections' => $sections,
 			'channels' => $channels
 		));

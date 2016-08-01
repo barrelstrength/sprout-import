@@ -6,17 +6,9 @@ class NumberSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	/**
 	 * @return string
 	 */
-	public function getFieldTypeModelName()
+	public function getModelName()
 	{
-		return 'NumberFieldType';
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function canMockData()
-	{
-		return true;
+		return 'Number';
 	}
 
 	/**
@@ -24,7 +16,7 @@ class NumberSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	 */
 	public function getMockData()
 	{
-		$settings = $this->fieldModel->settings;
+		$settings = $this->model->settings;
 
 		$min     = is_numeric($settings['min']) ? $settings['min'] : 0;
 		$max     = is_numeric($settings['max']) ? $settings['max'] : 100;

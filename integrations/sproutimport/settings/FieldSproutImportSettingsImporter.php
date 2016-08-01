@@ -1,14 +1,22 @@
 <?php
 namespace Craft;
 
-class FieldSproutImportImporter extends BaseSproutImportImporter
+class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 {
 	/**
 	 * @return string
 	 */
-	public function defineModel()
+	public function getName()
 	{
-		return 'FieldModel';
+		return "Field";
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getModelName()
+	{
+		return 'Field';
 	}
 
 	/**
@@ -16,7 +24,7 @@ class FieldSproutImportImporter extends BaseSproutImportImporter
 	 *
 	 * @return FieldModel|null
 	 */
-	public function getObjectByHandle($handle = null)
+	public function getModelByHandle($handle = null)
 	{
 		return craft()->fields->getFieldByHandle($handle);
 	}
@@ -44,13 +52,19 @@ class FieldSproutImportImporter extends BaseSproutImportImporter
 			}
 			else
 			{
-				sproutImport()->addError($type . ' field importer not supported', 'field-importer-null');
+				$message = $type . ' field importer not supported';
+
+				SproutImportPlugin::log($message, LogLevel::Error);
+
+				sproutImport()->addError($message, 'field-importer-null');
 
 				return false;
 			}
 		}
 		catch (\Exception $e)
 		{
+			SproutImportPlugin::log($e->getMessage(), LogLevel::Error);
+
 			sproutImport()->addError($e->getMessage(), 'field-importer-error');
 
 			return false;

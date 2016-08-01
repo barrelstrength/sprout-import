@@ -71,13 +71,13 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 				$fieldHandle = $field->field->handle;
 				$fieldType   = $field->field->type;
 				$handles[] = $fieldType;
-				$fieldClass = sproutImport()->getFieldImporterClassByType($fieldType);
+				$fieldImporterClass = sproutImport()->getFieldImporterClassByType($fieldType);
 
-				if ($fieldClass != null)
+				if ($fieldImporterClass != null)
 				{
-					$fieldClass->setField($field->field);
+					$fieldImporterClass->setModel($field->field);
 
-					$values[$fieldHandle] = $fieldClass->getMockData();
+					$values[$fieldHandle] = $fieldImporterClass->getMockData();
 				}
 			}
 		}

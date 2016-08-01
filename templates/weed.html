@@ -12,6 +12,7 @@
 		<div id="fields" class="pane">
 
 			{% if hasSeeds == true %}
+
 				<table class="weed data fullwidth">
 					<tr>
 						<th class="type">Type</th>
@@ -20,9 +21,9 @@
 					</tr>
 					{% if elementImporters is defined %}
 						{% for importer in elementImporters %}
-							{% if importer.getSeedCount('import') > 0 %}
+							{% if importer.getSeedCount() > 0 %}
 									<tr>
-										<td>{{ importer.getElementName() }}</td>
+										<td>{{ importer.getName() }}</td>
 										<td>{{ importer.getSeedCount() }}</td>
 										<td class="options">
 											<form method="post" accept-charset="UTF-8">
@@ -51,6 +52,7 @@
 						<input class="btn" name="submit" type="submit" value="Keep All">
 					</form>
 				</div>
+
 			{% else %}
 
 				<div class="sprout-nocontent">

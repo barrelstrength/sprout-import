@@ -1,16 +1,24 @@
 <?php
 namespace Craft;
 
-class SectionSproutImportImporter extends BaseSproutImportImporter
+class SectionSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 {
 	public $isNewSection;
 
 	/**
 	 * @return string
 	 */
-	public function defineModel()
+	public function getName()
 	{
-		return 'SectionModel';
+		return "Section";
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getModelName()
+	{
+		return 'Section';
 	}
 
 	/**
@@ -18,7 +26,7 @@ class SectionSproutImportImporter extends BaseSproutImportImporter
 	 *
 	 * @return SectionModel|null
 	 */
-	public function getObjectByHandle($handle)
+	public function getModelByHandle($handle)
 	{
 		return craft()->sections->getSectionByHandle($handle);
 	}
@@ -50,7 +58,7 @@ class SectionSproutImportImporter extends BaseSproutImportImporter
 	 * @param $model
 	 * @param $settings
 	 */
-	public function populateModel($model, $settings)
+	public function setModel($model, $settings)
 	{
 		if (!isset($settings['urlFormat']))
 		{
@@ -149,7 +157,7 @@ class SectionSproutImportImporter extends BaseSproutImportImporter
 		{
 			$settings['entryTypes'][$key]['sectionId'] = $sectionId;
 
-			$entryType = sproutImport()->settings->saveSetting($settings['entryTypes'][$key]);
+			$entryType = sproutImport()->settingsService->saveSetting($settings['entryTypes'][$key]);
 		}
 	}
 }
