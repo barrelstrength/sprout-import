@@ -158,7 +158,6 @@ class SproutImportService extends BaseApplicationComponent
 	{
 		try
 		{
-
 			$fieldsToLoad = craft()->plugins->call('registerSproutImportFields');
 
 			if ($fieldsToLoad)
