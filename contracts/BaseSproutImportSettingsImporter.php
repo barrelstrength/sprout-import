@@ -31,8 +31,7 @@ abstract class BaseSproutImportSettingsImporter extends BaseSproutImportImporter
 			// So just create a generic settings model
 			if (!$model)
 			{
-				$className = $this->getModelName() . "Model";
-				$model     = sproutImport()->getModelNameWithNamespace($className);
+				return parent::getModel();
 			}
 
 			$this->model = new $model;

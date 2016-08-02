@@ -63,7 +63,15 @@
 			<ul>
 			{% for importer in importers %}
 				{% if attribute(importer, 'getElement') is defined %}
-				<li>{{ importer.getName() }}</li>
+
+				<li>
+					{% set importerName = importer.getName() %}
+					{% if (importer.hasErrors()) %}
+						<span class="error">{{ importer.getError('not-found') }}</span>
+					{% else %}
+						{{ importerName }}
+					{% endif %}
+				</li>
 				{% endif %}
 			{% endfor %}
 			</ul>
@@ -73,7 +81,14 @@
 			<ul>
 			{% for importer in importers %}
 				{% if attribute(importer, 'getElement') is not defined %}
-					<li>{{ importer.getName() }}</li>
+					<li>
+						{% set importerModel = importer.getModel() %}
+						{% if (importer.hasErrors()) %}
+							<span class="error">{{ importer.getError('not-found') }}</span>
+						{% else %}
+							{{ importer.getName() }}
+						{% endif %}
+					</li>
 				{% endif %}
 			{% endfor %}
 			</ul>

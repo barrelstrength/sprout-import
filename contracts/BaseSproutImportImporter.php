@@ -20,6 +20,7 @@ abstract class BaseSproutImportImporter
 
 	protected $fakerService;
 
+	protected $errors = array();
 	/**
 	 * BaseSproutImportImporter constructor.
 	 *
@@ -131,6 +132,13 @@ abstract class BaseSproutImportImporter
 			$className = $this->getModelName() . "Model";
 			$model     = sproutImport()->getModelNameWithNamespace($className);
 
+			if (!class_exists($model))
+			{
+				$this->addError($model . ' not found.', 'not-found');
+
+				return $model;
+			}
+
 			$this->model = new $model;
 		}
 
@@ -200,9 +208,40 @@ abstract class BaseSproutImportImporter
 	/**
 	 * @return mixed
 	 */
-	public function getErrors()
+	public function getModelErrors()
 	{
 		return $this->model->getErrors();
 	}
 
+	public function addError($message, $key = false)
+	{
+		if ($key)
+		{
+			$this->errors[$key] = $message;
+		}
+		else
+		{
+			$this->errors[] = $message;
+		}
+	}
+
+	public function getError($key)
+	{
+		return (isset($this->errors[$key])) ? $this->errors[$key] : false;
+	}
+
+	public function getErrors()
+	{
+		return $this->errors;
+	}
+
+	public function hasErrors()
+	{
+		return (!empty($this->errors)) ? true : false;
+	}
+
+	public function clearErrors()
+	{
+		$this->errors = array();
+	}
 }

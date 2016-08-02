@@ -8,7 +8,14 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	 */
 	public function getName()
 	{
-		$elementTypeName = $this->getModel()->getElementType();
+		$model =  $this->getModel();
+
+		if (!is_object($model))
+		{
+			return $model . Craft::t(" Model definition not found.");
+		}
+
+		$elementTypeName = $model->getElementType();
 		$elementType = craft()->elements->getElementType($elementTypeName);
 
 		return $elementType->getName();
