@@ -1,0 +1,13 @@
+[  
+	{  
+		"@model": "SproutEmail_CampaignType",
+		"name": "Newsletters",
+		"template": "sproutemail\/newsletter",
+		"fieldLayout": {  
+			"Content One": [  
+				"exampleTextEmailBody",
+				"exampleHtmlEmailBody"
+			]
+		}
+	}
+]

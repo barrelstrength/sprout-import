@@ -31,10 +31,10 @@ abstract class BaseSproutImportSettingsImporter extends BaseSproutImportImporter
 			// So just create a generic settings model
 			if (!$model)
 			{
-				return parent::getModel();
+				$model = parent::getModel();
 			}
 
-			$this->model = new $model;
+			$this->model = $model;
 		}
 
 		return $this->model;

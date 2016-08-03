@@ -120,6 +120,8 @@ abstract class BaseSproutImportImporter
 		}
 
 		$this->model = $model;
+
+		return $this->model;
 	}
 
 	/**
