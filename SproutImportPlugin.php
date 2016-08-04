@@ -161,7 +161,7 @@ class SproutImportPlugin extends BasePlugin
 	 */
 	public function registerSproutImportFields()
 	{
-		return array(
+		$fields = array(
 			new RichTextSproutImportFieldImporter(),
 			new PlainTextSproutImportFieldImporter(),
 			new NumberSproutImportFieldImporter(),
@@ -178,10 +178,19 @@ class SproutImportPlugin extends BasePlugin
 			new CategoriesSproutImportFieldImporter(),
 			new TagsSproutImportFieldImporter(),
 			new AssetsSproutImportFieldImporter(),
-			new Commerce_ProductsSproutImportFieldImporter(),
 			new UsersSproutImportFieldImporter(),
 			new MatrixSproutImportFieldImporter()
 		);
+		// Check if craft commerce plugin is installed and enabled
+		$commercePlugin = craft()->plugins->getPlugin('commerce', false);
+
+		// Commerce fields goes here
+		if (isset($commercePlugin->isEnabled) && $commercePlugin->isEnabled)
+		{
+			$fields[] = new Commerce_ProductsSproutImportFieldImporter();
+		}
+
+		return $fields;
 	}
 }
 
