@@ -14,9 +14,9 @@ abstract class BaseSproutImportImporter
 
 	protected $valid;
 
-	protected $settings;
-
 	protected $data;
+
+	protected $rows;
 
 	protected $fakerService;
 
@@ -27,15 +27,15 @@ abstract class BaseSproutImportImporter
 	 * @param array $settings
 	 * @param null  $fakerService
 	 */
-	public function __construct($settings = array(), $fakerService = null)
+	public function __construct($rows = array(), $fakerService = null)
 	{
-		$this->settings = $settings;
+		$this->rows = $rows;
 
-		if (count($settings))
+		if (count($rows))
 		{
 			$model = $this->getModel();
 
-			$this->setModel($model, $settings);
+			$this->setModel($model, $rows);
 		}
 
 		if ($fakerService == null)
@@ -161,14 +161,6 @@ abstract class BaseSproutImportImporter
 	public function resolveNestedSettings()
 	{
 		return true;
-	}
-
-	/**
-	 * @param $settings
-	 */
-	public function setSettings($settings)
-	{
-		$this->settings = $settings;
 	}
 
 	/**

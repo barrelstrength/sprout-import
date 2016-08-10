@@ -28,6 +28,8 @@ class SproutImport_SettingsService extends BaseApplicationComponent
 		{
 			try
 			{
+				$importerClass->setData($settings);
+
 				$saved = $importerClass->save();
 
 				if ($saved)

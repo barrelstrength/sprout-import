@@ -21,9 +21,9 @@ abstract class BaseSproutImportSettingsImporter extends BaseSproutImportImporter
 			$model = null;
 
 			// If we have a Settings handle, use it to get our Settings Model
-			if (isset($this->settings['handle']))
+			if (isset($this->rows['handle']))
 			{
-				$handle = $this->settings['handle'];
+				$handle = $this->rows['handle'];
 				$model = $this->getModelByHandle($handle);
 			}
 
