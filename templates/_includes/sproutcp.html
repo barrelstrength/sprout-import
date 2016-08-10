@@ -1,3 +1,25 @@
+{% macro mediaBox(settings) %}
+
+	{% set resourceUrl = settings.resourceUrl ?? null %}
+	{% set resourceAltText = settings.resourceAltText ?? null %}
+	{% set heading = settings.heading ?? null %}
+	{% set body = settings.body ?? null %}
+
+	<div class="sprout-mediabox-outer">
+		<div class="sprout-mediabox-inner">
+			<div class="sprout-mediathumb">
+				<img src="{{ resourceUrl }}" alt="{{ resourceAltText }}" />
+			</div>
+			<div class="sprout-mediabody">
+				<h2>{{ heading }}</h2>
+				<hr>
+				<p>{{ body|raw }}</p>
+			</div>
+		</div>
+	</div>
+
+{% endmacro %}
+
 {% macro helpVideo(settings) %}
 
 	{% set heading = settings.heading %}
