@@ -30,7 +30,7 @@
 												{{ getCsrfInput() }}
 												<input type="hidden" name="action" value="sproutImport/seed/runWeed">
 												<input type="hidden" name="redirect" value="sproutimport/weed">
-												<input type="hidden" name="class" value="{{ importer.getName() }}">
+												<input type="hidden" name="class" value="{{ importer.getModelName() }}">
 												<input class="btn small" name="submit" type="submit" value="Weed">
 												<input class="btn small" name="submit" type="submit" value="Keep">
 											</form>

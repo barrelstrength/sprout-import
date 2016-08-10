@@ -187,7 +187,10 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 			{
 				$this->unsavedElements[] = array('title' => $model->getTitle(), 'error' => $e->getMessage());
 				$title                   = sproutImport()->getValueByKey('content.title', $element);
-				$message                     = $title . ' ' . implode(', ', array_keys($fields)) . ' Check field values if it exists.';
+
+				$fieldsMessage = (is_array($fields)) ? implode(', ', array_keys($fields)) : $fields;
+
+				$message                     = $title . ' ' . $fieldsMessage . ' Check field values if it exists.';
 
 				SproutImportPlugin::log($message, LogLevel::Error);
 

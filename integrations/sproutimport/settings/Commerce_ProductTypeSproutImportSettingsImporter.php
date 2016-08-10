@@ -40,6 +40,7 @@ class Commerce_ProductTypeSproutImportSettingsImporter extends BaseSproutImportS
 	public function deleteById($id)
 	{
 		$product = craft()->commerce_productTypes->getProductTypeById($id);
+
 		if ($product != null)
 		{
 			return craft()->commerce_productTypes->deleteProductTypeById($id);
