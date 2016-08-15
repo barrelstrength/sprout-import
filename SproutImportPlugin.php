@@ -95,13 +95,13 @@ class SproutImportPlugin extends BasePlugin
 	{
 		parent::init();
 
-		Craft::import('plugins.sproutimport.contracts.BaseSproutImportElementImporter');
-		Craft::import('plugins.sproutimport.contracts.BaseSproutImportSettingsImporter');
-		Craft::import('plugins.sproutimport.contracts.BaseSproutImportFieldImporter');
-		Craft::import('plugins.sproutimport.contracts.BaseSproutImportImporter');
-		Craft::import('plugins.sproutimport.integrations.sproutimport.elements.*');
-		Craft::import('plugins.sproutimport.integrations.sproutimport.settings.*');
-		Craft::import('plugins.sproutimport.integrations.sproutimport.fields.*');
+		$this->includeContracts();
+
+		$this->includeElements();
+
+		$this->includeSettings();
+
+		$this->includeFields();
 
 		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutimport')
 		{
@@ -181,16 +181,83 @@ class SproutImportPlugin extends BasePlugin
 			new UsersSproutImportFieldImporter(),
 			new MatrixSproutImportFieldImporter()
 		);
-		// Check if craft commerce plugin is installed and enabled
-		$commercePlugin = craft()->plugins->getPlugin('commerce', false);
 
-		// Commerce fields goes here
-		if (isset($commercePlugin->isEnabled) && $commercePlugin->isEnabled)
-		{
-			$fields[] = new Commerce_ProductsSproutImportFieldImporter();
-		}
 
 		return $fields;
+	}
+
+	private function includeContracts()
+	{
+		$contracts   = array();
+		$contracts[] = "BaseSproutImportImporter";
+		$contracts[] = "BaseSproutImportElementImporter";
+		$contracts[] = "BaseSproutImportSettingsImporter";
+		$contracts[] = "BaseSproutImportFieldImporter";
+
+		foreach ($contracts as $contract)
+		{
+			Craft::import("plugins.sproutimport.contracts.$contract");
+		}
+	}
+
+	private function includeElements()
+	{
+		$elements   = array();
+		$elements[] = "AssetFileSproutImportElementImporter";
+		$elements[] = "CategorySproutImportElementImporter";
+		$elements[] = "Commerce_OrderSproutImportElementImporter";
+		$elements[] = "Commerce_ProductSproutImportElementImporter";
+		$elements[] = "EntrySproutImportElementImporter";
+		$elements[] = "TagSproutImportElementImporter";
+		$elements[] = "UserSproutImportElementImporter";
+
+		foreach ($elements as $element)
+		{
+			Craft::import("plugins.sproutimport.integrations.sproutimport.elements.$element");
+		}
+	}
+
+	private function includeSettings()
+	{
+		$settings = array();
+		$settings[] = "Commerce_ProductTypeSproutImportSettingsImporter";
+		$settings[] = "SectionSproutImportSettingsImporter";
+		$settings[] = "FieldSproutImportSettingsImporter";
+		$settings[] = "EntryTypeSproutImportSettingsImporter";
+
+		foreach ($settings as $setting)
+		{
+			Craft::import("plugins.sproutimport.integrations.sproutimport.settings.$setting");
+		}
+	}
+
+	private function includeFields()
+	{
+		$fields = array();
+		$fields[] = "AssetsSproutImportFieldImporter";
+		$fields[] = "CategoriesSproutImportFieldImporter";
+		$fields[] = "CheckboxesSproutImportFieldImporter";
+		$fields[] = "ColorSproutImportFieldImporter";
+		$fields[] = "DateSproutImportFieldImporter";
+		$fields[] = "DropdownSproutImportFieldImporter";
+		$fields[] = "EntriesSproutImportFieldImporter";
+		$fields[] = "LightswitchSproutImportFieldImporter";
+		$fields[] = "MatrixSproutImportFieldImporter";
+		$fields[] = "MultiSelectSproutImportFieldImporter";
+		$fields[] = "NumberSproutImportFieldImporter";
+		$fields[] = "PlainTextSproutImportFieldImporter";
+		$fields[] = "PositionSelectSproutImportFieldImporter";
+		$fields[] = "RadioButtonsSproutImportFieldImporter";
+		$fields[] = "RichTextSproutImportFieldImporter";
+		$fields[] = "TableSproutImportFieldImporter";
+		$fields[] = "TagsSproutImportFieldImporter";
+		$fields[] = "UsersSproutImportFieldImporter";
+		$fields[] = "Commerce_ProductsSproutImportFieldImporter";
+
+		foreach ($fields as $field)
+		{
+			Craft::import("plugins.sproutimport.integrations.sproutimport.fields.$field");
+		}
 	}
 }
 
