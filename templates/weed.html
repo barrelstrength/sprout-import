@@ -1,5 +1,6 @@
 {% extends "sproutimport/_layouts/base" %}
 {% import "_includes/forms" as forms %}
+{% import 'sproutimport/_includes/sproutcp' as sprout %}
 
 {% set title = 'Weed'|t %}
 
@@ -55,21 +56,15 @@
 
 			{% else %}
 
-				<div class="sprout-nocontent">
-					<div class="sprout-mediabox-wrapper">
-						<div class="sprout-mediabox">
-							<img src="{{ resourceUrl('sproutimport/icon.svg') }}" alt="Sprout Logo" />
-						</div>
-						<div class="sprout-mediabody">
-							<h2>{{ "The garden is weeded"|t }}</h2>
-							<hr>
-							<p>{{ "Currently, no content or settings in your database are marked as seed content. Get started and <a href='{importLink}'>import content and settings</a> or <a href='{seedLink}'>generate seed content</a>."|t({
-									importLink: "#",
-									seedLink: "#"
-								})|raw }}</p>
-						</div>
-					</div>
-				</div>
+				{{ sprout.mediaBox({
+					resourceUrl: resourceUrl('sproutimport/icon.svg'),
+					resourceAltText: "Sprout Logo"|t,
+					heading: "The garden is weeded"|t,
+					body: "Currently, no content or settings in your database are marked as seed content. Get started and <a href='{importLink}'>import content and settings</a> or <a href='{seedLink}'>generate seed content</a>."|t({
+						importLink: "#",
+						seedLink: "#"
+					})
+				}) }}
 
 			{% endif %}
 
@@ -94,45 +89,11 @@
 
 {% endblock %}
 
+{% includeCssResource "sproutimport/css/sproutcp.css" %}
+
 {% includecss %}
 
 table.weed td:last-of-type {
 	text-align: right;
-}
-
-{# Media box styles #}
-.sprout-nocontent {
-	display: flex;
-	justify-content: center;
-	margin: 2em auto;
-}
-.sprout-mediabox-wrapper {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	align-items: center;
-	align-content: space-between;
-	width: 70%;
-}
-.sprout-mediabox {
-	margin-right: 1em;
-}
-.sprout-mediabox img {
-	height: 140px;
-	opacity: .3;
-	width: 140px;
-}
-.sprout-mediabody h2 {
-	font-size: 18px;
-}
-.sprout-mediabody hr {
-	margin: 0;
-}
-.sprout-mediabody a {
-	font-weight: bold;
-}
-.sprout-mediabody {
-	flex-grow: 1;
-	width: 60%;
 }
 {% endincludecss %}
