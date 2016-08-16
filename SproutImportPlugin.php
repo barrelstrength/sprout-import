@@ -95,13 +95,10 @@ class SproutImportPlugin extends BasePlugin
 	{
 		parent::init();
 
-		$this->includeContracts();
-
-		$this->includeElements();
-
-		$this->includeSettings();
-
-		$this->includeFields();
+		$this->importContracts();
+		$this->importSproutImportElementImporters();
+		$this->importSproutImportSettingsImporters();
+		$this->importSproutImportFieldImporters();
 
 		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutimport')
 		{
@@ -186,13 +183,14 @@ class SproutImportPlugin extends BasePlugin
 		return $fields;
 	}
 
-	private function includeContracts()
+	private function importContracts()
 	{
-		$contracts   = array();
-		$contracts[] = "BaseSproutImportImporter";
-		$contracts[] = "BaseSproutImportElementImporter";
-		$contracts[] = "BaseSproutImportSettingsImporter";
-		$contracts[] = "BaseSproutImportFieldImporter";
+		$contracts = array(
+			"BaseSproutImportImporter",
+			"BaseSproutImportElementImporter",
+			"BaseSproutImportSettingsImporter",
+			"BaseSproutImportFieldImporter"
+		);
 
 		foreach ($contracts as $contract)
 		{
@@ -200,16 +198,17 @@ class SproutImportPlugin extends BasePlugin
 		}
 	}
 
-	private function includeElements()
+	private function importSproutImportElementImporters()
 	{
-		$elements   = array();
-		$elements[] = "AssetFileSproutImportElementImporter";
-		$elements[] = "CategorySproutImportElementImporter";
-		$elements[] = "Commerce_OrderSproutImportElementImporter";
-		$elements[] = "Commerce_ProductSproutImportElementImporter";
-		$elements[] = "EntrySproutImportElementImporter";
-		$elements[] = "TagSproutImportElementImporter";
-		$elements[] = "UserSproutImportElementImporter";
+		$elements   = array(
+			"AssetFileSproutImportElementImporter",
+			"CategorySproutImportElementImporter",
+			"Commerce_OrderSproutImportElementImporter",
+			"Commerce_ProductSproutImportElementImporter",
+			"EntrySproutImportElementImporter",
+			"TagSproutImportElementImporter",
+			"UserSproutImportElementImporter"
+		);
 
 		foreach ($elements as $element)
 		{
@@ -217,13 +216,14 @@ class SproutImportPlugin extends BasePlugin
 		}
 	}
 
-	private function includeSettings()
+	private function importSproutImportSettingsImporters()
 	{
-		$settings = array();
-		$settings[] = "Commerce_ProductTypeSproutImportSettingsImporter";
-		$settings[] = "SectionSproutImportSettingsImporter";
-		$settings[] = "FieldSproutImportSettingsImporter";
-		$settings[] = "EntryTypeSproutImportSettingsImporter";
+		$settings = array(
+			"Commerce_ProductTypeSproutImportSettingsImporter",
+			"SectionSproutImportSettingsImporter",
+			"FieldSproutImportSettingsImporter",
+			"EntryTypeSproutImportSettingsImporter"
+		);
 
 		foreach ($settings as $setting)
 		{
@@ -231,28 +231,29 @@ class SproutImportPlugin extends BasePlugin
 		}
 	}
 
-	private function includeFields()
+	private function importSproutImportFieldImporters()
 	{
-		$fields = array();
-		$fields[] = "AssetsSproutImportFieldImporter";
-		$fields[] = "CategoriesSproutImportFieldImporter";
-		$fields[] = "CheckboxesSproutImportFieldImporter";
-		$fields[] = "ColorSproutImportFieldImporter";
-		$fields[] = "DateSproutImportFieldImporter";
-		$fields[] = "DropdownSproutImportFieldImporter";
-		$fields[] = "EntriesSproutImportFieldImporter";
-		$fields[] = "LightswitchSproutImportFieldImporter";
-		$fields[] = "MatrixSproutImportFieldImporter";
-		$fields[] = "MultiSelectSproutImportFieldImporter";
-		$fields[] = "NumberSproutImportFieldImporter";
-		$fields[] = "PlainTextSproutImportFieldImporter";
-		$fields[] = "PositionSelectSproutImportFieldImporter";
-		$fields[] = "RadioButtonsSproutImportFieldImporter";
-		$fields[] = "RichTextSproutImportFieldImporter";
-		$fields[] = "TableSproutImportFieldImporter";
-		$fields[] = "TagsSproutImportFieldImporter";
-		$fields[] = "UsersSproutImportFieldImporter";
-		$fields[] = "Commerce_ProductsSproutImportFieldImporter";
+		$fields = array(
+			"AssetsSproutImportFieldImporter",
+			"CategoriesSproutImportFieldImporter",
+			"CheckboxesSproutImportFieldImporter",
+			"ColorSproutImportFieldImporter",
+			"DateSproutImportFieldImporter",
+			"DropdownSproutImportFieldImporter",
+			"EntriesSproutImportFieldImporter",
+			"LightswitchSproutImportFieldImporter",
+			"MatrixSproutImportFieldImporter",
+			"MultiSelectSproutImportFieldImporter",
+			"NumberSproutImportFieldImporter",
+			"PlainTextSproutImportFieldImporter",
+			"PositionSelectSproutImportFieldImporter",
+			"RadioButtonsSproutImportFieldImporter",
+			"RichTextSproutImportFieldImporter",
+			"TableSproutImportFieldImporter",
+			"TagsSproutImportFieldImporter",
+			"UsersSproutImportFieldImporter",
+			"Commerce_ProductsSproutImportFieldImporter"
+		);
 
 		foreach ($fields as $field)
 		{
