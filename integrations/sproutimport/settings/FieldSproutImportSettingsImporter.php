@@ -44,9 +44,13 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 			{
 				if ($this->model->settings == null)
 				{
-					// Some fields require options setting to work
-					$this->model->settings = array('options' => array());
+					$defaultSettings = $field->getSettings()->getAttributes();
+
+					// Save default settings if no settings are provided
+					$this->model->settings = $defaultSettings;
 				}
+
+				SproutImportPlugin::log('NOT NULL settings: .' . JsonHelper::encode($this->model->settings));
 
 				return craft()->fields->saveField($this->model);
 			}
