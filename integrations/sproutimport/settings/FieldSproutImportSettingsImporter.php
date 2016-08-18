@@ -50,7 +50,12 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 					$this->model->settings = $defaultSettings;
 				}
 
-				SproutImportPlugin::log('NOT NULL settings: .' . JsonHelper::encode($this->model->settings));
+				// Create a Field Group if one isn't identified
+				if (!$this->model->groupId)
+				{
+					$defaultFieldGroupId = $this->getDefaultFieldGroup();
+					$this->model->groupId = $defaultFieldGroupId;
+				}
 
 				return craft()->fields->saveField($this->model);
 			}
@@ -84,5 +89,59 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 	public function deleteById($id)
 	{
 		return craft()->fields->deleteFieldById($id);
+	}
+
+	/**
+	 * @return mixed|null
+	 */
+	protected function getDefaultFieldGroup()
+	{
+		// @todo - cache this somewhere so we don't query the db
+		// for every field that doesn't have a fieldGroup
+		$groups = craft()->db->createCommand()
+			->select('*')
+			->from('fieldgroups')
+			->where('name = :name', array(':name' => 'Default'))
+			->orWhere('name = :name2', array(':name2' => 'Sprout Import'))
+			->queryAll();
+
+		$groupId = null;
+
+		foreach ($groups as $group)
+		{
+			if ($group['name'] == 'Default')
+			{
+				return $group['id'];
+			}
+		}
+
+		if (!$groupId)
+		{
+			SproutImportPlugin::log('No field group exists. Creating the Sprout Import field group.');
+
+			$groupId = $this->createSproutImportFieldGroup();
+		}
+
+		return $groupId;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	protected function createSproutImportFieldGroup()
+	{
+		$group = new FieldGroupModel();
+		$group->name = 'Sprout Import';
+
+		if (craft()->fields->saveGroup($group))
+		{
+			SproutImportPlugin::log('Sprout Import field group created successfully.');
+		}
+		else
+		{
+			SproutImportPlugin::log('Could not save the Sprout Import field group.', LogLevel::Warning);
+		}
+
+		return $group->id;
 	}
 }
