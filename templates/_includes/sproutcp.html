@@ -78,7 +78,7 @@
 			[data-min-colspan="3"] .sprout-mediabox {
 				flex-basis: auto;
 				min-width: 25%;
-				margin-right: 20px;
+				padding-right: 20px;
 			}
 			
 			.padded > .pane.sprout-docbox .sprout-mediabody,
@@ -88,14 +88,15 @@
 			[data-min-colspan="3"] .sprout-mediabody {
 				flex-basis: auto;
 				width: 75%;
-				margin-right: 20px;
+				padding-right: 20px;
 			}
 			
-			[data-colspan="2"] div:last-child,
-			[data-min-colspan="2"] div:last-child,
-			[data-colspan="3"] div:last-child,
-			[data-min-colspan="3"] div:last-child {
-				margin-right: 0;
+			.padded > .pane.sprout-docbox .sprout-mediabox + .sprout-mediabody,
+			[data-colspan="2"] .sprout-mediabox + .sprout-mediabody:last-child,
+			[data-min-colspan="2"] .sprout-mediabox + .sprout-mediabody:last-child,
+			[data-colspan="3"] .sprout-mediabox + .sprout-mediabody:last-child,
+			[data-min-colspan="3"] .sprout-mediabox + .sprout-mediabody:last-child {
+				padding-right: 0;
 			}
 		}
 	</style>
