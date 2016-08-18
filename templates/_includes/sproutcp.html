@@ -75,9 +75,10 @@
 			[data-colspan="2"] .sprout-mediabox,
 			[data-min-colspan="2"] .sprout-mediabox,
 			[data-colspan="3"] .sprout-mediabox,
-			[data-min-colspan="3"] .sprout-mediabox {
+			[data-min-colspan="3"] .sprout-mediabox,
+			.single-pane .sprout-video-wrapper .sprout-mediabox {
 				flex-basis: auto;
-				min-width: 25%;
+				min-width: 30%;
 				padding-right: 20px;
 			}
 			
@@ -85,9 +86,10 @@
 			[data-colspan="2"] .sprout-mediabody,
 			[data-min-colspan="2"] .sprout-mediabody,
 			[data-colspan="3"] .sprout-mediabody,
-			[data-min-colspan="3"] .sprout-mediabody {
+			[data-min-colspan="3"] .sprout-mediabody,
+			.single-pane .sprout-video-wrapper .sprout-mediabody {
 				flex-basis: auto;
-				width: 75%;
+				width: 70%;
 				padding-right: 20px;
 			}
 			
@@ -95,8 +97,22 @@
 			[data-colspan="2"] .sprout-mediabox + .sprout-mediabody:last-child,
 			[data-min-colspan="2"] .sprout-mediabox + .sprout-mediabody:last-child,
 			[data-colspan="3"] .sprout-mediabox + .sprout-mediabody:last-child,
-			[data-min-colspan="3"] .sprout-mediabox + .sprout-mediabody:last-child {
+			[data-min-colspan="3"] .sprout-mediabox + .sprout-mediabody:last-child,
+			.single-pane .sprout-video-wrapper .sprout-mediabody:last-child {
 				padding-right: 0;
+			}
+			
+			[data-colspan="2"] .sprout-videothumb,
+			[data-min-colspan="2"] .sprout-videothumb,
+			[data-colspan="3"] .sprout-videothumb,
+			[data-min-colspan="3"] .sprout-videothumb,
+			.single-pane .sprout-video-wrapper .sprout-videothumb {
+				margin-bottom: 0;	
+			}
+			
+			.single-pane .sprout-video-wrapper {
+				display: flex;
+				margin-bottom: 24px;
 			}
 		}
 	</style>
