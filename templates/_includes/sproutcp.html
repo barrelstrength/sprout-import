@@ -41,28 +41,6 @@
 	</div>
 
 	<style>
-		.sprout-docbox {
-			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-			justify-content: flex-start;
-			align-items: flex-start;
-			align-content: space-around;
-		}
-
-		.sprout-mediabox {
-			flex-basis: auto;
-			min-width: 25%;
-		}
-
-		.sprout-mediabody {
-			flex-basis: auto;
-			width: 75%;
-		}
-		.sprout-mediabody h2 {
-			font-size: 18px;
-			margin-top: 8px;
-		}
 		.sprout-mediabody hr {
 			margin: 8px 0;
 		}
@@ -74,8 +52,51 @@
 			display: block;
 			height: 120px;
 			margin-bottom: 1rem;
-			margin-right: 10px;
-			width: 180px;
+			width: 100%;
+		}
+		
+		.sprout-docbox,
+		.sprout-docbox * {
+			box-sizing: border-box;
+		}
+		
+		@media (min-width: 640px) {
+			.padded > .pane.sprout-docbox,
+			[data-colspan="2"] .sprout-docbox,
+			[data-min-colspan="2"] .sprout-docbox,
+			[data-colspan="3"] .sprout-docbox,
+			[data-min-colspan="3"] .sprout-docbox {
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+			}
+			
+			.padded > .pane.sprout-docbox .sprout-mediabox,
+			[data-colspan="2"] .sprout-mediabox,
+			[data-min-colspan="2"] .sprout-mediabox,
+			[data-colspan="3"] .sprout-mediabox,
+			[data-min-colspan="3"] .sprout-mediabox {
+				flex-basis: auto;
+				min-width: 25%;
+				margin-right: 20px;
+			}
+			
+			.padded > .pane.sprout-docbox .sprout-mediabody,
+			[data-colspan="2"] .sprout-mediabody,
+			[data-min-colspan="2"] .sprout-mediabody,
+			[data-colspan="3"] .sprout-mediabody,
+			[data-min-colspan="3"] .sprout-mediabody {
+				flex-basis: auto;
+				width: 75%;
+				margin-right: 20px;
+			}
+			
+			[data-colspan="2"] div:last-child,
+			[data-min-colspan="2"] div:last-child,
+			[data-colspan="3"] div:last-child,
+			[data-min-colspan="3"] div:last-child {
+				margin-right: 0;
+			}
 		}
 	</style>
 {% endmacro %}
