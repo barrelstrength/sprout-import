@@ -17,7 +17,7 @@ class Commerce_ProductsSproutImportFieldImporter extends BaseSproutImportFieldIm
 	public function getMockData()
 	{
 		$settings = $this->model->settings;
-		$limit    = $settings['limit'];
+		$limit    = sproutImport()->mockData->getLimit($settings['limit'], 3);
 		$sources  = $settings['sources'];
 
 		$productTypeIds = sproutImport()->mockData->getElementGroupIds($sources);
