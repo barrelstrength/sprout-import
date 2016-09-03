@@ -98,22 +98,12 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 	{
 		// @todo - cache this somewhere so we don't query the db
 		// for every field that doesn't have a fieldGroup
-		$groups = craft()->db->createCommand()
+		$groupId = craft()->db->createCommand()
 			->select('*')
 			->from('fieldgroups')
 			->where('name = :name', array(':name' => 'Default'))
 			->orWhere('name = :name2', array(':name2' => 'Sprout Import'))
-			->queryAll();
-
-		$groupId = null;
-
-		foreach ($groups as $group)
-		{
-			if ($group['name'] == 'Default')
-			{
-				return $group['id'];
-			}
-		}
+			->queryScalar();
 
 		if (!$groupId)
 		{
