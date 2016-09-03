@@ -6,5 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Patchwork\\' => array($vendorDir . '/patchwork/utf8/src/Patchwork'),
     'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
+    'Doctrine\\Common\\Cache\\' => array($vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache'),
+    'Doctrine\\Common\\' => array($vendorDir . '/doctrine/common/lib/Doctrine/Common'),
 );
