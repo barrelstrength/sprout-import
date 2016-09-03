@@ -1,29 +1,12 @@
 {% extends "sproutimport/_layouts/base" %}
 {% import "_includes/forms" as forms %}
-{% import 'sproutimport/_includes/sproutcp' as sprout %}
 
 {% set title = 'Seed'|t %}
 
 {% block main %}
 
-{{ sprout.helpVideo({
-	heading: "Thing or two about things."|t,
-	description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
-			<a href="#" style="font-weight: bold;">Watch our video</a> nascetur ridiculus mus. Donec quam felis, ultricies
-			nec arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis
-			pretium. <a href="#" style="font-weight: bold;">Learn more&hellip;</a>'|t,
-	videoUrl: "http://barrelstrengthdesign.com"
-}) }}
-
 <div class="grid first" data-max-cols="3">
 	<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
-
-		{{ sprout.helpVideo({
-			heading: "Thing or two about things."|t,
-			description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
-						<a href="#" style="font-weight: bold;">Watch our video</a> nascetur ridiculus mus. Donec quam felis, ultricies nec arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. <a href="#" style="font-weight: bold;">Learn more&hellip;</a>'|t,
-			videoUrl: "http://barrelstrengthdesign.com"
-		}) }}
 
 		<div id="fields" class="pane">
 
@@ -68,15 +51,6 @@
 	</div>
 	<div class="item" data-position="right" data-colspan="1">
 
-		{{ sprout.helpVideo({
-			heading: "Thing or two about things."|t,
-			description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
-						<a href="#" style="font-weight: bold;">Watch our video</a> nascetur ridiculus mus. Donec quam felis, ultricies
-						nec arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis
-						pretium. <a href="#" style="font-weight: bold;">Learn more&hellip;</a>'|t,
-			videoUrl: "http://barrelstrengthdesign.com"
-		}) }}
-
 		<div class="pane">
 			
 			<h2>{{ "Generate fake content"|t }}</h2>
@@ -111,3 +85,14 @@
 
 
 {% endblock %}
+
+{% includejs %}
+	(function(){
+		$('.sprout-mediabox a').on('click', function(event) {
+		event.preventDefault();
+
+		var $div = $('<div class="modal sprout-helpvideo-modal"><div class="body"><div class="sprout-helpvideo-wrapper"><iframe src="https://player.vimeo.com/video/133950017" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div></div></div>');
+		var myModal = new Garnish.Modal($div);
+		})
+	})();
+{% endincludejs %}

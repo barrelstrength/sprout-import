@@ -42,6 +42,7 @@ abstract class BaseSproutImportFieldImporter extends BaseSproutImportImporter
 
 		return new $this->model;
 	}
+
 	/**
 	 * @return mixed
 	 */

@@ -607,6 +607,27 @@ class SproutImportService extends BaseApplicationComponent
 		return $fieldClass;
 	}
 
+	public function saveSettings($postSettings)
+	{
+		$plugin   = craft()->plugins->getPlugin('sproutimport');
+		$settings = $plugin->getSettings();
+
+		if (isset($postSettings['pluginNameOverride']))
+		{
+			$settings['pluginNameOverride'] = $postSettings['pluginNameOverride'];
+		}
+
+		$settings = JsonHelper::encode($settings);
+
+		$affectedRows = craft()->db->createCommand()->update('plugins', array(
+			'settings' => $settings
+		), array(
+			'class' => 'SproutImport'
+		));
+
+		return (bool) $affectedRows;
+	}
+
 	/**
 	 * @param        $message
 	 * @param null   $data

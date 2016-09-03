@@ -8,7 +8,10 @@ class SproutImportPlugin extends BasePlugin
 	 */
 	public function getName()
 	{
-		return 'Sprout Import';
+		$pluginName         = Craft::t('Sprout Import');
+		$pluginNameOverride = $this->getSettings()->pluginNameOverride;
+
+		return ($pluginNameOverride) ? $pluginNameOverride : $pluginName;
 	}
 
 	/**
@@ -81,10 +84,31 @@ class SproutImportPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'sproutimport/start/'                       => array('action' => 'sproutImport/start'),
-			'sproutimport/run/[a-zA-Z]+/[a-zA-Z0-9\-]+' => array('action' => 'sproutImport/runTask'),
-			'sproutimport/seed'                         => array('action' => 'sproutImport/seed/indexTemplate'),
-			'sproutimport/weed'                         => array('action' => 'sproutImport/seed/weedIndex')
+			'sproutimport/start/'                       => array(
+				'action' => 'sproutImport/start'
+			),
+			'sproutimport/run/[a-zA-Z]+/[a-zA-Z0-9\-]+' => array(
+				'action' => 'sproutImport/runTask'
+			),
+			'sproutimport/seed'                         => array(
+				'action' => 'sproutImport/seed/indexTemplate'
+			),
+			'sproutimport/weed'                         => array(
+				'action' => 'sproutImport/seed/weedIndex'
+			),
+			'sproutimport/settings/(general)'                     => array(
+				'action' => 'sproutImport/settings/settingsIndexTemplate'
+			),
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function defineSettings()
+	{
+		return array(
+			'pluginNameOverride' => AttributeType::String
 		);
 	}
 
@@ -114,6 +138,23 @@ class SproutImportPlugin extends BasePlugin
 		{
 			sproutImport()->trackImport($event);
 		});
+
+		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutimport')
+		{
+			// @todo Craft 3 - update to use info from config.json
+			craft()->templates->includeJsResource('sproutimport/js/brand.js');
+			craft()->templates->includeJs("
+				sproutFormsBrand = new Craft.SproutBrand();
+				sproutFormsBrand.displayFooter({
+					pluginName: 'Sprout Import',
+					pluginUrl: 'http://sprout.barrelstrengthdesign.com/craft-plugins/import',
+					pluginVersion: '" . $this->getVersion() . "',
+					pluginDescription: '" . $this->getDescription() . "',
+					developerName: '(Barrel Strength)',
+					developerUrl: '" . $this->getDeveloperUrl() . "'
+				});
+			");
+		}
 	}
 
 	/**
@@ -178,7 +219,6 @@ class SproutImportPlugin extends BasePlugin
 			new UsersSproutImportFieldImporter(),
 			new MatrixSproutImportFieldImporter()
 		);
-
 
 		return $fields;
 	}
