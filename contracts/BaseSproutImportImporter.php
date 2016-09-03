@@ -21,10 +21,11 @@ abstract class BaseSproutImportImporter
 	protected $fakerService;
 
 	protected $errors = array();
+
 	/**
 	 * BaseSproutImportImporter constructor.
 	 *
-	 * @param array $settings
+	 * @param array $rows
 	 * @param null  $fakerService
 	 */
 	public function __construct($rows = array(), $fakerService = null)
