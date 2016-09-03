@@ -85,7 +85,6 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 		return $values;
 	}
 
-
 	/**
 	 * Get Element Group IDs from sources setting
 	 *
@@ -125,6 +124,23 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 		$sourceExplode = explode(":", $source);
 
 		return $sourceExplode[1];
+	}
+
+	/**
+	 * If a limit is set, use that limit. If the limit is infinite, use a reasonable default.
+	 *
+	 * @param $limit
+	 *
+	 * @return int
+	 */
+	public function getLimit($limitFromSettings, $defaultLimit = 3)
+	{
+		if ($limitFromSettings > 0)
+		{
+			return $limitFromSettings;
+		}
+
+		return $defaultLimit;
 	}
 	
 	/**
