@@ -26,7 +26,7 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 	 */
 	public function save()
 	{
-		$product  = $this->model;
+		$product = $this->model;
 
 		try
 		{

@@ -24,7 +24,7 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 	{
 		$criteria = craft()->elements->getCriteria($elementName);
 
-		$results  = $criteria->find($attributes);
+		$results = $criteria->find($attributes);
 
 		if (!$results)
 		{
@@ -68,9 +68,9 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 
 			foreach ($fields as $field)
 			{
-				$fieldHandle = $field->field->handle;
-				$fieldType   = $field->field->type;
-				$handles[] = $fieldType;
+				$fieldHandle        = $field->field->handle;
+				$fieldType          = $field->field->type;
+				$handles[]          = $fieldType;
 				$fieldImporterClass = sproutImport()->getFieldImporterClassByType($fieldType);
 
 				if ($fieldImporterClass != null)
@@ -142,7 +142,7 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 
 		return $defaultLimit;
 	}
-	
+
 	/**
 	 * Return a random selection of items from an array for fields such as Multi-select and Checkboxes
 	 *
@@ -303,7 +303,6 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 
 		return $value;
 	}
-
 
 	public function generateUsernameOrEmail($nameOrEmail, $faker, $isEmail = false, $usersService = null)
 	{

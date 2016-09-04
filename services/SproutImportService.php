@@ -200,7 +200,7 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	public function save(array $rows, $seed = false, $filename = '')
 	{
-		$result = "";
+		$result         = "";
 		$this->filename = $filename;
 
 		if (!empty($rows))

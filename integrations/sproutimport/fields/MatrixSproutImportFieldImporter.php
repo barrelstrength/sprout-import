@@ -35,7 +35,7 @@ class MatrixSproutImportFieldImporter extends BaseSproutImportFieldImporter
 				$key = 'new' . $count;
 
 				$values[$key] = array(
-					'type' => $block->handle,
+					'type'    => $block->handle,
 					'enabled' => 1
 				);
 

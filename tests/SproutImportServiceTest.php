@@ -242,7 +242,7 @@ class SproutImportServiceTest extends SproutImportBaseTest
 		$this->assertEquals($expected, $find);
 
 		$allSources = "*";
-		$expected = "*";
+		$expected   = "*";
 
 		$find = sproutImport()->mockData->getElementGroupIds($allSources);
 

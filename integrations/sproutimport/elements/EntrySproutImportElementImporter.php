@@ -53,7 +53,6 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 
 			return false;
 		}
-
 	}
 
 	/**

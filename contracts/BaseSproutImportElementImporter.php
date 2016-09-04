@@ -8,7 +8,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	 */
 	public function getName()
 	{
-		$model =  $this->getModel();
+		$model = $this->getModel();
 
 		if (!is_object($model))
 		{
@@ -16,7 +16,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 		}
 
 		$elementTypeName = $model->getElementType();
-		$elementType = craft()->elements->getElementType($elementTypeName);
+		$elementType     = craft()->elements->getElementType($elementTypeName);
 
 		return $elementType->getName();
 	}

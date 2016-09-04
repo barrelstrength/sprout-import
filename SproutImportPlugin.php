@@ -96,7 +96,7 @@ class SproutImportPlugin extends BasePlugin
 			'sproutimport/weed'                         => array(
 				'action' => 'sproutImport/seed/weedIndex'
 			),
-			'sproutimport/settings/(general)'                     => array(
+			'sproutimport/settings/(general)'           => array(
 				'action' => 'sproutImport/settings/settingsIndexTemplate'
 			),
 		);
@@ -240,7 +240,7 @@ class SproutImportPlugin extends BasePlugin
 
 	private function importSproutImportElementImporters()
 	{
-		$elements   = array(
+		$elements = array(
 			"AssetFileSproutImportElementImporter",
 			"CategorySproutImportElementImporter",
 			"Commerce_OrderSproutImportElementImporter",

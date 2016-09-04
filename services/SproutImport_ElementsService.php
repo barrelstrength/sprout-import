@@ -190,7 +190,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 
 				$fieldsMessage = (is_array($fields)) ? implode(', ', array_keys($fields)) : $fields;
 
-				$message                     = $title . ' ' . $fieldsMessage . ' Check field values if it exists.';
+				$message = $title . ' ' . $fieldsMessage . ' Check field values if it exists.';
 
 				SproutImportPlugin::log($message, LogLevel::Error);
 
@@ -494,7 +494,6 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 
 		return $selects;
 	}
-
 
 	/**
 	 * @param $model

@@ -24,7 +24,7 @@ abstract class BaseSproutImportSettingsImporter extends BaseSproutImportImporter
 			if (isset($this->rows['handle']))
 			{
 				$handle = $this->rows['handle'];
-				$model = $this->getModelByHandle($handle);
+				$model  = $this->getModelByHandle($handle);
 			}
 
 			// If the Settings handle doesn't return anything, it doesn't exist yet
