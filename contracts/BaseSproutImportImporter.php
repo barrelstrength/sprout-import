@@ -16,7 +16,7 @@ abstract class BaseSproutImportImporter
 	 * - FieldModel
 	 * - PlainTextFieldType
 	 *
-	 * @var
+	 * @var mixed
 	 */
 	public $model;
 
@@ -165,7 +165,10 @@ abstract class BaseSproutImportImporter
 	}
 
 	/**
-	 * @param $model
+	 * @param       $model
+	 * @param array $settings
+	 *
+	 * @return mixed
 	 */
 	public function setModel($model, $settings = array())
 	{

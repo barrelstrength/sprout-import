@@ -1,6 +1,11 @@
 <?php
 namespace Craft;
 
+/**
+ * Class SproutImport_ElementsService
+ *
+ * @package Craft
+ */
 class SproutImport_ElementsService extends BaseApplicationComponent
 {
 	/**
