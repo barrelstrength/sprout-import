@@ -274,7 +274,7 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 					break;
 
 				case "multiline":
-					$lines = rand(2, 4);
+					$lines = rand(2, 3);
 
 					$value = $fakerService->sentences($lines, true);
 

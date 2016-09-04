@@ -20,7 +20,7 @@ class TableSproutImportFieldImporter extends BaseSproutImportFieldImporter
 
 		$columns = $settings['columns'];
 
-		$randomLength = rand(2, 10);
+		$randomLength = rand(2, 5);
 
 		$values = array();
 
