@@ -38,7 +38,7 @@ class SproutImportVariable
 	 */
 	public function getSproutImportFieldImporters()
 	{
-		return sproutImport()->getSproutImportFields();
+		return sproutImport()->getSproutImportFieldImporters();
 	}
 
 	/**
