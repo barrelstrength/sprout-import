@@ -184,12 +184,14 @@ class SproutImportPlugin extends BasePlugin
 		// Commerce events goes here
 		if (isset($commercePlugin->isEnabled) && $commercePlugin->isEnabled)
 		{
-			$importers[] = new Commerce_OrderSproutImportElementImporter();
-			$importers[] = new Commerce_ProductSproutImportElementImporter();
-			$importers[] = new Commerce_ProductTypeSproutImportSettingsImporter();
+			$craftCommerceImporters = array(
+				new Commerce_OrderSproutImportElementImporter(),
+				new Commerce_ProductSproutImportElementImporter(),
+				new Commerce_ProductTypeSproutImportSettingsImporter()
+			);
 		}
 
-		return $importers;
+		return array_merge($importers, $craftCommerceImporters);
 	}
 
 	/**
@@ -197,7 +199,7 @@ class SproutImportPlugin extends BasePlugin
 	 *
 	 * @return array
 	 */
-	public function registerSproutImportFields()
+	public function registerSproutImportFieldImporters()
 	{
 		$fields = array(
 			new RichTextSproutImportFieldImporter(),
