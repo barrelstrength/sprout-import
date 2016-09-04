@@ -29,7 +29,7 @@
 										<td class="options">
 											<form method="post" accept-charset="UTF-8">
 												{{ getCsrfInput() }}
-												<input type="hidden" name="action" value="sproutImport/seed/runWeed">
+												<input type="hidden" name="action" value="sproutImport/weed/runWeed">
 												<input type="hidden" name="redirect" value="sproutimport/weed">
 												<input type="hidden" name="class" value="{{ importer.getModelName() }}">
 												<input class="btn small" name="submit" type="submit" value="Weed">
@@ -46,7 +46,7 @@
 				<div class="buttons">
 					<form method="post" accept-charset="UTF-8">
 						{{ getCsrfInput() }}
-						<input type="hidden" name="action" value="sproutImport/seed/runWeed">
+						<input type="hidden" name="action" value="sproutImport/weed/runWeed">
 						<input type="hidden" name="redirect" value="sproutimport/weed">
 						<input type="hidden" name="class" value="*">
 						<input class="btn submit" name="submit" type="submit" value="Weed All">

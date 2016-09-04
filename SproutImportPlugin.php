@@ -91,10 +91,10 @@ class SproutImportPlugin extends BasePlugin
 				'action' => 'sproutImport/runTask'
 			),
 			'sproutimport/seed'                         => array(
-				'action' => 'sproutImport/seed/indexTemplate'
+				'action' => 'sproutImport/seed/seedIndexTemplate'
 			),
 			'sproutimport/weed'                         => array(
-				'action' => 'sproutImport/seed/weedIndex'
+				'action' => 'sproutImport/weed/weedIndexTemplate'
 			),
 			'sproutimport/settings/(general)'           => array(
 				'action' => 'sproutImport/settings/settingsIndexTemplate'
@@ -141,7 +141,6 @@ class SproutImportPlugin extends BasePlugin
 
 		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutimport')
 		{
-			// @todo Craft 3 - update to use info from config.json
 			craft()->templates->includeJsResource('sproutimport/js/brand.js');
 			craft()->templates->includeJs("
 				sproutFormsBrand = new Craft.SproutBrand();
