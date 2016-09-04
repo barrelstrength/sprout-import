@@ -113,29 +113,6 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Return a list of importers by name
-	 *
-	 * @return array
-	 */
-	public function getSproutImportImportersByName()
-	{
-		$names     = array();
-		$importers = $this->getSproutImportImporters();
-
-		if (!empty($importers))
-		{
-			foreach ($importers as $importer)
-			{
-				$names[] = $importer->getModelName();
-			}
-		}
-
-		ksort($names, SORT_NATURAL);
-
-		return $names;
-	}
-
-	/**
 	 * Get all native and third-party that have seed generators
 	 *
 	 * @return array
@@ -252,13 +229,18 @@ class SproutImportService extends BaseApplicationComponent
 
 	/**
 	 * Get the Importer Model based on the "@model" key in the import data row
-	 * and return it if it exists
+	 * and return it if it exists. Models can be defined with or without the
+	 * word 'Model' in their name.
+	 *
+	 * Examples:
+	 * - UserModel or User
+	 * - FieldModel or Field
 	 *
 	 * @param $settings
 	 *
 	 * @return null
 	 */
-	public function getImporterModelName($settings, $names = null)
+	public function getImporterModelName($settings)
 	{
 		// Log error if no '@model' key identifier is found
 		if (!isset($settings['@model']))
@@ -274,18 +256,15 @@ class SproutImportService extends BaseApplicationComponent
 			return false;
 		}
 
-		// Allow Craft Import Format JSON to define a model with
-		// or without the Model suffix. i.e. Entry or EntryModel
-		//
 		// Remove the word 'Model' from the end of our setting if it exists
 		$importerModel = str_replace('Model', '', $settings['@model']);
 
-		if ($names == null)
-		{
-			$names = sproutImport()->getSproutImportImportersByName();
-		}
+		$importers = sproutImport()->getSproutImportImporters();
 
-		if (!in_array($importerModel, $names))
+		$elementImporterClassName  = $importerModel . 'SproutImportElementImporter';
+		$settingsImporterClassName = $importerModel . 'SproutImportSettingsImporter';
+
+		if (!isset($importers[$elementImporterClassName]) && !isset($importers[$settingsImporterClassName]))
 		{
 			$message = $importerModel . Craft::t(" Model could not be found.");
 
