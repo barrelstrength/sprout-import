@@ -6,12 +6,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 	/**
 	 * @type ImporterModel type
 	 */
-	private $type;
-
-	/**
-	 * @var ElementType
-	 */
-	private $element;
+	private $modelName;
 
 	/**
 	 * Elements saved during the length of the import job
@@ -38,38 +33,39 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 	protected $updatedElements = array();
 
 	/**
-	 * @param array $elements
-	 * @param bool  $returnSavedElementIds
+	 * @param array $data
+	 * @param bool  $seed
+	 * @param null  $source
 	 *
 	 * @return array
-	 * @throws Exception
-	 * @throws \CDbException
-	 * @throws \Exception
+	 * @internal param array $elements
+	 * @internal param bool $returnSavedElementIds
+	 *
 	 */
-	public function saveElement(array $element, $seed = false, $source = null)
+	public function saveElement(array $data, $seed = false, $source = null)
 	{
-		$modelName  = sproutImport()->getImporterModelName($element);
-		$this->type = $modelName;
+		$modelName       = sproutImport()->getImporterModelName($data);
+		$this->modelName = $modelName;
 
 		/**
 		 * Adds extra element keys to pass validation
 		 *
 		 * @var BaseSproutImportElementImporter $importerClass
 		 */
-		$importerClass = sproutImport()->getImporterByModelName($modelName, $element);
+		$importerClass = sproutImport()->getImporterByModelName($modelName, $data);
 
-		$importerElementKeys = $importerClass->defineKeys();
+		$additionalDataKeys = $importerClass->getImporterDataKeys();
 
-		$elementKeys = array_merge($this->getElementKeys(), $importerElementKeys);
+		$definedDataKeys = array_merge($this->getElementDataKeys(), $additionalDataKeys);
 
-		$inputKeys = array_keys($element);
+		$dataKeys = array_keys($data);
 
 		// Catches invalid element keys
-		$elementDiff = array_diff($inputKeys, $elementKeys);
+		$dataKeysDiff = array_diff($dataKeys, $definedDataKeys);
 
-		if (!empty($elementDiff))
+		if (!empty($dataKeysDiff))
 		{
-			$inputKeysText = implode(', ', $elementDiff);
+			$inputKeysText = implode(', ', $dataKeysDiff);
 
 			$message = Craft::t("Invalid element keys $inputKeysText.");
 
@@ -80,16 +76,9 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 			return false;
 		}
 
-		$this->element = $element;
-
-		$beforeSave = sproutImport()->getValueByKey('content.beforeSave', $element);
-
 		$model = $importerClass->getModel();
 
-		$content    = sproutImport()->getValueByKey('content', $element);
-		$fields     = sproutImport()->getValueByKey('content.fields', $element);
-		$related    = sproutImport()->getValueByKey('content.related', $element);
-		$attributes = sproutImport()->getValueByKey('attributes', $element);
+		$fields = sproutImport()->getValueByKey('content.fields', $data);
 
 		if (!empty($fields) && method_exists($importerClass, 'getAllFieldHandles'))
 		{
@@ -115,12 +104,12 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 			}
 		}
 
-		unset($element['content']['related']);
+		unset($data['content']['related']);
 
 		$eventParams = array(
+			'@model'  => $modelName,
 			'element' => $model,
 			'seed'    => $seed,
-			'@model'  => $modelName,
 			'source'  => $source
 		);
 
@@ -136,7 +125,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 
 			try
 			{
-				$importerClass->setData($element);
+				$importerClass->setData($data);
 
 				try
 				{
@@ -166,7 +155,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 
 				if ($saved)
 				{
-					$importerClass->resolveNestedSettings($model, $element);
+					$importerClass->resolveNestedSettings($model, $data);
 				}
 
 				if ($saved && $isNewElement)
@@ -185,8 +174,12 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 			}
 			catch (\Exception $e)
 			{
-				$this->unsavedElements[] = array('title' => $model->getTitle(), 'error' => $e->getMessage());
-				$title                   = sproutImport()->getValueByKey('content.title', $element);
+				$this->unsavedElements[] = array(
+					'title' => $model->getTitle(),
+					'error' => $e->getMessage()
+				);
+
+				$title = sproutImport()->getValueByKey('content.title', $data);
 
 				$fieldsMessage = (is_array($fields)) ? implode(', ', array_keys($fields)) : $fields;
 
@@ -422,7 +415,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 
 	public function getModelByMatches($beforeSave)
 	{
-		$type = $this->type;
+		$modelName = $this->modelName;
 
 		if ($beforeSave)
 		{
@@ -432,7 +425,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 
 			if ($matchBy && $matchValue)
 			{
-				$criteria = craft()->elements->getCriteria($type);
+				$criteria = craft()->elements->getCriteria($modelName);
 
 				// The following is critical to import/relate elements not enabled
 				$criteria->status = null;
@@ -514,7 +507,7 @@ class SproutImport_ElementsService extends BaseApplicationComponent
 	/**
 	 * @return array
 	 */
-	private function getElementKeys()
+	private function getElementDataKeys()
 	{
 		return array(
 			'@model', 'attributes', 'content'

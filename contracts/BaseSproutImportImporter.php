@@ -254,9 +254,11 @@ abstract class BaseSproutImportImporter
 	}
 
 	/**
+	 * Define the keys available in $this->data
+	 *
 	 * @return array
 	 */
-	public function defineKeys()
+	public function getImporterDataKeys()
 	{
 		return array();
 	}

@@ -120,7 +120,7 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 		return craft()->elements->deleteElementById($id);
 	}
 
-	public function defineKeys()
+	public function getImporterDataKeys()
 	{
 		return array('lineItems', 'payments');
 	}

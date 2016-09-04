@@ -98,7 +98,7 @@ class UserSproutImportElementImporter extends BaseSproutImportElementImporter
 	/**
 	 * @return array
 	 */
-	public function defineKeys()
+	public function getImporterDataKeys()
 	{
 		return array('groupIds');
 	}
