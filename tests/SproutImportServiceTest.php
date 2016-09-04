@@ -119,13 +119,13 @@ class SproutImportServiceTest extends SproutImportBaseTest
 		$length = count($values);
 		$number = rand(1, $length);
 
-		$randArrays = sproutImport()->mockData->getRandomArrays($values, $number);
+		$randomArrayItems = sproutImport()->mockData->getRandomArrayItems($values, $number);
 
-		$randCount = count($randArrays);
+		$randCount = count($randomArrayItems);
 
 		$this->assertEquals($number, $randCount);
 
-		$oneArray = sproutImport()->mockData->getRandomArrays($values, 1);
+		$oneArray = sproutImport()->mockData->getRandomArrayItems($values, 1);
 
 		$isArray = is_array($oneArray);
 
@@ -205,7 +205,7 @@ class SproutImportServiceTest extends SproutImportBaseTest
 			)
 		);
 
-		$values = sproutImport()->mockData->generateColumns($columns);
+		$values = sproutImport()->mockData->generateTableColumns($columns);
 
 		$expected = 5;
 		$length   = count($values);

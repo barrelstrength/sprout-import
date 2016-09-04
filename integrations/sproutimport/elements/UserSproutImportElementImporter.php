@@ -44,6 +44,7 @@ class UserSproutImportElementImporter extends BaseSproutImportElementImporter
 	}
 
 	/**
+	 * @todo - this is being called from the Mock Data service without the parameters: $fieldImporterClass->getMockData()
 	 * @param $settings
 	 */
 	public function getMockData($quantity, $settings)
@@ -90,7 +91,7 @@ class UserSproutImportElementImporter extends BaseSproutImportElementImporter
 		$fieldLayout           = craft()->fields->getLayoutByType('User');
 		$fieldLayoutFieldModel = $fieldLayout->fields;
 
-		$data['content']['fields'] = sproutImport()->mockData->getMockFields($fieldLayoutFieldModel);
+		$data['content']['fields'] = sproutImport()->mockData->getFieldsWithMockData($fieldLayoutFieldModel);
 
 		return sproutImport()->elementImporter->saveElement($data);
 	}

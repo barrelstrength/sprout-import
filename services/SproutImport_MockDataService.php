@@ -11,6 +11,37 @@ namespace Craft;
 class SproutImport_MockDataService extends BaseApplicationComponent
 {
 	/**
+	 * Generate mock data for all supported fields associated with an Element
+	 *
+	 * @param $fields
+	 *
+	 * @return array
+	 */
+	public function getFieldsWithMockData($fields)
+	{
+		$fieldsWithMockData = array();
+
+		if (!empty($fields))
+		{
+			foreach ($fields as $field)
+			{
+				$fieldHandle        = $field->field->handle;
+				$fieldType          = $field->field->type;
+				$fieldImporterClass = sproutImport()->getFieldImporterClassByType($fieldType);
+
+				if ($fieldImporterClass != null)
+				{
+					$fieldImporterClass->setModel($field->field);
+
+					$fieldsWithMockData[$fieldHandle] = $fieldImporterClass->getMockData();
+				}
+			}
+		}
+
+		return $fieldsWithMockData;
+	}
+
+	/**
 	 * Get a random sample of Relations for the given Element Relations field
 	 *
 	 * @param       $elementName
@@ -58,35 +89,8 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 		return $elementIds;
 	}
 
-	public function getMockFields($fields)
-	{
-		$values = array();
-
-		if (!empty($fields))
-		{
-			$handles = array();
-
-			foreach ($fields as $field)
-			{
-				$fieldHandle        = $field->field->handle;
-				$fieldType          = $field->field->type;
-				$handles[]          = $fieldType;
-				$fieldImporterClass = sproutImport()->getFieldImporterClassByType($fieldType);
-
-				if ($fieldImporterClass != null)
-				{
-					$fieldImporterClass->setModel($field->field);
-
-					$values[$fieldHandle] = $fieldImporterClass->getMockData();
-				}
-			}
-		}
-
-		return $values;
-	}
-
 	/**
-	 * Get Element Group IDs from sources setting
+	 * Determine the Element Group IDs from the source settings
 	 *
 	 * @param $sources
 	 *
@@ -113,7 +117,11 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get Element Group
+	 * Extract a specific Element Group ID from the source setting syntax
+	 *
+	 * Examples:
+	 * - group:1
+	 * - taggroup:1
 	 *
 	 * @param $source
 	 *
@@ -127,6 +135,8 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Determine what limit to use for a field that has a limit setting.
+	 *
 	 * If a limit is set, use that limit. If the limit is infinite, use a reasonable default.
 	 *
 	 * @param $limit
@@ -144,23 +154,25 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Return a random selection of items from an array for fields such as Multi-select and Checkboxes
+	 * Return a random selection of items from an array.
+	 *
+	 * Useful for fields such as Multi-select and Checkboxes
 	 *
 	 * @param $values
 	 * @param $number
 	 *
 	 * @return array|mixed
 	 */
-	public function getRandomArrays($values, $number)
+	public function getRandomArrayItems($values, $number)
 	{
-		$rands = array_rand($values, $number);
+		$randomItems = array_rand($values, $number);
 
-		if (!is_array($rands))
+		if (!is_array($randomItems))
 		{
-			return array($rands);
+			return array($randomItems);
 		}
 
-		return $rands;
+		return $randomItems;
 	}
 
 	/**
@@ -236,13 +248,13 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 	 *
 	 * @return array
 	 */
-	public function generateColumns($columns)
+	public function generateTableColumns($columns)
 	{
 		$values = array();
 
 		foreach ($columns as $key => $column)
 		{
-			$values[$key] = $this->generateColumn($key, $column);
+			$values[$key] = $this->generateTableColumn($key, $column);
 		}
 
 		return $values;
@@ -256,7 +268,7 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 	 *
 	 * @return array|int|string
 	 */
-	public function generateColumn($key, $column)
+	public function generateTableColumn($key, $column)
 	{
 		$value        = '';
 		$fakerService = sproutImport()->faker->getGenerator();
@@ -304,6 +316,19 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 		return $value;
 	}
 
+	/**
+	 * Generate a fake name or email
+	 *
+	 * @todo - why do we need to be passing the faker service and
+	 * the user service to this method? We could call them both from here.
+	 *
+	 * @param      $nameOrEmail
+	 * @param      $faker
+	 * @param bool $isEmail
+	 * @param null $usersService
+	 *
+	 * @return string
+	 */
 	public function generateUsernameOrEmail($nameOrEmail, $faker, $isEmail = false, $usersService = null)
 	{
 		if ($usersService == null)

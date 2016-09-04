@@ -43,7 +43,7 @@ class MatrixSproutImportFieldImporter extends BaseSproutImportFieldImporter
 
 				$fieldLayouts = craft()->fields->getLayoutFieldsById($fieldLayoutId);
 
-				$values[$key]['fields'] = sproutImport()->mockData->getMockFields($fieldLayouts);
+				$values[$key]['fields'] = sproutImport()->mockData->getFieldsWithMockData($fieldLayouts);
 
 				$count++;
 			}

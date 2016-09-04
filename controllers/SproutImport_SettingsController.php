@@ -5,7 +5,7 @@ namespace Craft;
 class SproutImport_SettingsController extends BaseController
 {
 	/**
-	 * Save Settings to the Database
+	 * Settings Index Template
 	 *
 	 * @return mixed Return to Page
 	 */

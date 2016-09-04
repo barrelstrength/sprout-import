@@ -94,7 +94,7 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 
 		$fieldLayouts = $this->getFieldLayoutsByGroupId();
 
-		$data['content']['fields'] = sproutImport()->mockData->getMockFields($fieldLayouts);
+		$data['content']['fields'] = sproutImport()->mockData->getFieldsWithMockData($fieldLayouts);
 
 		return sproutImport()->elementImporter->saveElement($data);
 	}
