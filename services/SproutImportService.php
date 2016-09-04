@@ -493,11 +493,11 @@ class SproutImportService extends BaseApplicationComponent
 	 * Get an Importer from it's model name
 	 *
 	 * @param $name
-	 * @param $row
+	 * @param $data
 	 *
 	 * @return mixed
 	 */
-	public function getImporterByModelName($name, $row)
+	public function getImporterByModelName($name, $data)
 	{
 		$importerClassName = 'Craft\\' . $name . 'SproutImportSettingsImporter';
 
@@ -505,15 +505,9 @@ class SproutImportService extends BaseApplicationComponent
 		if (!class_exists($importerClassName))
 		{
 			$importerClassName = 'Craft\\' . $name . 'SproutImportElementImporter';
-
-			$importer = new $importerClassName($row);
-		}
-		else
-		{
-			$importer = new $importerClassName($row);
 		}
 
-		return $importer;
+		return new $importerClassName($data);
 	}
 
 	/**
