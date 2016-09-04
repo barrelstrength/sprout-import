@@ -32,7 +32,7 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 		{
 			if (empty($this->data['variants']))
 			{
-				$message = Craft::t('Variants input is required');
+				$message = Craft::t('At least one variant is required');
 
 				SproutImportPlugin::log($message, LogLevel::Error);
 
