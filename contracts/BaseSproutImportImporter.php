@@ -8,19 +8,58 @@ namespace Craft;
  */
 abstract class BaseSproutImportImporter
 {
+	/**
+	 * The model of the thing being imported: Element, Setting, Field etc.
+	 *
+	 * Examples:
+	 * - UserModel
+	 * - FieldModel
+	 * - PlainTextFieldType
+	 *
+	 * @var
+	 */
 	public $model;
 
+	/**
+	 * The model of the importer class.
+	 *
+	 * Examples:
+	 * - UserSproutImportElementImporter
+	 * - FieldSproutImportSettingsImporter
+	 * - PlainTextSproutImportFieldImporter
+	 *
+	 * @var null
+	 */
 	protected $importerClass = null;
 
-	protected $valid;
-
+	/**
+	 * Any data an importer needs to store and access at another time such as
+	 * after something is saved and another action needs to be performed
+	 *
+	 * @var
+	 */
 	protected $data;
 
+	/**
+	 * ???
+	 *
+	 * @var array
+	 */
 	protected $rows;
 
-	protected $fakerService;
-
+	/**
+	 * Any errors that have occurred that we want to store and access later
+	 *
+	 * @var array
+	 */
 	protected $errors = array();
+
+	/**
+	 * Access to the Faker Service layer
+	 *
+	 * @var null
+	 */
+	protected $fakerService;
 
 	/**
 	 * BaseSproutImportImporter constructor.
@@ -50,6 +89,13 @@ abstract class BaseSproutImportImporter
 	}
 
 	/**
+	 * The Importer Class
+	 *
+	 * Examples:
+	 * - Craft\UserSproutImportElementImporter
+	 * - Craft\FieldSproutImportSettingsImporter
+	 * - Craft\PlainTextSproutImportFieldImporter
+	 *
 	 * @return mixed
 	 */
 	final public function getImporterClass()
@@ -64,6 +110,11 @@ abstract class BaseSproutImportImporter
 	/**
 	 * The user-friendly name for the imported data type
 	 *
+	 * Examples:
+	 * - Users
+	 * - Fields
+	 * - Plain Text
+	 *
 	 * @return mixed
 	 */
 	abstract public function getName();
@@ -71,8 +122,11 @@ abstract class BaseSproutImportImporter
 	/**
 	 * The primary model that the Importer supports
 	 *
-	 * i.e. EntryModel => Entry
-	 * i.e. SproutForms_FormModel => SproutForms_Form
+	 * Examples:
+	 * - UserModel => User
+	 * - FieldModel => Field
+	 * - PlainTextFieldType => PlainText
+	 * - SproutForms_FormModel => SproutForms_Form
 	 *
 	 * @return mixed
 	 */
@@ -126,6 +180,13 @@ abstract class BaseSproutImportImporter
 	}
 
 	/**
+	 * Get a model of the thing being imported, and assign it to $this->model
+	 *
+	 * Examples:
+	 * - new UserModel
+	 * - new FieldModel
+	 * - new PlainTextFieldType
+	 *
 	 * @return mixed
 	 */
 	public function getModel()
@@ -201,6 +262,13 @@ abstract class BaseSproutImportImporter
 	}
 
 	/**
+	 * Return any errors from the model of the thing being imported
+	 *
+	 * Examples:
+	 * - $userModel->getErrors()
+	 * - $fieldModel->getErrors()
+	 * - $plainTextFieldModel->getErrors()
+	 *
 	 * @return mixed
 	 */
 	public function getModelErrors()
@@ -208,6 +276,12 @@ abstract class BaseSproutImportImporter
 		return $this->model->getErrors();
 	}
 
+	/**
+	 * Add an error to global errors array: $this->errors
+	 *
+	 * @param      $message
+	 * @param bool $key
+	 */
 	public function addError($message, $key = false)
 	{
 		if ($key)
@@ -220,21 +294,45 @@ abstract class BaseSproutImportImporter
 		}
 	}
 
+	/**
+	 * Retrieve an error from global errors array: $this->errors
+	 *
+	 * @param $key
+	 *
+	 * @return string|false
+	 */
 	public function getError($key)
 	{
-		return (isset($this->errors[$key])) ? $this->errors[$key] : false;
+		$error = (isset($this->errors[$key])) ? $this->errors[$key] : false;
+
+		return $error;
 	}
 
+	/**
+	 * Retrieve all errors from global errors array: $this->errors
+	 *
+	 * @return array
+	 */
 	public function getErrors()
 	{
 		return $this->errors;
 	}
 
+	/**
+	 * Returns whether any errors exist in the global errors array: $this->errors
+	 *
+	 * @return bool
+	 */
 	public function hasErrors()
 	{
-		return (!empty($this->errors)) ? true : false;
+		$hasErrors = (!empty($this->errors)) ? true : false;
+
+		return $hasErrors;
 	}
 
+	/**
+	 * Reset global errors array and remove all errors
+	 */
 	public function clearErrors()
 	{
 		$this->errors = array();
