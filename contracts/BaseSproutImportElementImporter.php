@@ -8,7 +8,6 @@ namespace Craft;
  */
 abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 {
-
 	/**
 	 * @inheritdoc BaseSproutImportImporter::getName()
 	 *
