@@ -34,15 +34,13 @@ class SproutImportServiceTest extends SproutImportBaseTest
 		// Accepts with suffix Model or without
 		$row = array('@model' => 'FieldModel', 'groupId' => 1, 'name' => 'Field Name');
 
-		$names = array('Field', 'Entry');
-
-		$model = sproutImport()->getImporterModelName($row, $names);
+		$model = sproutImport()->getImporterModelName($row);
 
 		$this->assertEquals('Field', $model);
 
 		$row = array('@model' => 'Entry', 'attributes' => 1);
 
-		$model = sproutImport()->getImporterModelName($row, $names);
+		$model = sproutImport()->getImporterModelName($row);
 
 		$this->assertEquals('Entry', $model);
 	}
