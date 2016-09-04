@@ -64,7 +64,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 			'channel' => 'Channel'
 		);
 
-		$channels = sproutImport()->elements->getChannelSections();
+		$channels = sproutImport()->elementImporter->getChannelSections();
 
 		return craft()->templates->render('sproutimport/_settings/entry', array(
 			'id'       => $this->getModelName(),
@@ -177,7 +177,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 			$data['content']['beforeSave']['matchCriteria'] = array("section" => $entryParams['sectionHandle']);
 		}
 
-		return sproutImport()->elements->saveElement($data);
+		return sproutImport()->elementImporter->saveElement($data);
 	}
 
 	public function getAllFieldHandles()

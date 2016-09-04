@@ -6,20 +6,22 @@ namespace Craft;
  *
  * @package Craft
  * --
- * @property SproutImport_ElementsService $elements
- * @property SproutImport_FakerService    $faker
- * @property SproutImport_MockDataService $mockData
- * @property SproutImport_SeedService     $seed
- * @property SproutImport_SettingsService $settingsService
- * @property SproutImport_TasksService    $tasks
+ * @property SproutImport_ElementImporterService  $elementImporter
+ * @property SproutImport_FakerService            $faker
+ * @property SproutImport_MockDataService         $mockData
+ * @property SproutImport_SeedService             $seed
+ * @property SproutImport_Settings                $settings
+ * @property SproutImport_SettingsImporterService $settingsImporter
+ * @property SproutImport_TasksService            $tasks
  */
 class SproutImportService extends BaseApplicationComponent
 {
-	public $elements;
+	public $elementImporter;
 	public $faker;
 	public $mockData;
 	public $seed;
-	public $settingsService;
+	public $settings;
+	public $settingsImporter;
 	public $tasks;
 
 	/**
@@ -70,12 +72,13 @@ class SproutImportService extends BaseApplicationComponent
 			$this->elementsService = craft()->elements;
 		}
 
-		$this->elements        = Craft::app()->getComponent('sproutImport_elements');
-		$this->faker           = Craft::app()->getComponent('sproutImport_faker');
-		$this->mockData        = Craft::app()->getComponent('sproutImport_mockData');
-		$this->seed            = Craft::app()->getComponent('sproutImport_seed');
-		$this->settingsService = Craft::app()->getComponent('sproutImport_settings');
-		$this->tasks           = Craft::app()->getComponent('sproutImport_tasks');
+		$this->elementImporter  = Craft::app()->getComponent('sproutImport_elementImporter');
+		$this->faker            = Craft::app()->getComponent('sproutImport_faker');
+		$this->mockData         = Craft::app()->getComponent('sproutImport_mockData');
+		$this->seed             = Craft::app()->getComponent('sproutImport_seed');
+		$this->settings         = Craft::app()->getComponent('sproutImport_settings');
+		$this->settingsImporter = Craft::app()->getComponent('sproutImport_settingsImporter');
+		$this->tasks            = Craft::app()->getComponent('sproutImport_tasks');
 	}
 
 	/**
@@ -194,11 +197,11 @@ class SproutImportService extends BaseApplicationComponent
 
 				if ($this->isElementType($model))
 				{
-					$result = sproutImport()->elements->saveElement($row, $seed, 'import');
+					$result = sproutImport()->elementImporter->saveElement($row, $seed, 'import');
 				}
 				else
 				{
-					$result = sproutImport()->settingsService->saveSetting($row, $seed);
+					$result = sproutImport()->settingsImporter->saveSetting($row, $seed);
 				}
 			}
 		}
@@ -578,27 +581,6 @@ class SproutImportService extends BaseApplicationComponent
 		}
 
 		return $fieldClass;
-	}
-
-	public function saveSettings($postSettings)
-	{
-		$plugin   = craft()->plugins->getPlugin('sproutimport');
-		$settings = $plugin->getSettings();
-
-		if (isset($postSettings['pluginNameOverride']))
-		{
-			$settings['pluginNameOverride'] = $postSettings['pluginNameOverride'];
-		}
-
-		$settings = JsonHelper::encode($settings);
-
-		$affectedRows = craft()->db->createCommand()->update('plugins', array(
-			'settings' => $settings
-		), array(
-			'class' => 'SproutImport'
-		));
-
-		return (bool) $affectedRows;
 	}
 
 	/**

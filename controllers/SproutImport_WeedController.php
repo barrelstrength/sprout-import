@@ -4,7 +4,7 @@ namespace Craft;
 class SproutImport_WeedController extends BaseController
 {
 	/**
-	 * Weed page index
+	 * Weed Index Template
 	 *
 	 * @throws HttpException
 	 */

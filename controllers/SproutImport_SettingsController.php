@@ -38,7 +38,7 @@ class SproutImport_SettingsController extends BaseController
 		$this->requirePostRequest();
 		$settings = craft()->request->getPost('settings');
 
-		if (sproutImport()->saveSettings($settings))
+		if (sproutImport()->settings->saveSettings($settings))
 		{
 			craft()->userSession->setNotice(Craft::t('Settings saved.'));
 

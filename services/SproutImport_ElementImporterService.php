@@ -6,7 +6,7 @@ namespace Craft;
  *
  * @package Craft
  */
-class SproutImport_ElementsService extends BaseApplicationComponent
+class SproutImport_ElementImporterService extends BaseApplicationComponent
 {
 	/**
 	 * @type ImporterModel type

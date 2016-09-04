@@ -92,7 +92,7 @@ class UserSproutImportElementImporter extends BaseSproutImportElementImporter
 
 		$data['content']['fields'] = sproutImport()->mockData->getMockFields($fieldLayoutFieldModel);
 
-		return sproutImport()->elements->saveElement($data);
+		return sproutImport()->elementImporter->saveElement($data);
 	}
 
 	/**
