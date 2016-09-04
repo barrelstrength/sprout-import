@@ -51,11 +51,11 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 		{
 			$beforeSave = $settings['content']['beforeSave'];
 
-			$existModel = sproutImport()->elements->getModelByMatches($beforeSave);
+			$element = sproutImport()->elements->getModelByMatches($beforeSave);
 
-			if ($existModel)
+			if ($element)
 			{
-				$model = $existModel;
+				$model = $element;
 			}
 		}
 
