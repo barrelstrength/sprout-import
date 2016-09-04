@@ -37,27 +37,26 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 	{
 		try
 		{
-			$type = $this->model['type'];
-			$field = craft()->fields->getFieldType($type);
+			$fieldModel = $this->model;
 
-			if ($field != null)
+			if ($fieldModel != null)
 			{
-				if ($this->model->settings == null)
+				if ($fieldModel->settings == null)
 				{
 					$defaultSettings = $field->getSettings()->getAttributes();
 
 					// Save default settings if no settings are provided
-					$this->model->settings = $defaultSettings;
+					$fieldModel->settings = $defaultSettings;
 				}
 
 				// Create a Field Group if one isn't identified
-				if (!$this->model->groupId)
+				if (!$fieldModel->groupId)
 				{
 					$defaultFieldGroupId = $this->getDefaultFieldGroup();
-					$this->model->groupId = $defaultFieldGroupId;
+					$fieldModel->groupId = $defaultFieldGroupId;
 				}
 
-				return craft()->fields->saveField($this->model);
+				return craft()->fields->saveField($fieldModel);
 			}
 			else
 			{
@@ -78,7 +77,6 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 
 			return false;
 		}
-
 	}
 
 	/**
@@ -120,7 +118,7 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 	 */
 	protected function createSproutImportFieldGroup()
 	{
-		$group = new FieldGroupModel();
+		$group       = new FieldGroupModel();
 		$group->name = 'Sprout Import';
 
 		if (craft()->fields->saveGroup($group))
