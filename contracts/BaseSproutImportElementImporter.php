@@ -37,7 +37,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	}
 
 	/**
-	 * @return IElementType|null
+	 * @return mixed
 	 */
 	public function getElement()
 	{
@@ -50,21 +50,11 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	 * @param       $model
 	 * @param array $settings
 	 *
-	 * @return bool|BaseElementModel|null
+	 * @return BaseElementModel|null
 	 */
 	public function setModel($model, $settings = array())
 	{
-		if (isset($settings['content']['beforeSave']))
-		{
-			$beforeSave = $settings['content']['beforeSave'];
-
-			$element = sproutImport()->elements->getModelByMatches($beforeSave);
-
-			if ($element)
-			{
-				$model = $element;
-			}
-		}
+		$model = $this->processBeforeSave($settings);
 
 		if (isset($settings['attributes']))
 		{
@@ -168,6 +158,8 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	abstract public function save();
 
 	/**
+	 * Delete an Element using the Element ID
+	 *
 	 * @param $id
 	 *
 	 * @return bool
@@ -176,5 +168,31 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	public function deleteById($id)
 	{
 		return craft()->elements->deleteElementById($id);
+	}
+
+	/**
+	 * Determine if we have any elements we should handle before handling the current Element
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	protected function processBeforeSave($settings)
+	{
+		if (!isset($settings['content']['beforeSave']))
+		{
+			return null;
+		}
+
+		$beforeSave = $settings['content']['beforeSave'];
+
+		$element = sproutImport()->elements->getModelByMatches($beforeSave);
+
+		if ($element)
+		{
+			return $element;
+		}
+
+		return null;
 	}
 }
