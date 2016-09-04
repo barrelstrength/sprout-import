@@ -96,7 +96,7 @@ abstract class BaseSproutImportImporter
 	 * - Craft\FieldSproutImportSettingsImporter
 	 * - Craft\PlainTextSproutImportFieldImporter
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	final public function getImporterClass()
 	{
@@ -115,7 +115,7 @@ abstract class BaseSproutImportImporter
 	 * - Fields
 	 * - Plain Text
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	abstract public function getName();
 

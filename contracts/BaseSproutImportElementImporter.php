@@ -1,10 +1,18 @@
 <?php
 namespace Craft;
 
+/**
+ * Class BaseSproutImportElementImporter
+ *
+ * @package Craft
+ */
 abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 {
+
 	/**
-	 * @return mixed
+	 * @inheritdoc BaseSproutImportImporter::getName()
+	 *
+	 * @return string
 	 */
 	public function getName()
 	{
