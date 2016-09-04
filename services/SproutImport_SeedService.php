@@ -68,11 +68,11 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		}
 
 		$command = $command->from('sproutimport_seeds');
-		$results = $command->queryAll();
+		$itemsToWeed = $command->queryAll();
 
 		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 
-		foreach ($results as $row)
+		foreach ($itemsToWeed as $row)
 		{
 			try
 			{
