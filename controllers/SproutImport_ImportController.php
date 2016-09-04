@@ -5,8 +5,6 @@ class SproutImport_ImportController extends BaseController
 {
 	/**
 	 * Import Content and Settings via JSON schema using the proper Craft Import Format
-	 *
-	 * @throws HttpException
 	 */
 	public function actionRunImport()
 	{
@@ -21,9 +19,7 @@ class SproutImport_ImportController extends BaseController
 
 		foreach ($files as $file)
 		{
-			if (!$file->getHasError() && $file->getType() == 'application/json'
-				|| $file->getType() == 'application/octet-stream'
-			)
+			if (!$file->getHasError() && $file->getType() == 'application/json')
 			{
 				$path = $folderPath . $file->getName();
 
