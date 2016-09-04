@@ -82,14 +82,4 @@ class SproutImport_ImportController extends BaseController
 
 		craft()->end();
 	}
-
-	/**
-	 * @deprecated since 0.5.0. To be removed in 1.0.
-	 */
-	public function actionEnqueueTasksByPost()
-	{
-		craft()->deprecator->log('SproutImport_ImportController::actionEnqueueTasksByPost()', 'SproutImport_ImportController::actionEnqueueTasksByPost() has been deprecated. Use SproutImport_ImportController::actionRunImportFromPost() instead.');
-
-		$this->actionRunImportFromPost();
-	}
 }
