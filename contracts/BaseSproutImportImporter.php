@@ -334,12 +334,4 @@ abstract class BaseSproutImportImporter
 
 		return $hasErrors;
 	}
-
-	/**
-	 * Reset global errors array and remove all errors
-	 */
-	public function clearErrors()
-	{
-		$this->errors = array();
-	}
 }

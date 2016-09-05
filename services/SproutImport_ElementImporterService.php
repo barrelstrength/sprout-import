@@ -506,6 +506,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 		$errorKey = serialize($model->getAttributes());
 
 		SproutImportPlugin::log(Craft::t('Errors via logErrorByModel'), LogLevel::Error);
+
 		sproutImport()->addError($errorLog, $errorKey);
 	}
 
