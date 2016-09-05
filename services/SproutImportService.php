@@ -25,32 +25,32 @@ class SproutImportService extends BaseApplicationComponent
 	public $tasks;
 
 	/**
-	 * @type array
+	 * @var array
 	 */
 	protected $importers = array();
 
 	/**
-	 * @type array
+	 * @var array
 	 */
 	protected $seedImporters = array();
 
 	/**
-	 * @type array
+	 * @var array
 	 */
 	protected $fieldImporters = array();
 
 	/**
-	 * @type array
+	 * @var array
 	 */
 	protected $error = array();
 
 	/**
-	 * @type
+	 * @var
 	 */
 	protected $filename;
 
 	/**
-	 * @type
+	 * @var
 	 *
 	 * @todo - can probably remove $elementsService in favor of BaseSproutImportElementImporter::isElement
 	 */
@@ -281,197 +281,6 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param string $key
-	 * @param mixed  $data
-	 * @param mixed  $default
-	 *
-	 * @return mixed
-	 */
-	public function getValueByKey($key, $data, $default = null)
-	{
-		if (!is_array($data))
-		{
-			sproutImport()->errorLog('getValueByKey() was passed in a non-array as data.');
-
-			return $default;
-		}
-
-		if (!is_string($key) || empty($key) || !count($data))
-		{
-			return $default;
-		}
-
-		// @assert $key contains a dot notated string
-		if (strpos($key, '.') !== false)
-		{
-			$keys = explode('.', $key);
-
-			foreach ($keys as $innerKey)
-			{
-				if (!array_key_exists($innerKey, $data))
-				{
-					return $default;
-				}
-
-				$data = $data[$innerKey];
-			}
-
-			return $data;
-		}
-
-		return array_key_exists($key, $data) ? $data[$key] : $default;
-	}
-
-	/**
-	 * Add a record of the imported item to the seed database
-	 *
-	 * @param $event
-	 */
-	public function trackImport($event)
-	{
-		$element = $event->params['element'];
-		$seed    = $event->params['seed'];
-		$type    = $event->params['@model'];
-		$source  = $event->params['source'];
-
-		$id = $element->id;
-
-		if ($seed && $source == "import")
-		{
-			sproutImport()->seed->trackSeed($id, $type);
-		}
-	}
-
-	/**
-	 * @param string|mixed $message
-	 * @param array|mixed  $data
-	 * @param string       $level
-	 */
-	public function log($message, $data = null, $level = LogLevel::Info)
-	{
-		if ($data)
-		{
-			$data = print_r($data, true);
-		}
-
-		if (!is_string($message))
-		{
-			$message = print_r($message, true);
-		}
-
-		SproutImportPlugin::log(PHP_EOL . $message . PHP_EOL . PHP_EOL . $data, $level);
-	}
-
-	/**
-	 * Divide array by sections
-	 *
-	 * @param $array
-	 * @param $step
-	 *
-	 * @return array
-	 */
-	function sectionArray($array, $step)
-	{
-		$sectioned = array();
-
-		$k = 0;
-		for ($i = 0; $i < count($array); $i++)
-		{
-			if (!($i % $step))
-			{
-				$k++;
-			}
-
-			$sectioned[$k][] = $array[$i];
-		}
-
-		return array_values($sectioned);
-	}
-
-	/**
-	 * @author     Chris Smith <code+php@chris.cs278.org>
-	 * @copyright  Copyright (c) 2009 Chris Smith (http://www.cs278.org/)
-	 * @license    http://sam.zoy.org/wtfpl/ WTFPL
-	 *
-	 * @param    string $value  Value to test for serialized form
-	 * @param    mixed  $result Result of unserialize() of the $value
-	 *
-	 * @return    boolean      True if $value is serialized data, otherwise false
-	 */
-	function isSerialized($value, &$result = null)
-	{
-		// Bit of a give away this one
-		if (!is_string($value))
-		{
-			return false;
-		}
-		// Serialized false, return true. unserialize() returns false on an
-		// invalid string or it could return false if the string is serialized
-		// false, eliminate that possibility.
-		if ($value === 'b:0;')
-		{
-			$result = false;
-
-			return true;
-		}
-		$length = strlen($value);
-		$end    = '';
-		switch ($value[0])
-		{
-			case 's':
-				if ($value[$length - 2] !== '"')
-				{
-					return false;
-				}
-			case 'b':
-			case 'i':
-			case 'd':
-				// This looks odd but it is quicker than isset()ing
-				$end .= ';';
-			case 'a':
-			case 'O':
-				$end .= '}';
-				if ($value[1] !== ':')
-				{
-					return false;
-				}
-				switch ($value[2])
-				{
-					case 0:
-					case 1:
-					case 2:
-					case 3:
-					case 4:
-					case 5:
-					case 6:
-					case 7:
-					case 8:
-					case 9:
-						break;
-					default:
-						return false;
-				}
-			case 'N':
-				$end .= ';';
-				if ($value[$length - 1] !== $end[0])
-				{
-					return false;
-				}
-				break;
-			default:
-				return false;
-		}
-		if (($result = @unserialize($value)) === false)
-		{
-			$result = null;
-
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
 	 * Get an Importer from it's model name
 	 *
 	 * @param $name
@@ -531,22 +340,6 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Make sure the Sprout Import temp folder is created
-	 *
-	 * @return string
-	 */
-	public function createTempFolder()
-	{
-		$folderPath = craft()->path->getTempUploadsPath() . 'sproutimport/';
-
-		IOHelper::clearFolder($folderPath);
-
-		IOHelper::ensureFolderExists($folderPath);
-
-		return $folderPath;
-	}
-
-	/**
 	 * @param $name
 	 *
 	 * @return string
@@ -581,6 +374,84 @@ class SproutImportService extends BaseApplicationComponent
 		}
 
 		return $fieldClass;
+	}
+
+	/**
+	 * @param string $key
+	 * @param mixed  $data
+	 * @param mixed  $default
+	 *
+	 * @return mixed
+	 */
+	public function getValueByKey($key, $data, $default = null)
+	{
+		if (!is_array($data))
+		{
+			sproutImport()->errorLog('getValueByKey() was passed in a non-array as data.');
+
+			return $default;
+		}
+
+		if (!is_string($key) || empty($key) || !count($data))
+		{
+			return $default;
+		}
+
+		// @assert $key contains a dot notated string
+		if (strpos($key, '.') !== false)
+		{
+			$keys = explode('.', $key);
+
+			foreach ($keys as $innerKey)
+			{
+				if (!array_key_exists($innerKey, $data))
+				{
+					return $default;
+				}
+
+				$data = $data[$innerKey];
+			}
+
+			return $data;
+		}
+
+		return array_key_exists($key, $data) ? $data[$key] : $default;
+	}
+
+	/**
+	 * Make sure the Sprout Import temp folder is created
+	 *
+	 * @return string
+	 */
+	public function createTempFolder()
+	{
+		$folderPath = craft()->path->getTempUploadsPath() . 'sproutimport/';
+
+		IOHelper::clearFolder($folderPath);
+
+		IOHelper::ensureFolderExists($folderPath);
+
+		return $folderPath;
+	}
+
+	/**
+	 * @param string|mixed $message
+	 * @param array|mixed  $data
+	 * @param string       $level
+	 */
+	public function log($message, $data = null, $level = LogLevel::Info)
+	{
+		if ($data)
+		{
+			$data = print_r($data, true);
+		}
+
+		if (!is_string($message))
+		{
+			$message = print_r($message, true);
+		}
+
+		SproutImportPlugin::log(PHP_EOL . $message . PHP_EOL . PHP_EOL . $data, $level);
 	}
 
 	/**

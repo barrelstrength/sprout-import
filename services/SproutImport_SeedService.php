@@ -6,9 +6,7 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	/**
 	 * Return all imported content and settings marked as seed data
 	 *
-	 * @param $type
-	 *
-	 * @return array|\CDbDataReader
+	 * @return array
 	 */
 	public function getAllSeeds()
 	{
@@ -25,7 +23,6 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	 *
 	 * @param null   $itemId
 	 * @param null   $importerClass
-	 * @param string $type
 	 *
 	 * @return bool
 	 */
@@ -46,6 +43,26 @@ class SproutImport_SeedService extends BaseApplicationComponent
 			$record->importerClass = $importerClass;
 
 			$record->save();
+		}
+	}
+
+	/**
+	 * Add a record of the imported item to the seed database
+	 *
+	 * @param $event
+	 */
+	public function trackImport($event)
+	{
+		$type    = $event->params['@model'];
+		$element = $event->params['element'];
+		$seed    = $event->params['seed'];
+		$source  = $event->params['source'];
+
+		$id = $element->id;
+
+		if ($seed && $source == "import")
+		{
+			sproutImport()->seed->trackSeed($id, $type);
 		}
 	}
 

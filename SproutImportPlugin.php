@@ -131,12 +131,12 @@ class SproutImportPlugin extends BasePlugin
 
 		craft()->on('sproutImport.onAfterImportElement', function (Event $event)
 		{
-			sproutImport()->trackImport($event);
+			sproutImport()->seed->trackImport($event);
 		});
 
 		craft()->on('sproutImport.onAfterImportSetting', function (Event $event)
 		{
-			sproutImport()->trackImport($event);
+			sproutImport()->seed->trackImport($event);
 		});
 
 		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutimport')

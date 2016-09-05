@@ -30,18 +30,19 @@ class SproutImport_TasksService extends BaseApplicationComponent
 	 *
 	 * @param $elements
 	 *
+	 * @return mixed
 	 * @throws Exception
 	 */
 	public function createImportTasksFromPost($elements)
 	{
 		// support serialize format
-		if (sproutImport()->isSerialized($elements))
+		if ($this->isSerialized($elements))
 		{
 			$elements = unserialize($elements);
 		}
 
 		// Divide array for the tasks service
-		$tasks = sproutImport()->sectionArray($elements, 10);
+		$tasks = $this->sectionArray($elements, 10);
 
 		if (!count($tasks))
 		{
@@ -64,5 +65,114 @@ class SproutImport_TasksService extends BaseApplicationComponent
 		{
 			craft()->userSession->setError($e->getMessage());
 		}
+	}
+
+	/**
+	 * Divide array by sections
+	 *
+	 * @param $array
+	 * @param $step
+	 *
+	 * @return array
+	 */
+	function sectionArray($array, $step)
+	{
+		$sectioned = array();
+
+		$k = 0;
+		for ($i = 0; $i < count($array); $i++)
+		{
+			if (!($i % $step))
+			{
+				$k++;
+			}
+
+			$sectioned[$k][] = $array[$i];
+		}
+
+		return array_values($sectioned);
+	}
+
+	/**
+	 * @author     Chris Smith <code+php@chris.cs278.org>
+	 * @copyright  Copyright (c) 2009 Chris Smith (http://www.cs278.org/)
+	 * @license    http://sam.zoy.org/wtfpl/ WTFPL
+	 *
+	 * @param    string $value  Value to test for serialized form
+	 * @param    mixed  $result Result of unserialize() of the $value
+	 *
+	 * @return    boolean      True if $value is serialized data, otherwise false
+	 */
+	function isSerialized($value, &$result = null)
+	{
+		// Bit of a give away this one
+		if (!is_string($value))
+		{
+			return false;
+		}
+		// Serialized false, return true. unserialize() returns false on an
+		// invalid string or it could return false if the string is serialized
+		// false, eliminate that possibility.
+		if ($value === 'b:0;')
+		{
+			$result = false;
+
+			return true;
+		}
+		$length = strlen($value);
+		$end    = '';
+		switch ($value[0])
+		{
+			case 's':
+				if ($value[$length - 2] !== '"')
+				{
+					return false;
+				}
+			case 'b':
+			case 'i':
+			case 'd':
+				// This looks odd but it is quicker than isset()ing
+				$end .= ';';
+			case 'a':
+			case 'O':
+				$end .= '}';
+				if ($value[1] !== ':')
+				{
+					return false;
+				}
+				switch ($value[2])
+				{
+					case 0:
+					case 1:
+					case 2:
+					case 3:
+					case 4:
+					case 5:
+					case 6:
+					case 7:
+					case 8:
+					case 9:
+						break;
+					default:
+						return false;
+				}
+			case 'N':
+				$end .= ';';
+				if ($value[$length - 1] !== $end[0])
+				{
+					return false;
+				}
+				break;
+			default:
+				return false;
+		}
+		if (($result = @unserialize($value)) === false)
+		{
+			$result = null;
+
+			return false;
+		}
+
+		return true;
 	}
 }
