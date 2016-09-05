@@ -26,7 +26,7 @@ class TagsSproutImportFieldImporter extends BaseSproutImportFieldImporter
 			'groupId' => $groupId
 		);
 
-		$elementIds = sproutImport()->mockData->getMockRelations("Tag", $attributes, '');
+		$elementIds = sproutImport()->mockData->getMockRelations("Tag", $attributes, 3);
 
 		return $elementIds;
 	}
