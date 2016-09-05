@@ -387,7 +387,7 @@ class SproutImportService extends BaseApplicationComponent
 	{
 		if (!is_array($data))
 		{
-			sproutImport()->errorLog('getValueByKey() was passed in a non-array as data.');
+			SproutImportPlugin::log(Craft::t('getValueByKey() was passed in a non-array as data.'), LogLevel::Error);
 
 			return $default;
 		}

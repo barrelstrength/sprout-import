@@ -107,13 +107,10 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 
 					if (!$fields)
 					{
-						$message = Craft::t("Unable to resolve matrix relationships.");
+						$message['error']  = Craft::t("Unable to resolve matrix relationships.");
+						$message['fields'] = $fields;
 
-						$log            = array();
-						$log['message'] = $message;
-						$log['fields']  = $fields;
-
-						sproutImport()->log($log, 'invalid-matrix');
+						SproutImportPlugin::log($message);
 					}
 				}
 
@@ -128,13 +125,10 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 
 					if (!$fields)
 					{
-						$message = Craft::t("Unable to resolve related relationships.");
+						$message['error']  = Craft::t("Unable to resolve related relationships.");
+						$message['fields'] = $fields;
 
-						$log            = array();
-						$log['message'] = $message;
-						$log['fields']  = $fields;
-
-						sproutImport()->log($log, 'invalid-relation');
+						SproutImportPlugin::log($message);
 					}
 				}
 

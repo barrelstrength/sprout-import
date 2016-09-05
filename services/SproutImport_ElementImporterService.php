@@ -352,7 +352,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 
 						if (strtolower($type) == 'asset' && !$element)
 						{
-							sproutImport()->log('Missing > ' . $matchBy . ': ' . $reference);
+							SproutImportPlugin::log('Missing > ' . $matchBy . ': ' . $reference);
 						}
 
 						if ($element)
@@ -381,7 +381,10 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 					}
 					catch (\Exception $e)
 					{
-						sproutImport()->errorLog($e->getMessage(), $e);
+						$message['errorMessage'] = $e->getMessage();
+						$message['errorObject']  = $e;
+
+						SproutImportPlugin::log($message, LogLevel::Error);
 
 						continue;
 					}
