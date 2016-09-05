@@ -129,6 +129,11 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 	 */
 	public function getElementGroupId($source)
 	{
+		if (!isset($source))
+		{
+			return null;
+		}
+
 		$sourceExplode = explode(":", $source);
 
 		return $sourceExplode[1];
