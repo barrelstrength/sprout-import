@@ -54,7 +54,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	 */
 	public function setModel($model, $settings = array())
 	{
-		$model = $this->processBeforeSave($settings);
+		$model = $this->processBeforeSave($model, $settings);
 
 		if (isset($settings['attributes']))
 		{
@@ -177,11 +177,11 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	 *
 	 * @return mixed
 	 */
-	protected function processBeforeSave($settings)
+	protected function processBeforeSave($model, $settings)
 	{
 		if (!isset($settings['content']['beforeSave']))
 		{
-			return null;
+			return $model;
 		}
 
 		$beforeSave = $settings['content']['beforeSave'];
@@ -193,6 +193,6 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 			return $element;
 		}
 
-		return null;
+		return $model;
 	}
 }
