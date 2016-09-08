@@ -37,18 +37,26 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 	{
 		try
 		{
-			$type = $this->model['type'];
-			$field = craft()->fields->getFieldType($type);
+			$fieldModel = $this->model;
 
-			if ($field != null)
+			if ($fieldModel != null)
 			{
-				if ($this->model->settings == null)
+				if ($fieldModel->settings == null)
 				{
-					// Some fields require options setting to work
-					$this->model->settings = array('options' => array());
+					$defaultSettings = $field->getSettings()->getAttributes();
+
+					// Save default settings if no settings are provided
+					$fieldModel->settings = $defaultSettings;
 				}
 
-				return craft()->fields->saveField($this->model);
+				// Create a Field Group if one isn't identified
+				if (!$fieldModel->groupId)
+				{
+					$defaultFieldGroupId = $this->getDefaultFieldGroup();
+					$fieldModel->groupId = $defaultFieldGroupId;
+				}
+
+				return craft()->fields->saveField($fieldModel);
 			}
 			else
 			{
@@ -69,7 +77,6 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 
 			return false;
 		}
-
 	}
 
 	/**
@@ -80,5 +87,49 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 	public function deleteById($id)
 	{
 		return craft()->fields->deleteFieldById($id);
+	}
+
+	/**
+	 * @return mixed|null
+	 */
+	protected function getDefaultFieldGroup()
+	{
+		// @todo - cache this somewhere so we don't query the db
+		// for every field that doesn't have a fieldGroup
+		$groupId = craft()->db->createCommand()
+			->select('*')
+			->from('fieldgroups')
+			->where('name = :name', array(':name' => 'Default'))
+			->orWhere('name = :name2', array(':name2' => 'Sprout Import'))
+			->queryScalar();
+
+		if (!$groupId)
+		{
+			SproutImportPlugin::log('No field group exists. Creating the Sprout Import field group.');
+
+			$groupId = $this->createSproutImportFieldGroup();
+		}
+
+		return $groupId;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	protected function createSproutImportFieldGroup()
+	{
+		$group       = new FieldGroupModel();
+		$group->name = 'Sprout Import';
+
+		if (craft()->fields->saveGroup($group))
+		{
+			SproutImportPlugin::log('Sprout Import field group created successfully.');
+		}
+		else
+		{
+			SproutImportPlugin::log('Could not save the Sprout Import field group.', LogLevel::Warning);
+		}
+
+		return $group->id;
 	}
 }

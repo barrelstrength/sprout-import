@@ -157,7 +157,7 @@ class SectionSproutImportSettingsImporter extends BaseSproutImportSettingsImport
 		{
 			$settings['entryTypes'][$key]['sectionId'] = $sectionId;
 
-			$entryType = sproutImport()->settingsService->saveSetting($settings['entryTypes'][$key]);
+			$entryType = sproutImport()->settingsImporter->saveSetting($settings['entryTypes'][$key]);
 		}
 	}
 }

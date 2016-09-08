@@ -38,17 +38,18 @@ class UserSproutImportElementImporter extends BaseSproutImportElementImporter
 		}
 
 		return craft()->templates->render('sproutimport/_settings/user', array(
-			'id'       => $this->getModelName(),
+			'id'     => $this->getModelName(),
 			'groups' => $groupsSelect
 		));
 	}
 
 	/**
+	 * @todo - this is being called from the Mock Data service without the parameters: $fieldImporterClass->getMockData()
 	 * @param $settings
 	 */
 	public function getMockData($quantity, $settings)
 	{
-		$saveIds       = array();
+		$saveIds   = array();
 		$userGroup = $settings['userGroup'];
 
 		if (!empty($quantity))
@@ -75,30 +76,30 @@ class UserSproutImportElementImporter extends BaseSproutImportElementImporter
 
 		$username = sproutImport()->mockData->generateUsernameOrEmail($username, $faker);
 
-		$email    = $faker->email;
+		$email = $faker->email;
 
 		$email = sproutImport()->mockData->generateUsernameOrEmail($email, $faker, true);
 
 		$data                            = array();
 		$data['@model']                  = 'User';
-		$data['groupIds']                 = array($groupId);
+		$data['groupIds']                = array($groupId);
 		$data['attributes']['username']  = $username;
 		$data['attributes']['firstName'] = $firstName;
 		$data['attributes']['lastName']  = $lastName;
 		$data['attributes']['email']     = $faker->email;
 
-		$fieldLayout = craft()->fields->getLayoutByType('User');
+		$fieldLayout           = craft()->fields->getLayoutByType('User');
 		$fieldLayoutFieldModel = $fieldLayout->fields;
 
-		$data['content']['fields'] = sproutImport()->mockData->getMockFields($fieldLayoutFieldModel);
+		$data['content']['fields'] = sproutImport()->mockData->getFieldsWithMockData($fieldLayoutFieldModel);
 
-		return sproutImport()->elements->saveElement($data);
+		return sproutImport()->elementImporter->saveElement($data);
 	}
 
 	/**
 	 * @return array
 	 */
-	public function defineKeys()
+	public function getImporterDataKeys()
 	{
 		return array('groupIds');
 	}

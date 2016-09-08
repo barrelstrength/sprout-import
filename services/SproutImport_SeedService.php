@@ -6,9 +6,7 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	/**
 	 * Return all imported content and settings marked as seed data
 	 *
-	 * @param $type
-	 *
-	 * @return array|\CDbDataReader
+	 * @return array
 	 */
 	public function getAllSeeds()
 	{
@@ -25,7 +23,6 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	 *
 	 * @param null   $itemId
 	 * @param null   $importerClass
-	 * @param string $type
 	 *
 	 * @return bool
 	 */
@@ -50,6 +47,26 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Add a record of the imported item to the seed database
+	 *
+	 * @param $event
+	 */
+	public function trackImport($event)
+	{
+		$type    = $event->params['@model'];
+		$element = $event->params['element'];
+		$seed    = $event->params['seed'];
+		$source  = $event->params['source'];
+
+		$id = $element->id;
+
+		if ($seed && $source == "import")
+		{
+			sproutImport()->seed->trackSeed($id, $type);
+		}
+	}
+
+	/**
 	 * Remove a group of items from the database that are marked as seed data as identified by their class handle
 	 *
 	 * @param $type
@@ -68,11 +85,11 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		}
 
 		$command = $command->from('sproutimport_seeds');
-		$results = $command->queryAll();
+		$itemsToWeed = $command->queryAll();
 
 		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 
-		foreach ($results as $row)
+		foreach ($itemsToWeed as $row)
 		{
 			try
 			{

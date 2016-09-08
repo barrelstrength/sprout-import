@@ -20,13 +20,13 @@ class TableSproutImportFieldImporter extends BaseSproutImportFieldImporter
 
 		$columns = $settings['columns'];
 
-		$randomLength = rand(2, 10);
+		$randomLength = rand(2, 5);
 
 		$values = array();
 
 		for ($inc = 1; $inc <= $randomLength; $inc++)
 		{
-			$values[] = sproutImport()->mockData->generateColumns($columns);
+			$values[] = sproutImport()->mockData->generateTableColumns($columns);
 		}
 
 		return $values;

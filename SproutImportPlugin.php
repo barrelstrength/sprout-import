@@ -8,7 +8,10 @@ class SproutImportPlugin extends BasePlugin
 	 */
 	public function getName()
 	{
-		return 'Sprout Import';
+		$pluginName         = Craft::t('Sprout Import');
+		$pluginNameOverride = $this->getSettings()->pluginNameOverride;
+
+		return ($pluginNameOverride) ? $pluginNameOverride : $pluginName;
 	}
 
 	/**
@@ -81,10 +84,31 @@ class SproutImportPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'sproutimport/start/'                       => array('action' => 'sproutImport/start'),
-			'sproutimport/run/[a-zA-Z]+/[a-zA-Z0-9\-]+' => array('action' => 'sproutImport/runTask'),
-			'sproutimport/seed'                         => array('action' => 'sproutImport/seed/indexTemplate'),
-			'sproutimport/weed'                         => array('action' => 'sproutImport/seed/weedIndex')
+			'sproutimport/start/'                       => array(
+				'action' => 'sproutImport/start'
+			),
+			'sproutimport/run/[a-zA-Z]+/[a-zA-Z0-9\-]+' => array(
+				'action' => 'sproutImport/runTask'
+			),
+			'sproutimport/seed'                         => array(
+				'action' => 'sproutImport/seed/seedIndexTemplate'
+			),
+			'sproutimport/weed'                         => array(
+				'action' => 'sproutImport/weed/weedIndexTemplate'
+			),
+			'sproutimport/settings/(general)'           => array(
+				'action' => 'sproutImport/settings/settingsIndexTemplate'
+			),
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function defineSettings()
+	{
+		return array(
+			'pluginNameOverride' => AttributeType::String
 		);
 	}
 
@@ -95,13 +119,10 @@ class SproutImportPlugin extends BasePlugin
 	{
 		parent::init();
 
-		$this->includeContracts();
-
-		$this->includeElements();
-
-		$this->includeSettings();
-
-		$this->includeFields();
+		$this->importContracts();
+		$this->importSproutImportElementImporters();
+		$this->importSproutImportSettingsImporters();
+		$this->importSproutImportFieldImporters();
 
 		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutimport')
 		{
@@ -110,13 +131,29 @@ class SproutImportPlugin extends BasePlugin
 
 		craft()->on('sproutImport.onAfterImportElement', function (Event $event)
 		{
-			sproutImport()->trackImport($event);
+			sproutImport()->seed->trackImport($event);
 		});
 
 		craft()->on('sproutImport.onAfterImportSetting', function (Event $event)
 		{
-			sproutImport()->trackImport($event);
+			sproutImport()->seed->trackImport($event);
 		});
+
+		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutimport')
+		{
+			craft()->templates->includeJsResource('sproutimport/js/brand.js');
+			craft()->templates->includeJs("
+				sproutFormsBrand = new Craft.SproutBrand();
+				sproutFormsBrand.displayFooter({
+					pluginName: 'Sprout Import',
+					pluginUrl: 'http://sprout.barrelstrengthdesign.com/craft-plugins/import',
+					pluginVersion: '" . $this->getVersion() . "',
+					pluginDescription: '" . $this->getDescription() . "',
+					developerName: '(Barrel Strength)',
+					developerUrl: '" . $this->getDeveloperUrl() . "'
+				});
+			");
+		}
 	}
 
 	/**
@@ -146,12 +183,14 @@ class SproutImportPlugin extends BasePlugin
 		// Commerce events goes here
 		if (isset($commercePlugin->isEnabled) && $commercePlugin->isEnabled)
 		{
-			$importers[] = new Commerce_OrderSproutImportElementImporter();
-			$importers[] = new Commerce_ProductSproutImportElementImporter();
-			$importers[] = new Commerce_ProductTypeSproutImportSettingsImporter();
+			$craftCommerceImporters = array(
+				new Commerce_OrderSproutImportElementImporter(),
+				new Commerce_ProductSproutImportElementImporter(),
+				new Commerce_ProductTypeSproutImportSettingsImporter()
+			);
 		}
 
-		return $importers;
+		return array_merge($importers, $craftCommerceImporters);
 	}
 
 	/**
@@ -159,7 +198,7 @@ class SproutImportPlugin extends BasePlugin
 	 *
 	 * @return array
 	 */
-	public function registerSproutImportFields()
+	public function registerSproutImportFieldImporters()
 	{
 		$fields = array(
 			new RichTextSproutImportFieldImporter(),
@@ -182,17 +221,17 @@ class SproutImportPlugin extends BasePlugin
 			new MatrixSproutImportFieldImporter()
 		);
 
-
 		return $fields;
 	}
 
-	private function includeContracts()
+	private function importContracts()
 	{
-		$contracts   = array();
-		$contracts[] = "BaseSproutImportImporter";
-		$contracts[] = "BaseSproutImportElementImporter";
-		$contracts[] = "BaseSproutImportSettingsImporter";
-		$contracts[] = "BaseSproutImportFieldImporter";
+		$contracts = array(
+			"BaseSproutImportImporter",
+			"BaseSproutImportElementImporter",
+			"BaseSproutImportSettingsImporter",
+			"BaseSproutImportFieldImporter"
+		);
 
 		foreach ($contracts as $contract)
 		{
@@ -200,16 +239,17 @@ class SproutImportPlugin extends BasePlugin
 		}
 	}
 
-	private function includeElements()
+	private function importSproutImportElementImporters()
 	{
-		$elements   = array();
-		$elements[] = "AssetFileSproutImportElementImporter";
-		$elements[] = "CategorySproutImportElementImporter";
-		$elements[] = "Commerce_OrderSproutImportElementImporter";
-		$elements[] = "Commerce_ProductSproutImportElementImporter";
-		$elements[] = "EntrySproutImportElementImporter";
-		$elements[] = "TagSproutImportElementImporter";
-		$elements[] = "UserSproutImportElementImporter";
+		$elements = array(
+			"AssetFileSproutImportElementImporter",
+			"CategorySproutImportElementImporter",
+			"Commerce_OrderSproutImportElementImporter",
+			"Commerce_ProductSproutImportElementImporter",
+			"EntrySproutImportElementImporter",
+			"TagSproutImportElementImporter",
+			"UserSproutImportElementImporter"
+		);
 
 		foreach ($elements as $element)
 		{
@@ -217,13 +257,14 @@ class SproutImportPlugin extends BasePlugin
 		}
 	}
 
-	private function includeSettings()
+	private function importSproutImportSettingsImporters()
 	{
-		$settings = array();
-		$settings[] = "Commerce_ProductTypeSproutImportSettingsImporter";
-		$settings[] = "SectionSproutImportSettingsImporter";
-		$settings[] = "FieldSproutImportSettingsImporter";
-		$settings[] = "EntryTypeSproutImportSettingsImporter";
+		$settings = array(
+			"Commerce_ProductTypeSproutImportSettingsImporter",
+			"SectionSproutImportSettingsImporter",
+			"FieldSproutImportSettingsImporter",
+			"EntryTypeSproutImportSettingsImporter"
+		);
 
 		foreach ($settings as $setting)
 		{
@@ -231,33 +272,73 @@ class SproutImportPlugin extends BasePlugin
 		}
 	}
 
-	private function includeFields()
+	private function importSproutImportFieldImporters()
 	{
-		$fields = array();
-		$fields[] = "AssetsSproutImportFieldImporter";
-		$fields[] = "CategoriesSproutImportFieldImporter";
-		$fields[] = "CheckboxesSproutImportFieldImporter";
-		$fields[] = "ColorSproutImportFieldImporter";
-		$fields[] = "DateSproutImportFieldImporter";
-		$fields[] = "DropdownSproutImportFieldImporter";
-		$fields[] = "EntriesSproutImportFieldImporter";
-		$fields[] = "LightswitchSproutImportFieldImporter";
-		$fields[] = "MatrixSproutImportFieldImporter";
-		$fields[] = "MultiSelectSproutImportFieldImporter";
-		$fields[] = "NumberSproutImportFieldImporter";
-		$fields[] = "PlainTextSproutImportFieldImporter";
-		$fields[] = "PositionSelectSproutImportFieldImporter";
-		$fields[] = "RadioButtonsSproutImportFieldImporter";
-		$fields[] = "RichTextSproutImportFieldImporter";
-		$fields[] = "TableSproutImportFieldImporter";
-		$fields[] = "TagsSproutImportFieldImporter";
-		$fields[] = "UsersSproutImportFieldImporter";
-		$fields[] = "Commerce_ProductsSproutImportFieldImporter";
+		$fields = array(
+			"AssetsSproutImportFieldImporter",
+			"CategoriesSproutImportFieldImporter",
+			"CheckboxesSproutImportFieldImporter",
+			"ColorSproutImportFieldImporter",
+			"DateSproutImportFieldImporter",
+			"DropdownSproutImportFieldImporter",
+			"EntriesSproutImportFieldImporter",
+			"LightswitchSproutImportFieldImporter",
+			"MatrixSproutImportFieldImporter",
+			"MultiSelectSproutImportFieldImporter",
+			"NumberSproutImportFieldImporter",
+			"PlainTextSproutImportFieldImporter",
+			"PositionSelectSproutImportFieldImporter",
+			"RadioButtonsSproutImportFieldImporter",
+			"RichTextSproutImportFieldImporter",
+			"TableSproutImportFieldImporter",
+			"TagsSproutImportFieldImporter",
+			"UsersSproutImportFieldImporter",
+			"Commerce_ProductsSproutImportFieldImporter"
+		);
 
 		foreach ($fields as $field)
 		{
 			Craft::import("plugins.sproutimport.integrations.sproutimport.fields.$field");
 		}
+	}
+
+	/**
+	 * Override SproutImportPlugin::log() method to allow the logging of
+	 * multiple messages and arrays
+	 *
+	 * Examples:
+	 *
+	 * Standard log:
+	 * SproutImportPlugin::log($msg);
+	 *
+	 * Enhanced log:
+	 * $messages['thing1'] = Craft::t('Something happened');
+	 * $messages['thing2'] = $entry->getErrors();
+	 * SproutImportPlugin::log($messages);
+	 *
+	 * @param string $messages
+	 * @param string $level
+	 * @param bool   $force
+	 *
+	 * @return null - writes log to logfile
+	 */
+	public static function log($messages, $level = LogLevel::Info, $force = false)
+	{
+		$msg = "";
+
+		if (is_array($messages))
+		{
+			foreach ($messages as $message)
+			{
+				$msg .= PHP_EOL . print_r($message, true);
+			}
+		}
+		else
+		{
+			$msg = $messages;
+		}
+
+		parent::log($msg, $level = LogLevel::Info, $force = false);
 	}
 }
 

@@ -65,7 +65,7 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 					{
 						if ($isNewLineItem)
 						{
-							$linesItems = $order->getLineItems();
+							$linesItems   = $order->getLineItems();
 							$linesItems[] = $lineItem;
 							$order->setLineItems($linesItems);
 						}
@@ -120,13 +120,14 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 		return craft()->elements->deleteElementById($id);
 	}
 
-	public function defineKeys()
+	public function getImporterDataKeys()
 	{
 		return array('lineItems', 'payments');
 	}
 
 	/**
 	 * This is code is from Commerce_CartService copied it because it is private
+	 *
 	 * @return mixed|string
 	 */
 	private function getRandomCartNumber()

@@ -1,6 +1,7 @@
 {
 	"name": "barrelstrengthdesign/sproutimport",
 	"require": {
-		"fzaninotto/faker": "~1.4"
+		"fzaninotto/faker": "~1.4",
+		"icomefromthenet/reverse-regex" : "dev-master"
 	}
 }

@@ -1,14 +1,21 @@
 <?php
 namespace Craft;
 
+/**
+ * Class BaseSproutImportElementImporter
+ *
+ * @package Craft
+ */
 abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 {
 	/**
-	 * @return mixed
+	 * @inheritdoc BaseSproutImportImporter::getName()
+	 *
+	 * @return string
 	 */
 	public function getName()
 	{
-		$model =  $this->getModel();
+		$model = $this->getModel();
 
 		if (!is_object($model))
 		{
@@ -16,7 +23,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 		}
 
 		$elementTypeName = $model->getElementType();
-		$elementType = craft()->elements->getElementType($elementTypeName);
+		$elementType     = craft()->elements->getElementType($elementTypeName);
 
 		return $elementType->getName();
 	}
@@ -30,7 +37,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	}
 
 	/**
-	 * @return IElementType|null
+	 * @return mixed
 	 */
 	public function getElement()
 	{
@@ -43,21 +50,11 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	 * @param       $model
 	 * @param array $settings
 	 *
-	 * @return bool|BaseElementModel|null
+	 * @return BaseElementModel|null
 	 */
 	public function setModel($model, $settings = array())
 	{
-		if (isset($settings['content']['beforeSave']))
-		{
-			$beforeSave = $settings['content']['beforeSave'];
-
-			$existModel = sproutImport()->elements->getModelByMatches($beforeSave);
-
-			if ($existModel)
-			{
-				$model = $existModel;
-			}
-		}
+		$model = $this->processBeforeSave($model, $settings);
 
 		if (isset($settings['attributes']))
 		{
@@ -106,17 +103,14 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 
 				if (!empty($fields))
 				{
-					$fields = sproutImport()->elements->resolveMatrixRelationships($fields);
+					$fields = sproutImport()->elementImporter->resolveMatrixRelationships($fields);
 
 					if (!$fields)
 					{
-						$message = Craft::t("Unable to resolve matrix relationships.");
+						$message['error']  = Craft::t("Unable to resolve matrix relationships.");
+						$message['fields'] = $fields;
 
-						$log            = array();
-						$log['message'] = $message;
-						$log['fields']  = $fields;
-
-						sproutImport()->log($log, 'invalid-matrix');
+						SproutImportPlugin::log($message);
 					}
 				}
 
@@ -127,17 +121,14 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 				{
 					$related = $settings['content']['related'];
 
-					$fields = sproutImport()->elements->resolveRelationships($related, $fields);
+					$fields = sproutImport()->elementImporter->resolveRelationships($related, $fields);
 
 					if (!$fields)
 					{
-						$message = Craft::t("Unable to resolve related relationships.");
+						$message['error']  = Craft::t("Unable to resolve related relationships.");
+						$message['fields'] = $fields;
 
-						$log            = array();
-						$log['message'] = $message;
-						$log['fields']  = $fields;
-
-						sproutImport()->log($log, 'invalid-relation');
+						SproutImportPlugin::log($message);
 					}
 				}
 
@@ -161,6 +152,8 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	abstract public function save();
 
 	/**
+	 * Delete an Element using the Element ID
+	 *
 	 * @param $id
 	 *
 	 * @return bool
@@ -169,5 +162,31 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	public function deleteById($id)
 	{
 		return craft()->elements->deleteElementById($id);
+	}
+
+	/**
+	 * Determine if we have any elements we should handle before handling the current Element
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	protected function processBeforeSave($model, $settings)
+	{
+		if (!isset($settings['content']['beforeSave']))
+		{
+			return $model;
+		}
+
+		$beforeSave = $settings['content']['beforeSave'];
+
+		$element = sproutImport()->elementImporter->getModelByMatches($beforeSave);
+
+		if ($element)
+		{
+			return $element;
+		}
+
+		return $model;
 	}
 }

@@ -82,13 +82,13 @@ class SproutImportBaseTest extends BaseTest
 	protected function autoload()
 	{
 		$map = array(
-			'\\Craft\\SproutImportPlugin'       => '../SproutImportPlugin.php',
-			'\\Craft\\SproutImportService'      => '../services/SproutImportService.php',
-			'\\Craft\\SproutImport_SeedService' => '../services/SproutImport_SeedService.php',
-			'\\Craft\\SproutImport_FakerService' => '../services/SproutImport_FakerService.php',
+			'\\Craft\\SproutImportPlugin'           => '../SproutImportPlugin.php',
+			'\\Craft\\SproutImportService'          => '../services/SproutImportService.php',
+			'\\Craft\\SproutImport_SeedService'     => '../services/SproutImport_SeedService.php',
+			'\\Craft\\SproutImport_FakerService'    => '../services/SproutImport_FakerService.php',
 			'\\Craft\\SproutImport_MockDataService' => '../services/SproutImport_MockDataService.php',
-			'\\Craft\\BaseSproutImportImporter' => '../contracts/BaseSproutImportImporter.php',
-			'\\Craft\\FieldSproutImportImporter' => '../integrations/sproutimport/FieldSproutImportImporter.php'
+			'\\Craft\\BaseSproutImportImporter'     => '../contracts/BaseSproutImportImporter.php',
+			'\\Craft\\FieldSproutImportImporter'    => '../integrations/sproutimport/FieldSproutImportImporter.php'
 		);
 
 		foreach ($map as $classPath => $filePath)

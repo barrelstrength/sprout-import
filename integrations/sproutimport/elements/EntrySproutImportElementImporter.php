@@ -53,7 +53,6 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 
 			return false;
 		}
-
 	}
 
 	/**
@@ -65,7 +64,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 			'channel' => 'Channel'
 		);
 
-		$channels = sproutImport()->elements->getChannelSections();
+		$channels = sproutImport()->elementImporter->getChannelSections();
 
 		return craft()->templates->render('sproutimport/_settings/entry', array(
 			'id'       => $this->getModelName(),
@@ -167,7 +166,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 
 		$fieldLayouts = $this->getFieldLayouts();
 
-		$data['content']['fields'] = sproutImport()->mockData->getMockFields($fieldLayouts);
+		$data['content']['fields'] = sproutImport()->mockData->getFieldsWithMockData($fieldLayouts);
 
 		$data['content']['fields']['title'] = $title;
 
@@ -178,7 +177,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 			$data['content']['beforeSave']['matchCriteria'] = array("section" => $entryParams['sectionHandle']);
 		}
 
-		return sproutImport()->elements->saveElement($data);
+		return sproutImport()->elementImporter->saveElement($data);
 	}
 
 	public function getAllFieldHandles()

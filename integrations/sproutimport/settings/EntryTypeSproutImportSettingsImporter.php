@@ -46,7 +46,7 @@ class EntryTypeSproutImportSettingsImporter extends BaseSproutImportSettingsImpo
 
 				foreach ($fields as $fieldSettings)
 				{
-					$field = sproutImport()->settingsService->saveSetting($fieldSettings);
+					$field = sproutImport()->settingsImporter->saveSetting($fieldSettings);
 
 					$fieldLayout[$tabName][] = $field->id;
 

@@ -6,4 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Normalizer' => $vendorDir . '/patchwork/utf8/src/Normalizer.php',
 );

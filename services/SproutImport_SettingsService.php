@@ -1,100 +1,36 @@
 <?php
 namespace Craft;
 
+/**
+ * Class SproutImport_SettingsService
+ *
+ * @package Craft
+ */
 class SproutImport_SettingsService extends BaseApplicationComponent
 {
 	/**
-	 * @type array
-	 */
-	private $savedIds = array();
-
-	/**
-	 * Returns $model if saved, or false if failed
-	 * This can be called in a loop, or called directly if we know we just have one setting and want and ID back.
-	 *
-	 * @param      $settings
-	 * @param bool $seed
+	 * @param $postSettings
 	 *
 	 * @return bool
 	 */
-	public function saveSetting($settings, $seed = false, $source = 'import')
+	public function saveSettings($postSettings)
 	{
-		$modelName     = sproutImport()->getImporterModelName($settings);
-		$importerClass = sproutImport()->getImporterByModelName($modelName, $settings);
+		$plugin         = craft()->plugins->getPlugin('sproutimport');
+		$pluginSettings = $plugin->getSettings();
 
-		$model = $importerClass->getModel();
-
-		if ($model->validate())
+		if (isset($postSettings['pluginNameOverride']))
 		{
-			try
-			{
-				$importerClass->setData($settings);
-
-				$saved = $importerClass->save();
-
-				if ($saved)
-				{
-					// Get updated model after save
-					$model = $importerClass->getModel();
-
-					$importerModel = sproutImport()->getImporterModelName($settings);
-
-					$eventParams = array(
-						'element' => $model,
-						'seed'    => $seed,
-						'@model'  => $importerModel,
-						'source'  => $source
-					);
-
-					$event = new Event($this, $eventParams);
-
-					sproutImport()->onAfterImportSetting($event);
-				}
-			}
-			catch (\Exception $e)
-			{
-				$message = Craft::t("Error on importer save setting method. \n ");
-				$message .= $e->getMessage();
-
-				SproutImportPlugin::log($message, LogLevel::Error);
-				sproutImport()->addError($message, 'save-setting-importer');
-
-				return false;
-			}
-
-			if ($saved)
-			{
-				$importerClass->resolveNestedSettings($model, $settings);
-			}
-
-			$this->savedIds[] = $model->id;
-
-			return $importerClass->model;
+			$pluginSettings['pluginNameOverride'] = $postSettings['pluginNameOverride'];
 		}
-		else
-		{
-			$errorKey = serialize($model->getAttributes());
 
-			$errorLog               = array();
-			$errorLog['errors']     = Craft::t("Unable to save settings.");
-			$errorLog['attributes'] = $model->getAttributes();
+		$pluginSettings = JsonHelper::encode($pluginSettings);
 
-			SproutImportPlugin::log($errorLog['errors'], LogLevel::Error);
-			sproutImport()->addError($errorLog, $errorKey);
+		$affectedRows = craft()->db->createCommand()->update('plugins', array(
+			'settings' => $pluginSettings
+		), array(
+			'class' => 'SproutImport'
+		));
 
-			return false;
-		}
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getSavedResults()
-	{
-		$result = array(
-			'savedSettingIds' => $this->savedIds
-		);
-
-		return $result;
+		return (bool) $affectedRows;
 	}
 }

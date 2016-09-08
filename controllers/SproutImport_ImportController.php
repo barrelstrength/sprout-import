@@ -5,8 +5,6 @@ class SproutImport_ImportController extends BaseController
 {
 	/**
 	 * Import Content and Settings via JSON schema using the proper Craft Import Format
-	 *
-	 * @throws HttpException
 	 */
 	public function actionRunImport()
 	{
@@ -21,9 +19,7 @@ class SproutImport_ImportController extends BaseController
 
 		foreach ($files as $file)
 		{
-			if (!$file->getHasError() && $file->getType() == 'application/json'
-				|| $file->getType() == 'application/octet-stream'
-			)
+			if (!$file->getHasError() && $file->getType() == 'application/json')
 			{
 				$path = $folderPath . $file->getName();
 
@@ -85,15 +81,5 @@ class SproutImport_ImportController extends BaseController
 		sproutImport()->tasks->createImportTasksFromPost($elements);
 
 		craft()->end();
-	}
-
-	/**
-	 * @deprecated since 0.5.0. To be removed in 1.0.
-	 */
-	public function actionEnqueueTasksByPost()
-	{
-		craft()->deprecator->log('SproutImport_ImportController::actionEnqueueTasksByPost()', 'SproutImport_ImportController::actionEnqueueTasksByPost() has been deprecated. Use SproutImport_ImportController::actionRunImportFromPost() instead.');
-
-		$this->actionRunImportFromPost();
 	}
 }

@@ -50,7 +50,7 @@
 								"type": "Categories",
 								"settings": {
 									"useSingleFolder": false,
-									"source": null,
+									"source": "group:1",
 									"limit": 3,
 									"selectionLabel": "Add a category"
 								}
@@ -138,7 +138,7 @@
 								"type": "Entries",
 								"settings": {
 									"limit": 3,
-									"sources": null,
+									"sources": "*",
 									"selectionLabel": "Add an entry"
 								}
 							},
@@ -370,7 +370,7 @@
 								"instructions": "",
 								"type": "Tags",
 								"settings": {
-									"source": null,
+									"source": "taggroup:1",
 									"selectionLabel": "Add a tag"
 								}
 							},
@@ -382,7 +382,7 @@
 								"instructions": "",
 								"type": "Users",
 								"settings": {
-									"sources": null,
+									"sources": "*",
 									"selectionLabel": "Add a user"
 								}
 							}

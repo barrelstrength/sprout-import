@@ -4,16 +4,6 @@ namespace Craft;
 class SproutImportVariable
 {
 	/**
-	 * @return int
-	 */
-	public function hasSeeds()
-	{
-		$seeds = craft()->sproutImport_seed->getAllSeeds();
-
-		return count($seeds);
-	}
-
-	/**
 	 * Return an instance of the \Faker\Generator
 	 *
 	 * @return \Faker\Generator
@@ -26,22 +16,8 @@ class SproutImportVariable
 	}
 
 	/**
-	 * @return BaseSproutImportImporter[]
-	 */
-	public function getSproutImportImporters()
-	{
-		return sproutImport()->getSproutImportImporters();
-	}
-
-	/**
-	 * @return BaseSproutImport[]
-	 */
-	public function getSproutImportFieldImporters()
-	{
-		return sproutImport()->getSproutImportFields();
-	}
-
-	/**
+	 * Confirm if a specific plugin is installed
+	 *
 	 * @param string
 	 *
 	 * @return bool
@@ -56,5 +32,37 @@ class SproutImportVariable
 		}
 
 		return false;
+	}
+
+	/**
+	 * Get all Element and Settings importers
+	 *
+	 * @return BaseSproutImportImporter[]
+	 */
+	public function getSproutImportImporters()
+	{
+		return sproutImport()->getSproutImportImporters();
+	}
+
+	/**
+	 * Get all Field importers
+	 *
+	 * @return BaseSproutImport[]
+	 */
+	public function getSproutImportFieldImporters()
+	{
+		return sproutImport()->getSproutImportFieldImporters();
+	}
+
+	/**
+	 * Confirm if any seeds exist
+	 *
+	 * @return int
+	 */
+	public function hasSeeds()
+	{
+		$seeds = sproutImport()->seed->getAllSeeds();
+
+		return count($seeds);
 	}
 }

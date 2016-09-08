@@ -34,15 +34,13 @@ class SproutImportServiceTest extends SproutImportBaseTest
 		// Accepts with suffix Model or without
 		$row = array('@model' => 'FieldModel', 'groupId' => 1, 'name' => 'Field Name');
 
-		$names = array('Field', 'Entry');
-
-		$model = sproutImport()->getImporterModelName($row, $names);
+		$model = sproutImport()->getImporterModelName($row);
 
 		$this->assertEquals('Field', $model);
 
 		$row = array('@model' => 'Entry', 'attributes' => 1);
 
-		$model = sproutImport()->getImporterModelName($row, $names);
+		$model = sproutImport()->getImporterModelName($row);
 
 		$this->assertEquals('Entry', $model);
 	}
@@ -121,13 +119,13 @@ class SproutImportServiceTest extends SproutImportBaseTest
 		$length = count($values);
 		$number = rand(1, $length);
 
-		$randArrays = sproutImport()->mockData->getRandomArrays($values, $number);
+		$randomArrayItems = sproutImport()->mockData->getRandomArrayItems($values, $number);
 
-		$randCount = count($randArrays);
+		$randCount = count($randomArrayItems);
 
 		$this->assertEquals($number, $randCount);
 
-		$oneArray = sproutImport()->mockData->getRandomArrays($values, 1);
+		$oneArray = sproutImport()->mockData->getRandomArrayItems($values, 1);
 
 		$isArray = is_array($oneArray);
 
@@ -207,7 +205,7 @@ class SproutImportServiceTest extends SproutImportBaseTest
 			)
 		);
 
-		$values = sproutImport()->mockData->generateColumns($columns);
+		$values = sproutImport()->mockData->generateTableColumns($columns);
 
 		$expected = 5;
 		$length   = count($values);
@@ -242,7 +240,7 @@ class SproutImportServiceTest extends SproutImportBaseTest
 		$this->assertEquals($expected, $find);
 
 		$allSources = "*";
-		$expected = "*";
+		$expected   = "*";
 
 		$find = sproutImport()->mockData->getElementGroupIds($allSources);
 

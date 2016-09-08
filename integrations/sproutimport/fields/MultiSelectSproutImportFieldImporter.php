@@ -25,9 +25,9 @@ class MultiSelectSproutImportFieldImporter extends BaseSproutImportFieldImporter
 			$length = count($options);
 			$number = rand(1, $length);
 
-			$randArrays = sproutImport()->mockData->getRandomArrays($options, $number);
+			$randomArrayItems = sproutImport()->mockData->getRandomArrayItems($options, $number);
 
-			$values = sproutImport()->mockData->getOptionValuesByKeys($randArrays, $options);
+			$values = sproutImport()->mockData->getOptionValuesByKeys($randomArrayItems, $options);
 
 			return $values;
 		}

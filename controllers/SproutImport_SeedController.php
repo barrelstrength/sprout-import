@@ -8,7 +8,7 @@ class SproutImport_SeedController extends BaseController
 	 *
 	 * @throws HttpException
 	 */
-	public function actionIndexTemplate()
+	public function actionSeedIndexTemplate()
 	{
 		$elementSelect = array();
 
@@ -113,6 +113,7 @@ class SproutImport_SeedController extends BaseController
 				{
 					sproutImport()->seed->trackSeed($id, $elementType);
 				}
+
 				craft()->userSession->setNotice(Craft::t('Elements generated.'));
 			}
 			else
@@ -121,68 +122,15 @@ class SproutImport_SeedController extends BaseController
 
 				if (!empty($errors))
 				{
-					$message = implode("\n", $errors);
-					sproutImport()->errorLog($message);
-
 					craft()->userSession->setError(Craft::t('Unable to generate data. Check logs.'));
+
+					$message = implode("\n", $errors);
+
+					SproutImportPlugin::log($message, LogLevel::Error);
 				}
 			}
 		}
 
 		$this->redirectToPostedUrl();
-	}
-
-	/**
-	 * Weed page index
-	 *
-	 * @throws HttpException
-	 */
-
-	public function actionWeedIndex()
-	{
-		$elementImporters = sproutImport()->getSproutImportImporters();
-
-		craft()->templates->includeCssResource('sproutimport/css/sproutimport.css');
-
-		$this->renderTemplate('sproutimport/weed', array(
-			'elementImporters' => $elementImporters
-		));
-	}
-
-	/**
-	 * Remove all Seed entries from the database
-	 */
-	public function actionRunWeed()
-	{
-		$this->requirePostRequest();
-
-		$submit = craft()->request->getPost('submit');
-		$class  = craft()->request->getPost('class');
-
-		if ($submit == "Weed" || $submit == "Weed All")
-		{
-			if (craft()->sproutImport_seed->weed($class))
-			{
-				craft()->userSession->setNotice(Craft::t('The garden is weeded!'));
-			}
-			else
-			{
-				craft()->userSession->setError(Craft::t('No luck weeding. Try again.'));
-			}
-		}
-		else
-		{
-			if ($submit == "Keep" || $submit == "Keep All")
-			{
-				if (craft()->sproutImport_seed->weed($class, true))
-				{
-					craft()->userSession->setNotice(Craft::t('Data Kept!'));
-				}
-				else
-				{
-					craft()->userSession->setError(Craft::t('Unable to keep data. Try again.'));
-				}
-			}
-		}
 	}
 }

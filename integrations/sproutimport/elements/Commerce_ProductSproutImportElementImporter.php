@@ -26,13 +26,13 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 	 */
 	public function save()
 	{
-		$product  = $this->model;
+		$product = $this->model;
 
 		try
 		{
 			if (empty($this->data['variants']))
 			{
-				$message = Craft::t('Variants input is required');
+				$message = Craft::t('At least one variant is required');
 
 				SproutImportPlugin::log($message, LogLevel::Error);
 
@@ -59,7 +59,7 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 	/**
 	 * @return array
 	 */
-	public function defineKeys()
+	public function getImporterDataKeys()
 	{
 		return array('variants');
 	}
