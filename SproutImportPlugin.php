@@ -27,7 +27,7 @@ class SproutImportPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '0.4.0';
+		return '0.4.1';
 	}
 
 	/**
@@ -35,7 +35,7 @@ class SproutImportPlugin extends BasePlugin
 	 */
 	public function getSchemaVersion()
 	{
-		return '0.4.0';
+		return '0.4.1';
 	}
 
 	/**

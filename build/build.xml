@@ -4,7 +4,7 @@
 
     <property name="pluginFileName" value="SproutImport" />
     <property name="pluginName" value="sproutimport" />
-    <property name="pluginVersion" value="0.4.0" />
+    <property name="pluginVersion" value="0.4.1" />
 
     <target name="release">
         <echo msg="Preparing release distro..." />
@@ -15,6 +15,9 @@
                 <exclude name="${pluginName}/.git/" />
                 <exclude name="${pluginName}/.gitignore" />
                 <exclude name="${pluginName}/.idea/" />
+                <exclude name="${pluginName}/composer.lock/" />
+                <exclude name="${pluginName}/composer.json/" />
+                <exclude name="${pluginName}/tests/" />
             </fileset>
         </zip>
         <echo msg="Release for (${pluginName}) has been created!" />
