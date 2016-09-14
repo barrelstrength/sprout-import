@@ -45,7 +45,22 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 
 			\Commerce\Helpers\CommerceProductHelper::populateProductVariantModels($product, $variants);
 
-			return craft()->commerce_products->saveProduct($product);
+			if (!craft()->commerce_products->saveProduct($product))
+			{
+				// If result is false, products errors will have already been logged
+				// but we need to take an extra step to log the variant errors
+				foreach ($product->getVariants() as $variant)
+				{
+					sproutImport()->addError("Product Variants have errors. See logs.", 'variant-errors');
+
+					SproutImportPlugin::log(array(
+						'Variant has errors' => $variant->getErrors()
+					));
+				}
+
+				return false;
+			}
+
 		}
 		catch (\Exception $e)
 		{
