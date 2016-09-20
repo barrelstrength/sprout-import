@@ -61,7 +61,7 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 
 					unset($variants[$variant]['related']);
 
-					$variants[$variant]['fields'] = array_unique($variantFields);
+					$variants[$variant]['fields'] = $variantFields;
 				}
 			}
 
