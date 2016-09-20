@@ -165,7 +165,7 @@ class SproutImportPlugin extends BasePlugin
 	{
 		$importers = array(
 			// Element Importers
-			new AssetFileSproutImportElementImporter(),
+			new AssetSproutImportElementImporter(),
 			new CategorySproutImportElementImporter(),
 			new EntrySproutImportElementImporter(),
 			new TagSproutImportElementImporter(),
@@ -242,7 +242,7 @@ class SproutImportPlugin extends BasePlugin
 	private function importSproutImportElementImporters()
 	{
 		$elements = array(
-			"AssetFileSproutImportElementImporter",
+			"AssetSproutImportElementImporter",
 			"CategorySproutImportElementImporter",
 			"Commerce_OrderSproutImportElementImporter",
 			"Commerce_ProductSproutImportElementImporter",
