@@ -27,7 +27,7 @@ class SproutImportPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '0.4.1';
+		return '0.4.2';
 	}
 
 	/**
