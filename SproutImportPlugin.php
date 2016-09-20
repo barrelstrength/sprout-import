@@ -188,9 +188,11 @@ class SproutImportPlugin extends BasePlugin
 				new Commerce_ProductSproutImportElementImporter(),
 				new Commerce_ProductTypeSproutImportSettingsImporter()
 			);
+
+			$importers = array_merge($importers, $craftCommerceImporters);
 		}
 
-		return array_merge($importers, $craftCommerceImporters);
+		return $importers;
 	}
 
 	/**
