@@ -43,6 +43,28 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 
 			$variants = $this->data['variants'];
 
+			// Loop through each variant
+			foreach ($variants as $variant => $attributes)
+			{
+				// Check if related variants need to be resolved
+				if (strpos($variant, 'new') === 0 && isset($attributes['related']))
+				{
+					$variantFields   = isset($attributes['fields']) ? $attributes['fields'] : array();
+					$relatedFields = $attributes['related'];
+
+					$variantFields = sproutImport()->elementImporter->resolveRelationships($relatedFields, $variantFields);
+
+					if (!$variantFields)
+					{
+						return false;
+					}
+
+					unset($variants[$variant]['related']);
+
+					$variants[$variant]['fields'] = array_unique($variantFields);
+				}
+			}
+
 			\Commerce\Helpers\CommerceProductHelper::populateProductVariantModels($product, $variants);
 
 			if (!craft()->commerce_products->saveProduct($product))
