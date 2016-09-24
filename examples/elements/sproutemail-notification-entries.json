@@ -1,6 +1,6 @@
 [
 	{
-		"@model": "SproutEmail_NotificationEmail",
+		"@model": "SproutEmail_NotificationEmailModel",
 		"fieldLayout": {
 			"Content One": [
 				"exampleTextEmailBody",

@@ -1,6 +1,6 @@
 [ 
   {
-    "@model": "SproutForms_Entry",
+    "@model": "SproutForms_EntryModel",
     "attributes": {
       "formId": 446,
       "ipAddress": "127.0.0.1",
