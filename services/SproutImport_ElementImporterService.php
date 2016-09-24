@@ -139,8 +139,10 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 					// Get updated model after save
 					$model = $importerClass->getModel();
 
+					$errors = $model->getErrors();
+
 					// Check for field setting errors
-					if (!empty($model->getErrors()))
+					if (!empty($errors))
 					{
 						$this->logErrorByModel($model);
 
