@@ -43,9 +43,46 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 
 			$variants = $this->data['variants'];
 
+			// Loop through each variant
+			foreach ($variants as $variant => $attributes)
+			{
+				// Check if related variants need to be resolved
+				if (strpos($variant, 'new') === 0 && isset($attributes['related']))
+				{
+					$variantFields   = isset($attributes['fields']) ? $attributes['fields'] : array();
+					$relatedFields = $attributes['related'];
+
+					$variantFields = sproutImport()->elementImporter->resolveRelationships($relatedFields, $variantFields);
+
+					if (!$variantFields)
+					{
+						return false;
+					}
+
+					unset($variants[$variant]['related']);
+
+					$variants[$variant]['fields'] = $variantFields;
+				}
+			}
+
 			\Commerce\Helpers\CommerceProductHelper::populateProductVariantModels($product, $variants);
 
-			return craft()->commerce_products->saveProduct($product);
+			if (!craft()->commerce_products->saveProduct($product))
+			{
+				// If result is false, products errors will have already been logged
+				// but we need to take an extra step to log the variant errors
+				foreach ($product->getVariants() as $variant)
+				{
+					sproutImport()->addError("Product Variants have errors. See logs.", 'variant-errors');
+
+					SproutImportPlugin::log(array(
+						'Variant has errors' => $variant->getErrors()
+					));
+				}
+
+				return false;
+			}
+
 		}
 		catch (\Exception $e)
 		{

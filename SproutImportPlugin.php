@@ -27,7 +27,7 @@ class SproutImportPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '0.4.0';
+		return '0.4.2';
 	}
 
 	/**
@@ -35,7 +35,7 @@ class SproutImportPlugin extends BasePlugin
 	 */
 	public function getSchemaVersion()
 	{
-		return '0.4.0';
+		return '0.4.1';
 	}
 
 	/**
@@ -165,7 +165,7 @@ class SproutImportPlugin extends BasePlugin
 	{
 		$importers = array(
 			// Element Importers
-			new AssetFileSproutImportElementImporter(),
+			new AssetSproutImportElementImporter(),
 			new CategorySproutImportElementImporter(),
 			new EntrySproutImportElementImporter(),
 			new TagSproutImportElementImporter(),
@@ -188,9 +188,11 @@ class SproutImportPlugin extends BasePlugin
 				new Commerce_ProductSproutImportElementImporter(),
 				new Commerce_ProductTypeSproutImportSettingsImporter()
 			);
+
+			$importers = array_merge($importers, $craftCommerceImporters);
 		}
 
-		return array_merge($importers, $craftCommerceImporters);
+		return $importers;
 	}
 
 	/**
@@ -242,7 +244,7 @@ class SproutImportPlugin extends BasePlugin
 	private function importSproutImportElementImporters()
 	{
 		$elements = array(
-			"AssetFileSproutImportElementImporter",
+			"AssetSproutImportElementImporter",
 			"CategorySproutImportElementImporter",
 			"Commerce_OrderSproutImportElementImporter",
 			"Commerce_ProductSproutImportElementImporter",
