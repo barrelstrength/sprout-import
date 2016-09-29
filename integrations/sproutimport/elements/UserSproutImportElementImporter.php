@@ -115,9 +115,9 @@ class UserSproutImportElementImporter extends BaseSproutImportElementImporter
 
 		if ($user)
 		{
-			if (!empty($this->data['groupIds']))
+			if (!empty($this->data['attributes']['groupIds']))
 			{
-				$groupIds = $this->data['groupIds'];
+				$groupIds = $this->data['attributes']['groupIds'];
 
 				$userId = $this->model->id;
 
