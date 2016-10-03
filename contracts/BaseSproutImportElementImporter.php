@@ -76,23 +76,21 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 
 						$model->setAttribute('authorId', $authorId);
 					}
-					else
-					{
-						if (isset($attributes['defaultAuthorId']))
-						{
-							$defaultAuthorId = $attributes['defaultAuthorId'];
-
-							$userModel = craft()->users->getUserById($defaultAuthorId);
-
-							$authorId = $userModel->getAttribute('id');
-
-							$model->setAttribute('authorId', $authorId);
-						}
-					}
 				}
 				else
 				{
 					$userModel = craft()->users->getUserById($attributes['authorId']);
+				}
+
+				if ($userModel == null && isset($attributes['defaultAuthorId']))
+				{
+					$defaultAuthorId = $attributes['defaultAuthorId'];
+
+					$userModel = craft()->users->getUserById($defaultAuthorId);
+
+					$authorId = $userModel->getAttribute('id');
+
+					$model->setAttribute('authorId', $authorId);
 				}
 
 				if ($userModel == null)
