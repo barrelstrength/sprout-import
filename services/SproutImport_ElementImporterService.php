@@ -456,6 +456,12 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 				{
 					$element = $criteria->first($attributes);
 
+					// Bug: if searchScore is not integer it does not validate
+					if (isset($element->searchScore))
+					{
+						$element->searchScore = round($element->searchScore);
+					}
+
 					if ($element)
 					{
 						return $element;
