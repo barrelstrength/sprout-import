@@ -136,6 +136,9 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	public function getSproutImportFieldImporters()
 	{
+		// Make sure all of our Field Type classes are loaded
+		craft()->components->getComponentsByType(ComponentType::Field);
+
 		try
 		{
 			$fieldsToLoad = craft()->plugins->call('registerSproutImportFieldImporters');
