@@ -340,7 +340,7 @@ class SproutImportPlugin extends BasePlugin
 			$msg = $messages;
 		}
 
-		parent::log($msg, $level = LogLevel::Info, $force = false);
+		parent::log($msg, $level, $force);
 	}
 }
 
