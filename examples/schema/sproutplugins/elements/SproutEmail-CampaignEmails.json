@@ -1,6 +1,6 @@
 [
 	{
-		"@model": "SproutEmail_CampaignEmail",
+		"@model": "SproutEmail_CampaignEmailModel",
 		"campaignId": 1,
 		"attributes": {
 			"subjectLine": "Subject Campaign line example",

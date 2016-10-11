@@ -110,7 +110,7 @@ class SproutImportService extends BaseApplicationComponent
 			}
 		}
 
-		ksort($this->importers, SORT_NATURAL);
+		ksort($this->importers);
 
 		return $this->importers;
 	}
@@ -124,7 +124,7 @@ class SproutImportService extends BaseApplicationComponent
 	{
 		$this->getSproutImportImporters();
 
-		ksort($this->seedImporters, SORT_NATURAL);
+		ksort($this->seedImporters);
 
 		return $this->seedImporters;
 	}
@@ -136,6 +136,9 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	public function getSproutImportFieldImporters()
 	{
+		// Make sure all of our Field Type classes are loaded
+		craft()->components->getComponentsByType(ComponentType::Field);
+
 		try
 		{
 			$fieldsToLoad = craft()->plugins->call('registerSproutImportFieldImporters');
@@ -154,7 +157,7 @@ class SproutImportService extends BaseApplicationComponent
 				}
 			}
 
-			ksort($this->fieldImporters, SORT_NATURAL);
+			ksort($this->fieldImporters);
 
 			return $this->fieldImporters;
 		}
