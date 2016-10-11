@@ -134,6 +134,11 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 			return null;
 		}
 
+		if ($source == 'singles')
+		{
+			return $source;
+		}
+
 		$sourceExplode = explode(":", $source);
 
 		return $sourceExplode[1];
