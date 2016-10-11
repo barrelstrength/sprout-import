@@ -269,7 +269,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 						}
 						else
 						{
-							$fields[$field][$block]['fields'] = array_unique($blockFields);
+							$fields[$field][$block]['fields'] = $blockFields;
 						}
 					}
 				}
