@@ -174,35 +174,9 @@ class SproutImportPlugin extends BasePlugin
 			// Settings Importers
 			new EntryTypeSproutImportSettingsImporter(),
 			new FieldSproutImportSettingsImporter(),
-			new SectionSproutImportSettingsImporter()
-		);
+			new SectionSproutImportSettingsImporter(),
 
-		// Check if craft commerce plugin is installed and enabled
-		$commercePlugin = craft()->plugins->getPlugin('commerce', false);
-
-		// Commerce events goes here
-		if (isset($commercePlugin->isEnabled) && $commercePlugin->isEnabled)
-		{
-			$craftCommerceImporters = array(
-				new Commerce_OrderSproutImportElementImporter(),
-				new Commerce_ProductSproutImportElementImporter(),
-				new Commerce_ProductTypeSproutImportSettingsImporter()
-			);
-
-			$importers = array_merge($importers, $craftCommerceImporters);
-		}
-
-		return $importers;
-	}
-
-	/**
-	 * Register importer fields
-	 *
-	 * @return array
-	 */
-	public function registerSproutImportFieldImporters()
-	{
-		$fields = array(
+			// FIeld Importers
 			new RichTextSproutImportFieldImporter(),
 			new PlainTextSproutImportFieldImporter(),
 			new NumberSproutImportFieldImporter(),

@@ -97,6 +97,13 @@ class SproutImportService extends BaseApplicationComponent
 			{
 				foreach ($importers as $importer)
 				{
+					// Pluck any Field Importers for their own list
+					if ($importer && $importer instanceof BaseSproutImportFieldImporter)
+					{
+						$this->fieldImporters[$importer->getImporterClass()] = $importer;
+						continue;
+					}
+
 					if ($importer && $importer instanceof BaseSproutImportImporter)
 					{
 						$this->importers[$importer->getImporterClass()] = $importer;
@@ -111,6 +118,8 @@ class SproutImportService extends BaseApplicationComponent
 		}
 
 		ksort($this->importers);
+		ksort($this->fieldImporters);
+		ksort($this->seedImporters);
 
 		return $this->importers;
 	}
@@ -122,9 +131,12 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	public function getSproutImportSeedImporters()
 	{
-		$this->getSproutImportImporters();
+		if (count($this->seedImporters))
+		{
+			return $this->seedImporters;
+		}
 
-		ksort($this->seedImporters);
+		$this->getSproutImportImporters();
 
 		return $this->seedImporters;
 	}
@@ -139,32 +151,14 @@ class SproutImportService extends BaseApplicationComponent
 		// Make sure all of our Field Type classes are loaded
 		craft()->components->getComponentsByType(ComponentType::Field);
 
-		try
+		if (count($this->fieldImporters))
 		{
-			$fieldsToLoad = craft()->plugins->call('registerSproutImportFieldImporters');
-
-			if ($fieldsToLoad)
-			{
-				foreach ($fieldsToLoad as $plugin => $fieldClasses)
-				{
-					foreach ($fieldClasses as $fieldClass)
-					{
-						if ($fieldClass && $fieldClass instanceof BaseSproutImportFieldImporter)
-						{
-							$this->fieldImporters[$fieldClass->getImporterClass()] = $fieldClass;
-						}
-					}
-				}
-			}
-
-			ksort($this->fieldImporters);
-
 			return $this->fieldImporters;
 		}
-		catch (Exception $e)
-		{
-			throw $e;
-		}
+
+		$this->getSproutImportImporters();
+
+		return $this->fieldImporters;
 	}
 
 	/**
