@@ -9,43 +9,41 @@
 	<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
 		<div id="fields" class="pane">
 
+			<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
+				{{ getCsrfInput() }}
+				<input type="hidden" name="action" value="sproutImport/import/runImport">
+				<input type="hidden" name="redirect" value="sproutimport">
 
-	<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
+				{{ forms.textareaField({
+					label: "Import via Copy/Paste"|t,
+					instructions: "Paste JSON data to import."|t,
+					class: 'nicetext',
+					name: 'pastedJson',
+					value: pastedJson ?? null,
+					errors: '',
+					rows: 20,
+					first: true
+				}) }}
 
-		{{ getCsrfInput() }}
-
-		<input type="hidden" name="action" value="sproutImport/import/runImport">
-
-		{{ forms.textareaField({
-			label: "Import via Copy/Paste"|t,
-			instructions: "Paste JSON data to import."|t,
-			class: 'nicetext',
-			name: 'pastedJson',
-			value: '',
-			errors: '',
-			rows: 20,
-			first: true
-		}) }}
-
-		<div class="field first" id="files-field">
-			<div class="heading">
-				<label for="files">{{ 'Import via Files'|t }}</label>
-				<div class="instructions">
-					<p>{{ 'Select one or more JSON encoded files to import.'|t }}</p>
+				<div class="field first" id="files-field">
+					<div class="heading">
+						<label for="files">{{ 'Import via Files'|t }}</label>
+						<div class="instructions">
+							<p>{{ 'Select one or more JSON encoded files to import.'|t }}</p>
+						</div>
+					</div>
+					<div class="input"><input type="file" multiple id="files" name="files[]"></div>
 				</div>
-			</div>
-			<div class="input"><input type="file" multiple id="files" name="files[]"></div>
-		</div>
 
-		{{ forms.lightswitchField({
-			label: "Seed data"|t,
-			instructions: "Mark your imported data as seed data. Seed data can be removed via the Weed tab."|t,
-			on: true,
-			name: 'seed'
-		}) }}
+				{{ forms.lightswitchField({
+					label: "Seed data"|t,
+					instructions: "Mark your imported data as seed data. Seed data can be removed via the Weed tab."|t,
+					on: true,
+					name: 'seed'
+				}) }}
 
-		<button class="btn submit" type="submit">{{ 'Run Import'|t }}</button>
-	</form>
+				<button class="btn submit" type="submit">{{ 'Run Import'|t }}</button>
+			</form>
 
 		</div>
 	</div>

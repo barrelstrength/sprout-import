@@ -10,63 +10,99 @@ class SproutImport_ImportController extends BaseController
 	{
 		$this->requirePostRequest();
 
-		$tasks = array();
-		$files = UploadedFile::getInstancesByName('files');
-
-		$folderPath = sproutImport()->createTempFolder();
+		$tasks            = array();
+		$seed             = craft()->request->getPost('seed');
+		$pastedJsonString = craft()->request->getPost('pastedJson');
+		$files            = UploadedFile::getInstancesByName('files');
 
 		$count = 0;
 
-		foreach ($files as $file)
+		if (count($files))
 		{
-			if (!$file->getHasError() && ($file->getType() == 'application/json' || $file->getType() == 'application/octet-stream'))
+
+			$folderPath = sproutImport()->createTempFolder();
+
+			foreach ($files as $file)
 			{
-				$path = $folderPath . $file->getName();
-
-				if (move_uploaded_file($file->getTempName(), $path))
+				if (!$file->getHasError())
 				{
-					$content = file_get_contents($path);
+					$fileContent = file_get_contents($file->getTempName());
+					$jsonContent = new SproutImport_JsonModel($fileContent);
 
-					$tasks[$count]['path']    = $path;
-					$tasks[$count]['content'] = $content;
+					// Make sure we have JSON
+					if ($jsonContent->hasErrors())
+					{
+						craft()->userSession->setError($jsonContent->getError('json'));
+
+						SproutImportPlugin::log($jsonContent->getError('json'));
+
+						break;
+					}
+
+					$path = $folderPath . $file->getName();
+
+					if (move_uploaded_file($file->getTempName(), $path))
+					{
+						$content = file_get_contents($path);
+
+						$tasks[$count]['path']    = $path;
+						$tasks[$count]['content'] = $content;
+					}
 				}
+				else
+				{
+					craft()->userSession->setError($file->getError());
+
+					SproutImportPlugin::log($file->getError());
+				}
+
+				$count++;
 			}
-
-			$count++;
 		}
 
-		$pastedJson = craft()->request->getPost('pastedJson');
-
-		if (!empty($pastedJson) && json_decode($pastedJson, true) == true && !json_last_error())
+		if ($pastedJsonString)
 		{
-			$tasks[$count]['path']    = 'pastedJson';
-			$tasks[$count]['content'] = $pastedJson;
+			$pastedJson = new SproutImport_JsonModel($pastedJsonString);
+
+			// Make sure we have JSON
+			if (!$pastedJson->hasErrors())
+			{
+				$tasks[$count]['path']    = 'pastedJson';
+				$tasks[$count]['content'] = $pastedJsonString;
+			}
+			else
+			{
+				$message = $pastedJson->getError('json');
+
+				craft()->userSession->setError($message);
+
+				SproutImportPlugin::log($pastedJson->getError('json'));
+
+				craft()->urlManager->setRouteVariables(array(
+					'pastedJson' => $pastedJsonString
+				));
+			}
 		}
-		elseif (!empty($pastedJson))
+
+		if (count($tasks))
 		{
-			$message = Craft::t('Unable to parse pasted JSON.');
+			try
+			{
+				sproutImport()->tasks->createImportTasks($tasks, $seed);
 
-			craft()->userSession->setError($message);
+				craft()->userSession->setNotice(Craft::t('Files queued for import. Total: {tasks}', array(
+					'tasks' => count($tasks)
+				)));
 
-			$this->redirectToPostedUrl();
+				$this->redirectToPostedUrl();
+			}
+			catch (\Exception $e)
+			{
+				craft()->userSession->setError($e->getMessage());
+
+				SproutImportPlugin::log($e->getMessage());
+			}
 		}
-
-		$seed = craft()->request->getPost('seed');
-
-		try
-		{
-			sproutImport()->tasks->createImportTasks($tasks, $seed);
-
-			craft()->userSession->setNotice(Craft::t('Files queued for import. Total: {tasks}', array(
-				'tasks' => count($tasks)
-			)));
-		}
-		catch (\Exception $e)
-		{
-			craft()->userSession->setError($e->getMessage());
-		}
-
-		$this->redirectToPostedUrl();
 	}
 
 	/**
