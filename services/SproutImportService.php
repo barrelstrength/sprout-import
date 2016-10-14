@@ -432,36 +432,6 @@ class SproutImportService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param string|mixed $message
-	 * @param array|mixed  $data
-	 * @param string       $level
-	 */
-	public function log($message, $data = null, $level = LogLevel::Info)
-	{
-		if ($data)
-		{
-			$data = print_r($data, true);
-		}
-
-		if (!is_string($message))
-		{
-			$message = print_r($message, true);
-		}
-
-		SproutImportPlugin::log(PHP_EOL . $message . PHP_EOL . PHP_EOL . $data, $level);
-	}
-
-	/**
-	 * @param        $message
-	 * @param null   $data
-	 * @param string $level
-	 */
-	public function errorLog($message, $data = null, $level = LogLevel::Error)
-	{
-		$this->log($message, $data, $level);
-	}
-
-	/**
 	 * Logs an error in cases where it makes more sense than to throw an exception
 	 *
 	 * @param mixed $message
