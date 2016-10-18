@@ -31,9 +31,11 @@ class SproutImport_WeedController extends BaseController
 
 		if ($submit == "Weed" || $submit == "Weed All")
 		{
-			if (craft()->sproutImport_seed->weed($class))
+			if (sproutImport()->seed->weed($class))
 			{
 				craft()->userSession->setNotice(Craft::t('The garden is weeded!'));
+
+				$this->redirectToPostedUrl();
 			}
 			else
 			{
@@ -44,9 +46,11 @@ class SproutImport_WeedController extends BaseController
 		{
 			if ($submit == "Keep" || $submit == "Keep All")
 			{
-				if (craft()->sproutImport_seed->weed($class, true))
+				if (sproutImport()->seed->weed($class, true))
 				{
 					craft()->userSession->setNotice(Craft::t('Data Kept!'));
+
+					$this->redirectToPostedUrl();
 				}
 				else
 				{
