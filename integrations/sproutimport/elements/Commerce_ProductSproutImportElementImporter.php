@@ -82,7 +82,6 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 
 				return false;
 			}
-
 		}
 		catch (\Exception $e)
 		{
@@ -91,6 +90,22 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 			sproutImport()->addError('Commerce Product Import Error:', 'commerce-import-error');
 			sproutImport()->addError($e->getMessage(), 'commerce-import-error-message');
 		}
+	}
+
+	/**
+	 * Delete an Element using the Element ID
+	 *
+	 * @param $id
+	 *
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function deleteById($id)
+	{
+		$product = new Commerce_ProductModel();
+		$product->id = $id;
+
+		return craft()->commerce_products->deleteProduct($product);
 	}
 
 	/**
