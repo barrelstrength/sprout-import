@@ -11,6 +11,7 @@
             },
             "enabled": 1,
             "taxCategoryId": 1,
+            "shippingCategoryId": 1,
             "freeShipping": "",
             "promotable": 1
         },
