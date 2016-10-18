@@ -47,26 +47,6 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Add a record of the imported item to the seed database
-	 *
-	 * @param $event
-	 */
-	public function trackImport($event)
-	{
-		$type    = $event->params['@model'];
-		$element = $event->params['element'];
-		$seed    = $event->params['seed'];
-		$source  = $event->params['source'];
-
-		$id = $element->id;
-
-		if ($seed && $source == "import")
-		{
-			sproutImport()->seed->trackSeed($id, $type);
-		}
-	}
-
-	/**
 	 * Remove a group of items from the database that are marked as seed data as identified by their class handle
 	 *
 	 * @param $type

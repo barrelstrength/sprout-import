@@ -129,16 +129,6 @@ class SproutImportPlugin extends BasePlugin
 			craft()->templates->includeJsResource("sproutimport/js/sproutimport.js");
 		}
 
-		craft()->on('sproutImport.onAfterImportElement', function (Event $event)
-		{
-			sproutImport()->seed->trackImport($event);
-		});
-
-		craft()->on('sproutImport.onAfterImportSetting', function (Event $event)
-		{
-			sproutImport()->seed->trackImport($event);
-		});
-
 		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutimport')
 		{
 			craft()->templates->includeJsResource('sproutimport/js/brand.js');

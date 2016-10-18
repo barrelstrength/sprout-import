@@ -194,7 +194,7 @@ class SproutImportService extends BaseApplicationComponent
 
 				if ($this->isElementType($model))
 				{
-					$result = sproutImport()->elementImporter->saveElement($row, $seed, 'import');
+					$result = sproutImport()->elementImporter->saveElement($row, $seed);
 				}
 				else
 				{

@@ -19,7 +19,6 @@ class SproutImport_ImportController extends BaseController
 
 		if (count($files))
 		{
-
 			$folderPath = sproutImport()->createTempFolder();
 
 			foreach ($files as $file)
