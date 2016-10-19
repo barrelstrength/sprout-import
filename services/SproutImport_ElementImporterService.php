@@ -47,7 +47,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 	 * @internal param bool $returnSavedElementIds
 	 *
 	 */
-	public function saveElement(array $data, $seed = false, $source = null)
+	public function saveElement(array $data, $seed = false)
 	{
 		$modelName       = sproutImport()->getImporterModelName($data);
 		$this->modelName = $modelName;
@@ -111,14 +111,11 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 
 		unset($data['content']['related']);
 
-		$eventParams = array(
+		$event = new Event($this, array(
 			'@model'  => $modelName,
 			'element' => $model,
-			'seed'    => $seed,
-			'source'  => $source
-		);
-
-		$event = new Event($this, $eventParams);
+			'seed'    => $seed
+		));
 
 		sproutImport()->onBeforeImportElement($event);
 
@@ -134,7 +131,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 
 				try
 				{
-					$saved = $importerClass->save();
+					$importerClass->save();
 
 					// Get updated model after save
 					$model = $importerClass->getModel();
@@ -148,6 +145,8 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 
 						return false;
 					}
+
+					$saved = true;
 				}
 				catch (\Exception $e)
 				{
@@ -208,12 +207,18 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 
 		if ($saved)
 		{
-			// Pass the updated model after save
-			$eventParams['element'] = $model;
-
-			$event = new Event($this, $eventParams);
+			$event = new Event($this, array(
+				'@model'  => $modelName,
+				'element' => $model,
+				'seed'    => $seed
+			));
 
 			sproutImport()->onAfterImportElement($event);
+
+			if ($seed)
+			{
+				sproutImport()->seed->trackSeed($model->id, $modelName);
+			}
 
 			return $model->id;
 		}

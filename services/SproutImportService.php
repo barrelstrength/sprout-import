@@ -97,6 +97,13 @@ class SproutImportService extends BaseApplicationComponent
 			{
 				foreach ($importers as $importer)
 				{
+					// Pluck any Field Importers for their own list
+					if ($importer && $importer instanceof BaseSproutImportFieldImporter)
+					{
+						$this->fieldImporters[$importer->getImporterClass()] = $importer;
+						continue;
+					}
+
 					if ($importer && $importer instanceof BaseSproutImportImporter)
 					{
 						$this->importers[$importer->getImporterClass()] = $importer;
@@ -111,6 +118,8 @@ class SproutImportService extends BaseApplicationComponent
 		}
 
 		ksort($this->importers);
+		ksort($this->fieldImporters);
+		ksort($this->seedImporters);
 
 		return $this->importers;
 	}
@@ -122,9 +131,12 @@ class SproutImportService extends BaseApplicationComponent
 	 */
 	public function getSproutImportSeedImporters()
 	{
-		$this->getSproutImportImporters();
+		if (count($this->seedImporters))
+		{
+			return $this->seedImporters;
+		}
 
-		ksort($this->seedImporters);
+		$this->getSproutImportImporters();
 
 		return $this->seedImporters;
 	}
@@ -139,32 +151,14 @@ class SproutImportService extends BaseApplicationComponent
 		// Make sure all of our Field Type classes are loaded
 		craft()->components->getComponentsByType(ComponentType::Field);
 
-		try
+		if (count($this->fieldImporters))
 		{
-			$fieldsToLoad = craft()->plugins->call('registerSproutImportFieldImporters');
-
-			if ($fieldsToLoad)
-			{
-				foreach ($fieldsToLoad as $plugin => $fieldClasses)
-				{
-					foreach ($fieldClasses as $fieldClass)
-					{
-						if ($fieldClass && $fieldClass instanceof BaseSproutImportFieldImporter)
-						{
-							$this->fieldImporters[$fieldClass->getImporterClass()] = $fieldClass;
-						}
-					}
-				}
-			}
-
-			ksort($this->fieldImporters);
-
 			return $this->fieldImporters;
 		}
-		catch (Exception $e)
-		{
-			throw $e;
-		}
+
+		$this->getSproutImportImporters();
+
+		return $this->fieldImporters;
 	}
 
 	/**
@@ -200,7 +194,7 @@ class SproutImportService extends BaseApplicationComponent
 
 				if ($this->isElementType($model))
 				{
-					$result = sproutImport()->elementImporter->saveElement($row, $seed, 'import');
+					$result = sproutImport()->elementImporter->saveElement($row, $seed);
 				}
 				else
 				{
@@ -435,36 +429,6 @@ class SproutImportService extends BaseApplicationComponent
 		IOHelper::ensureFolderExists($folderPath);
 
 		return $folderPath;
-	}
-
-	/**
-	 * @param string|mixed $message
-	 * @param array|mixed  $data
-	 * @param string       $level
-	 */
-	public function log($message, $data = null, $level = LogLevel::Info)
-	{
-		if ($data)
-		{
-			$data = print_r($data, true);
-		}
-
-		if (!is_string($message))
-		{
-			$message = print_r($message, true);
-		}
-
-		SproutImportPlugin::log(PHP_EOL . $message . PHP_EOL . PHP_EOL . $data, $level);
-	}
-
-	/**
-	 * @param        $message
-	 * @param null   $data
-	 * @param string $level
-	 */
-	public function errorLog($message, $data = null, $level = LogLevel::Error)
-	{
-		$this->log($message, $data, $level);
 	}
 
 	/**

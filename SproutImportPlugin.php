@@ -27,7 +27,7 @@ class SproutImportPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '0.4.3';
+		return '0.4.5';
 	}
 
 	/**
@@ -129,16 +129,6 @@ class SproutImportPlugin extends BasePlugin
 			craft()->templates->includeJsResource("sproutimport/js/sproutimport.js");
 		}
 
-		craft()->on('sproutImport.onAfterImportElement', function (Event $event)
-		{
-			sproutImport()->seed->trackImport($event);
-		});
-
-		craft()->on('sproutImport.onAfterImportSetting', function (Event $event)
-		{
-			sproutImport()->seed->trackImport($event);
-		});
-
 		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutimport')
 		{
 			craft()->templates->includeJsResource('sproutimport/js/brand.js');
@@ -174,7 +164,28 @@ class SproutImportPlugin extends BasePlugin
 			// Settings Importers
 			new EntryTypeSproutImportSettingsImporter(),
 			new FieldSproutImportSettingsImporter(),
-			new SectionSproutImportSettingsImporter()
+			new SectionSproutImportSettingsImporter(),
+
+			// FIeld Importers
+			new RichTextSproutImportFieldImporter(),
+			new PlainTextSproutImportFieldImporter(),
+			new NumberSproutImportFieldImporter(),
+			new CheckboxesSproutImportFieldImporter(),
+			new RadioButtonsSproutImportFieldImporter(),
+			new ColorSproutImportFieldImporter(),
+			new DateSproutImportFieldImporter(),
+			new LightswitchSproutImportFieldImporter(),
+			new DropdownSproutImportFieldImporter(),
+			new PositionSelectSproutImportFieldImporter(),
+			new MultiSelectSproutImportFieldImporter(),
+			new TableSproutImportFieldImporter(),
+			new EntriesSproutImportFieldImporter(),
+			new CategoriesSproutImportFieldImporter(),
+			new TagsSproutImportFieldImporter(),
+			new AssetsSproutImportFieldImporter(),
+			new UsersSproutImportFieldImporter(),
+			new MatrixSproutImportFieldImporter(),
+			new Commerce_ProductsSproutImportFieldImporter()
 		);
 
 		// Check if craft commerce plugin is installed and enabled
@@ -193,37 +204,6 @@ class SproutImportPlugin extends BasePlugin
 		}
 
 		return $importers;
-	}
-
-	/**
-	 * Register importer fields
-	 *
-	 * @return array
-	 */
-	public function registerSproutImportFieldImporters()
-	{
-		$fields = array(
-			new RichTextSproutImportFieldImporter(),
-			new PlainTextSproutImportFieldImporter(),
-			new NumberSproutImportFieldImporter(),
-			new CheckboxesSproutImportFieldImporter(),
-			new RadioButtonsSproutImportFieldImporter(),
-			new ColorSproutImportFieldImporter(),
-			new DateSproutImportFieldImporter(),
-			new LightswitchSproutImportFieldImporter(),
-			new DropdownSproutImportFieldImporter(),
-			new PositionSelectSproutImportFieldImporter(),
-			new MultiSelectSproutImportFieldImporter(),
-			new TableSproutImportFieldImporter(),
-			new EntriesSproutImportFieldImporter(),
-			new CategoriesSproutImportFieldImporter(),
-			new TagsSproutImportFieldImporter(),
-			new AssetsSproutImportFieldImporter(),
-			new UsersSproutImportFieldImporter(),
-			new MatrixSproutImportFieldImporter()
-		);
-
-		return $fields;
 	}
 
 	private function importContracts()
@@ -340,7 +320,7 @@ class SproutImportPlugin extends BasePlugin
 			$msg = $messages;
 		}
 
-		parent::log($msg, $level = LogLevel::Info, $force = false);
+		parent::log($msg, $level, $force);
 	}
 }
 

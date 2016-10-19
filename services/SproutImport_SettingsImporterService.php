@@ -17,7 +17,7 @@ class SproutImport_SettingsImporterService extends BaseApplicationComponent
 	 *
 	 * @return bool
 	 */
-	public function saveSetting($settings, $seed = false, $source = 'import')
+	public function saveSetting($settings, $seed = false)
 	{
 		$modelName     = sproutImport()->getImporterModelName($settings);
 		$importerClass = sproutImport()->getImporterByModelName($modelName, $settings);
@@ -39,16 +39,18 @@ class SproutImport_SettingsImporterService extends BaseApplicationComponent
 
 					$importerModel = sproutImport()->getImporterModelName($settings);
 
-					$eventParams = array(
+					$event = new Event($this, array(
 						'element' => $model,
 						'seed'    => $seed,
-						'@model'  => $importerModel,
-						'source'  => $source
-					);
-
-					$event = new Event($this, $eventParams);
+						'@model'  => $importerModel
+					));
 
 					sproutImport()->onAfterImportSetting($event);
+
+					if ($seed)
+					{
+						sproutImport()->seed->trackSeed($model->id, $importerModel);
+					}
 				}
 			}
 			catch (\Exception $e)

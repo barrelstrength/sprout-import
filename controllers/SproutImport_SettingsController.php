@@ -11,7 +11,8 @@ class SproutImport_SettingsController extends BaseController
 	 */
 	public function actionSettingsIndexTemplate()
 	{
-		$settingsTemplate = craft()->request->getSegment(3) ?? 'general';
+
+		$settingsTemplate = craft()->request->getSegment(3) ? craft()->request->getSegment(3) : 'general';
 
 		$results = craft()->db->createCommand()
 			->select('settings')

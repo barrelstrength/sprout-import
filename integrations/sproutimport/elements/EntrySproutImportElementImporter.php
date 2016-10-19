@@ -102,32 +102,29 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 			for ($i = 1; $i <= $quantity; $i++)
 			{
 				$entryId = null;
+
 				if (!empty($entryTypes))
 				{
-					// Loop all entry types for this element
-					foreach ($entryTypes as $entryType)
+					$randomEntryType = $entryTypes[array_rand($entryTypes)];
+
+					$entryParams['entryTypeId'] = $randomEntryType->id;
+
+					// Update entry prevent duplicate
+					if ($entryId != null)
 					{
-						$entryParams['entryTypeId'] = $entryType->id;
+						$entryParams['entryId'] = $entryId;
+					}
+					else
+					{
+						$entryParams['entryId'] = null;
+					}
 
-						// Update entry prevent duplicate
-						if ($entryId != null)
-						{
-							$entryParams['entryId'] = $entryId;
-						}
-						else
-						{
-							$entryParams['entryId'] = null;
-						}
+					$id = $this->generateEntry($entryParams);
 
-						$id = $this->generateEntry($entryParams);
-
-						$entryId = $id;
-
-						// Avoid duplication of saveIds
-						if (!in_array($id, $saveIds) && $id !== false)
-						{
-							$saveIds[] = $id;
-						}
+					// Avoid duplication of saveIds
+					if (!in_array($id, $saveIds) && $id !== false)
+					{
+						$saveIds[] = $id;
 					}
 				}
 			}
