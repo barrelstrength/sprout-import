@@ -88,7 +88,9 @@ class SproutImportBaseTest extends BaseTest
 			'\\Craft\\SproutImport_FakerService'    => '../services/SproutImport_FakerService.php',
 			'\\Craft\\SproutImport_MockDataService' => '../services/SproutImport_MockDataService.php',
 			'\\Craft\\BaseSproutImportImporter'     => '../contracts/BaseSproutImportImporter.php',
-			'\\Craft\\FieldSproutImportImporter'    => '../integrations/sproutimport/FieldSproutImportImporter.php'
+			'\\Craft\\BaseSproutImportElementImporter'      => '../contracts/BaseSproutImportElementImporter.php',
+			'\\Craft\\BaseSproutImportSettingsImporter'     => '../contracts/BaseSproutImportSettingsImporter.php',
+			'\\Craft\\FieldSproutImportSettingsImporter'    => '../integrations/sproutimport/settings/FieldSproutImportSettingsImporter.php'
 		);
 
 		foreach ($map as $classPath => $filePath)

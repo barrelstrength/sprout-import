@@ -184,8 +184,7 @@ class SproutImportPlugin extends BasePlugin
 			new TagsSproutImportFieldImporter(),
 			new AssetsSproutImportFieldImporter(),
 			new UsersSproutImportFieldImporter(),
-			new MatrixSproutImportFieldImporter(),
-			new Commerce_ProductsSproutImportFieldImporter()
+			new MatrixSproutImportFieldImporter()
 		);
 
 		// Check if craft commerce plugin is installed and enabled
@@ -197,7 +196,8 @@ class SproutImportPlugin extends BasePlugin
 			$craftCommerceImporters = array(
 				new Commerce_OrderSproutImportElementImporter(),
 				new Commerce_ProductSproutImportElementImporter(),
-				new Commerce_ProductTypeSproutImportSettingsImporter()
+				new Commerce_ProductTypeSproutImportSettingsImporter(),
+				new Commerce_ProductsSproutImportFieldImporter()
 			);
 
 			$importers = array_merge($importers, $craftCommerceImporters);
