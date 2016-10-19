@@ -42,10 +42,8 @@ class SproutImport_ImportController extends BaseController
 
 					if (move_uploaded_file($file->getTempName(), $path))
 					{
-						$content = file_get_contents($path);
-
 						$tasks[$count]['path']    = $path;
-						$tasks[$count]['content'] = $content;
+						$tasks[$count]['content'] = $jsonContent->json;
 					}
 				}
 				else

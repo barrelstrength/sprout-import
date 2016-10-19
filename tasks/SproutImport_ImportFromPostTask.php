@@ -40,8 +40,37 @@ class SproutImport_ImportFromPostTask extends BaseTask
 		$elements = $this->getSettings()->getAttribute('elements');
 		$element  = $step ? $elements[$step] : $elements[0];
 
-		$result = sproutImport()->save($element);
+		try
+		{
+			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 
-		return true;
+			sproutImport()->save($element, false);
+
+			$errors = sproutImport()->getErrors();
+
+			if (!empty($errors))
+			{
+				$message = implode("\n", $errors);
+
+				SproutImportPlugin::log($message, LogLevel::Error);
+
+				$transaction->rollback();
+
+				return false;
+			}
+
+			if ($transaction && $transaction->active)
+			{
+				$transaction->commit();
+			}
+
+			return true;
+		}
+		catch (\Exception $e)
+		{
+			SproutImportPlugin::log($e->getMessage(), LogLevel::Error);
+		}
+
+		return false;
 	}
 }

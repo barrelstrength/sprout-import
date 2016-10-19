@@ -33,16 +33,36 @@ class SproutImport_TasksService extends BaseApplicationComponent
 	 * @return mixed
 	 * @throws Exception
 	 */
-	public function createImportTasksFromPost($elements)
+	public function createImportTasksFromPost($elements, $step = 10)
 	{
+
 		// support serialize format
 		if ($this->isSerialized($elements))
 		{
 			$elements = unserialize($elements);
 		}
 
+		if (!is_array($elements))
+		{
+			$jsonContent = new SproutImport_JsonModel($elements);
+
+			// Make sure we have JSON
+			if ($jsonContent->hasErrors())
+			{
+				craft()->userSession->setError($jsonContent->getError('json'));
+
+				SproutImportPlugin::log($jsonContent->getError('json'));
+
+				return false;
+			}
+			else
+			{
+				$elements = $jsonContent->json;
+			}
+		}
+
 		// Divide array for the tasks service
-		$tasks = $this->sectionArray($elements, 10);
+		$tasks = $this->sectionArray($elements, $step);
 
 		if (!count($tasks))
 		{

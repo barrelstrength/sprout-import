@@ -44,49 +44,42 @@ class SproutImport_ImportTask extends BaseTask
 		$files = $this->getSettings()->getAttribute('files');
 		$data  = $step ? $files[$step] : $files[0];
 
-		$content = $data['content'];
-		$file    = $data['path'];
+		$elements = $data['content'];
+		$file     = $data['path'];
 
-		if ($content && ($elements = json_decode($content, true)) && !json_last_error())
+		try
 		{
-			try
+			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
+
+			$filename = substr($file, strrpos($file, '/') + 1);
+
+			sproutImport()->save($elements, $seed, $filename);
+
+			IOHelper::deleteFile($file);
+
+			$errors = sproutImport()->getErrors();
+
+			if (!empty($errors))
 			{
-				$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
+				$message = implode("\n", $errors);
 
-				$filename = substr($file, strrpos($file, '/') + 1);
+				SproutImportPlugin::log($message, LogLevel::Error);
 
-				sproutImport()->save($elements, $seed, $filename);
+				$transaction->rollback();
 
-				IOHelper::deleteFile($file);
-
-				$errors = sproutImport()->getErrors();
-
-				if (!empty($errors))
-				{
-					$message = implode("\n", $errors);
-
-					SproutImportPlugin::log($message, LogLevel::Error);
-
-					$transaction->rollback();
-
-					return false;
-				}
-
-				if ($transaction && $transaction->active)
-				{
-					$transaction->commit();
-				}
-
-				return true;
+				return false;
 			}
-			catch (\Exception $e)
+
+			if ($transaction && $transaction->active)
 			{
-				SproutImportPlugin::log($e->getMessage(), LogLevel::Error);
+				$transaction->commit();
 			}
+
+			return true;
 		}
-		else
+		catch (\Exception $e)
 		{
-			SproutImportPlugin::log('Unable to parse file.', compact('file'), LogLevel::Error);
+			SproutImportPlugin::log($e->getMessage(), LogLevel::Error);
 		}
 
 		return false;
