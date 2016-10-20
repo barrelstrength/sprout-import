@@ -420,6 +420,10 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 						$fields[$name] = $ids;
 					}
 				}
+				else
+				{
+					$fields[$name] = array(0);
+				}
 			}
 		}
 
