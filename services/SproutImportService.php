@@ -240,7 +240,7 @@ class SproutImportService extends BaseApplicationComponent
 	 *
 	 * @return null
 	 */
-	public function getImporterModelName($settings)
+	public function getImporterModelName($settings, $importers = null)
 	{
 		// Log error if no '@model' key identifier is found
 		if (!isset($settings['@model']))
@@ -259,7 +259,10 @@ class SproutImportService extends BaseApplicationComponent
 		// Remove the word 'Model' from the end of our setting if it exists
 		$importerModel = str_replace('Model', '', $settings['@model']);
 
-		$importers = sproutImport()->getSproutImportImporters();
+		if ($importers == null)
+		{
+			$importers = sproutImport()->getSproutImportImporters();
+		}
 
 		$elementImporterClassName  = $importerModel . 'SproutImportElementImporter';
 		$settingsImporterClassName = $importerModel . 'SproutImportSettingsImporter';

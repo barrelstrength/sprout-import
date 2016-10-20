@@ -30,7 +30,7 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 
 		try
 		{
-			if (empty($this->data['variants']))
+			if (empty($this->rows['variants']))
 			{
 				$message = Craft::t('At least one variant is required');
 
@@ -41,7 +41,7 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 				return false;
 			}
 
-			$variants = $this->data['variants'];
+			$variants = $this->rows['variants'];
 
 			// Loop through each variant
 			foreach ($variants as $variant => $attributes)

@@ -34,13 +34,17 @@ class SproutImportServiceTest extends SproutImportBaseTest
 		// Accepts with suffix Model or without
 		$row = array('@model' => 'FieldModel', 'groupId' => 1, 'name' => 'Field Name');
 
-		$model = sproutImport()->getImporterModelName($row);
+		$importers = array('FieldSproutImportSettingsImporter' => '');
+
+		$model = sproutImport()->getImporterModelName($row, $importers);
 
 		$this->assertEquals('Field', $model);
 
 		$row = array('@model' => 'Entry', 'attributes' => 1);
 
-		$model = sproutImport()->getImporterModelName($row);
+		$importers = array('EntrySproutImportElementImporter' => '');
+
+		$model = sproutImport()->getImporterModelName($row, $importers);
 
 		$this->assertEquals('Entry', $model);
 	}
@@ -51,9 +55,9 @@ class SproutImportServiceTest extends SproutImportBaseTest
 
 		$data = array('handle' => 'test');
 
-		$importer = m::mock('Craft\FieldSproutImportImporter[getModelByHandle]')
-			->shouldReceive('setData')
-			->andReturn($data)
+		$importer = m::mock('Craft\FieldSproutImportSettingsImporter[getModelByHandle]')
+			->shouldReceive('setModel')
+			->andReturn($fieldModel, $data)
 			->shouldReceive('getModelByHandle')
 			->andReturn(null)
 			->mock();

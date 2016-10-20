@@ -38,13 +38,6 @@ abstract class BaseSproutImportImporter
 	 *
 	 * @var
 	 */
-	protected $data;
-
-	/**
-	 * ???
-	 *
-	 * @var array
-	 */
 	protected $rows;
 
 	/**
@@ -246,14 +239,6 @@ abstract class BaseSproutImportImporter
 		$count = sproutImport()->seed->getSeedCountByElementType($name);
 
 		return $count;
-	}
-
-	/**
-	 * @param $data
-	 */
-	public function setData($data)
-	{
-		$this->data = $data;
 	}
 
 	/**

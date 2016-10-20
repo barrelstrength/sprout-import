@@ -34,7 +34,7 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 			// Change number variable to generated number.
 			$this->model->returnUrl = str_replace('{number}', $this->model->number, $this->model->returnUrl);
 		}
-		$dataLineItems = $this->data['lineItems'];
+		$dataLineItems = $this->rows['lineItems'];
 
 		// Get data for saving after calculating adjustments
 		$isCompleted = $this->model->isCompleted;
@@ -76,7 +76,7 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 
 		craft()->commerce_orders->saveOrder($order);
 
-		$paymentData = $this->data['payments'];
+		$paymentData = $this->rows['payments'];
 
 		$paymentMethod = $order->getPaymentMethod();
 

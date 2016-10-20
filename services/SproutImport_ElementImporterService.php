@@ -127,8 +127,6 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 
 			try
 			{
-				$importerClass->setData($data);
-
 				try
 				{
 					$importerClass->save();
