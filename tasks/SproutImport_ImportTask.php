@@ -51,7 +51,8 @@ class SproutImport_ImportTask extends BaseTask
 		{
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 
-			$filename = substr($file, strrpos($file, '/') + 1);
+			// remove any initial slash from the filename
+			$filename = ($file != 'pastedJson') ? substr($file, strrpos($file, '/') + 1) : $file;
 
 			sproutImport()->save($elements, $seed, $filename);
 
