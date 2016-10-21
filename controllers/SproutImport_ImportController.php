@@ -65,7 +65,7 @@ class SproutImport_ImportController extends BaseController
 			if (!$pastedJson->hasErrors())
 			{
 				$tasks[$count]['path']    = 'pastedJson';
-				$tasks[$count]['content'] = $pastedJsonString;
+				$tasks[$count]['content'] = $pastedJson->json;
 			}
 			else
 			{
