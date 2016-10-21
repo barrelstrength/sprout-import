@@ -82,9 +82,9 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 					$userModel = craft()->users->getUserById($attributes['authorId']);
 				}
 
-				if ($userModel == null && isset($attributes['defaultAuthorId']))
+				if ($userModel == null && isset($settings['settings']['defaultAuthorId']))
 				{
-					$defaultAuthorId = $attributes['defaultAuthorId'];
+					$defaultAuthorId = $settings['settings']['defaultAuthorId'];
 
 					$userModel = craft()->users->getUserById($defaultAuthorId);
 
@@ -131,7 +131,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 				if (isset($settings['content']['related']) && count($settings['content']['related']))
 				{
 					$related = $settings['content']['related'];
-
+					;
 					$fields = sproutImport()->elementImporter->resolveRelationships($related, $fields);
 
 					if (!$fields)
@@ -184,14 +184,14 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	 */
 	protected function processBeforeSave($model, $settings)
 	{
-		if (!isset($settings['content']['beforeSave']))
+		if (!isset($settings['settings']['updateElement']))
 		{
 			return $model;
 		}
 
-		$beforeSave = $settings['content']['beforeSave'];
+		$updateElement = $settings['settings']['updateElement'];
 
-		$element = sproutImport()->elementImporter->getModelByMatches($beforeSave);
+		$element = sproutImport()->elementImporter->getModelByMatches($updateElement);
 
 		if ($element)
 		{

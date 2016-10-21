@@ -312,7 +312,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 				$matchCriteria         = sproutImport()->getValueByKey('matchCriteria', $definition);
 				$fieldType             = sproutImport()->getValueByKey('destinationField.type', $definition);
 				$createIfNotFound      = sproutImport()->getValueByKey('createIfNotFound', $definition);
-				$newElementDefinitions = sproutImport()->getValueByKey('newElementDefinitions', $definition);
+				$newElements            = sproutImport()->getValueByKey('newElements', $definition);
 
 				if (!$type && !$matchValue && !$matchBy)
 				{
@@ -369,11 +369,11 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 							$foundAll = false;
 						}
 
-						if (!$foundAll && $createIfNotFound && is_array($newElementDefinitions) && count($newElementDefinitions))
+						if (!$foundAll && $createIfNotFound && is_array($newElements) && count($newElements))
 						{
-							if (!empty($newElementDefinitions))
+							if (!empty($newElements))
 							{
-								foreach ($newElementDefinitions as $definition)
+								foreach ($newElements as $definition)
 								{
 									$this->saveElement($definition);
 								}
@@ -430,15 +430,15 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 		return $fields;
 	}
 
-	public function getModelByMatches($beforeSave)
+	public function getModelByMatches($updateElement)
 	{
 		$modelName = $this->modelName;
 
-		if ($beforeSave)
+		if ($updateElement)
 		{
-			$matchBy       = sproutImport()->getValueByKey('matchBy', $beforeSave);
-			$matchValue    = sproutImport()->getValueByKey('matchValue', $beforeSave);
-			$matchCriteria = sproutImport()->getValueByKey('matchCriteria', $beforeSave);
+			$matchBy       = sproutImport()->getValueByKey('matchBy', $updateElement);
+			$matchValue    = sproutImport()->getValueByKey('matchValue', $updateElement);
+			$matchCriteria = sproutImport()->getValueByKey('matchCriteria', $updateElement);
 
 			if ($matchBy && $matchValue)
 			{
@@ -534,7 +534,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 	private function getElementDataKeys()
 	{
 		return array(
-			'@model', 'attributes', 'content'
+			'@model', 'attributes', 'content', 'settings'
 		);
 	}
 }

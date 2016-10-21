@@ -169,9 +169,9 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 
 		if (isset($entryParams['entryId']))
 		{
-			$data['content']['beforeSave']['matchBy']       = "id";
-			$data['content']['beforeSave']['matchValue']    = $entryParams['entryId'];
-			$data['content']['beforeSave']['matchCriteria'] = array("section" => $entryParams['sectionHandle']);
+			$data['settings']['updateElement']['matchBy']       = "id";
+			$data['settings']['updateElement']['matchValue']    = $entryParams['entryId'];
+			$data['settings']['updateElement']['matchCriteria'] = array("section" => $entryParams['sectionHandle']);
 		}
 
 		return sproutImport()->elementImporter->saveElement($data);
