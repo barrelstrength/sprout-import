@@ -103,15 +103,13 @@ class SproutImport_ImportController extends BaseController
 	}
 
 	/**
-	 * Import element content from a post request
-	 *
-	 * @todo - make this import method behave just like the standard actionRunImport method
+	 * Import element content or settings via a POST request
 	 */
 	public function actionRunImportFromPost()
 	{
-		$elements = craft()->request->getPost('elements');
+		$data = craft()->request->getPost('data');
 
-		sproutImport()->tasks->createImportTasksFromPost($elements);
+		sproutImport()->tasks->createImportTasksFromPost($data);
 
 		craft()->end();
 	}
