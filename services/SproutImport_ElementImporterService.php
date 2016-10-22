@@ -442,6 +442,20 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 
 			if ($matchBy && $matchValue)
 			{
+				if (is_array($matchValue))
+				{
+					$matchValue = $matchValue[0];
+
+					if (count($matchValue) > 0)
+					{
+						$message = Craft::t('The updateElement key can only retrieve a single match. Array with multiple values was provided. Only the first value has been used to find a match: {matchValue}', array(
+							'matchValue' => $matchValue
+						));
+
+						SproutImportPlugin::log($message, LogLevel::Warning);
+					}
+				}
+
 				$criteria = craft()->elements->getCriteria($modelName);
 
 				// The following is critical to import/relate elements not enabled
