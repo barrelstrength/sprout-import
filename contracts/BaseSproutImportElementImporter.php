@@ -101,8 +101,9 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 
 			// @todo - authorId is specific to Entry Elements, support via specific Importer
 			if ((isset($attributes['authorId']) OR
-					 isset($settings['settings']['defaults']['authorId'])) &&
-				   empty($model['authorId']))
+					isset($settings['settings']['defaults']['authorId'])) &&
+				empty($model['authorId'])
+			)
 			{
 				$message = Craft::t("Could not find Author by ID, Email, or Username.");
 
@@ -138,8 +139,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 				// moving the $related check to before the method runs, works.
 				if (isset($settings['content']['related']) && count($settings['content']['related']))
 				{
-					$related = $settings['content']['related'];
-					;
+					$related = $settings['content']['related'];;
 					$fields = sproutImport()->elementImporter->resolveRelationships($related, $fields);
 
 					if (!$fields)

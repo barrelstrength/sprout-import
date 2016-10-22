@@ -49,7 +49,7 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 				// Check if related variants need to be resolved
 				if (strpos($variant, 'new') === 0 && isset($attributes['related']))
 				{
-					$variantFields   = isset($attributes['fields']) ? $attributes['fields'] : array();
+					$variantFields = isset($attributes['fields']) ? $attributes['fields'] : array();
 					$relatedFields = $attributes['related'];
 
 					$variantFields = sproutImport()->elementImporter->resolveRelationships($relatedFields, $variantFields);
@@ -102,7 +102,7 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 	 */
 	public function deleteById($id)
 	{
-		$product = new Commerce_ProductModel();
+		$product     = new Commerce_ProductModel();
 		$product->id = $id;
 
 		return craft()->commerce_products->deleteProduct($product);

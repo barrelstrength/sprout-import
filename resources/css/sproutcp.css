@@ -19,6 +19,7 @@
 	justify-content: center;
 	margin: 2em auto;
 }
+
 .sprout-mediabox-inner {
 	display: flex;
 	flex-direction: row;
@@ -27,23 +28,29 @@
 	align-content: space-between;
 	width: 70%;
 }
+
 .sprout-mediathumb {
 	margin-right: 1em;
 }
+
 .sprout-mediathumb img {
 	height: 140px;
 	opacity: .3;
 	width: 140px;
 }
+
 .sprout-mediabody h2 {
 	font-size: 18px;
 }
+
 .sprout-mediabody hr {
 	margin: 0;
 }
+
 .sprout-mediabody a {
 	font-weight: bold;
 }
+
 .sprout-mediabody {
 	flex-grow: 1;
 	width: 60%;

@@ -21,8 +21,8 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	/**
 	 * Mark an item being imported as seed data
 	 *
-	 * @param null   $itemId
-	 * @param null   $importerClass
+	 * @param null $itemId
+	 * @param null $importerClass
 	 *
 	 * @return bool
 	 */
@@ -64,7 +64,7 @@ class SproutImport_SeedService extends BaseApplicationComponent
 			$command = $command->andWhere("importerClass = '$handle'");
 		}
 
-		$command = $command->from('sproutimport_seeds');
+		$command     = $command->from('sproutimport_seeds');
 		$itemsToWeed = $command->queryAll();
 
 		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
