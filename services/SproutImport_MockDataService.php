@@ -329,9 +329,6 @@ class SproutImport_MockDataService extends BaseApplicationComponent
 	/**
 	 * Generate a fake name or email
 	 *
-	 * @todo - why do we need to be passing the faker service and
-	 * the user service to this method? We could call them both from here.
-	 *
 	 * @param      $nameOrEmail
 	 * @param      $faker
 	 * @param bool $isEmail

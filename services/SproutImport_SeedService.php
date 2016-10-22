@@ -75,7 +75,6 @@ class SproutImport_SeedService extends BaseApplicationComponent
 			{
 				if (!$isKeep)
 				{
-					// @todo - improve how we handle this setting...
 					// we're just appending 'Model' and adding it to the array here...
 					$row['@model'] = $row['importerClass'] . 'Model';
 

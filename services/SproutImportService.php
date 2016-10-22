@@ -51,8 +51,6 @@ class SproutImportService extends BaseApplicationComponent
 
 	/**
 	 * @var
-	 *
-	 * @todo - can probably remove $elementsService in favor of BaseSproutImportElementImporter::isElement
 	 */
 	protected $elementsService;
 
@@ -163,9 +161,6 @@ class SproutImportService extends BaseApplicationComponent
 
 	/**
 	 * Save an imported Element or Setting
-	 *
-	 * @todo - it appears the $filename variable may not be in use?
-	 *       Should be in use for error logs to communicate which filename had an issue.
 	 *
 	 * @param array $elements
 	 * @param bool  $returnSavedElementIds

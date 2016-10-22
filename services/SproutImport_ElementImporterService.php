@@ -379,7 +379,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 							}
 
 							$elementIds = $this->getSavedResults(true);
-							// Do we need to create the element?
+
 							$ids = array_merge($ids, $elementIds);
 						}
 					}

@@ -4,11 +4,6 @@ namespace Craft;
 class SproutImport_SettingsImporterService extends BaseApplicationComponent
 {
 	/**
-	 * @type array
-	 */
-	private $savedIds = array();
-
-	/**
 	 * Returns $model if saved, or false if failed
 	 * This can be called in a loop, or called directly if we know we just have one setting and want and ID back.
 	 *
@@ -67,8 +62,6 @@ class SproutImport_SettingsImporterService extends BaseApplicationComponent
 				$importerClass->resolveNestedSettings($model, $settings);
 			}
 
-			$this->savedIds[] = $model->id;
-
 			return $importerClass->model;
 		}
 		else
@@ -84,19 +77,5 @@ class SproutImport_SettingsImporterService extends BaseApplicationComponent
 
 			return false;
 		}
-	}
-
-	/**
-	 * @todo - this method and related $this->savedIds settings don't appear to be in use
-	 *
-	 * @return array
-	 */
-	public function getSavedResults()
-	{
-		$result = array(
-			'savedSettingIds' => $this->savedIds
-		);
-
-		return $result;
 	}
 }
