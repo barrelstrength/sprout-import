@@ -62,45 +62,53 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 
 			$model->setAttributes($attributes);
 
-			// Allows author email to add as author of the entry
+			// Check for email and username values if authorId attribute
 			if (isset($attributes['authorId']))
 			{
-				if (is_array($attributes['authorId']) && !empty($attributes['authorId']['email']))
+				if ($authorId = $this->getAuthorId($attributes['authorId']))
 				{
-					$userEmail = $attributes['authorId']['email'];
-					$userModel = craft()->users->getUserByUsernameOrEmail($userEmail);
-
-					if ($userModel != null)
-					{
-						$authorId = $userModel->getAttribute('id');
-
-						$model->setAttribute('authorId', $authorId);
-					}
-				}
-				else
-				{
-					$userModel = craft()->users->getUserById($attributes['authorId']);
-				}
-
-				if ($userModel == null && isset($settings['settings']['defaultAuthorId']))
-				{
-					$defaultAuthorId = $settings['settings']['defaultAuthorId'];
-
-					$userModel = craft()->users->getUserById($defaultAuthorId);
-
-					$authorId = $userModel->getAttribute('id');
-
 					$model->setAttribute('authorId', $authorId);
 				}
+			}
 
-				if ($userModel == null)
+			// Check if we have defaults for any unset attributes
+			if (isset($settings['settings']['defaults']))
+			{
+				$defaults = $settings['settings']['defaults'];
+
+				foreach ($model->getAttributes() as $attribute => $value)
 				{
-					$message = Craft::t("Could not find Author ID or Email.");
+					if (isset($model->{$attribute}) && !$model->{$attribute})
+					{
+						// Check for email and username values if authorId attribute
+						if ($attribute == 'authorId' && isset($defaults['authorId']))
+						{
+							if ($authorId = $this->getAuthorId($defaults['authorId']))
+							{
+								$model->setAttribute('authorId', $authorId);
+							}
 
-					SproutImportPlugin::log($message, LogLevel::Error);
+							continue;
+						}
 
-					sproutImport()->addError($message, 'invalid-author');
+						if (isset($defaults[$attribute]))
+						{
+							$model->setAttribute($attribute, $defaults[$attribute]);
+						}
+					}
 				}
+			}
+
+			// @todo - authorId is specific to Entry Elements, support via specific Importer
+			if ((isset($attributes['authorId']) OR
+					 isset($settings['settings']['defaults']['authorId'])) &&
+				   empty($model['authorId']))
+			{
+				$message = Craft::t("Could not find Author by ID, Email, or Username.");
+
+				SproutImportPlugin::log($message, LogLevel::Error);
+
+				sproutImport()->addError($message, 'invalid-author');
 			}
 		}
 
@@ -199,5 +207,19 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 		}
 
 		return $model;
+	}
+
+	protected function getAuthorId($authorId)
+	{
+		if (is_int($authorId))
+		{
+			$userModel = craft()->users->getUserById($authorId);
+		}
+		else
+		{
+			$userModel = craft()->users->getUserByUsernameOrEmail($authorId);
+		}
+
+		return isset($userModel) ? $userModel->id : null;
 	}
 }
