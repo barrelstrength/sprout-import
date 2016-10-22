@@ -8,7 +8,7 @@ class SproutImport_ImportTask extends BaseTask
 	 */
 	public function getDescription()
 	{
-		return 'Sprout Import Task';
+		return Craft::t('Sprout Import Task');
 	}
 
 	/**

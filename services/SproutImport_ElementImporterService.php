@@ -99,7 +99,9 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 				{
 					$key = 'field-null-' . $fieldHandle;
 
-					$message = Craft::t("Could not find the $fieldHandle field.");
+					$message = Craft::t("Could not find the {fieldHandle} field.", array(
+						'fieldHandle' => $fieldHandle
+					));
 
 					SproutImportPlugin::log($message, LogLevel::Error);
 					sproutImport()->addError($message, $key);
@@ -148,7 +150,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 				}
 				catch (\Exception $e)
 				{
-					$message = Craft::t("Error on importer save method. \n ");
+					$message = Craft::t("Error when saving Element. \n ");
 					$message .= $e->getMessage();
 
 					SproutImportPlugin::log($message, LogLevel::Error);
@@ -187,7 +189,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 
 				$fieldsMessage = (is_array($fields)) ? implode(', ', array_keys($fields)) : $fields;
 
-				$message = $title . ' ' . $fieldsMessage . ' Check field values if it exists.';
+				$message = $title . ' ' . $fieldsMessage . Craft::t(' Check field values if it exists.');
 
 				SproutImportPlugin::log($message, LogLevel::Error);
 
@@ -408,6 +410,11 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 		return $fields;
 	}
 
+	/**
+	 * @param $updateElement
+	 *
+	 * @return bool|BaseElementModel|null
+	 */
 	public function getModelByMatches($updateElement)
 	{
 		$modelName = $this->modelName;
@@ -482,28 +489,6 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @return array
-	 */
-	public function getChannelSections()
-	{
-		$selects  = array();
-		$sections = craft()->sections->getAllSections();
-		if (!empty($sections))
-		{
-			foreach ($sections as $section)
-			{
-				if ($section->type == 'single')
-				{
-					continue;
-				}
-				$selects[$section->handle] = $section->name;
-			}
-		}
-
-		return $selects;
-	}
-
-	/**
 	 * @param $model
 	 */
 	public function logErrorByModel($model)
@@ -515,7 +500,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 		// make error unique
 		$errorKey = serialize($model->getAttributes());
 
-		SproutImportPlugin::log(Craft::t('Errors via logErrorByModel'), LogLevel::Error);
+		SproutImportPlugin::log(Craft::t('Errors found on model while saving Element'), LogLevel::Error);
 
 		sproutImport()->addError($errorLog, $errorKey);
 	}

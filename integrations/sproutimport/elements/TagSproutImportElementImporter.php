@@ -47,7 +47,7 @@ class TagSproutImportElementImporter extends BaseSproutImportElementImporter
 			}
 		}
 
-		return craft()->templates->render('sproutimport/_settings/tag', array(
+		return craft()->templates->render('sproutimport/_integrations/tag/settings', array(
 			'id'        => $this->getModelName(),
 			'tagGroups' => $groupsSelect
 		));

@@ -3,7 +3,10 @@ namespace Craft;
 
 class Commerce_ProductTypeSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 {
-	private $defaultArgs = array(
+	/**
+	 * @var array
+	 */
+	private $defaultAttributes = array(
 		'hasVariantTitleField' => false,
 		'titleFormat'          => '{product.title}'
 	);
@@ -13,7 +16,7 @@ class Commerce_ProductTypeSproutImportSettingsImporter extends BaseSproutImportS
 	 */
 	public function getName()
 	{
-		return "Craft Commerce Product Type";
+		return Craft::t('Craft Commerce Product Type');
 	}
 
 	/**
@@ -48,12 +51,12 @@ class Commerce_ProductTypeSproutImportSettingsImporter extends BaseSproutImportS
 	}
 
 	/**
-	 * @param $model
-	 * @param $settings
+	 * @param       $model
+	 * @param array $settings
 	 */
 	public function setModel($model, $settings)
 	{
-		$attributes = array_merge($this->defaultArgs, $settings);
+		$attributes = array_merge($this->defaultAttributes, $settings);
 
 		if (isset($settings['urlFormat']))
 		{

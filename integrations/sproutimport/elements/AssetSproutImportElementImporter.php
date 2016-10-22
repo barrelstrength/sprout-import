@@ -8,7 +8,7 @@ class AssetSproutImportElementImporter extends BaseSproutImportElementImporter
 	 */
 	public function getName()
 	{
-		return 'Assets';
+		return Craft::t('Assets');
 	}
 
 	/**

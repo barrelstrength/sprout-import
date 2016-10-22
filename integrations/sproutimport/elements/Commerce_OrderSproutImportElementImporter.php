@@ -8,7 +8,7 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 	 */
 	public function getName()
 	{
-		return "Craft Commerce Orders";
+		return Craft::t("Craft Commerce Orders");
 	}
 
 	/**

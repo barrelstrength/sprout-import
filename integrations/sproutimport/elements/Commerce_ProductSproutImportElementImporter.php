@@ -8,7 +8,7 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 	 */
 	public function getName()
 	{
-		return "Craft Commerce Products";
+		return Craft::t('Craft Commerce Products');
 	}
 
 	/**
@@ -73,7 +73,7 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 				// but we need to take an extra step to log the variant errors
 				foreach ($product->getVariants() as $variant)
 				{
-					sproutImport()->addError("Product Variants have errors. See logs.", 'variant-errors');
+					sproutImport()->addError(Craft::t('Product Variants have errors. See logs.'), 'variant-errors');
 
 					SproutImportPlugin::log(array(
 						'Variant has errors' => $variant->getErrors()
@@ -85,9 +85,9 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 		}
 		catch (\Exception $e)
 		{
-			SproutImportPlugin::log('Commerce Product Import Error:' . $e->getMessage(), LogLevel::Error);
+			SproutImportPlugin::log(Craft::t('Commerce Product Import Error: ') . $e->getMessage(), LogLevel::Error);
 
-			sproutImport()->addError('Commerce Product Import Error:', 'commerce-import-error');
+			sproutImport()->addError(Craft::t('Commerce Product Import Error: '), 'commerce-import-error');
 			sproutImport()->addError($e->getMessage(), 'commerce-import-error-message');
 		}
 	}

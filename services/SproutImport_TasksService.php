@@ -35,7 +35,6 @@ class SproutImport_TasksService extends BaseApplicationComponent
 	 */
 	public function createImportTasksFromPost($elements, $step = 10)
 	{
-
 		// support serialize format
 		if ($this->isSerialized($elements))
 		{

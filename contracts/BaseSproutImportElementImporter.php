@@ -50,7 +50,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	 * @param       $model
 	 * @param array $settings
 	 *
-	 * @return BaseElementModel|null
+	 * @return mixed
 	 */
 	public function setModel($model, $settings = array())
 	{
@@ -205,6 +205,11 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 		return $model;
 	}
 
+	/**
+	 * @param $authorId
+	 *
+	 * @return mixed|null
+	 */
 	protected function getAuthorId($authorId)
 	{
 		if (is_int($authorId))

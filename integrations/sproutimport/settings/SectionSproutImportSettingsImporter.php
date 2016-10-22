@@ -3,6 +3,9 @@ namespace Craft;
 
 class SectionSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 {
+	/**
+	 * @var
+	 */
 	public $isNewSection;
 
 	/**

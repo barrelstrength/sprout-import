@@ -8,7 +8,7 @@ class EntryTypeSproutImportSettingsImporter extends BaseSproutImportSettingsImpo
 	 */
 	public function getName()
 	{
-		return "Entry Type";
+		return Craft::t('Entry Type');
 	}
 
 	/**
@@ -94,6 +94,11 @@ class EntryTypeSproutImportSettingsImporter extends BaseSproutImportSettingsImpo
 		return craft()->sections->deleteEntryTypeById($id);
 	}
 
+	/**
+	 * @param null $handle
+	 *
+	 * @return mixed
+	 */
 	public function getModelByHandle($handle = null)
 	{
 		$types = craft()->sections->getEntryTypesByHandle($handle);

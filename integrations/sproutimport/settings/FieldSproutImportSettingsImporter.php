@@ -8,7 +8,7 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 	 */
 	public function getName()
 	{
-		return "Field";
+		return Craft::t('Field');
 	}
 
 	/**
@@ -60,7 +60,7 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 			}
 			else
 			{
-				$message = $type . ' field importer not supported';
+				$message = $type . Craft::t(' field importer not supported');
 
 				SproutImportPlugin::log($message, LogLevel::Error);
 
@@ -105,7 +105,7 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 
 		if (!$groupId)
 		{
-			SproutImportPlugin::log('No field group exists. Creating the Sprout Import field group.');
+			SproutImportPlugin::log(Craft::t('No field group exists. Creating the Sprout Import field group.'));
 
 			$groupId = $this->createSproutImportFieldGroup();
 		}
@@ -123,11 +123,11 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 
 		if (craft()->fields->saveGroup($group))
 		{
-			SproutImportPlugin::log('Sprout Import field group created successfully.');
+			SproutImportPlugin::log(Craft::t('Sprout Import field group created successfully.'));
 		}
 		else
 		{
-			SproutImportPlugin::log('Could not save the Sprout Import field group.', LogLevel::Warning);
+			SproutImportPlugin::log(Craft::t('Could not save the Sprout Import field group.'), LogLevel::Warning);
 		}
 
 		return $group->id;

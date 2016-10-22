@@ -3,6 +3,11 @@ namespace Craft;
 
 class SproutImport_JsonModel extends BaseModel
 {
+	/**
+	 * SproutImport_JsonModel constructor.
+	 *
+	 * @param mixed|null $string
+	 */
 	public function __construct($string)
 	{
 		$this->setJson($string);
@@ -10,6 +15,9 @@ class SproutImport_JsonModel extends BaseModel
 		parent::__construct($string);
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function defineAttributes()
 	{
 		return array(
@@ -18,11 +26,17 @@ class SproutImport_JsonModel extends BaseModel
 		);
 	}
 
+	/**
+	 * @param $string
+	 */
 	public function setJson($string)
 	{
 		$this->validateJson($string);
 	}
 
+	/**
+	 * @param $string
+	 */
 	public function validateJson($string)
 	{
 		$result = json_decode($string);

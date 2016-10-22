@@ -83,16 +83,4 @@
 	</div>
 </div>
 
-
 {% endblock %}
-
-{% includejs %}
-	(function(){
-		$('.sprout-mediabox a').on('click', function(event) {
-		event.preventDefault();
-
-		var $div = $('<div class="modal sprout-helpvideo-modal"><div class="body"><div class="sprout-helpvideo-wrapper"><iframe src="https://player.vimeo.com/video/133950017" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div></div></div>');
-		var myModal = new Garnish.Modal($div);
-		})
-	})();
-{% endincludejs %}
