@@ -307,12 +307,11 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 					return false;
 				}
 
-				$matchBy               = sproutImport()->getValueByKey('matchBy', $definition);
-				$matchValue            = sproutImport()->getValueByKey('matchValue', $definition);
-				$matchCriteria         = sproutImport()->getValueByKey('matchCriteria', $definition);
-				$fieldType             = sproutImport()->getValueByKey('destinationField.type', $definition);
-				$createIfNotFound      = sproutImport()->getValueByKey('createIfNotFound', $definition);
-				$newElements            = sproutImport()->getValueByKey('newElements', $definition);
+				$matchBy          = sproutImport()->getValueByKey('matchBy', $definition);
+				$matchValue       = sproutImport()->getValueByKey('matchValue', $definition);
+				$matchCriteria    = sproutImport()->getValueByKey('matchCriteria', $definition);
+				$createIfNotFound = sproutImport()->getValueByKey('createIfNotFound', $definition);
+				$newElements      = sproutImport()->getValueByKey('newElements', $definition);
 
 				if (!$type && !$matchValue && !$matchBy)
 				{
@@ -397,28 +396,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 
 				if (count($ids))
 				{
-					if (strtolower($fieldType) === 'matrix')
-					{
-						$blockType      = sproutImport()->getValueByKey('destinationField.blockType', $definition);
-						$blockTypeField = sproutImport()->getValueByKey('destinationField.blockTypeField', $definition);
-
-						if ($blockType && $blockTypeField)
-						{
-							$fields[$name] = array(
-								'new1' => array(
-									'type'    => $blockType,
-									'enabled' => true,
-									'fields'  => array(
-										$blockTypeField => $ids
-									)
-								)
-							);
-						}
-					}
-					else
-					{
-						$fields[$name] = $ids;
-					}
+					$fields[$name] = $ids;
 				}
 				else
 				{
