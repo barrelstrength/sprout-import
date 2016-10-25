@@ -94,7 +94,7 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 	 */
 	protected function getDefaultFieldGroup()
 	{
-		// @todo - cache this somewhere so we don't query the db
+		// @todo - cache this
 		// for every field that doesn't have a fieldGroup
 		$groupId = craft()->db->createCommand()
 			->select('*')

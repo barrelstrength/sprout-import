@@ -27,7 +27,7 @@ class EntryTypeSproutImportSettingsImporter extends BaseSproutImportSettingsImpo
 	{
 		$entryType->setAttributes($entryTypeSettings);
 
-		// @TODO - make fieldContext and contentTable dynamic
+		// @todo - make fieldContext and contentTable dynamic
 		craft()->content->fieldContext = 'global';
 		// craft()->content->contentTable = 'content';
 
@@ -65,6 +65,7 @@ class EntryTypeSproutImportSettingsImporter extends BaseSproutImportSettingsImpo
 
 			$fieldLayout = craft()->fields->assembleLayout($fieldLayout, $requiredFields);
 
+			// @todo - hard coded
 			$fieldLayout->type = 'Entry';
 
 			$entryType->setFieldLayout($fieldLayout);
