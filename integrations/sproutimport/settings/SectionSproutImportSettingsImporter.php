@@ -63,55 +63,46 @@ class SectionSproutImportSettingsImporter extends BaseSproutImportSettingsImport
 	 */
 	public function setModel($model, $settings)
 	{
-		if (!isset($settings['urlFormat']))
-		{
-			return;
-		}
+		// Assign any Shared and Type-specific values we can to the model
+		$model->setAttributes($settings);
 
+		// Locale-specific attributes
 		$locales = array();
 
-		if (empty($settings['locales']))
+		if (isset($settings['locales']) && count($settings['locales']))
+		{
+			$localeIds = $settings['locales'];
+		}
+		else
 		{
 			$primaryLocaleId = craft()->i18n->getPrimarySiteLocaleId();
 			$localeIds       = array($primaryLocaleId);
-
-			// @TODO - homepage check is hard coded
-			$isHomepage = false;
-			// $isHomepage = ($section->type == SectionType::Single && craft()->request->getPost('types.'.$section->type.'.homepage'));
-
-			foreach ($localeIds as $localeId)
-			{
-				if ($isHomepage)
-				{
-					$settings['urlFormat'] = '__home__';
-					$nestedUrlFormat       = null;
-				}
-				else
-				{
-					$urlFormat = (isset($settings['urlFormat'][$localeId])) ? $settings['urlFormat'][$localeId] : $settings['urlFormat'];
-
-					// @TODO - improve this, hard coded fake data
-					$nestedUrlFormat = 'NOT WORKING';
-					// $settings['urlFormat'][$settings['type']]['nestedUrlFormat'][$localeId];
-					// craft()->request->getPost('types.'.$section->type.'.nestedUrlFormat.'.$localeId);
-					// 
-				}
-
-				$locales[$localeId] = new SectionLocaleModel(array(
-					'locale'           => $localeId,
-					// @TODO - improve this, hard coded
-					// 'enabledByDefault' => (bool) craft()->request->getPost('defaultLocaleStatuses.'.$localeId),
-					'enabledByDefault' => true,
-					'urlFormat'        => $urlFormat,
-					'nestedUrlFormat'  => $nestedUrlFormat,
-				));
-			}
-
-			$model->setLocales($locales);
 		}
 
-		// Assign any setting values we can to the model
-		$model->setAttributes($settings);
+		$isHomepage = $this->isHomepage($settings);
+
+		foreach ($localeIds as $localeId)
+		{
+			if ($isHomepage)
+			{
+				$urlFormat       = $settings['urlFormat'];
+				$nestedUrlFormat = null;
+			}
+			else
+			{
+				$urlFormat       = (isset($settings['urlFormat'][$localeId])) ? $settings['urlFormat'][$localeId] : null;
+				$nestedUrlFormat = (isset($settings['nestedUrlFormat'][$localeId])) ? $settings['nestedUrlFormat'][$localeId] : null;
+			}
+
+			$locales[$localeId] = new SectionLocaleModel(array(
+				'locale'           => $localeId,
+				 'enabledByDefault' => (bool) isset($settings['defaultLocaleStatuses'][$localeId]) ? $settings['defaultLocaleStatuses'][$localeId] : false,
+				'urlFormat'        => $urlFormat,
+				'nestedUrlFormat'  => $nestedUrlFormat,
+			));
+		}
+
+		$model->setLocales($locales);
 
 		$this->model = $model;
 	}
@@ -162,5 +153,25 @@ class SectionSproutImportSettingsImporter extends BaseSproutImportSettingsImport
 
 			$entryType = sproutImport()->settingsImporter->saveSetting($settings['entryTypes'][$key]);
 		}
+	}
+
+	/**
+	 * @param $settings
+	 *
+	 * @return bool
+	 */
+	protected function isHomepage($settings)
+	{
+		if ($settings['type'] != SectionType::Single)
+		{
+			return false;
+		}
+
+		if (isset($settings['urlFormat']) && ($settings['urlFormat'] == '__home__'))
+		{
+			return true;
+		}
+
+		return false;
 	}
 }
