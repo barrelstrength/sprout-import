@@ -2,10 +2,10 @@
 	{
 		"@model": "SproutForms_FormModel",
     "attributes": {
-      "name": "Contact FormZ2",
-      "handle": "contactZz",
+      "name": "Contact Form",
+      "handle": "contact",
       "titleFormat": "{dateCreated|date('Y-m-d')} – {fullName} – {message|slice(0,22)}...",
-      "redirectUri": "sproutforms/examples/contact-form?message=thank-you",
+      "redirectUri": "?message=thank-you",
       "displaySectionTitles": false,
       "fieldLayout": {
         "fieldLayoutTab": {
