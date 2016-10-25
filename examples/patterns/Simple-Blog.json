@@ -1,0 +1,151 @@
+[
+	{
+		"@model": "SectionModel",
+		"name": "Blog",
+		"handle": "blog",
+		"type": "channel",
+		"hasUrls": true,
+		"urlFormat": "blog/{slug}",
+		"template": "blog/_entry",
+		"entryTypes": [
+			{
+				"@model": "EntryTypeModel",
+				"name": "Posts",
+				"handle": "posts",
+				"showTitles": true,
+				"titleLabel": "Title",
+				"fieldLayout": {
+					"fieldLayoutTab": {
+						"name": "Content",
+						"fields": [
+							{
+								"@model": "FieldModel",
+								"groupId": null,
+								"name": "Summary",
+								"handle": "summary",
+								"instructions": "",
+								"type": "PlainText",
+								"settings": {
+									"placeholder": "",
+									"maxLength": null,
+									"multiline": true,
+									"initialRows": 4
+								}
+							},
+							{
+								"@model": "FieldModel",
+								"groupId": null,
+								"name": "Longform Content Body",
+								"handle": "longformContentBody",
+								"instructions": "",
+								"type": "Matrix",
+								"settings": {
+									"blockTypes": {
+										"new1": {
+											"name": "Heading",
+											"handle": "headingBlock",
+											"fields": {
+												"new1": {
+													"name": "Heading",
+													"handle": "heading",
+													"instructions": "",
+													"type": "PlainText",
+													"typesettings": {
+														"placeholder": "",
+														"maxLength": null,
+														"multiline": false
+													}
+												}
+											}
+										},
+										"new2": {
+											"name": "Subheading",
+											"handle": "subheadingBlock",
+											"fields": {
+												"new1": {
+													"name": "Subheading",
+													"handle": "subheading",
+													"instructions": "",
+													"type": "PlainText",
+													"typesettings": {
+														"placeholder": "",
+														"maxLength": null,
+														"multiline": false
+													}
+												}
+											}
+										},
+										"new3": {
+											"name": "Text",
+											"handle": "textBlock",
+											"fields": {
+												"new1": {
+													"name": "Text",
+													"handle": "text",
+													"instructions": "",
+													"type": "RichText",
+													"typesettings": {
+														"configFile": "Simple.json",
+														"cleanupHtml": true,
+														"purifyHtml": true,
+														"columnType": "text"
+													}
+												}
+											}
+										},
+										"new4": {
+											"name": "Quote",
+											"handle": "quoteBlock",
+											"fields": {
+												"new1": {
+													"name": "Quote",
+													"handle": "quote",
+													"instructions": "",
+													"type": "PlainText",
+													"typesettings": {
+														"placeholder": "",
+														"maxLength": null,
+														"multiline": true,
+														"initialRows": 4
+													}
+												},
+												"new2": {
+													"name": "Attribution",
+													"handle": "attribution",
+													"instructions": "",
+													"type": "PlainText",
+													"typesettings": {
+														"placeholder": "",
+														"maxLength": null,
+														"multiline": false
+													}
+												},
+												"new3": {
+													"name": "Position",
+													"handle": "position",
+													"instructions": "",
+													"type": "PositionSelect",
+													"typesettings": {
+														"options": {
+															"left": true,
+															"center": false,
+															"right": true,
+															"full": true,
+															"drop-left": false,
+															"drop-right": false
+														}
+													}
+												}
+											}
+										}
+									},
+									"maxBlocks": null
+								}
+							}
+						]
+					}
+				}
+			}
+		]
+	}
+]

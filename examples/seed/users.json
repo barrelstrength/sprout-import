@@ -1,5 +1,4 @@
-{%- set faker = craft.faker.fake -%}
-{%- set paragraphs = "<p>" ~ faker.paragraphs(5)|join('</p><p>')|raw ~ "</p>" -%}
+{%- set faker = craft.sproutImport.faker -%}
 [
 {%- for i in 0..97 %}
   {
