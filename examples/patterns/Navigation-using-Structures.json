@@ -1,0 +1,67 @@
+[
+	{
+		"@model": "SectionModel",
+		"name": "Primary Navigation",
+		"handle": "primaryNavigation",
+		"type": "structure",
+		"hasUrls": false,
+		"maxLevels": 1,
+		"enableVersioning": false,
+		"entryTypes": [
+			{
+				"@model": "EntryTypeModel",
+				"name": "Page",
+				"handle": "page",
+				"showTitles": true,
+				"titleLabel": "Name",
+				"fieldLayout": {
+					"fieldLayoutTab": {
+						"name": "Nav Item",
+						"fields": [
+							{
+								"@model": "FieldModel",
+								"groupId": null,
+								"name": "Page",
+								"handle": "page",
+								"instructions": "Add an existing Entry to your navigation.",
+								"type": "Entries",
+								"settings": {
+									"limit": 1,
+									"sources": "*",
+									"selectionLabel": "Select an entry"
+								}
+							}
+						]
+					}
+				}
+			},
+			{
+				"@model": "EntryTypeModel",
+				"name": "Custom URL",
+				"handle": "customUrl",
+				"showTitles": true,
+				"titleLabel": "Name",
+				"fieldLayout": {
+					"fieldLayoutTab": {
+						"name": "Nav Item",
+						"fields": [
+							{
+								"@model": "FieldModel",
+								"groupId": null,
+								"name": "Custom URL",
+								"handle": "customUrl",
+								"instructions": "Link to an off-site resource in your navigation.",
+								"type": "PlainText",
+								"settings": {
+									"placeholder": "",
+									"maxLength": null,
+									"multiline": false
+								}
+							}
+						]
+					}
+				}
+			}
+		]
+	}
+]

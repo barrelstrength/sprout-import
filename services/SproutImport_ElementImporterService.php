@@ -99,7 +99,9 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 				{
 					$key = 'field-null-' . $fieldHandle;
 
-					$message = Craft::t("Could not find the $fieldHandle field.");
+					$message = Craft::t("Could not find the {fieldHandle} field.", array(
+						'fieldHandle' => $fieldHandle
+					));
 
 					SproutImportPlugin::log($message, LogLevel::Error);
 					sproutImport()->addError($message, $key);
@@ -148,7 +150,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 				}
 				catch (\Exception $e)
 				{
-					$message = Craft::t("Error on importer save method. \n ");
+					$message = Craft::t("Error when saving Element. \n ");
 					$message .= $e->getMessage();
 
 					SproutImportPlugin::log($message, LogLevel::Error);
@@ -187,7 +189,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 
 				$fieldsMessage = (is_array($fields)) ? implode(', ', array_keys($fields)) : $fields;
 
-				$message = $title . ' ' . $fieldsMessage . ' Check field values if it exists.';
+				$message = $title . ' ' . $fieldsMessage . Craft::t(' Check field values if it exists.');
 
 				SproutImportPlugin::log($message, LogLevel::Error);
 
@@ -307,12 +309,11 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 					return false;
 				}
 
-				$matchBy               = sproutImport()->getValueByKey('matchBy', $definition);
-				$matchValue            = sproutImport()->getValueByKey('matchValue', $definition);
-				$matchCriteria         = sproutImport()->getValueByKey('matchCriteria', $definition);
-				$fieldType             = sproutImport()->getValueByKey('destinationField.type', $definition);
-				$createIfNotFound      = sproutImport()->getValueByKey('createIfNotFound', $definition);
-				$newElements            = sproutImport()->getValueByKey('newElements', $definition);
+				$matchBy          = sproutImport()->getValueByKey('matchBy', $definition);
+				$matchValue       = sproutImport()->getValueByKey('matchValue', $definition);
+				$matchCriteria    = sproutImport()->getValueByKey('matchCriteria', $definition);
+				$createIfNotFound = sproutImport()->getValueByKey('createIfNotFound', $definition);
+				$newElements      = sproutImport()->getValueByKey('newElements', $definition);
 
 				if (!$type && !$matchValue && !$matchBy)
 				{
@@ -380,7 +381,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 							}
 
 							$elementIds = $this->getSavedResults(true);
-							// Do we need to create the element?
+
 							$ids = array_merge($ids, $elementIds);
 						}
 					}
@@ -397,28 +398,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 
 				if (count($ids))
 				{
-					if (strtolower($fieldType) === 'matrix')
-					{
-						$blockType      = sproutImport()->getValueByKey('destinationField.blockType', $definition);
-						$blockTypeField = sproutImport()->getValueByKey('destinationField.blockTypeField', $definition);
-
-						if ($blockType && $blockTypeField)
-						{
-							$fields[$name] = array(
-								'new1' => array(
-									'type'    => $blockType,
-									'enabled' => true,
-									'fields'  => array(
-										$blockTypeField => $ids
-									)
-								)
-							);
-						}
-					}
-					else
-					{
-						$fields[$name] = $ids;
-					}
+					$fields[$name] = $ids;
 				}
 				else
 				{
@@ -430,6 +410,11 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 		return $fields;
 	}
 
+	/**
+	 * @param $updateElement
+	 *
+	 * @return bool|BaseElementModel|null
+	 */
 	public function getModelByMatches($updateElement)
 	{
 		$modelName = $this->modelName;
@@ -442,6 +427,20 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 
 			if ($matchBy && $matchValue)
 			{
+				if (is_array($matchValue))
+				{
+					$matchValue = $matchValue[0];
+
+					if (count($matchValue) > 0)
+					{
+						$message = Craft::t('The updateElement key can only retrieve a single match. Array with multiple values was provided. Only the first value has been used to find a match: {matchValue}', array(
+							'matchValue' => $matchValue
+						));
+
+						SproutImportPlugin::log($message, LogLevel::Warning);
+					}
+				}
+
 				$criteria = craft()->elements->getCriteria($modelName);
 
 				// The following is critical to import/relate elements not enabled
@@ -490,28 +489,6 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @return array
-	 */
-	public function getChannelSections()
-	{
-		$selects  = array();
-		$sections = craft()->sections->getAllSections();
-		if (!empty($sections))
-		{
-			foreach ($sections as $section)
-			{
-				if ($section->type == 'single')
-				{
-					continue;
-				}
-				$selects[$section->handle] = $section->name;
-			}
-		}
-
-		return $selects;
-	}
-
-	/**
 	 * @param $model
 	 */
 	public function logErrorByModel($model)
@@ -523,7 +500,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 		// make error unique
 		$errorKey = serialize($model->getAttributes());
 
-		SproutImportPlugin::log(Craft::t('Errors via logErrorByModel'), LogLevel::Error);
+		SproutImportPlugin::log(Craft::t('Errors found on model while saving Element'), LogLevel::Error);
 
 		sproutImport()->addError($errorLog, $errorKey);
 	}

@@ -1,6 +1,5 @@
 {% extends "sproutimport/_layouts/base" %}
 {% import "_includes/forms" as forms %}
-{% import 'sproutimport/_includes/sproutcp' as sprout %}
 
 {% set title = 'Weed'|t %}
 
@@ -89,11 +88,4 @@
 
 {% endblock %}
 
-{% includeCssResource "sproutimport/css/sproutcp.css" %}
-
-{% includecss %}
-
-table.weed td:last-of-type {
-	text-align: right;
-}
-{% endincludecss %}
+{% includeCssResource "sproutimport/css/sproutimport.css" %}

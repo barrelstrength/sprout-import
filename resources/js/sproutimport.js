@@ -1,12 +1,10 @@
-if (typeof Craft.SproutImport === typeof undefined)
-{
+if (typeof Craft.SproutImport === typeof undefined) {
 	Craft.SproutImport = {};
 }
 
 Craft.SproutImport.Seed = {
 
-	init: function()
-	{
+	init: function() {
 		$('#elementType').change(function() {
 			Craft.SproutImport.Seed.selectElementTypeEvent();
 		});
@@ -16,14 +14,12 @@ Craft.SproutImport.Seed = {
 		});
 	},
 
-	selectElementTypeEvent: function()
-	{
+	selectElementTypeEvent: function() {
 		$('.element-options').hide();
 		$('.' + $('#elementType').val()).show();
 	},
 
-	selectSectionEvent: function()
-	{
+	selectSectionEvent: function() {
 		$('.section-options').hide();
 		$('.' + $('#sectionType').val()).show();
 	}

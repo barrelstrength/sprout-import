@@ -50,11 +50,11 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	 * @param       $model
 	 * @param array $settings
 	 *
-	 * @return BaseElementModel|null
+	 * @return mixed
 	 */
 	public function setModel($model, $settings = array())
 	{
-		$model = $this->processBeforeSave($model, $settings);
+		$model = $this->processUpdateElement($model, $settings);
 
 		if (isset($settings['attributes']))
 		{
@@ -62,45 +62,53 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 
 			$model->setAttributes($attributes);
 
-			// Allows author email to add as author of the entry
+			// Check for email and username values if authorId attribute
 			if (isset($attributes['authorId']))
 			{
-				if (is_array($attributes['authorId']) && !empty($attributes['authorId']['email']))
+				if ($authorId = $this->getAuthorId($attributes['authorId']))
 				{
-					$userEmail = $attributes['authorId']['email'];
-					$userModel = craft()->users->getUserByUsernameOrEmail($userEmail);
-
-					if ($userModel != null)
-					{
-						$authorId = $userModel->getAttribute('id');
-
-						$model->setAttribute('authorId', $authorId);
-					}
-				}
-				else
-				{
-					$userModel = craft()->users->getUserById($attributes['authorId']);
-				}
-
-				if ($userModel == null && isset($settings['settings']['defaultAuthorId']))
-				{
-					$defaultAuthorId = $settings['settings']['defaultAuthorId'];
-
-					$userModel = craft()->users->getUserById($defaultAuthorId);
-
-					$authorId = $userModel->getAttribute('id');
-
 					$model->setAttribute('authorId', $authorId);
 				}
+			}
 
-				if ($userModel == null)
+			// Check if we have defaults for any unset attributes
+			if (isset($settings['settings']['defaults']))
+			{
+				$defaults = $settings['settings']['defaults'];
+
+				foreach ($model->getAttributes() as $attribute => $value)
 				{
-					$message = Craft::t("Could not find Author ID or Email.");
+					if (isset($model->{$attribute}) && !$model->{$attribute})
+					{
+						// Check for email and username values if authorId attribute
+						if ($attribute == 'authorId' && isset($defaults['authorId']))
+						{
+							if ($authorId = $this->getAuthorId($defaults['authorId']))
+							{
+								$model->setAttribute('authorId', $authorId);
+							}
 
-					SproutImportPlugin::log($message, LogLevel::Error);
+							continue;
+						}
 
-					sproutImport()->addError($message, 'invalid-author');
+						if (isset($defaults[$attribute]))
+						{
+							$model->setAttribute($attribute, $defaults[$attribute]);
+						}
+					}
 				}
+			}
+
+			if ((isset($attributes['authorId']) OR
+					isset($settings['settings']['defaults']['authorId'])) &&
+				empty($model['authorId'])
+			)
+			{
+				$message = Craft::t("Could not find Author by ID, Email, or Username.");
+
+				SproutImportPlugin::log($message, LogLevel::Error);
+
+				sproutImport()->addError($message, 'invalid-author');
 			}
 		}
 
@@ -125,13 +133,9 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 					}
 				}
 
-				// @todo - when trying to import Sprout Forms Form Models,
-				// which do not have any fields or content, running this method kills the script
-				// moving the $related check to before the method runs, works.
 				if (isset($settings['content']['related']) && count($settings['content']['related']))
 				{
 					$related = $settings['content']['related'];
-					;
 					$fields = sproutImport()->elementImporter->resolveRelationships($related, $fields);
 
 					if (!$fields)
@@ -182,7 +186,7 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 	 *
 	 * @return mixed
 	 */
-	protected function processBeforeSave($model, $settings)
+	protected function processUpdateElement($model, $settings)
 	{
 		if (!isset($settings['settings']['updateElement']))
 		{
@@ -199,5 +203,24 @@ abstract class BaseSproutImportElementImporter extends BaseSproutImportImporter
 		}
 
 		return $model;
+	}
+
+	/**
+	 * @param $authorId
+	 *
+	 * @return mixed|null
+	 */
+	protected function getAuthorId($authorId)
+	{
+		if (is_int($authorId))
+		{
+			$userModel = craft()->users->getUserById($authorId);
+		}
+		else
+		{
+			$userModel = craft()->users->getUserByUsernameOrEmail($authorId);
+		}
+
+		return isset($userModel) ? $userModel->id : null;
 	}
 }

@@ -37,14 +37,13 @@ class UserSproutImportElementImporter extends BaseSproutImportElementImporter
 			}
 		}
 
-		return craft()->templates->render('sproutimport/_settings/user', array(
+		return craft()->templates->render('sproutimport/_integrations/user/settings', array(
 			'id'     => $this->getModelName(),
 			'groups' => $groupsSelect
 		));
 	}
 
 	/**
-	 * @todo - this is being called from the Mock Data service without the parameters: $fieldImporterClass->getMockData()
 	 * @param $settings
 	 */
 	public function getMockData($quantity, $settings)

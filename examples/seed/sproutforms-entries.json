@@ -1,0 +1,25 @@
+{%- set faker = craft.sproutImport.faker -%}
+[
+{%- for i in 0..10 %}
+  {
+    "@model": "SproutForms_Entry",
+    "attributes": {
+
+      "formId": 42,
+
+      "ipAddress": "{{ random([faker.ipv4,faker.ipv6]) }}",
+      "userAgent": "{{ faker.userAgent }}",
+      "dateCreated": "{{ faker.dateTimeBetween('-2 years', 'now')|date('Y-m-d h:m:s') }}",
+      "dateUpdated": "{{ faker.dateTimeBetween('-2 years', 'now')|date('Y-m-d h:m:s') }}"
+    },
+    "content": {
+      "title": "{{ faker.text(42) }}",
+      "fields": {
+        "fullName": "{{ faker.text(42) }}",
+        "email": "{{ faker.email }}",
+        "message": "{{ faker.text(42) }}"
+      }
+    }
+  }{% if not loop.last %},{% endif %}
+{%- endfor -%}
+]

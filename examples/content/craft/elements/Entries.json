@@ -1,0 +1,44 @@
+[
+  {
+    "@model": "EntryModel",
+    "attributes": {
+      "sectionId": 2,
+      "typeId": 2,
+      "authorId": 1,
+      "locale": "en_us",
+      "slug": "entry-slug",
+      "postDate": "2015-02-27 16:43:52",
+      "expiryDate": null,
+      "dateCreated": "2015-02-27 16:43:52",
+      "dateUpdated": "2015-02-27 16:51:42",
+      "enabled": true
+    },
+    "content": {
+      "title": "Entry title",
+      "fields": {
+        "body": "Body content"
+      }
+    }
+  },
+  {
+    "@model": "EntryModel",
+    "attributes": {
+      "sectionId": 2,
+      "typeId": 2,
+      "authorId": 1,
+      "locale": "en_us",
+      "slug": "entry-slug-two",
+      "postDate": "2015-02-27 16:43:52",
+      "expiryDate": null,
+      "dateCreated": "2015-02-27 16:43:52",
+      "dateUpdated": "2015-02-27 16:51:42",
+      "enabled": true
+    },
+    "content": {
+      "title": "Entry title two",
+      "fields": {
+        "body": "Body content two"
+      }
+    }
+  }
+]

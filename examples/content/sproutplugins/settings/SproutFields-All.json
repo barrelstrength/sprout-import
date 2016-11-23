@@ -1,0 +1,155 @@
+[
+	{
+		"@model": "FieldModel",
+		"groupId": 1,
+		"name": "Email Field Basic",
+		"handle": "emailFieldBasic",
+		"type": "SproutFields_Email",
+		"settings": {
+			"customPatternToggle": false,
+			"customPattern": "",
+			"customPatternErrorMessage": "",
+			"uniqueEmail": false
+		}
+	},
+	{
+		"@model": "FieldModel",
+		"groupId": 1,
+		"name": "Email Field - Unique",
+		"handle": "emailFieldUnique",
+		"type": "SproutFields_Email",
+		"settings": {
+			"customPatternToggle": false,
+			"customPattern": "",
+			"customPatternErrorMessage": "",
+			"uniqueEmail": true
+		}
+	},
+	{
+		"@model": "FieldModel",
+		"groupId": 1,
+		"name": "Email Field - Custom Pattern",
+		"handle": "emailFieldWithCustomPattern",
+		"type": "SproutFields_Email",
+		"settings": {
+			"customPatternToggle": true,
+			"customPattern": "(.*)@barrelstrengthdesign.com",
+			"customPatternErrorMessage": "Must use a barrelstrengthdesign.com email address",
+			"uniqueEmail": false
+		}
+	},
+	{
+		"@model": "FieldModel",
+		"groupId": 1,
+		"name": "Link Field",
+		"handle": "linkField",
+		"type": "SproutFields_Link",
+		"settings": {
+			"customPatternToggle": false,
+			"customPattern": "",
+			"customPatternErrorMessage": ""
+		}
+	},
+	{
+		"@model": "FieldModel",
+		"groupId": 1,
+		"name": "Link Field - Custom Pattern",
+		"handle": "linkFieldWithCustomPattern",
+		"type": "SproutFields_Link",
+		"settings": {
+			"customPatternToggle": true,
+			"customPattern": "http://twitter.com",
+			"customPatternErrorMessage": "Must be a Twitter URL"
+		}
+	},
+	{
+		"@model": "FieldModel",
+		"groupId": 1,
+		"name": "Phone Field Basic",
+		"handle": "phoneFieldBasic",
+		"type": "SproutFields_Phone",
+		"settings": {
+			"customPatternToggle": false,
+			"mask": "",
+			"customPatternErrorMessage": "",
+			"inputMask": false
+		}
+	},
+	{
+		"@model": "FieldModel",
+		"groupId": 1,
+		"name": "Phone Field with Mask",
+		"handle": "phoneFieldWithMask",
+		"type": "SproutFields_Phone",
+		"settings": {
+			"customPatternToggle": false,
+			"mask": "",
+			"customPatternErrorMessage": "",
+			"inputMask": true
+		}
+	},
+	{
+		"@model": "FieldModel",
+		"groupId": 1,
+		"name": "Phone Field - Custom Pattern",
+		"handle": "phoneFieldWithCustomPattern",
+		"type": "SproutFields_Phone",
+		"settings": {
+			"customPatternToggle": true,
+			"mask": "(###) ###-####",
+			"customPatternErrorMessage": "Get the phone format right, yo!",
+			"inputMask": false
+		}
+	},
+	{
+		"@model": "FieldModel",
+		"groupId": 1,
+		"name": "Hidden Field",
+		"handle": "hiddenField",
+		"type": "SproutFields_Hidden",
+		"settings": {
+			"value": "{{ craft.request.path }}"
+		}
+	},
+	{
+		"@model": "FieldModel",
+		"groupId": 1,
+		"name": "Invisible Field",
+		"handle": "invisibleField",
+		"type": "SproutFields_Invisible",
+		"settings": {
+			"value": "{{ craft.request.url }}"
+		}
+	},
+	{
+		"@model": "FieldModel",
+		"groupId": 1,
+		"name": "Email Select Field",
+		"handle": "emailSelectField",
+		"type": "SproutFields_EmailSelect",
+		"settings": {
+			"options": [
+				{
+					"label": "Sales",
+					"value": "sales@example.com"
+				},
+				{
+					"label": "Support",
+					"value": "support@example.com"
+				}
+			]
+		}
+	},
+	{
+		"@model": "FieldModel",
+		"groupId": 1,
+		"name": "Notes",
+		"handle": "notesFieldPrimary",
+		"type": "SproutFields_Notes",
+		"settings": {
+			"output": "markdown",
+			"style": "infoPrimaryDocumentation",
+			"instructions": "#Waaaa"
+		}
+	}
+]

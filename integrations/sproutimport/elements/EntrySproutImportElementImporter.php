@@ -64,9 +64,9 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 			'channel' => 'Channel'
 		);
 
-		$channels = sproutImport()->elementImporter->getChannelSections();
+		$channels = $this->getChannelSections();
 
-		return craft()->templates->render('sproutimport/_settings/entry', array(
+		return craft()->templates->render('sproutimport/_integrations/entry/settings', array(
 			'id'       => $this->getModelName(),
 			'sections' => $sections,
 			'channels' => $channels
@@ -214,5 +214,27 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 		}
 
 		return $fieldLayouts;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getChannelSections()
+	{
+		$selects  = array();
+		$sections = craft()->sections->getAllSections();
+		if (!empty($sections))
+		{
+			foreach ($sections as $section)
+			{
+				if ($section->type == 'single')
+				{
+					continue;
+				}
+				$selects[$section->handle] = $section->name;
+			}
+		}
+
+		return $selects;
 	}
 }

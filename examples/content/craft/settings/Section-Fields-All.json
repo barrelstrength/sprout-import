@@ -171,7 +171,7 @@
 													"handle": "sproutExamplePlainTextMatrixOne",
 													"instructions": "",
 													"type": "PlainText",
-													"settings": {
+													"typesettings": {
 														"placeholder": "",
 														"maxLength": null,
 														"multiline": false
@@ -188,7 +188,7 @@
 													"handle": "sproutExamplePlainTextMatrixTwo",
 													"instructions": "",
 													"type": "PlainText",
-													"settings": {
+													"typesettings": {
 														"placeholder": "",
 														"maxLength": null,
 														"multiline": false

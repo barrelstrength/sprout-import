@@ -1,11 +1,11 @@
 {%- set faker = craft.sproutImport.faker -%}
 {%- set paragraphs = "<p>" ~ faker.paragraphs(5)|join('</p><p>')|raw ~ "</p>" -%}
 [
-{%- for i in 0..97 %}
+{%- for i in 0..10 %}
   {
-    "type": "Entry",
+    "@model": "Entry",
     "attributes": {
-      
+
       "sectionId": 2,
       "typeId": 2,
       "authorId": 1,
@@ -19,9 +19,9 @@
       "enabled": true
     },
     "content": {
-      "title": "{{ faker.text(40) }}",
+      "title": "{{ faker.text(42) }}",
       "fields": {
-        "title": "{{ faker.text(40) }}",
+        "title": "{{ faker.text(42) }}",
         "body": "{{ paragraphs|raw }}",
         "categories": {{ random(["[4, 5]", "[4, 5, 6]", "[4]", "[6]", "[]"]) }}
       }
