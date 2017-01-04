@@ -17,6 +17,9 @@ class CategoriesSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	public function getMockData()
 	{
 		$settings = $this->model->settings;
+
+		if (!isset($settings['source'])) return;
+
 		$limit    = sproutImport()->mockData->getLimit($settings['limit'], 3);
 		$source   = $settings['source'];
 

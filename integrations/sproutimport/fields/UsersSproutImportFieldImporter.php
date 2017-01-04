@@ -17,6 +17,9 @@ class UsersSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	public function getMockData()
 	{
 		$settings = $this->model->settings;
+
+		if (!isset($settings['sources'])) return;
+
 		$sources  = $settings['sources'];
 
 		$groupIds = sproutImport()->mockData->getElementGroupIds($sources);

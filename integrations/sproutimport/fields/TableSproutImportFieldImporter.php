@@ -18,6 +18,8 @@ class TableSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	{
 		$settings = $this->model->settings;
 
+		if (!isset($settings['columns'])) return;
+
 		$columns = $settings['columns'];
 
 		$randomLength = rand(2, 5);

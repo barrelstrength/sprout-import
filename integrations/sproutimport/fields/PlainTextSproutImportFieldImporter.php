@@ -18,7 +18,7 @@ class PlainTextSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	{
 		$settings = $this->model->settings;
 
-		if ($settings != null && $settings['multiline'] == 1)
+		if ($settings != null && isset($settings['multiline']) && $settings['multiline'] == 1)
 		{
 			$lines      = rand(1, 3);
 			$paragraphs = $this->fakerService->paragraphs($lines);

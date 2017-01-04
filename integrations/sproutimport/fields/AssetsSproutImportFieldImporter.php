@@ -17,6 +17,9 @@ class AssetsSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	public function getMockData()
 	{
 		$settings = $this->model->settings;
+
+		if (!isset($settings['sources'])) return;
+
 		$limit    = sproutImport()->mockData->getLimit($settings['limit'], 3);
 		$sources  = $settings['sources'];
 

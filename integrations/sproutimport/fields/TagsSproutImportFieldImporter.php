@@ -18,6 +18,8 @@ class TagsSproutImportFieldImporter extends BaseSproutImportFieldImporter
 	{
 		$settings = $this->model->settings;
 
+		if (!isset($settings['source'])) return;
+
 		$source = $settings['source'];
 
 		$groupId = sproutImport()->mockData->getElementGroupId($source);
