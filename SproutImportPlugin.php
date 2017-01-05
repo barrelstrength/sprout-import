@@ -159,7 +159,6 @@ class SproutImportPlugin extends BasePlugin
 			new CategorySproutImportElementImporter(),
 			new EntrySproutImportElementImporter(),
 			new TagSproutImportElementImporter(),
-			new UserSproutImportElementImporter(),
 
 			// Settings Importers
 			new EntryTypeSproutImportSettingsImporter(),
@@ -183,9 +182,9 @@ class SproutImportPlugin extends BasePlugin
 			new CategoriesSproutImportFieldImporter(),
 			new TagsSproutImportFieldImporter(),
 			new AssetsSproutImportFieldImporter(),
-			new UsersSproutImportFieldImporter(),
 			new MatrixSproutImportFieldImporter()
 		);
+
 
 		// Check if craft commerce plugin is installed and enabled
 		$commercePlugin = craft()->plugins->getPlugin('commerce', false);
@@ -201,6 +200,12 @@ class SproutImportPlugin extends BasePlugin
 			);
 
 			$importers = array_merge($importers, $craftCommerceImporters);
+		}
+
+		if (craft()->getEdition() == Craft::Pro)
+		{
+			$importers[] = new UserSproutImportElementImporter();
+			$importers[] = new UsersSproutImportFieldImporter();
 		}
 
 		return $importers;
@@ -229,9 +234,13 @@ class SproutImportPlugin extends BasePlugin
 			"Commerce_OrderSproutImportElementImporter",
 			"Commerce_ProductSproutImportElementImporter",
 			"EntrySproutImportElementImporter",
-			"TagSproutImportElementImporter",
-			"UserSproutImportElementImporter"
+			"TagSproutImportElementImporter"
 		);
+
+		if (craft()->getEdition() == Craft::Pro)
+		{
+			$elements[] = "UserSproutImportElementImporter";
+		}
 
 		foreach ($elements as $element)
 		{
@@ -274,9 +283,13 @@ class SproutImportPlugin extends BasePlugin
 			"RichTextSproutImportFieldImporter",
 			"TableSproutImportFieldImporter",
 			"TagsSproutImportFieldImporter",
-			"UsersSproutImportFieldImporter",
 			"Commerce_ProductsSproutImportFieldImporter"
 		);
+
+		if (craft()->getEdition() == Craft::Pro)
+		{
+			$fields[] = 	"UsersSproutImportFieldImporter";
+		}
 
 		foreach ($fields as $field)
 		{
