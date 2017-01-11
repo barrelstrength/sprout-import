@@ -29,12 +29,13 @@
   <nav class="last">
     <ul>
       <li><a href="{{ url('sproutimport/settings/general') }}" {% if selectedSidebarItem == 'general'
-        %}class="sel"{% endif %}>General</a></li>
+        %}class="sel"{% endif %}>{{ "General"|t }}</a></li>
 
-      <li class="heading"><span>Integrations</span></li>
+      <li class="heading"><span>{{ "Integrations"|t }}</span></li>
 
       <li><a href="{{ url('sproutimport/settings/seo') }}" {% if selectedSidebarItem == 'seo'
         %}class="sel"{% endif %}>SEO</a>
+
       </li>
     </ul>
   </nav>
