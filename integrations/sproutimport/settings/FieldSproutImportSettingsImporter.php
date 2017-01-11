@@ -43,10 +43,15 @@ class FieldSproutImportSettingsImporter extends BaseSproutImportSettingsImporter
 			{
 				if ($fieldModel->settings == null)
 				{
-					$defaultSettings = $field->getSettings()->getAttributes();
+					$fieldTypes = craft()->fields->getAllFieldTypes();
 
-					// Save default settings if no settings are provided
-					$fieldModel->settings = $defaultSettings;
+					if (isset($fieldTypes[$fieldModel->type]))
+					{
+						$defaultSettings = $fieldTypes[$fieldModel->type]->getSettings();
+
+						// Save default settings if no settings are provided
+						$fieldModel->settings = $defaultSettings;
+					}
 				}
 
 				// Create a Field Group if one isn't identified

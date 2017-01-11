@@ -102,6 +102,11 @@ class SectionSproutImportSettingsImporter extends BaseSproutImportSettingsImport
 			));
 		}
 
+		if ($urlFormat == null)
+		{
+			sproutImport()->addError(Craft::t('Invalid urlFormat value. E.g. {"en_us": "blog/{slug}"}'), 'section-urlFormat');
+		}
+
 		$model->setLocales($locales);
 
 		$this->model = $model;
