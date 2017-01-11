@@ -6,33 +6,27 @@ class SproutImport_GenerateController extends BaseController
 {
 	public function actionGenerateRedirectJson()
 	{
-		$csv = craft()->request->getPost('pastedCSV');
+		$pastedCSV = craft()->request->getPost('pastedCSV');
 
-		if (empty($csv))
+		$importableJson = $this->convertToJson($pastedCSV);
+
+		if (!empty($importableJson))
 		{
-			craft()->userSession->setError(Craft::t('CSV box is empty.'));
+			craft()->userSession->setNotice(Craft::t('Redirect JSON generated.'));
 
 			craft()->urlManager->setRouteVariables(array(
-				'csvError' => 1
-			));
-		}
-		$json = $this->convertToJson($csv);
-
-		if (!empty($json))
-		{
-			craft()->userSession->setNotice(Craft::t('CSV converted.'));
-
-			craft()->urlManager->setRouteVariables(array(
-				'json' => $json
+				'importableJson' => $importableJson
 			));
 		}
 		else
 		{
-			craft()->userSession->setError(Craft::t('Couldn’t not convert to JSON. Make sure you input the right format.'));
+			craft()->userSession->setError(Craft::t('Unable to convert data.'));
 
 			craft()->urlManager->setRouteVariables(array(
-				'csvError' => 1,
-				'pastedCSV' => $csv
+				'errors' => array(
+					0 => Craft::t("CSV data not provided or using incorrect format.")
+				),
+				'pastedCSV' => $pastedCSV
 			));
 		}
 	}

@@ -18,7 +18,7 @@
 			instructions: "Paste your Redirects in comma-delimited CSV format to convert them into Sprout Import JSON Format."|t,
 			name: 'pastedCSV',
 			value: pastedCSV ?? null,
-			errors: csvError ?? null,
+			errors: errors ?? null,
 			rows: 20,
 			first: true
 		}) }}
@@ -27,12 +27,12 @@
 			<input class="btn submit" type="submit" value="{{ 'Generate JSON'|t }}">
 		</div>
 
-		{% if json is defined %}
+		{% if importableJson is defined %}
 			{{ forms.textareaField({
 				label: "Redirect Element JSON"|t,
 				instructions: "Use the JSON generated below to import your Redirects on the Sprout Import->Import tab."|t,
 				name: 'json',
-				value: json ?? null,
+				value: importableJson ?? null,
 				rows: 20,
 				first: true
 			}) }}
