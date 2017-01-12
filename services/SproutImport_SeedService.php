@@ -26,12 +26,9 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	 *
 	 * @return bool
 	 */
-	public function trackSeed($itemId = null, $importerClass = null)
+	public function trackSeed(SproutImport_SeedModel $model)
 	{
-		if (!$itemId || !$importerClass)
-		{
-			return false;
-		}
+		$itemId = $model->itemId;
 
 		$record = SproutImport_SeedRecord::model()->findByAttributes(array('itemId' => $itemId));
 
@@ -40,7 +37,9 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		{
 			$record                = new SproutImport_SeedRecord;
 			$record->itemId        = $itemId;
-			$record->importerClass = $importerClass;
+			$record->importerClass = $model->importerClass;
+			$record->type          = $model->type;
+			$record->details       = $model->details;
 
 			$record->save();
 		}
@@ -134,5 +133,16 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		{
 			return "0";
 		}
+	}
+
+	public function getSeeds()
+	{
+		$seeds = craft()->db->createCommand()
+			->select('GROUP_CONCAT(id) ids, type, details, COUNT(1) as total, DATE_FORMAT(dateCreated, "%b %d %Y %h:%i %p") as date')
+			->from('sproutimport_seeds')
+			->group('date, details')
+			->queryAll();
+
+		return $seeds;
 	}
 }

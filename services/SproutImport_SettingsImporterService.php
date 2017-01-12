@@ -40,10 +40,7 @@ class SproutImport_SettingsImporterService extends BaseApplicationComponent
 
 					sproutImport()->onAfterImportSetting($event);
 
-					if ($seed)
-					{
-						sproutImport()->seed->trackSeed($model->id, $importerModel);
-					}
+					return $model;
 				}
 			}
 			catch (\Exception $e)

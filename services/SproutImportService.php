@@ -195,6 +195,30 @@ class SproutImportService extends BaseApplicationComponent
 				{
 					$result = sproutImport()->settingsImporter->saveSetting($row, $seed);
 				}
+
+
+				switch ($filename)
+				{
+					case "pastedJson":
+						$type = 'Copy/Paste';
+						break;
+					default:
+						$type = 'File';
+				}
+
+				if ($seed && isset($result->id))
+				{
+					$seedAttributes = array(
+						'itemId'        => $result->id,
+						'importerClass' => $model,
+						'type'          => $type,
+						'details'       => $filename
+					);
+
+					$seedModel = SproutImport_SeedModel::populateModel($seedAttributes);
+
+					sproutImport()->seed->trackSeed($seedModel);
+				}
 			}
 		}
 

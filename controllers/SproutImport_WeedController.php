@@ -10,12 +10,14 @@ class SproutImport_WeedController extends BaseController
 	 */
 	public function actionWeedIndexTemplate()
 	{
+		$seeds = sproutImport()->seed->getSeeds();
+
 		$elementImporters = sproutImport()->getSproutImportImporters();
 
 		craft()->templates->includeCssResource('sproutimport/css/sproutimport.css');
 
-		$this->renderTemplate('sproutimport/weed', array(
-			'elementImporters' => $elementImporters
+		$this->renderTemplate('sproutimport/weeds', array(
+			'seeds' => $seeds
 		));
 	}
 

@@ -30,14 +30,7 @@ class SproutImport_SeedController extends BaseController
 
 			foreach ($defaultSeedImporters as $importer)
 			{
-				if ($importer->isElement())
-				{
-					$title = $importer->getName();
-				}
-				else
-				{
-					$title = $importer->getName();
-				}
+				$title = $importer->getName();
 
 				$classId = 'SproutImport-' . $importer->getModelName();
 
@@ -58,14 +51,7 @@ class SproutImport_SeedController extends BaseController
 			{
 				foreach ($importer as $plugin => $importerClass)
 				{
-					if ($importerClass->isElement())
-					{
-						$title = $importerClass->getName();
-					}
-					else
-					{
-						$title = $importerClass->getName();
-					}
+					$title = $importerClass->getName();
 
 					$classId = $plugin . '-' . $importerClass->getModelName();
 
@@ -111,7 +97,16 @@ class SproutImport_SeedController extends BaseController
 			{
 				foreach ($ids as $id)
 				{
-					sproutImport()->seed->trackSeed($id, $elementType);
+					$attributes = array(
+						'itemId'        => $id,
+						'importerClass' => $elementType,
+						'type'          => 'Seed',
+						'details'       => $importerClass->getName()
+					);
+
+					$seedModel = SproutImport_SeedModel::populateModel($attributes);
+
+					sproutImport()->seed->trackSeed($seedModel);
 				}
 
 				craft()->userSession->setNotice(Craft::t('Elements generated.'));

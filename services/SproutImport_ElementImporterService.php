@@ -215,12 +215,7 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 
 			sproutImport()->onAfterImportElement($event);
 
-			if ($seed)
-			{
-				sproutImport()->seed->trackSeed($model->id, $modelName);
-			}
-
-			return $model->id;
+			return $model;
 		}
 	}
 
