@@ -55,7 +55,8 @@ class UserSproutImportElementImporter extends BaseSproutImportElementImporter
 		{
 			for ($i = 1; $i <= $quantity; $i++)
 			{
-				$saveIds[] = $this->generateUser($userGroup);
+				$model = $this->generateUser($userGroup);
+				$saveIds[] = $model->id;
 			}
 		}
 

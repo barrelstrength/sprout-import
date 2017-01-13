@@ -65,7 +65,8 @@ class TagSproutImportElementImporter extends BaseSproutImportElementImporter
 		{
 			for ($i = 1; $i <= $quantity; $i++)
 			{
-				$saveIds[] = $this->generateTag($tagGroup);
+				$model = $this->generateTag($tagGroup);
+				$saveIds[] = $model->id;
 			}
 		}
 

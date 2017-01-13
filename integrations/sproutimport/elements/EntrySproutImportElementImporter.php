@@ -119,12 +119,16 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 						$entryParams['entryId'] = null;
 					}
 
-					$id = $this->generateEntry($entryParams);
+					$model = $this->generateEntry($entryParams);
 
-					// Avoid duplication of saveIds
-					if (!in_array($id, $saveIds) && $id !== false)
+					if (isset($model->id))
 					{
-						$saveIds[] = $id;
+						$id = $model->id;
+						// Avoid duplication of saveIds
+						if (!in_array($id, $saveIds) && $id !== false)
+						{
+							$saveIds[] = $id;
+						}
 					}
 				}
 			}

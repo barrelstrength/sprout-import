@@ -67,7 +67,8 @@ class CategorySproutImportElementImporter extends BaseSproutImportElementImporte
 		{
 			for ($i = 1; $i <= $quantity; $i++)
 			{
-				$saveIds[] = $this->generateCategory($categoryGroup);
+				$model = $this->generateCategory($categoryGroup);
+				$saveIds[] = $model->id;
 			}
 		}
 

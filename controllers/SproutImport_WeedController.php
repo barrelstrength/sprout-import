@@ -61,4 +61,64 @@ class SproutImport_WeedController extends BaseController
 			}
 		}
 	}
+
+	public function actionProcessWeed()
+	{
+		$submit = craft()->request->getPost('submit');
+
+		$isKeep = true;
+
+		if ($submit == 'Weed' || $submit == 'Weed All')
+		{
+			$isKeep = false;
+		}
+
+		$seeds = array();
+
+		$idsString  = craft()->request->getPost('ids');
+
+		if ($idsString != null && $idsString != '*')
+		{
+			$ids = explode(',', $idsString);
+
+			$seeds = sproutImport()->seed->getSeedsByIds($ids);
+		}
+
+		if ($idsString == '*')
+		{
+			$seeds = sproutImport()->seed->getAllSeeds();
+		}
+
+		if (!empty($seeds))
+		{
+			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
+
+			foreach ($seeds as $seed)
+			{
+				try
+				{
+					if (!$isKeep)
+					{
+						// we're just appending 'Model' and adding it to the array here...
+						$row['@model'] = $seed['importerClass'] . 'Model';
+
+						$modelName = sproutImport()->getImporterModelName($row);
+						$importer = sproutImport()->getImporterByModelName($modelName, $row);
+						$importer->deleteById($seed['itemId']);
+					}
+
+					sproutImport()->seed->deleteSeedById($seed['id']);
+				}
+				catch (\Exception $e)
+				{
+					SproutImportPlugin::log($e->getMessage());
+				}
+			}
+
+			if ($transaction && $transaction->active)
+			{
+				$transaction->commit();
+			}
+		}
+	}
 }
