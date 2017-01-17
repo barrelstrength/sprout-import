@@ -53,49 +53,40 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	 * @return bool
 	 * @throws \CDbException
 	 */
-	public function weed($handle = '', $isKeep = false)
+	public function weed($seeds = array(), $isKeep = false)
 	{
-		$command = craft()->db->createCommand();
-		$command = $command->select('id, itemId, importerClass');
-
-		if ($handle != "*")
-		{
-			$command = $command->andWhere("importerClass = '$handle'");
-		}
-
-		$command     = $command->from('sproutimport_seeds');
-		$itemsToWeed = $command->queryAll();
-
 		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 
-		foreach ($itemsToWeed as $row)
+		if (!empty($seeds))
 		{
-			try
+			foreach ($seeds as $seed)
 			{
-				if (!$isKeep)
+				try
 				{
-					// we're just appending 'Model' and adding it to the array here...
-					$row['@model'] = $row['importerClass'] . 'Model';
+					if (!$isKeep)
+					{
+						$row = array();
+						// we're just appending 'Model' and adding it to the array here...
+						$row['@model'] = $seed['importerClass'] . 'Model';
 
-					$modelName = sproutImport()->getImporterModelName($row);
-					$importer  = sproutImport()->getImporterByModelName($modelName, $row);
-					$importer->deleteById($row['itemId']);
+						$modelName = sproutImport()->getImporterModelName($row);
+						$importer = sproutImport()->getImporterByModelName($modelName, $row);
+						$importer->deleteById($seed['itemId']);
+					}
+
+					sproutImport()->seed->deleteSeedById($seed['id']);
 				}
-
-				$this->deleteSeedById($row['id']);
+				catch (\Exception $e)
+				{
+					SproutImportPlugin::log($e->getMessage());
+				}
 			}
-			catch (\Exception $e)
+
+			if ($transaction && $transaction->active)
 			{
-				SproutImportPlugin::log($e->getMessage());
+				$transaction->commit();
 			}
 		}
-
-		if ($transaction && $transaction->active)
-		{
-			$transaction->commit();
-		}
-
-		return true;
 	}
 
 	/**
