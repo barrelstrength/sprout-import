@@ -1,7 +1,6 @@
 {% extends "sproutimport/_layouts/base" %}
 {% import "_includes/forms" as forms %}
 {% import 'sproutimport/_includes/sproutcp' as sprout %}
-{% includeCssResource "sproutimport/css/sproutcp.css" %}
 
 {% set title = 'Weed'|t %}
 
@@ -17,20 +16,23 @@
 
 				<table class="weed data fullwidth">
 					<tr>
-						<th class="date">Date Imported</th>
-						<th class="type">Import Type</th>
-						<th class="seeds">Details</th>
-						<th class="seeds">Items Imported</th>
+						<th class="date">{{ "Import Date"|t }}</th>
+						<th class="seeds">{{ "Total"|t }}</th>
+						<th class="type">{{ "Type"|t }}</th>
 						<th class="options">&nbsp;</th>
 					</tr>
 
 						{% for seed in seeds %}
 							<tr>
-								<td>{{ seed['date'] }}</td>
-								<td>{{ seed['type'] }}</td>
-								<td>{{ seed['details'] }}</td>
+								<td>{{ seed['dateCreated']|date('M d, Y h:i A') }}</td>
 								<td>{{ seed['total'] }}</td>
-								<td class="options">
+								<td>
+									{{ seed['type'] }}
+									<span class="info sprout-info">
+										{{ seed['details'] }}
+									</span>
+								</td>
+								<td>
 									<form method="post" accept-charset="UTF-8">
 										{{ getCsrfInput() }}
 										<input type="hidden" name="action" value="sproutImport/weed/processWeed">
@@ -91,4 +93,5 @@
 
 {% endblock %}
 
+{% includeCssResource "sproutimport/css/sproutcp.css" %}
 {% includeCssResource "sproutimport/css/sproutimport.css" %}

@@ -129,9 +129,10 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	public function getSeeds()
 	{
 		$seeds = craft()->db->createCommand()
-			->select('GROUP_CONCAT(id) ids, type, details, COUNT(1) as total, DATE_FORMAT(dateCreated, "%b %d %Y %h:%i %p") as date')
+			->select('GROUP_CONCAT(id) ids, type, details, COUNT(1) as total, dateCreated as dateCreated')
 			->from('sproutimport_seeds')
-			->group('date, details')
+			->group('dateCreated, details')
+			->order('dateCreated DESC')
 			->queryAll();
 
 		return $seeds;

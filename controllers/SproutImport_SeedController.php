@@ -93,6 +93,13 @@ class SproutImport_SeedController extends BaseController
 
 			$ids = $importerClass->getMockData($quantity, $settings);
 
+			$weedMessage = '{quantity} {elementType} Element';
+
+			if ($quantity > 1)
+			{
+				$weedMessage = '{quantity} {elementType} Elements';
+			}
+
 			if (!empty($ids))
 			{
 				foreach ($ids as $id)
@@ -100,8 +107,11 @@ class SproutImport_SeedController extends BaseController
 					$attributes = array(
 						'itemId'        => $id,
 						'importerClass' => $elementType,
-						'type'          => 'Seed',
-						'details'       => $importerClass->getName()
+						'type'          => Craft::t('Seed'),
+						'details'       => Craft::t($weedMessage, array(
+							'quantity'    => $quantity,
+							'elementType' => $elementType
+						))
 					);
 
 					$seedModel = SproutImport_SeedModel::populateModel($attributes);
