@@ -84,7 +84,7 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 	 */
 	public function getMockData($quantity, $settings)
 	{
-		$saveIds       = array();
+		$data       = array();
 		$sectionHandle = $settings['channel'];
 
 		$section    = craft()->sections->getSectionByHandle($sectionHandle);
@@ -119,9 +119,9 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 						$entryParams['entryId'] = null;
 					}
 
-					$model = $this->generateEntry($entryParams);
+					$data[] = $this->generateEntry($entryParams);
 
-					if (isset($model->id))
+/*					if (isset($model->id))
 					{
 						$id = $model->id;
 						// Avoid duplication of saveIds
@@ -129,12 +129,12 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 						{
 							$saveIds[] = $id;
 						}
-					}
+					}*/
 				}
 			}
 		}
 
-		return $saveIds;
+		return $data;
 	}
 
 	/**
@@ -178,7 +178,8 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 			$data['settings']['updateElement']['matchCriteria'] = array("section" => $entryParams['sectionHandle']);
 		}
 
-		return sproutImport()->elementImporter->saveElement($data);
+		//return sproutImport()->elementImporter->saveElement($data);
+		return $data;
 	}
 
 	public function getAllFieldHandles()

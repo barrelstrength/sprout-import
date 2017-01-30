@@ -25,6 +25,18 @@ class SproutImport_TasksService extends BaseApplicationComponent
 		));
 	}
 
+	public function createSeedTasks(array $tasks)
+	{
+		if (!count($tasks))
+		{
+			throw new Exception(Craft::t('Unable to create import task. No tasks found.'));
+		}
+
+		return craft()->tasks->createTask('SproutImport_Seed', Craft::t("Seeding data."), array(
+			'seeds' => $tasks
+		));
+	}
+
 	/**
 	 * Create the tasks that will import our posted data
 	 *

@@ -86,6 +86,37 @@ class SproutImport_SeedController extends BaseController
 		{
 			$namespace = 'Craft\\' . $elementType . 'SproutImportElementImporter';
 
+			$seedTasksAtrributes = array(
+				'elementType' => $elementType,
+				'batch'       => 2, // temp
+				'quantity'    => $quantity,
+				'settings'    => $settings
+			);
+
+			$seedTaskModel = SproutImport_SeedTasksModel::populateModel($seedTasksAtrributes);
+
+			$seedTasks = sproutImport()->seed->getSeedTasks($seedTaskModel);
+
+			if (!empty($seedTasks))
+			{
+				try
+				{
+					sproutImport()->tasks->createSeedTasks($seedTasks);
+
+					craft()->userSession->setNotice(Craft::t('Files queued for seeds. Total: {tasks}', array(
+						'tasks' => count($seedTasks)
+					)));
+
+					$this->redirectToPostedUrl();
+				}
+				catch (\Exception $e)
+				{
+					craft()->userSession->setError($e->getMessage());
+
+					SproutImportPlugin::log($e->getMessage());
+				}
+			}
+			Craft::dd('stop don');
 			/**
 			 * @var BaseSproutImportElementImporter $importerClass
 			 */

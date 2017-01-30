@@ -148,4 +148,39 @@ class SproutImport_SeedService extends BaseApplicationComponent
 
 		return $seeds;
 	}
+
+	public function getSeedTasks(SproutImport_SeedTasksModel $seedTasksModel)
+	{
+		$quantity = $seedTasksModel->quantity;
+		$batch    = $seedTasksModel->batch;
+		$settings = $seedTasksModel->settings;
+		$elementType = $seedTasksModel->elementType;
+
+		$namespace = 'Craft\\' . $elementType . 'SproutImportElementImporter';
+		/**
+		 * @var BaseSproutImportElementImporter $importerClass
+		 */
+		$importerClass = new $namespace;
+
+		$seedTasks = array();
+
+		if ($quantity > $batch)
+		{
+			$steps = floor($quantity / $batch);
+
+			$mod = $quantity % $batch;
+
+			for ($i = 1; $i <= $steps; $i++)
+			{
+				$seedTasks[] = $importerClass->getMockData($batch, $settings);
+			}
+
+			if (count($mod))
+			{
+				$seedTasks[] = $importerClass->getMockData($mod, $settings);
+			}
+		}
+
+		return $seedTasks;
+	}
 }
