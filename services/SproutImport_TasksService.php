@@ -12,7 +12,7 @@ class SproutImport_TasksService extends BaseApplicationComponent
 	 * @throws Exception
 	 * @return TaskModel
 	 */
-	public function createImportTasks(array $tasks, $seed = false)
+	public function createImportTasks(array $tasks, $seed = false, array $type)
 	{
 		if (!count($tasks))
 		{
@@ -21,11 +21,12 @@ class SproutImport_TasksService extends BaseApplicationComponent
 
 		return craft()->tasks->createTask('SproutImport_Import', Craft::t("Importing data."), array(
 			'files' => $tasks,
-			'seed'  => $seed
+			'seed'  => $seed,
+			'type'  => $type
 		));
 	}
 
-	public function createSeedTasks(array $tasks)
+	public function createSeedTasks(array $tasks, array $type)
 	{
 		if (!count($tasks))
 		{
@@ -33,7 +34,8 @@ class SproutImport_TasksService extends BaseApplicationComponent
 		}
 
 		return craft()->tasks->createTask('SproutImport_Seed', Craft::t("Seeding data."), array(
-			'seeds' => $tasks
+			'seeds' => $tasks,
+			'type'  => $type
 		));
 	}
 

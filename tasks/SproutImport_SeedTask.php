@@ -17,7 +17,8 @@ class SproutImport_SeedTask extends BaseTask
 	protected function defineSettings()
 	{
 		return array(
-			'seeds' => AttributeType::Mixed
+			'seeds' => AttributeType::Mixed,
+			'type'  => AttributeType::Mixed
 		);
 	}
 
@@ -39,14 +40,25 @@ class SproutImport_SeedTask extends BaseTask
 		craft()->config->maxPowerCaptain();
 
 		$seeds = $this->getSettings()->getAttribute('seeds');
+		$type  = $this->getSettings()->getAttribute('type');
 
 		$elements  = $step ? $seeds[$step] : $seeds[0];
 
 		try
 		{
-			/*$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
+			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 
-			sproutImport()->save($elements);
+			$details = $type['details'];
+
+			$weedModelAttributes = array(
+				'seed'    => true,
+				'type'    => $type['type'],
+				'details' => $details
+			);
+
+			$weedModel = SproutImport_WeedModel::populateModel($weedModelAttributes);
+
+			sproutImport()->save($elements, $weedModel);
 
 			$errors = sproutImport()->getErrors();
 
@@ -65,8 +77,7 @@ class SproutImport_SeedTask extends BaseTask
 			{
 				$transaction->commit();
 			}
-			*/
-			SproutImportPlugin::log("seed steps: " . $step);
+
 			return true;
 		}
 		catch (\Exception $e)

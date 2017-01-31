@@ -17,6 +17,11 @@ class SproutImport_ImportController extends BaseController
 
 		$count = 0;
 
+		$type = array(
+			'type' => 'File',
+			'details' => ''
+		);
+
 		if (count($files))
 		{
 			$folderPath = sproutImport()->createTempFolder();
@@ -79,13 +84,16 @@ class SproutImport_ImportController extends BaseController
 					'pastedJson' => $pastedJsonString
 				));
 			}
+
+			$type['type']    = 'pastedJson';
+			$type['details'] = 'Copy/Paste';
 		}
 
 		if (count($tasks))
 		{
 			try
 			{
-				sproutImport()->tasks->createImportTasks($tasks, $seed);
+				sproutImport()->tasks->createImportTasks($tasks, $seed, $type);
 
 				craft()->userSession->setNotice(Craft::t('Files queued for import. Total: {tasks}', array(
 					'tasks' => count($tasks)

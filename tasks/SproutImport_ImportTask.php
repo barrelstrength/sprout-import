@@ -18,7 +18,8 @@ class SproutImport_ImportTask extends BaseTask
 	{
 		return array(
 			'files' => AttributeType::Mixed,
-			'seed'  => AttributeType::Bool
+			'seed'  => AttributeType::Bool,
+			'type'  => AttributeType::Mixed,
 		);
 	}
 
@@ -40,6 +41,7 @@ class SproutImport_ImportTask extends BaseTask
 		craft()->config->maxPowerCaptain();
 
 		$seed = $this->getSettings()->getAttribute('seed');
+		$type = $this->getSettings()->getAttribute('type');
 
 		$files = $this->getSettings()->getAttribute('files');
 		$data  = $step ? $files[$step] : $files[0];
@@ -51,10 +53,25 @@ class SproutImport_ImportTask extends BaseTask
 		{
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 
-			// remove any initial slash from the filename
-			$filename = ($file != 'pastedJson') ? substr($file, strrpos($file, '/') + 1) : $file;
+			$details = $type['details'];
 
-			sproutImport()->save($elements, $seed, $filename);
+			if (empty($details))
+			{
+				// remove any initial slash from the filename
+				$filename = substr($file, strrpos($file, '/') + 1);
+
+				$details = $filename;
+			}
+
+			$weedModelAttributes = array(
+				'seed'    => $seed,
+				'type'    => $type['type'],
+				'details' => $details
+			);
+
+			$weedModel = SproutImport_WeedModel::populateModel($weedModelAttributes);
+
+			sproutImport()->save($elements, $weedModel);
 
 			IOHelper::deleteFile($file);
 

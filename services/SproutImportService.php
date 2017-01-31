@@ -170,10 +170,9 @@ class SproutImportService extends BaseApplicationComponent
 	 * @throws \CDbException
 	 * @throws \Exception
 	 */
-	public function save(array $rows, $seed = false, $filename = '')
+	public function save(array $rows, SproutImport_WeedModel $weedModel = null)
 	{
 		$result         = "";
-		$this->filename = $filename;
 
 		if (!empty($rows))
 		{
@@ -189,35 +188,28 @@ class SproutImportService extends BaseApplicationComponent
 
 				if ($this->isElementType($model))
 				{
-					$result = sproutImport()->elementImporter->saveElement($row, $seed);
+					$result = sproutImport()->elementImporter->saveElement($row);
 				}
 				else
 				{
-					$result = sproutImport()->settingsImporter->saveSetting($row, $seed);
+					$result = sproutImport()->settingsImporter->saveSetting($row);
 				}
 
-
-				switch ($filename)
+				if ($weedModel != null)
 				{
-					case "pastedJson":
-						$type = 'Copy/Paste';
-						break;
-					default:
-						$type = 'File';
-				}
+					if ($weedModel->seed == true && isset($result->id))
+					{
+						$seedAttributes = array(
+							'itemId'        => $result->id,
+							'importerClass' => $model,
+							'type'          => $weedModel->type,
+							'details'       => $weedModel->details
+						);
 
-				if ($seed && isset($result->id))
-				{
-					$seedAttributes = array(
-						'itemId'        => $result->id,
-						'importerClass' => $model,
-						'type'          => $type,
-						'details'       => $filename
-					);
+						$seedModel = SproutImport_SeedModel::populateModel($seedAttributes);
 
-					$seedModel = SproutImport_SeedModel::populateModel($seedAttributes);
-
-					sproutImport()->seed->trackSeed($seedModel);
+						sproutImport()->seed->trackSeed($seedModel);
+					}
 				}
 			}
 		}

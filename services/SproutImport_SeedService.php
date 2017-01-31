@@ -164,7 +164,12 @@ class SproutImport_SeedService extends BaseApplicationComponent
 
 		$seedTasks = array();
 
-		if ($quantity > $batch)
+		if ($batch > $quantity)
+		{
+			$batch = $quantity;
+		}
+
+		if ($quantity > $batch || $quantity == $batch)
 		{
 			$steps = floor($quantity / $batch);
 
@@ -175,7 +180,7 @@ class SproutImport_SeedService extends BaseApplicationComponent
 				$seedTasks[] = $importerClass->getMockData($batch, $settings);
 			}
 
-			if (count($mod))
+			if ($mod > 0)
 			{
 				$seedTasks[] = $importerClass->getMockData($mod, $settings);
 			}
