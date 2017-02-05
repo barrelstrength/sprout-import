@@ -5,12 +5,14 @@ namespace Craft;
 class SproutImport_TasksService extends BaseApplicationComponent
 {
 	/**
-	 * Create the tasks that will import our user-provided data
+	 * Create the tasks that will import the user-provided data
 	 *
 	 * @param array $tasks
+	 * @param bool  $seed
+	 * @param array $type
 	 *
-	 * @throws Exception
 	 * @return TaskModel
+	 * @throws Exception
 	 */
 	public function createImportTasks(array $tasks, $seed = false, array $type)
 	{
@@ -26,6 +28,15 @@ class SproutImport_TasksService extends BaseApplicationComponent
 		));
 	}
 
+	/**
+	 * Create the tasks that will import the Seed Data
+	 *
+	 * @param array $tasks
+	 * @param array $type
+	 *
+	 * @return TaskModel
+	 * @throws Exception
+	 */
 	public function createSeedTasks(array $tasks, array $type)
 	{
 		if (!count($tasks))
@@ -90,7 +101,9 @@ class SproutImport_TasksService extends BaseApplicationComponent
 				'elements' => $tasks
 			));
 
-			craft()->userSession->setNotice(Craft::t('({tasks}) Tasks queued successfully.', array('tasks' => count($tasks))));
+			craft()->userSession->setNotice(Craft::t('({tasks}) Tasks queued successfully.', array(
+				'tasks' => count($tasks)
+			)));
 
 			return $response;
 		}

@@ -85,8 +85,8 @@ class SproutImport_ImportController extends BaseController
 				));
 			}
 
-			$type['type']    = 'pastedJson';
-			$type['details'] = 'Copy/Paste';
+			$type['type']    = Craft::t('Copy/Paste');
+			$type['details'] = 'pastedJson';
 		}
 
 		if (count($tasks))
