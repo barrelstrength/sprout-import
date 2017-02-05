@@ -2,7 +2,7 @@
 
 namespace Craft;
 
-class SproutImport_GenerateController extends BaseController
+class SproutImport_SproutSeoController extends BaseController
 {
 	public function actionGenerateRedirectJson()
 	{
