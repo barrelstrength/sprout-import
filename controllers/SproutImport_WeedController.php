@@ -12,7 +12,7 @@ class SproutImport_WeedController extends BaseController
 	{
 		$seeds = sproutImport()->seed->getSeeds();
 
-		$this->renderTemplate('sproutimport/weeds', array(
+		$this->renderTemplate('sproutimport/weed', array(
 			'seeds' => $seeds
 		));
 	}

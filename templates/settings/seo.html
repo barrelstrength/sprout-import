@@ -1,0 +1,43 @@
+{% extends "sproutimport/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% if settingsTemplate is not defined or not settingsTemplate %}
+	{% set settingsTemplate = 'sproutseo' %}
+{% endif %}
+
+{% set content %}
+
+	<form method="post" accept-charset="UTF-8" data-saveshortcut data-confirm-unload>
+		{{ getCsrfInput() }}
+
+		<input type="hidden" name="action" value="sproutImport/generate/generateRedirectJson">
+		<input type="hidden" name="redirect" value="sproutimport/settings/{{ settingsTemplate }}">
+
+		{{ forms.textareaField({
+			label: "Redirect Element Import Helper"|t,
+			instructions: "Paste your Redirects in comma-delimited CSV format to convert them into Sprout Import JSON Format."|t,
+			name: 'pastedCSV',
+			value: pastedCSV ?? null,
+			errors: errors ?? null,
+			rows: 20,
+			first: true
+		}) }}
+
+		<div class="buttons">
+			<input class="btn submit" type="submit" value="{{ 'Generate JSON'|t }}">
+		</div>
+
+		{% if importableJson is defined %}
+			{{ forms.textareaField({
+				label: "Redirect Element JSON"|t,
+				instructions: "Use the JSON generated below to import your Redirects on the Sprout Import->Import tab."|t,
+				name: 'json',
+				value: importableJson ?? null,
+				rows: 20,
+				first: true
+			}) }}
+		{% endif %}
+
+	</form>
+
+{% endset %}
