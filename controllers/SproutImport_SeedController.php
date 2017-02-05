@@ -63,7 +63,6 @@ class SproutImport_SeedController extends BaseController
 			}
 		}
 
-
 		$seedTaskModel = new SproutImport_SeedTasksModel;
 
 		if (isset($variables['seeds']))
@@ -104,6 +103,7 @@ class SproutImport_SeedController extends BaseController
 			$seedTaskModel = SproutImport_SeedTasksModel::populateModel($seedTasksAtrributes);
 
 			$sets = array();
+
 			if (!empty($settings))
 			{
 				foreach ($settings as $type => $setting)
@@ -139,7 +139,7 @@ class SproutImport_SeedController extends BaseController
 							'elementType' => $elementType
 						));
 
-						$type = array();
+						$type            = array();
 						$type['type']    = 'Seed';
 						$type['details'] = $details;
 
@@ -161,11 +161,11 @@ class SproutImport_SeedController extends BaseController
 			}
 			else
 			{
-
 				$message = Craft::t('Unable to generate seeds.');
+
 				if (empty($sets))
 				{
-					$message.= ' ' . Craft::t('Setting is required.');
+					$message .= ' ' . Craft::t('Setting is required.');
 				}
 				craft()->userSession->setError($message);
 				craft()->urlManager->setRouteVariables(array(

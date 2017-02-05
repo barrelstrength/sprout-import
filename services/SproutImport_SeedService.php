@@ -70,7 +70,7 @@ class SproutImport_SeedService extends BaseApplicationComponent
 						$row['@model'] = $seed['importerClass'] . 'Model';
 
 						$modelName = sproutImport()->getImporterModelName($row);
-						$importer = sproutImport()->getImporterByModelName($modelName, $row);
+						$importer  = sproutImport()->getImporterByModelName($modelName, $row);
 						$importer->deleteById($seed['itemId']);
 					}
 
@@ -151,9 +151,9 @@ class SproutImport_SeedService extends BaseApplicationComponent
 
 	public function getSeedTasks(SproutImport_SeedTasksModel $seedTasksModel)
 	{
-		$quantity = $seedTasksModel->quantity;
-		$batch    = $seedTasksModel->batch;
-		$settings = $seedTasksModel->settings;
+		$quantity    = $seedTasksModel->quantity;
+		$batch       = $seedTasksModel->batch;
+		$settings    = $seedTasksModel->settings;
 		$elementType = $seedTasksModel->elementType;
 
 		$namespace = 'Craft\\' . $elementType . 'SproutImportElementImporter';
