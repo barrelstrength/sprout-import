@@ -1,14 +1,14 @@
 <?php
 namespace Craft;
 
-class SproutImport_ImportTask extends BaseTask
+class SproutImport_SeedTask extends BaseTask
 {
 	/**
 	 * @return string
 	 */
 	public function getDescription()
 	{
-		return Craft::t('Sprout Import Task');
+		return Craft::t('Sprout Seed Task');
 	}
 
 	/**
@@ -17,9 +17,8 @@ class SproutImport_ImportTask extends BaseTask
 	protected function defineSettings()
 	{
 		return array(
-			'files' => AttributeType::Mixed,
-			'seed'  => AttributeType::Bool,
-			'type'  => AttributeType::Mixed,
+			'seeds' => AttributeType::Mixed,
+			'type'  => AttributeType::Mixed
 		);
 	}
 
@@ -28,7 +27,7 @@ class SproutImport_ImportTask extends BaseTask
 	 */
 	public function getTotalSteps()
 	{
-		return count($this->getSettings()->getAttribute('files'));
+		return count($this->getSettings()->getAttribute('seeds'));
 	}
 
 	/**
@@ -40,14 +39,10 @@ class SproutImport_ImportTask extends BaseTask
 	{
 		craft()->config->maxPowerCaptain();
 
-		$seed = $this->getSettings()->getAttribute('seed');
-		$type = $this->getSettings()->getAttribute('type');
+		$seeds = $this->getSettings()->getAttribute('seeds');
+		$type  = $this->getSettings()->getAttribute('type');
 
-		$files = $this->getSettings()->getAttribute('files');
-		$data  = $step ? $files[$step] : $files[0];
-
-		$elements = $data['content'];
-		$file     = $data['path'];
+		$elements  = $step ? $seeds[$step] : $seeds[0];
 
 		try
 		{
@@ -55,16 +50,8 @@ class SproutImport_ImportTask extends BaseTask
 
 			$details = $type['details'];
 
-			if (empty($details))
-			{
-				// remove any initial slash from the filename
-				$filename = substr($file, strrpos($file, '/') + 1);
-
-				$details = $filename;
-			}
-
 			$weedModelAttributes = array(
-				'seed'    => $seed,
+				'seed'    => true,
 				'type'    => $type['type'],
 				'details' => $details
 			);
@@ -72,8 +59,6 @@ class SproutImport_ImportTask extends BaseTask
 			$weedModel = SproutImport_WeedModel::populateModel($weedModelAttributes);
 
 			sproutImport()->save($elements, $weedModel);
-
-			IOHelper::deleteFile($file);
 
 			$errors = sproutImport()->getErrors();
 

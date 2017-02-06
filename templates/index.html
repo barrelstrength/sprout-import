@@ -49,11 +49,11 @@
 	<div class="item" data-position="right" data-colspan="1">
 		<div class="pane">
 
-			<h2>All aboard! <span class="info">If you need to import something that isn't supported, see our documentation on how to add custom integrations.</span></h2>
+			<h2>{{ "All aboard!"|t }} <span class="info">{{ "If you need to import something that isn't supported, see our documentation on how to add custom integrations."|t }}</span></h2>
 
 			<p>{{ 'Sprout Import provides a flexible and extensible framework to import your content and settings into Craft. A list of supported data types for this Craft install are below. Third-party plugins can add support for <a href="" target="_blank">additional data types</a>.'|t|raw }}</p>
 
-			<h6>Supported Elements</h6>
+			<h6>{{ "Supported Elements"|t }}</h6>
 
 			{% set importers = craft.sproutImport.getSproutImportImporters() %}
 
@@ -73,7 +73,7 @@
 			{% endfor %}
 			</ul>
 
-			<h6>Supported Settings</h6>
+			<h6>{{ "Supported Settings"|t }}</h6>
 
 			<ul>
 			{% for importer in importers %}

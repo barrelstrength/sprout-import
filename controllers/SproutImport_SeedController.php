@@ -8,7 +8,7 @@ class SproutImport_SeedController extends BaseController
 	 *
 	 * @throws HttpException
 	 */
-	public function actionSeedIndexTemplate()
+	public function actionSeedIndexTemplate(array $variables = array())
 	{
 		$elementSelect = array();
 
@@ -63,9 +63,17 @@ class SproutImport_SeedController extends BaseController
 			}
 		}
 
+		$seedTaskModel = new SproutImport_SeedTasksModel;
+
+		if (isset($variables['seeds']))
+		{
+			$seedTaskModel = $variables['seeds'];
+		}
+
 		$this->renderTemplate('sproutimport/seed', array(
 			'elements'  => $elementSelect,
-			'importers' => $allSeedImporters
+			'importers' => $allSeedImporters,
+			'seeds'     => $seedTaskModel
 		));
 	}
 
@@ -80,62 +88,90 @@ class SproutImport_SeedController extends BaseController
 
 		$elementType = craft()->request->getRequiredPost('elementType');
 		$quantity    = craft()->request->getRequiredPost('quantity');
+		$batch       = craft()->request->getRequiredPost('batch');
 		$settings    = craft()->request->getRequiredPost('settings');
 
 		if (!empty($elementType))
 		{
-			$namespace = 'Craft\\' . $elementType . 'SproutImportElementImporter';
+			$seedTasksAtrributes = array(
+				'elementType' => $elementType,
+				'batch'       => $batch,
+				'quantity'    => $quantity,
+				'settings'    => $settings
+			);
 
-			/**
-			 * @var BaseSproutImportElementImporter $importerClass
-			 */
-			$importerClass = new $namespace;
+			$seedTaskModel = SproutImport_SeedTasksModel::populateModel($seedTasksAtrributes);
 
-			$ids = $importerClass->getMockData($quantity, $settings);
+			$sets = array();
 
-			$weedMessage = '{quantity} {elementType} Element';
-
-			if ($quantity > 1)
+			if (!empty($settings))
 			{
-				$weedMessage = '{quantity} {elementType} Elements';
-			}
-
-			if (!empty($ids))
-			{
-				foreach ($ids as $id)
+				foreach ($settings as $type => $setting)
 				{
-					$attributes = array(
-						'itemId'        => $id,
-						'importerClass' => $elementType,
-						'type'          => Craft::t('Seed'),
-						'details'       => Craft::t($weedMessage, array(
-							'quantity'    => $quantity,
-							'elementType' => $elementType
-						))
-					);
-
-					$seedModel = SproutImport_SeedModel::populateModel($attributes);
-
-					sproutImport()->seed->trackSeed($seedModel);
+					if (!empty($setting))
+					{
+						$sets[] = $type;
+					}
 				}
 
-				craft()->userSession->setNotice(Craft::t('Elements generated.'));
+				if (empty($sets))
+				{
+					$seedTaskModel->addError('settings', Craft::t('Setting is required.'));
+				}
+			}
+
+			if ($seedTaskModel->validate(null, false) && !$seedTaskModel->hasErrors())
+			{
+				$seedTasks = sproutImport()->seed->getSeedTasks($seedTaskModel);
+
+				if (!empty($seedTasks))
+				{
+					try
+					{
+						$weedMessage = '{elementType} Element';
+
+						if ($quantity > 1)
+						{
+							$weedMessage = '{elementType} Elements';
+						}
+
+						$details = Craft::t($weedMessage, array(
+							'elementType' => $elementType
+						));
+
+						$type            = array();
+						$type['type']    = 'Seed';
+						$type['details'] = $details;
+
+						sproutImport()->tasks->createSeedTasks($seedTasks, $type);
+
+						craft()->userSession->setNotice(Craft::t('Files queued for seeds. Total: {tasks}', array(
+							'tasks' => count($seedTasks)
+						)));
+
+						$this->redirectToPostedUrl();
+					}
+					catch (\Exception $e)
+					{
+						craft()->userSession->setError($e->getMessage());
+
+						SproutImportPlugin::log($e->getMessage());
+					}
+				}
 			}
 			else
 			{
-				$errors = sproutImport()->getErrors();
+				$message = Craft::t('Unable to generate seeds.');
 
-				if (!empty($errors))
+				if (empty($sets))
 				{
-					craft()->userSession->setError(Craft::t('Unable to generate data. Check logs.'));
-
-					$message = implode("\n", $errors);
-
-					SproutImportPlugin::log($message, LogLevel::Error);
+					$message .= ' ' . Craft::t('Setting is required.');
 				}
+				craft()->userSession->setError($message);
+				craft()->urlManager->setRouteVariables(array(
+					'seeds' => $seedTaskModel
+				));
 			}
 		}
-
-		$this->redirectToPostedUrl();
 	}
 }

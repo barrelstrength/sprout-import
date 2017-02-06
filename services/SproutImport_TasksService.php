@@ -5,14 +5,16 @@ namespace Craft;
 class SproutImport_TasksService extends BaseApplicationComponent
 {
 	/**
-	 * Create the tasks that will import our user-provided data
+	 * Create the tasks that will import the user-provided data
 	 *
 	 * @param array $tasks
+	 * @param bool  $seed
+	 * @param array $type
 	 *
-	 * @throws Exception
 	 * @return TaskModel
+	 * @throws Exception
 	 */
-	public function createImportTasks(array $tasks, $seed = false)
+	public function createImportTasks(array $tasks, $seed = false, array $type)
 	{
 		if (!count($tasks))
 		{
@@ -21,7 +23,30 @@ class SproutImport_TasksService extends BaseApplicationComponent
 
 		return craft()->tasks->createTask('SproutImport_Import', Craft::t("Importing data."), array(
 			'files' => $tasks,
-			'seed'  => $seed
+			'seed'  => $seed,
+			'type'  => $type
+		));
+	}
+
+	/**
+	 * Create the tasks that will import the Seed Data
+	 *
+	 * @param array $tasks
+	 * @param array $type
+	 *
+	 * @return TaskModel
+	 * @throws Exception
+	 */
+	public function createSeedTasks(array $tasks, array $type)
+	{
+		if (!count($tasks))
+		{
+			throw new Exception(Craft::t('Unable to create import task. No tasks found.'));
+		}
+
+		return craft()->tasks->createTask('SproutImport_Seed', Craft::t("Seeding data."), array(
+			'seeds' => $tasks,
+			'type'  => $type
 		));
 	}
 
@@ -76,7 +101,9 @@ class SproutImport_TasksService extends BaseApplicationComponent
 				'elements' => $tasks
 			));
 
-			craft()->userSession->setNotice(Craft::t('({tasks}) Tasks queued successfully.', array('tasks' => count($tasks))));
+			craft()->userSession->setNotice(Craft::t('({tasks}) Tasks queued successfully.', array(
+				'tasks' => count($tasks)
+			)));
 
 			return $response;
 		}
