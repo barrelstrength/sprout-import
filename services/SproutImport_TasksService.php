@@ -14,7 +14,7 @@ class SproutImport_TasksService extends BaseApplicationComponent
 	 * @return TaskModel
 	 * @throws Exception
 	 */
-	public function createImportTasks(array $tasks, $seed = false, array $type)
+	public function createImportTasks(array $tasks, $seed = false, array $seedInfo)
 	{
 		if (!count($tasks))
 		{
@@ -22,9 +22,9 @@ class SproutImport_TasksService extends BaseApplicationComponent
 		}
 
 		return craft()->tasks->createTask('SproutImport_Import', Craft::t("Importing data."), array(
-			'files' => $tasks,
-			'seed'  => $seed,
-			'type'  => $type
+			'files'     => $tasks,
+			'seed'      => $seed,
+			'seedInfo'  => $seedInfo
 		));
 	}
 
@@ -37,7 +37,7 @@ class SproutImport_TasksService extends BaseApplicationComponent
 	 * @return TaskModel
 	 * @throws Exception
 	 */
-	public function createSeedTasks(array $tasks, array $type)
+	public function createSeedTasks(array $tasks, array $seedInfo)
 	{
 		if (!count($tasks))
 		{
@@ -45,8 +45,8 @@ class SproutImport_TasksService extends BaseApplicationComponent
 		}
 
 		return craft()->tasks->createTask('SproutImport_Seed', Craft::t("Seeding data."), array(
-			'seeds' => $tasks,
-			'type'  => $type
+			'seeds'     => $tasks,
+			'seedInfo'  => $seedInfo
 		));
 	}
 
@@ -58,7 +58,7 @@ class SproutImport_TasksService extends BaseApplicationComponent
 	 * @return mixed
 	 * @throws Exception
 	 */
-	public function createImportTasksFromPost($elements, $step = 10)
+	public function createImportTasksFromPost($elements, $step = 10, array $seedInfo)
 	{
 		// support serialize format
 		if ($this->isSerialized($elements))
@@ -98,7 +98,8 @@ class SproutImport_TasksService extends BaseApplicationComponent
 			$taskName = Craft::t("Importing data from post.");
 
 			$response = craft()->tasks->createTask('SproutImport_ImportFromPost', $taskName, array(
-				'elements' => $tasks
+				'elements' => $tasks,
+				'seedInfo' => $seedInfo
 			));
 
 			craft()->userSession->setNotice(Craft::t('({tasks}) Tasks queued successfully.', array(

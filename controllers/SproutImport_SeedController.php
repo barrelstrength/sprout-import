@@ -139,11 +139,13 @@ class SproutImport_SeedController extends BaseController
 							'elementType' => $elementType
 						));
 
-						$type            = array();
-						$type['type']    = 'Seed';
-						$type['details'] = $details;
+						$seedInfo                  = array();
+						$seedInfo['type']          = 'Seed';
+						$seedInfo['details']       = $details;
+						// Record the seed submission for grouping seeds
+						$seedInfo['dateSubmitted'] = DateTimeHelper::currentTimeForDb();
 
-						sproutImport()->tasks->createSeedTasks($seedTasks, $type);
+						sproutImport()->tasks->createSeedTasks($seedTasks, $seedInfo);
 
 						craft()->userSession->setNotice(Craft::t('Files queued for seeds. Total: {tasks}', array(
 							'tasks' => count($seedTasks)

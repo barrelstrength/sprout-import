@@ -13,7 +13,8 @@ class SproutImport_SeedModel extends BaseModel
 			'importerClass' => array(AttributeType::String, 'required' => true),
 			'type'          => array(AttributeType::String),
 			'details'       => array(AttributeType::String),
-			'items'         => array(AttributeType::Number)
+			'items'         => array(AttributeType::Number),
+			'dateSubmitted' => array(AttributeType::DateTime)
 		);
 	}
 }

@@ -17,9 +17,9 @@ class SproutImport_ImportTask extends BaseTask
 	protected function defineSettings()
 	{
 		return array(
-			'files' => AttributeType::Mixed,
-			'seed'  => AttributeType::Bool,
-			'type'  => AttributeType::Mixed,
+			'files'     => AttributeType::Mixed,
+			'seed'      => AttributeType::Bool,
+			'seedInfo'  => AttributeType::Mixed
 		);
 	}
 
@@ -40,8 +40,8 @@ class SproutImport_ImportTask extends BaseTask
 	{
 		craft()->config->maxPowerCaptain();
 
-		$seed = $this->getSettings()->getAttribute('seed');
-		$type = $this->getSettings()->getAttribute('type');
+		$seed     = $this->getSettings()->getAttribute('seed');
+		$seedInfo = $this->getSettings()->getAttribute('seedInfo');
 
 		$files = $this->getSettings()->getAttribute('files');
 		$data  = $step ? $files[$step] : $files[0];
@@ -53,7 +53,7 @@ class SproutImport_ImportTask extends BaseTask
 		{
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 
-			$details = $type['details'];
+			$details = $seedInfo['details'];
 
 			if (empty($details))
 			{
@@ -65,8 +65,9 @@ class SproutImport_ImportTask extends BaseTask
 
 			$weedModelAttributes = array(
 				'seed'    => $seed,
-				'type'    => $type['type'],
-				'details' => $details
+				'type'    => $seedInfo['type'],
+				'details' => $details,
+				'dateSubmitted' => $seedInfo['dateSubmitted']
 			);
 
 			$weedModel = SproutImport_WeedModel::populateModel($weedModelAttributes);

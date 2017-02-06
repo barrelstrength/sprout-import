@@ -32,16 +32,14 @@ class SproutImport_WeedController extends BaseController
 
 		$seeds = array();
 
-		$idsString  = craft()->request->getPost('ids');
+		$dateSubmitted  = craft()->request->getPost('dateSubmitted');
 
-		if ($idsString != null && $idsString != '*')
+		if ($dateSubmitted != null && $dateSubmitted != '*')
 		{
-			$ids = explode(',', $idsString);
-
-			$seeds = sproutImport()->seed->getSeedsByIds($ids);
+			$seeds = sproutImport()->seed->getSeedsByDateSubmitted($dateSubmitted);
 		}
 
-		if ($idsString == '*')
+		if ($dateSubmitted == '*')
 		{
 			$seeds = sproutImport()->seed->getAllSeeds();
 		}

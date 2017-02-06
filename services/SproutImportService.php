@@ -203,7 +203,8 @@ class SproutImportService extends BaseApplicationComponent
 							'itemId'        => $result->id,
 							'importerClass' => $model,
 							'type'          => $weedModel->type,
-							'details'       => $weedModel->details
+							'details'       => $weedModel->details,
+							'dateSubmitted' => $weedModel->dateSubmitted
 						);
 
 						$seedModel = SproutImport_SeedModel::populateModel($seedAttributes);

@@ -24,7 +24,7 @@
 
 						{% for seed in seeds %}
 							<tr>
-								<td>{{ seed['dateCreated']|date('M d, Y h:i A') }}</td>
+								<td>{{ seed['dateSubmitted']|date('M d, Y h:i A') }}</td>
 								<td>{{ seed['total'] }}</td>
 								<td>
 									{{ seed['type'] }}
@@ -37,7 +37,7 @@
 										{{ getCsrfInput() }}
 										<input type="hidden" name="action" value="sproutImport/weed/processWeed">
 										<input type="hidden" name="redirect" value="sproutimport/weed">
-										<input type="hidden" name="ids" value="{{ seed['ids'] }}">
+										<input type="hidden" name="dateSubmitted" value="{{ seed['dateSubmitted'] }}">
 										<input class="btn small" name="submit" type="submit" value="Weed">
 										<input class="btn small" name="submit" type="submit" value="Keep">
 									</form>
@@ -52,7 +52,7 @@
 						{{ getCsrfInput() }}
 						<input type="hidden" name="action" value="sproutImport/weed/processWeed">
 						<input type="hidden" name="redirect" value="sproutimport/weed">
-						<input type="hidden" name="ids" value="*">
+						<input type="hidden" name="dateSubmitted" value="*">
 						<input class="btn submit" name="submit" type="submit" value="Weed All">
 						<input class="btn" name="submit" type="submit" value="Keep All">
 					</form>

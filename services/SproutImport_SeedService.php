@@ -36,10 +36,16 @@ class SproutImport_SeedService extends BaseApplicationComponent
 		if ($record == null)
 		{
 			$record                = new SproutImport_SeedRecord;
-			$record->itemId        = $itemId;
-			$record->importerClass = $model->importerClass;
-			$record->type          = $model->type;
-			$record->details       = $model->details;
+
+			$recordAttributes = $model->getAttributes();
+
+			if (!empty($recordAttributes))
+			{
+				foreach ($recordAttributes as $handle => $value)
+				{
+					$record->setAttribute($handle, $value);
+				}
+			}
 
 			$record->save();
 		}
@@ -129,21 +135,28 @@ class SproutImport_SeedService extends BaseApplicationComponent
 	public function getSeeds()
 	{
 		$seeds = craft()->db->createCommand()
-			->select('GROUP_CONCAT(id) ids, type, details, COUNT(1) as total, dateCreated as dateCreated')
+			->select('GROUP_CONCAT(id) ids, type, details, COUNT(1) as total, dateSubmitted')
 			->from('sproutimport_seeds')
-			->group('dateCreated, details')
-			->order('dateCreated DESC')
+			->group('dateSubmitted, details')
+			->order('dateSubmitted DESC')
 			->queryAll();
 
 		return $seeds;
 	}
 
-	public function getSeedsByIds($ids)
+	/**
+	 * Returns seeds by dateSubmitted
+	 *
+	 * @param $date
+	 *
+	 * @return array|\CDbDataReader
+	 */
+	public function getSeedsByDateSubmitted($date)
 	{
 		$seeds = craft()->db->createCommand()
 			->select('*')
 			->from('sproutimport_seeds')
-			->where(array('in', 'id', $ids))
+			->where('dateSubmitted=:dateSubmitted', array(':dateSubmitted' => $date))
 			->queryAll();
 
 		return $seeds;
