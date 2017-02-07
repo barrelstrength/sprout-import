@@ -103,16 +103,6 @@ class SproutImportPlugin extends BasePlugin
 	}
 
 	/**
-	 * @return array
-	 */
-	protected function defineSettings()
-	{
-		return array(
-			'pluginNameOverride' => AttributeType::String
-		);
-	}
-
-	/**
 	 * Initialize Sprout Import
 	 */
 	public function init()
@@ -144,6 +134,17 @@ class SproutImportPlugin extends BasePlugin
 				});
 			");
 		}
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function defineSettings()
+	{
+		return array(
+			'pluginNameOverride' => AttributeType::String,
+			'batch'              => AttributeType::Number
+		);
 	}
 
 	/**

@@ -25,17 +25,6 @@
 					first: true
 				}) }}
 
-				{{ forms.textField({
-					label: 'Batch'|t,
-					instructions: '',
-					name: 'batch',
-					placeholder: '10'|t,
-					value: (seeds.batch is defined ? seeds.batch : ''),
-					errors: (seeds is defined ? seeds.getErrors('batch') : null),
-					size: 4,
-					first: true
-				}) }}
-
 				{{ forms.selectField({
 					label: "Type of Content"|t,
 					instructions: "Select the type of content to seed in your database."|t,

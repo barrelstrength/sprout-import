@@ -1,4 +1,3 @@
-
 {{ forms.textField({
 	label: "Plugin Name"|t,
 	instructions: "Intuitive, human-readable plugin name for the end user."|t,
@@ -8,4 +7,15 @@
 	autofocus: true,
 	first: true,
 	errors: ''
+}) }}
+
+{{ forms.textField({
+	label: 'Batch'|t,
+	instructions: '',
+	name: 'batch',
+	placeholder: '10'|t,
+	value: (settings.batch is defined ? settings.batch : 10),
+	errors: (settings is defined ? settings.getErrors('batch') : null),
+	size: 4,
+	first: true
 }) }}

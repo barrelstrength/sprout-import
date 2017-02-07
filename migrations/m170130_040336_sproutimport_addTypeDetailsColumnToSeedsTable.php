@@ -31,6 +31,22 @@ class m170130_040336_sproutimport_addTypeDetailsColumnToSeedsTable extends BaseM
 				one there.', LogLevel::Warning);
 			}
 
+			if (($column = $table->getColumn('dateSubmitted')) == null)
+			{
+				$definition = array(
+					AttributeType::Mixed,
+					'column'   => ColumnType::DateTime,
+					'required' => false
+				);
+
+				$this->addColumnAfter('sproutimport_seeds', 'dateSubmitted', $definition, 'importerClass');
+			}
+			else
+			{
+				Craft::log('Tried to add a `dateSubmitted` column to the `sproutimport_seeds` table, but there is already
+				one there.', LogLevel::Warning);
+			}
+
 			if (($column = $table->getColumn('type')) == null)
 			{
 				$definition = array(

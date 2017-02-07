@@ -88,8 +88,12 @@ class SproutImport_SeedController extends BaseController
 
 		$elementType = craft()->request->getRequiredPost('elementType');
 		$quantity    = craft()->request->getRequiredPost('quantity');
-		$batch       = craft()->request->getRequiredPost('batch');
 		$settings    = craft()->request->getRequiredPost('settings');
+
+		$plugin         = craft()->plugins->getPlugin('sproutimport');
+		$pluginSettings = $plugin->getSettings();
+
+		$batch       = (isset($pluginSettings->batch)) ? $pluginSettings->batch : 10;
 
 		if (!empty($elementType))
 		{
