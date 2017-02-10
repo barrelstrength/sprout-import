@@ -6,7 +6,7 @@
 			"handle": "blog",
 			"type": "channel",
 			"hasUrls": true,
-			"urlFormat": "blog/{slug}",
+			"urlFormat": { "en_us": "blog/{slug}" },
 			"template": "blog/_entry",
 			"entryTypes": [
 					{
