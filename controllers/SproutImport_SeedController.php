@@ -97,11 +97,25 @@ class SproutImport_SeedController extends BaseController
 
 		if (!empty($elementType))
 		{
+			$weedMessage = '{elementType} Element';
+
+			if ($quantity > 1)
+			{
+				$weedMessage = '{elementType} Elements';
+			}
+
+			$details = Craft::t($weedMessage, array(
+				'elementType' => $elementType
+			));
+
 			$seedTasksAtrributes = array(
 				'elementType' => $elementType,
 				'batch'       => $batch,
 				'quantity'    => $quantity,
-				'settings'    => $settings
+				'settings'    => $settings,
+				'type'        => 'Seed',
+				'details'     => $details,
+				'dateSubmitted' => DateTimeHelper::currentTimeForDb()
 			);
 
 			$seedTaskModel = SproutImport_SeedTasksModel::populateModel($seedTasksAtrributes);
@@ -126,30 +140,14 @@ class SproutImport_SeedController extends BaseController
 
 			if ($seedTaskModel->validate(null, false) && !$seedTaskModel->hasErrors())
 			{
-				$seedTasks = sproutImport()->seed->getSeedTasks($seedTaskModel);
+				//$seedTasks = sproutImport()->seed->getSeedTasks($seedTaskModel);
+				 sproutImport()->seed->seedTasks($seedTaskModel);
 
 				if (!empty($seedTasks))
 				{
 					try
 					{
-						$weedMessage = '{elementType} Element';
-
-						if ($quantity > 1)
-						{
-							$weedMessage = '{elementType} Elements';
-						}
-
-						$details = Craft::t($weedMessage, array(
-							'elementType' => $elementType
-						));
-
-						$seedInfo            = array();
-						$seedInfo['type']    = 'Seed';
-						$seedInfo['details'] = $details;
-						// Record the seed submission for grouping seeds
-						$seedInfo['dateSubmitted'] = DateTimeHelper::currentTimeForDb();
-
-						sproutImport()->tasks->createSeedTasks($seedTasks, $seedInfo);
+					//	sproutImport()->tasks->createSeedTasks($seedTasks, $seedInfo);
 
 						craft()->userSession->setNotice(Craft::t('Files queued for seeds. Total: {tasks}', array(
 							'tasks' => count($seedTasks)

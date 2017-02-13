@@ -42,8 +42,6 @@ class SproutImport_SeedTask extends BaseTask
 		$seeds    = $this->getSettings()->getAttribute('seeds');
 		$seedInfo = $this->getSettings()->getAttribute('seedInfo');
 
-		$elements  = $step ? $seeds[$step] : $seeds[0];
-
 		try
 		{
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
@@ -59,7 +57,7 @@ class SproutImport_SeedTask extends BaseTask
 
 			$weedModel = SproutImport_WeedModel::populateModel($weedModelAttributes);
 
-			sproutImport()->save($elements, $weedModel);
+			sproutImport()->save($seeds, $weedModel);
 
 			$errors = sproutImport()->getErrors();
 
