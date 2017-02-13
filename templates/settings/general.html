@@ -9,9 +9,9 @@
 
 	<form method="post" accept-charset="UTF-8" data-saveshortcut data-confirm-unload>
 		{{ getCsrfInput() }}
-		<input type="hidden" name="pluginClass" value="SproutImport">
 		<input type="hidden" name="action" value="plugins/savePluginSettings">
 		<input type="hidden" name="redirect" value="sproutimport/settings/{{ settingsTemplate }}">
+		<input type="hidden" name="pluginClass" value="SproutImport">
 
 		{% namespace 'settings' %}
 			{% include 'sproutimport/settings/_tabs/' ~ settingsTemplate %}

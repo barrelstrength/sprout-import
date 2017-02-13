@@ -10,8 +10,8 @@
 }) }}
 
 {{ forms.textField({
-	label: 'Batch'|t,
-	instructions: '',
+	label: 'Batch Size'|t,
+	instructions: 'The number of imported items to group together in a task. When importing or seeding the database with memory-intensive content you may want to raise this number. i.e. 100 Elements imported with a Batch Size of 100 will create 100 tasks.',
 	name: 'batch',
 	placeholder: '10'|t,
 	value: (settings.batch is defined ? settings.batch : 10),

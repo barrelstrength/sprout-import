@@ -15,22 +15,6 @@ class m170130_040336_sproutimport_addTypeDetailsColumnToSeedsTable extends BaseM
 	{
 		if (($table = $this->dbConnection->schema->getTable('{{sproutimport_seeds}}')))
 		{
-			if (($column = $table->getColumn('details')) == null)
-			{
-				$definition = array(
-					AttributeType::Mixed,
-					'column'   => ColumnType::Text,
-					'required' => false
-				);
-
-				$this->addColumnAfter('sproutimport_seeds', 'details', $definition, 'importerClass');
-			}
-			else
-			{
-				Craft::log('Tried to add a `details` column to the `sproutimport_seeds` table, but there is already
-				one there.', LogLevel::Warning);
-			}
-
 			if (($column = $table->getColumn('dateSubmitted')) == null)
 			{
 				$definition = array(
@@ -44,6 +28,22 @@ class m170130_040336_sproutimport_addTypeDetailsColumnToSeedsTable extends BaseM
 			else
 			{
 				Craft::log('Tried to add a `dateSubmitted` column to the `sproutimport_seeds` table, but there is already
+				one there.', LogLevel::Warning);
+			}
+
+			if (($column = $table->getColumn('details')) == null)
+			{
+				$definition = array(
+					AttributeType::Mixed,
+					'column'   => ColumnType::Text,
+					'required' => false
+				);
+
+				$this->addColumnAfter('sproutimport_seeds', 'details', $definition, 'importerClass');
+			}
+			else
+			{
+				Craft::log('Tried to add a `details` column to the `sproutimport_seeds` table, but there is already
 				one there.', LogLevel::Warning);
 			}
 

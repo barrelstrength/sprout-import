@@ -5,7 +5,7 @@
 		"handle": "sproutExampleFields",
 		"type": "channel",
 		"hasUrls": true,
-		"urlFormat": "allfields/{slug}",
+		"urlFormat": {"en_us": "allfields/{slug}"},
 		"template": "allfields/_entry",
 		"entryTypes": [
 			{

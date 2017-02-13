@@ -93,7 +93,7 @@ class SproutImport_SeedController extends BaseController
 		$plugin         = craft()->plugins->getPlugin('sproutimport');
 		$pluginSettings = $plugin->getSettings();
 
-		$batch       = (isset($pluginSettings->batch)) ? $pluginSettings->batch : 10;
+		$batch = (isset($pluginSettings->batch) && $pluginSettings->batch > 0) ? $pluginSettings->batch : 10;
 
 		if (!empty($elementType))
 		{
@@ -143,9 +143,9 @@ class SproutImport_SeedController extends BaseController
 							'elementType' => $elementType
 						));
 
-						$seedInfo                  = array();
-						$seedInfo['type']          = 'Seed';
-						$seedInfo['details']       = $details;
+						$seedInfo            = array();
+						$seedInfo['type']    = 'Seed';
+						$seedInfo['details'] = $details;
 						// Record the seed submission for grouping seeds
 						$seedInfo['dateSubmitted'] = DateTimeHelper::currentTimeForDb();
 
@@ -174,6 +174,7 @@ class SproutImport_SeedController extends BaseController
 					$message .= ' ' . Craft::t('Setting is required.');
 				}
 				craft()->userSession->setError($message);
+
 				craft()->urlManager->setRouteVariables(array(
 					'seeds' => $seedTaskModel
 				));

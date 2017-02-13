@@ -81,10 +81,13 @@ class SproutImport_SeedService extends BaseApplicationComponent
 					}
 
 					sproutImport()->seed->deleteSeedById($seed['id']);
+
 				}
 				catch (\Exception $e)
 				{
 					SproutImportPlugin::log($e->getMessage());
+
+					return false;
 				}
 			}
 
@@ -92,7 +95,11 @@ class SproutImport_SeedService extends BaseApplicationComponent
 			{
 				$transaction->commit();
 			}
+
+			return true;
 		}
+
+
 	}
 
 	/**
