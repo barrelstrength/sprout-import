@@ -40,6 +40,8 @@ class SproutImport_SettingsImporterService extends BaseApplicationComponent
 
 					sproutImport()->onAfterImportSetting($event);
 
+					$importerClass->resolveNestedSettings($model, $settings);
+
 					return $model;
 				}
 			}
@@ -52,11 +54,6 @@ class SproutImport_SettingsImporterService extends BaseApplicationComponent
 				sproutImport()->addError($message, 'save-setting-importer');
 
 				return false;
-			}
-
-			if ($saved)
-			{
-				$importerClass->resolveNestedSettings($model, $settings);
 			}
 
 			return $importerClass->model;

@@ -159,11 +159,6 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 					return false;
 				}
 
-				if ($saved)
-				{
-					$importerClass->resolveNestedSettings($model, $data);
-				}
-
 				if ($saved && $isNewElement)
 				{
 					$this->savedElementIds[] = $model->id;
@@ -214,6 +209,8 @@ class SproutImport_ElementImporterService extends BaseApplicationComponent
 			));
 
 			sproutImport()->onAfterImportElement($event);
+
+			$importerClass->resolveNestedSettings($model, $data);
 
 			return $model;
 		}
