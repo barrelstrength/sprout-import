@@ -17,11 +17,10 @@ class SproutImport_ImportController extends BaseController
 
 		$count = 0;
 
-		$seedInfo = array(
-			'type'          => 'File',
-			'details'       => '',
-			'dateSubmitted' => DateTimeHelper::currentTimeForDb()
-		);
+		$seedModel = new SproutImport_SeedModel();
+		$seedModel->type          = 'File';
+		$seedModel->details       = '';
+		$seedModel->dateSubmitted = DateTimeHelper::currentTimeForDb();
 
 		if (count($files))
 		{
@@ -86,15 +85,15 @@ class SproutImport_ImportController extends BaseController
 				));
 			}
 
-			$seedInfo['type']    = Craft::t('Copy/Paste');
-			$seedInfo['details'] = 'pastedJson';
+			$seedModel->type    = Craft::t('Copy/Paste');
+			$seedModel->details = 'pastedJson';
 		}
 
 		if (count($tasks))
 		{
 			try
 			{
-				sproutImport()->tasks->createImportTasks($tasks, $seed, $seedInfo);
+				sproutImport()->tasks->createImportTasks($tasks, $seed, $seedModel);
 
 				craft()->userSession->setNotice(Craft::t('Files queued for import. Total: {tasks}', array(
 					'tasks' => count($tasks)
@@ -118,13 +117,12 @@ class SproutImport_ImportController extends BaseController
 	{
 		$data = craft()->request->getPost('data');
 
-		$seedInfo = array(
-			'type'          => 'Post',
-			'details'       => '',
-			'dateSubmitted' => DateTimeHelper::currentTimeForDb()
-		);
+		$seedModel = new SproutImport_SeedModel();
+		$seedModel->type          = 'Post';
+		$seedModel->details       = '';
+		$seedModel->dateSubmitted = DateTimeHelper::currentTimeForDb();
 
-		sproutImport()->tasks->createImportTasksFromPost($data, 10, $seedInfo);
+		sproutImport()->tasks->createImportTasksFromPost($data, 10, $seedModel);
 
 		craft()->end();
 	}

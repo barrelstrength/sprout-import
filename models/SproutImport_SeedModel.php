@@ -9,8 +9,8 @@ class SproutImport_SeedModel extends BaseModel
 	protected function defineAttributes()
 	{
 		return array(
-			'itemId'        => array(AttributeType::Number, 'required' => true),
-			'importerClass' => array(AttributeType::String, 'required' => true),
+			'itemId'        => array(AttributeType::Number),
+			'importerClass' => array(AttributeType::String),
 			'type'          => array(AttributeType::String),
 			'details'       => array(AttributeType::String),
 			'items'         => array(AttributeType::Number),

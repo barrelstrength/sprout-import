@@ -8,7 +8,7 @@ class SproutImport_SeedTask extends BaseTask
 	 */
 	public function getDescription()
 	{
-		return Craft::t('Sprout Seed Task');
+		return Craft::t('Sprout Import Seed Task');
 	}
 
 	/**
@@ -17,20 +17,24 @@ class SproutImport_SeedTask extends BaseTask
 	protected function defineSettings()
 	{
 		return array(
-			'seeds'     => AttributeType::Mixed,
-			'seedInfo'  => AttributeType::Mixed
+			'seedTasks' => AttributeType::Mixed
 		);
 	}
 
 	/**
+	 *
 	 * @return mixed
 	 */
 	public function getTotalSteps()
 	{
-		return count($this->getSettings()->getAttribute('seeds'));
+		$seedTasks = $this->getSettings()->getAttribute('seedTasks');
+
+		return $seedTasks['quantity'];
 	}
 
 	/**
+	 * Create 1 mockData for each step
+	 *
 	 * @param int $step
 	 *
 	 * @return bool
@@ -39,25 +43,33 @@ class SproutImport_SeedTask extends BaseTask
 	{
 		craft()->config->maxPowerCaptain();
 
-		$seeds    = $this->getSettings()->getAttribute('seeds');
-		$seedInfo = $this->getSettings()->getAttribute('seedInfo');
+		$seedTasks = $this->getSettings()->getAttribute('seedTasks');
 
 		try
 		{
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 
-			$details = $seedInfo['details'];
+			$details = $seedTasks['details'];
 
 			$weedModelAttributes = array(
-				'seed'    => true,
-				'type'    => $seedInfo['type'],
-				'details' => $details,
-				'dateSubmitted' => $seedInfo['dateSubmitted']
+				'seed'          => true,
+				'type'          => $seedTasks['type'],
+				'details'       => $details,
+				'dateSubmitted' => $seedTasks['dateSubmitted']
 			);
 
 			$weedModel = SproutImport_WeedModel::populateModel($weedModelAttributes);
 
-			sproutImport()->save($seeds, $weedModel);
+			$elementType = $seedTasks['elementType'];
+			$settings    = $seedTasks['settings'];
+
+			$namespace = 'Craft\\' . $elementType . 'SproutImportElementImporter';
+
+			$importerClass = new $namespace;
+
+			$seed = $importerClass->getMockData(1, $settings);
+
+			sproutImport()->save($seed, $weedModel);
 
 			$errors = sproutImport()->getErrors();
 

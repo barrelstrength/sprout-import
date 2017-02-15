@@ -140,27 +140,22 @@ class SproutImport_SeedController extends BaseController
 
 			if ($seedTaskModel->validate(null, false) && !$seedTaskModel->hasErrors())
 			{
-				//$seedTasks = sproutImport()->seed->getSeedTasks($seedTaskModel);
-				 sproutImport()->seed->seedTasks($seedTaskModel);
-
-				if (!empty($seedTasks))
+				try
 				{
-					try
-					{
-					//	sproutImport()->tasks->createSeedTasks($seedTasks, $seedInfo);
+					// Run the seeding by the craft tasks service
+					sproutImport()->tasks->createSeedTasks($seedTaskModel);
 
-						craft()->userSession->setNotice(Craft::t('Files queued for seeds. Total: {tasks}', array(
-							'tasks' => count($seedTasks)
-						)));
+					craft()->userSession->setNotice(Craft::t('Elements queued for seeds. Total: {tasks}', array(
+						'tasks' => $quantity
+					)));
 
-						$this->redirectToPostedUrl();
-					}
-					catch (\Exception $e)
-					{
-						craft()->userSession->setError($e->getMessage());
+					$this->redirectToPostedUrl();
+				}
+				catch (\Exception $e)
+				{
+					craft()->userSession->setError($e->getMessage());
 
-						SproutImportPlugin::log($e->getMessage());
-					}
+					SproutImportPlugin::log($e->getMessage());
 				}
 			}
 			else

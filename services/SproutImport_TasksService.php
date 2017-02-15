@@ -14,7 +14,7 @@ class SproutImport_TasksService extends BaseApplicationComponent
 	 * @return TaskModel
 	 * @throws Exception
 	 */
-	public function createImportTasks(array $tasks, $seed = false, array $seedInfo)
+	public function createImportTasks(array $tasks, $seed = false, SproutImport_SeedModel $seedModel)
 	{
 		if (!count($tasks))
 		{
@@ -24,7 +24,7 @@ class SproutImport_TasksService extends BaseApplicationComponent
 		return craft()->tasks->createTask('SproutImport_Import', Craft::t("Importing data."), array(
 			'files'     => $tasks,
 			'seed'      => $seed,
-			'seedInfo'  => $seedInfo
+			'seedInfo'  => $seedModel->getAttributes()
 		));
 	}
 
@@ -37,22 +37,10 @@ class SproutImport_TasksService extends BaseApplicationComponent
 	 * @return TaskModel
 	 * @throws Exception
 	 */
-	public function createSeedTasks(array $tasks, $seedTaskModel)
+	public function createSeedTasks(SproutImport_SeedTasksModel $seedTaskModel)
 	{
-		if (!count($tasks))
-		{
-			throw new Exception(Craft::t('Unable to create import task. No tasks found.'));
-		}
-
-		$seedInfo = array(
-			'type'    => $seedTaskModel->type,
-			'details' => $seedTaskModel->details,
-			'dateSubmitted' => $seedTaskModel->dateSubmitted
-		);
-		
 		return craft()->tasks->createTask('SproutImport_Seed', Craft::t("Seeding data."), array(
-			'seeds'     => $tasks,
-			'seedInfo'  => $seedInfo
+			'seedTasks' => $seedTaskModel->getAttributes()
 		));
 	}
 
@@ -64,7 +52,7 @@ class SproutImport_TasksService extends BaseApplicationComponent
 	 * @return mixed
 	 * @throws Exception
 	 */
-	public function createImportTasksFromPost($elements, $step = 10, array $seedInfo)
+	public function createImportTasksFromPost($elements, $step = 10, SproutImport_SeedModel $seedModel)
 	{
 		// support serialize format
 		if ($this->isSerialized($elements))
@@ -105,7 +93,7 @@ class SproutImport_TasksService extends BaseApplicationComponent
 
 			$response = craft()->tasks->createTask('SproutImport_ImportFromPost', $taskName, array(
 				'elements' => $tasks,
-				'seedInfo' => $seedInfo
+				'seedInfo' => $seedModel->getAttributes()
 			));
 
 			craft()->userSession->setNotice(Craft::t('({tasks}) Tasks queued successfully.', array(
