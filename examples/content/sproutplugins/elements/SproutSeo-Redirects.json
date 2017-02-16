@@ -9,7 +9,7 @@
     }
   },
 	{
-    "@model": "SproutSeo_Redirect",
+    "@model": "SproutSeo_RedirectModel",
     "attributes": {
       "oldUrl": "/prev-url",
       "newUrl": "/next-url",
