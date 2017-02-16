@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutImport_SeedTasksModel extends BaseModel
+class SproutImport_SeedTaskModel extends BaseModel
 {
 	/**
 	 * @return array

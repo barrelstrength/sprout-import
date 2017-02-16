@@ -96,13 +96,15 @@ class SectionSproutImportSettingsImporter extends BaseSproutImportSettingsImport
 
 			$locales[$localeId] = new SectionLocaleModel(array(
 				'locale'           => $localeId,
-				 'enabledByDefault' => (bool) isset($settings['defaultLocaleStatuses'][$localeId]) ? $settings['defaultLocaleStatuses'][$localeId] : false,
+				'enabledByDefault' => (bool) isset($settings['defaultLocaleStatuses'][$localeId]) ? $settings['defaultLocaleStatuses'][$localeId] : false,
 				'urlFormat'        => $urlFormat,
 				'nestedUrlFormat'  => $nestedUrlFormat,
 			));
 		}
 
-		if ($urlFormat == null)
+		$hasUrls = (isset($settings['hasUrls'])) ? $settings['hasUrls'] : false;
+
+		if ($hasUrls == true && $urlFormat == null)
 		{
 			sproutImport()->addError(Craft::t('Invalid urlFormat value. E.g. {"en_us": "blog/{slug}"}'), 'section-urlFormat');
 		}

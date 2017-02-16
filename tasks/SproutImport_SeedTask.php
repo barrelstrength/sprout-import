@@ -17,7 +17,7 @@ class SproutImport_SeedTask extends BaseTask
 	protected function defineSettings()
 	{
 		return array(
-			'seedTasks' => AttributeType::Mixed
+			'seedTask' => AttributeType::Mixed
 		);
 	}
 
@@ -27,13 +27,13 @@ class SproutImport_SeedTask extends BaseTask
 	 */
 	public function getTotalSteps()
 	{
-		$seedTasks = $this->getSettings()->getAttribute('seedTasks');
+		$seedTask = $this->getSettings()->getAttribute('seedTask');
 
-		return $seedTasks['quantity'];
+		return $seedTask['quantity'];
 	}
 
 	/**
-	 * Create 1 mockData for each step
+	 * Create the mock data each time a step is run
 	 *
 	 * @param int $step
 	 *
@@ -43,25 +43,25 @@ class SproutImport_SeedTask extends BaseTask
 	{
 		craft()->config->maxPowerCaptain();
 
-		$seedTasks = $this->getSettings()->getAttribute('seedTasks');
+		$seedTask = $this->getSettings()->getAttribute('seedTask');
 
 		try
 		{
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 
-			$details = $seedTasks['details'];
+			$details = $seedTask['details'];
 
 			$weedModelAttributes = array(
 				'seed'          => true,
-				'type'          => $seedTasks['type'],
+				'type'          => $seedTask['type'],
 				'details'       => $details,
-				'dateSubmitted' => $seedTasks['dateSubmitted']
+				'dateSubmitted' => $seedTask['dateSubmitted']
 			);
 
 			$weedModel = SproutImport_WeedModel::populateModel($weedModelAttributes);
 
-			$elementType = $seedTasks['elementType'];
-			$settings    = $seedTasks['settings'];
+			$elementType = $seedTask['elementType'];
+			$settings    = $seedTask['settings'];
 
 			$namespace = 'Craft\\' . $elementType . 'SproutImportElementImporter';
 

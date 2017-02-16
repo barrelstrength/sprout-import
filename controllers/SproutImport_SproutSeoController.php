@@ -4,6 +4,9 @@ namespace Craft;
 
 class SproutImport_SproutSeoController extends BaseController
 {
+	/**
+	 * Generate Redirect JSON in Sprout Import Format
+	 */
 	public function actionGenerateRedirectJson()
 	{
 		$pastedCSV = craft()->request->getPost('pastedCSV');
@@ -31,6 +34,13 @@ class SproutImport_SproutSeoController extends BaseController
 		}
 	}
 
+	/**
+	 * Convert provided CSV data into JSON
+	 *
+	 * @param $csv
+	 *
+	 * @return string
+	 */
 	private function convertToJson($csv)
 	{
 		$json = '';
@@ -74,6 +84,13 @@ class SproutImport_SproutSeoController extends BaseController
 		return $json;
 	}
 
+	/**
+	 * Determine if the row might be our header row and remove it
+	 *
+	 * @param $header
+	 *
+	 * @return bool
+	 */
 	private function isHeader($header)
 	{
 		$result = false;
