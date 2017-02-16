@@ -142,8 +142,7 @@ class SproutImportPlugin extends BasePlugin
 	protected function defineSettings()
 	{
 		return array(
-			'pluginNameOverride' => AttributeType::String,
-			'batch'              => AttributeType::Number
+			'pluginNameOverride' => AttributeType::String
 		);
 	}
 

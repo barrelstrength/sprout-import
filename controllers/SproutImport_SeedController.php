@@ -93,8 +93,6 @@ class SproutImport_SeedController extends BaseController
 		$plugin         = craft()->plugins->getPlugin('sproutimport');
 		$pluginSettings = $plugin->getSettings();
 
-		$batch = (isset($pluginSettings->batch) && $pluginSettings->batch > 0) ? $pluginSettings->batch : 10;
-
 		if (!empty($elementType))
 		{
 			$weedMessage = Craft::t('{elementType} Element');
@@ -110,7 +108,6 @@ class SproutImport_SeedController extends BaseController
 
 			$seedTaskAttributes = array(
 				'elementType'   => $elementType,
-				'batch'         => $batch,
 				'quantity'      => $quantity,
 				'settings'      => $settings,
 				'type'          => 'Seed',
