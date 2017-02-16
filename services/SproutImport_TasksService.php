@@ -37,10 +37,10 @@ class SproutImport_TasksService extends BaseApplicationComponent
 	 * @return TaskModel
 	 * @throws Exception
 	 */
-	public function createSeedTasks(SproutImport_SeedTasksModel $seedTaskModel)
+	public function createSeedTask(SproutImport_SeedTaskModel $seedTaskModel)
 	{
 		return craft()->tasks->createTask('SproutImport_Seed', Craft::t("Seeding data."), array(
-			'seedTasks' => $seedTaskModel->getAttributes()
+			'seedTask' => $seedTaskModel->getAttributes()
 		));
 	}
 

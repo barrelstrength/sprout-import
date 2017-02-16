@@ -5,6 +5,8 @@ class SproutImport_ImportController extends BaseController
 {
 	/**
 	 * Import Content and Settings via JSON schema using the proper Craft Import Format
+	 *
+	 * @return null
 	 */
 	public function actionRunImport()
 	{

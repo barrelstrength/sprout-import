@@ -63,7 +63,7 @@ class SproutImport_SeedController extends BaseController
 			}
 		}
 
-		$seedTaskModel = new SproutImport_SeedTasksModel;
+		$seedTaskModel = new SproutImport_SeedTaskModel();
 
 		if (isset($variables['seeds']))
 		{
@@ -97,28 +97,28 @@ class SproutImport_SeedController extends BaseController
 
 		if (!empty($elementType))
 		{
-			$weedMessage = '{elementType} Element';
+			$weedMessage = Craft::t('{elementType} Element');
 
 			if ($quantity > 1)
 			{
-				$weedMessage = '{elementType} Elements';
+				$weedMessage = Craft::t('{elementType} Elements');
 			}
 
 			$details = Craft::t($weedMessage, array(
 				'elementType' => $elementType
 			));
 
-			$seedTasksAtrributes = array(
-				'elementType' => $elementType,
-				'batch'       => $batch,
-				'quantity'    => $quantity,
-				'settings'    => $settings,
-				'type'        => 'Seed',
-				'details'     => $details,
+			$seedTaskAttributes = array(
+				'elementType'   => $elementType,
+				'batch'         => $batch,
+				'quantity'      => $quantity,
+				'settings'      => $settings,
+				'type'          => 'Seed',
+				'details'       => $details,
 				'dateSubmitted' => DateTimeHelper::currentTimeForDb()
 			);
 
-			$seedTaskModel = SproutImport_SeedTasksModel::populateModel($seedTasksAtrributes);
+			$seedTaskModel = SproutImport_SeedTaskModel::populateModel($seedTaskAttributes);
 
 			$sets = array();
 
@@ -143,7 +143,7 @@ class SproutImport_SeedController extends BaseController
 				try
 				{
 					// Run the seeding by the craft tasks service
-					sproutImport()->tasks->createSeedTasks($seedTaskModel);
+					sproutImport()->tasks->createSeedTask($seedTaskModel);
 
 					craft()->userSession->setNotice(Craft::t('Elements queued for seeds. Total: {tasks}', array(
 						'tasks' => $quantity
