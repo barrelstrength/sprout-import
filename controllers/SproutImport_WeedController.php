@@ -46,7 +46,7 @@ class SproutImport_WeedController extends BaseController
 
 		if (sproutImport()->seed->weed($seeds, $isKeep))
 		{
-			craft()->userSession->setError(Craft::t('The garden is weeded.'));
+			craft()->userSession->setNotice(Craft::t('The garden is weeded.'));
 
 			$this->redirectToPostedUrl();
 		}
