@@ -3,6 +3,9 @@ namespace Craft;
 
 class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementImporter
 {
+	/** @var string Session key for storing the cart number */
+	protected $cookieCartId = 'commerce_cookie';
+
 	/**
 	 * @return string
 	 */
@@ -19,10 +22,84 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 		return 'Commerce_Order';
 	}
 
+	public function setModel($model, $settings = array())
+	{
+		$this->model = parent::setModel($model, $settings);
+
+		$this->model->isCompleted     = 0;
+		$this->model->number          = $this->getRandomCartNumber();
+		$this->model->paymentCurrency = craft()->commerce_paymentCurrencies->getPrimaryPaymentCurrencyIso();
+	}
+
+	public function save()
+	{
+		$result = craft()->commerce_orders->saveOrder($this->model);
+
+		$order = $this->model;
+
+		if (!$result)
+		{
+			$message = Craft::t("Could not save order attributes.");
+
+			SproutImportPlugin::log($message, LogLevel::Error);
+
+			sproutImport()->addError($message, 'invalid-attributes');
+		}
+
+		if (!empty($this->rows['lineItems']))
+		{
+			foreach ($this->rows['lineItems'] as $lineItem)
+			{
+				$purchasableId = $lineItem['purchasableId'];
+				$qty           = $lineItem['qty'];
+				$options       = $lineItem['options'];
+
+				if (!craft()->commerce_cart->addToCart($order, $purchasableId, $qty, $options))
+				{
+
+				}
+			}
+		}
+
+		if (!empty($this->rows['payments']))
+		{
+			$paymentData = $this->rows['payments'];
+
+			$paymentMethod = $order->getPaymentMethod();
+
+			$paymentForm = $paymentMethod->getPaymentFormModel();
+
+			// Needed for the base class populateModelFromPost
+			$_POST = $paymentData;
+
+			$paymentForm->populateModelFromPost($paymentData);
+
+			$paymentForm->validate();
+
+			if (!$paymentForm->hasErrors())
+			{
+				$success = craft()->commerce_payments->processPayment($order, $paymentForm);
+			}
+			else
+			{
+
+				$message = Craft::t('Payment information submitted is invalid.');
+
+				SproutImportPlugin::log($message, LogLevel::Error);
+
+				sproutImport()->addError($message, 'payment-invalid');
+
+				$success = false;
+			}
+		}
+
+		return $success;
+	}
+
 	/**
 	 * @return mixed
 	 */
-	public function save()
+	public function save_temp()
 	{
 		if ($this->model->number == null)
 		{
