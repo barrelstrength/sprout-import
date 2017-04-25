@@ -33,9 +33,9 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 
 	public function save()
 	{
-		$result = craft()->commerce_orders->saveOrder($this->model);
-
 		$order = $this->model;
+
+		$result = craft()->commerce_orders->saveOrder($order);
 
 		if (!$result)
 		{
@@ -93,98 +93,31 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 			}
 		}
 
+		$this->saveAddress('billingAddress', $order);
+		$this->saveAddress('shippingAddress', $order);
+
 		return $success;
 	}
 
-	/**
-	 * @return mixed
-	 */
-	public function save_temp()
+	private function saveAddress($type = 'billingAddress', Commerce_OrderModel $order)
 	{
-		if ($this->model->number == null)
+		if (!empty($this->rows['addresses'][$type]))
 		{
-			$this->model->number = $this->getRandomCartNumber();
-		}
+			$address = $this->rows['addresses'][$type];
 
-		if ($this->model->returnUrl != null)
-		{
-			// Change number variable to generated number.
-			$this->model->returnUrl = str_replace('{number}', $this->model->number, $this->model->returnUrl);
-		}
-		$dataLineItems = $this->rows['lineItems'];
+			$addressModel = Commerce_AddressModel::populateModel($address);
 
-		// Get data for saving after calculating adjustments
-		$isCompleted = $this->model->isCompleted;
-
-		// Needed to calculate adjustments such totalPrice and itemTotal
-		$this->model->isCompleted = false;
-
-		$result = craft()->commerce_orders->saveOrder($this->model);
-
-		$order = $this->model;
-
-		if (!empty($dataLineItems))
-		{
-			foreach ($dataLineItems as $dataLineItem)
+			if (craft()->commerce_addresses->saveAddress($addressModel))
 			{
-				$lineItem = craft()->commerce_lineItems->createLineItem($dataLineItem['purchasableId'], $order,
-					$dataLineItem['options'], $dataLineItem['qty']);
+				$addressId = $addressModel->id;
 
-				$isNewLineItem = true;
+				$keyAddress = $type . 'Id';
 
-				$lineItem->validate();
+				$order->$keyAddress = $addressId;
 
-				$lineItem->purchasable->validateLineItem($lineItem);
-
-				if (!$lineItem->hasErrors())
-				{
-					if (craft()->commerce_lineItems->saveLineItem($lineItem))
-					{
-						if ($isNewLineItem)
-						{
-							$linesItems   = $order->getLineItems();
-							$linesItems[] = $lineItem;
-							$order->setLineItems($linesItems);
-						}
-					}
-				}
+				craft()->commerce_orders->saveOrder($order);
 			}
 		}
-
-		craft()->commerce_orders->saveOrder($order);
-
-		$paymentData = $this->rows['payments'];
-
-		$paymentMethod = $order->getPaymentMethod();
-
-		$paymentForm = $paymentMethod->getPaymentFormModel();
-
-		// Needed for the base class populateModelFromPost
-		$_POST = $paymentData;
-
-		$paymentForm->populateModelFromPost($paymentData);
-
-		$paymentForm->validate();
-		if (!$paymentForm->hasErrors())
-		{
-			//Craft::dd($paymentForm);
-			$success = craft()->commerce_payments->processPayment($order, $paymentForm);
-		}
-		else
-		{
-			$message = Craft::t('Payment information submitted is invalid.');
-
-			SproutImportPlugin::log($message, LogLevel::Error);
-
-			sproutImport()->addError($message, 'payment-invalid');
-
-			$success = false;
-		}
-
-		return $success;
-		// Update the order again for isCompleted attribute only after adjustments
-		//$order->isCompleted = $isCompleted;
-		//return craft()->commerce_orders->updateOrderPaidTotal($order);
 	}
 
 	/**
@@ -199,7 +132,7 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 
 	public function getImporterDataKeys()
 	{
-		return array('lineItems', 'payments');
+		return array('lineItems', 'payments', 'addresses');
 	}
 
 	/**
