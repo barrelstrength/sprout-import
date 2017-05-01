@@ -26,8 +26,13 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 	{
 		$this->model = parent::setModel($model, $settings);
 
-		$this->model->isCompleted     = 0;
-		$this->model->number          = $this->getRandomCartNumber();
+		$this->model->isCompleted = (!empty($settings['isCompleted'])) ? $settings['isCompleted'] : 0;
+
+		if (empty($this->model->number))
+		{
+			$this->model->number = $this->getRandomCartNumber();
+		}
+
 		$this->model->paymentCurrency = craft()->commerce_paymentCurrencies->getPrimaryPaymentCurrencyIso();
 	}
 
@@ -66,24 +71,59 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 			$paymentData = $this->rows['payments'];
 
 			$paymentMethod = $order->getPaymentMethod();
+			//
+			//$paymentForm = $paymentMethod->getPaymentFormModel();
+			//
+			//// Needed for the base class populateModelFromPost
+			//$_POST = $paymentData;
+			//
+			//$paymentForm->populateModelFromPost($paymentData);
+			//
+			//$paymentForm->validate();
 
-			$paymentForm = $paymentMethod->getPaymentFormModel();
+			//if (!$paymentForm->hasErrors())
 
-			// Needed for the base class populateModelFromPost
-			$_POST = $paymentData;
-
-			$paymentForm->populateModelFromPost($paymentData);
-
-			$paymentForm->validate();
-
-			if (!$paymentForm->hasErrors())
+			try
 			{
-				$success = craft()->commerce_payments->processPayment($order, $paymentForm);
+				if (!$order->isCompleted)
+				{
+					craft()->commerce_orders->completeOrder($order);
+				}
+
+				//creating order, transaction and request
+				$transaction = craft()->commerce_transactions->createTransaction($order);
+
+				if (!empty($this->rows['payments']['status']))
+				{
+					$transaction->status = $this->rows['payments']['status'];
+				}
+
+				$transaction->type = Commerce_TransactionRecord::TYPE_AUTHORIZE;
+
+				if (!empty($this->rows['payments']['type']))
+				{
+					$transaction->type = $this->rows['payments']['type'];
+				}
+
+				if (!empty($this->rows['payments']['reference']))
+				{
+					$transaction->reference = $this->rows['payments']['reference'];
+				}
+
+				if (!empty($this->rows['payments']['dateUpdated']))
+				{
+					$transaction->dateUpdated = $this->rows['payments']['dateUpdated'];
+				}
+
+				craft()->commerce_transactions->saveTransaction($transaction);
+
+				craft()->commerce_orders->updateOrderPaidTotal($order);
+
+				$success = true;
 			}
-			else
+			catch (\Exception $e)
 			{
-
-				$message = Craft::t('Payment information submitted is invalid.');
+				$message = $e->getMessage();
 
 				SproutImportPlugin::log($message, LogLevel::Error);
 

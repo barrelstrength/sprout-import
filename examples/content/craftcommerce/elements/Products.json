@@ -26,11 +26,32 @@
 				"width": "",
 				"height": "",
 				"weight": ""
+			},
+			"new2": {
+				"sku": "shoes-2",
+				"title": "Shoes Two",
+				"price": 18,
+				"unlimitedStock": 1,
+				"minQty": "",
+				"maxQty": "",
+				"length": "",
+				"width": "",
+				"height": "",
+				"weight": ""
 			}
 		},
 		"content": {
 			"title": "Shoes One",
-			"fields": []
+			"fields": {
+				"startDate": {
+					"date": "5/14/2016",
+					"time": "9:45 AM"
+				},
+				"endDate": {
+					"date": "7/14/2016",
+					"time": "5:00 PM"
+				}
+			}
 		}
 	},
 	{
