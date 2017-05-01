@@ -115,6 +115,11 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 					$transaction->dateUpdated = $this->rows['payments']['dateUpdated'];
 				}
 
+				if (!empty($this->rows['payments']['message']))
+				{
+					$transaction->message = $this->rows['payments']['message'];
+				}
+
 				craft()->commerce_transactions->saveTransaction($transaction);
 
 				craft()->commerce_orders->updateOrderPaidTotal($order);
