@@ -34,6 +34,42 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 		}
 
 		$this->model->paymentCurrency = craft()->commerce_paymentCurrencies->getPrimaryPaymentCurrencyIso();
+
+		if (!empty($customer = $settings['attributes']['customerId']))
+		{
+			// If email is passed create customer record
+			if (!is_int($customer))
+			{
+				if (!filter_var($customer, FILTER_VALIDATE_EMAIL))
+				{
+					$message = Craft::t($customer . " email does not validate");
+
+					SproutImportPlugin::log($message, LogLevel::Error);
+
+					sproutImport()->addError($message, 'invalid-email');
+				}
+				else
+				{
+					$user = craft()->users->getUserByEmail($customer);
+
+					$userId = ($user != null)? $user->id : null;
+
+					$attributes = array(
+						'email'  => $customer,
+						'userId' => $userId
+					);
+
+					$customerModel = Commerce_CustomerModel::populateModel($attributes);
+
+					$result = craft()->commerce_customers->saveCustomer($customerModel);
+
+					if ($result)
+					{
+						$this->model->customerId = $customerModel->id;
+					}
+				}
+			}
+		}
 	}
 
 	public function save()
@@ -68,21 +104,6 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 
 		if (!empty($this->rows['payments']))
 		{
-			$paymentData = $this->rows['payments'];
-
-			$paymentMethod = $order->getPaymentMethod();
-			//
-			//$paymentForm = $paymentMethod->getPaymentFormModel();
-			//
-			//// Needed for the base class populateModelFromPost
-			//$_POST = $paymentData;
-			//
-			//$paymentForm->populateModelFromPost($paymentData);
-			//
-			//$paymentForm->validate();
-
-			//if (!$paymentForm->hasErrors())
-
 			try
 			{
 				if (!$order->isCompleted)
@@ -98,7 +119,8 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 					$transaction->status = $this->rows['payments']['status'];
 				}
 
-				$transaction->type = Commerce_TransactionRecord::TYPE_AUTHORIZE;
+				// Capture and Purchase type will set total paid other type does not
+				$transaction->type = Commerce_TransactionRecord::TYPE_CAPTURE;
 
 				if (!empty($this->rows['payments']['type']))
 				{
