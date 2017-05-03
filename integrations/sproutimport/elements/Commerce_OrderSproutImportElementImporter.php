@@ -35,6 +35,14 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 
 		$this->model->paymentCurrency = craft()->commerce_paymentCurrencies->getPrimaryPaymentCurrencyIso();
 
+		//Bypass validation
+		$this->model->customerId = 0;
+	}
+
+	public function save()
+	{
+		$settings = $this->rows;
+
 		if (!empty($customer = $settings['attributes']['customerId']))
 		{
 			// If email is passed create customer record
@@ -70,17 +78,14 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 				}
 			}
 		}
-	}
 
-	public function save()
-	{
 		$order = $this->model;
 
 		$result = craft()->commerce_orders->saveOrder($order);
 
 		if (!$result)
 		{
-			$message = Craft::t("Could not save order attributes.");
+			$message = $order->getErrors();
 
 			SproutImportPlugin::log($message, LogLevel::Error);
 
