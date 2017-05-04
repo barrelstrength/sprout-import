@@ -26,6 +26,8 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 	{
 		$this->model = parent::setModel($model, $settings);
 
+		$this->model->setAttributes($settings['attributes']);
+
 		$this->model->isCompleted = (!empty($settings['isCompleted'])) ? $settings['isCompleted'] : 0;
 
 		if (empty($this->model->number))
@@ -107,7 +109,7 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 			}
 		}
 
-		if (!empty($this->rows['payments']))
+		if (!empty($this->rows['transactions']))
 		{
 			try
 			{
@@ -116,35 +118,22 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 					craft()->commerce_orders->completeOrder($order);
 				}
 
+				if (!empty($orderStatusId = $settings['attributes']['orderStatusId']))
+				{
+					// Needed to import Status Id
+					$order->orderStatusId = $orderStatusId;
+					$order->dateOrdered   = $settings['attributes']['dateOrdered'];
+				}
+
 				//creating order, transaction and request
 				$transaction = craft()->commerce_transactions->createTransaction($order);
 
-				if (!empty($this->rows['payments']['status']))
-				{
-					$transaction->status = $this->rows['payments']['status'];
-				}
+				$transaction->setAttributes($this->rows['transactions']);
 
-				// Capture and Purchase type will set total paid other type does not
-				$transaction->type = Commerce_TransactionRecord::TYPE_CAPTURE;
-
-				if (!empty($this->rows['payments']['type']))
+				if (empty($this->rows['transactions']['type']))
 				{
-					$transaction->type = $this->rows['payments']['type'];
-				}
-
-				if (!empty($this->rows['payments']['reference']))
-				{
-					$transaction->reference = $this->rows['payments']['reference'];
-				}
-
-				if (!empty($this->rows['payments']['dateUpdated']))
-				{
-					$transaction->dateUpdated = $this->rows['payments']['dateUpdated'];
-				}
-
-				if (!empty($this->rows['payments']['message']))
-				{
-					$transaction->message = $this->rows['payments']['message'];
+					// Capture and Purchase type will set total paid other type does not
+					$transaction->type = Commerce_TransactionRecord::TYPE_CAPTURE;
 				}
 
 				craft()->commerce_transactions->saveTransaction($transaction);
@@ -204,7 +193,7 @@ class Commerce_OrderSproutImportElementImporter extends BaseSproutImportElementI
 
 	public function getImporterDataKeys()
 	{
-		return array('lineItems', 'payments', 'addresses');
+		return array('lineItems', 'transactions', 'addresses');
 	}
 
 	/**
