@@ -1,0 +1,15 @@
+{% import "_includes/forms" as forms %}
+
+<div class="field element-options {{ id }}" style="display: none">
+
+	{{ forms.selectField({
+		label: "Product Types"|t,
+		instructions: "The product type to import products."|t,
+		id: "productTypes",
+		name: "settings[productType]",
+		options: [{label: "Select a Product Type..."|t, value: null}]|merge(productTypes),
+		value: settings.productType is defined ? settings.productType : null,
+	}) }}
+
+</div>
+

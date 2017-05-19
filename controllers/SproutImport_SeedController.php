@@ -90,9 +90,6 @@ class SproutImport_SeedController extends BaseController
 		$quantity    = craft()->request->getRequiredPost('quantity');
 		$settings    = craft()->request->getRequiredPost('settings');
 
-		$plugin         = craft()->plugins->getPlugin('sproutimport');
-		$pluginSettings = $plugin->getSettings();
-
 		if (!empty($elementType))
 		{
 			$weedMessage = Craft::t('{elementType} Element');

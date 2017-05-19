@@ -168,7 +168,6 @@ class EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 			$data['settings']['updateElement']['matchCriteria'] = array("section" => $entryParams['sectionHandle']);
 		}
 
-		//return sproutImport()->elementImporter->saveElement($data);
 		return $data;
 	}
 

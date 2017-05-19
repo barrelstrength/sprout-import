@@ -21,6 +21,124 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 
 	/**
 	 * @return bool
+	 */
+	public function hasSeedGenerator()
+	{
+		return true;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSettingsHtml()
+	{
+		$productTypes = $this->getProductTypes();
+
+		return craft()->templates->render('sproutimport/_integrations/commerce/settings', array(
+			'id'       => $this->getModelName(),
+			'productTypes' => $productTypes
+		));
+	}
+
+	private function getProductTypes()
+	{
+		$products = array();
+
+		$productTypes = craft()->commerce_productTypes->getAllProductTypes();
+
+		if (!empty($productTypes))
+		{
+			foreach ($productTypes as $productType)
+			{
+				$products[] = new OptionData($productType->name, $productType->id, false);
+			}
+		}
+
+		return $products;
+	}
+
+	public function getMockData($quantity, $settings)
+	{
+		$data = array();
+
+		$productType = $settings['productType'];
+
+		$data[] = $this->generateProduct($productType);
+
+		return $data;
+	}
+
+	private function generateProduct($productType)
+	{
+		$fakerDate = $this->fakerService->dateTimeThisYear('now');
+
+		$taxIds = array();
+		$taxCategories = craft()->commerce_taxCategories->getAllTaxCategories();
+
+		if (!empty($taxCategories))
+		{
+			foreach ($taxCategories as $taxCategory)
+			{
+				$taxIds[] = $taxCategory->id;
+			}
+		}
+
+		$randomTaxKey = array_rand($taxIds);
+
+		$shipIds = array();
+		$shippingCategories = craft()->commerce_shippingCategories->getAllShippingCategories();
+
+		if (!empty($shippingCategories))
+		{
+			foreach ($shippingCategories as $shipCategory)
+			{
+				$shipIds[] = $shipCategory->id;
+			}
+		}
+
+		$randomShipKey = array_rand($shipIds);
+
+		$product = array();
+		$product['@model'] = "Commerce_ProductModel";
+		$product['attributes']['typeId']        = $productType;
+		$product['attributes']['postDate']      = $fakerDate;
+		$product['attributes']['enabled']       = 1;
+		$product['attributes']['taxCategoryId'] = $taxIds[$randomTaxKey];
+		$product['attributes']['shippingCategoryId'] = $shipIds[$randomShipKey];
+
+		$product['attributes']['freeShipping'] = $this->fakerService->boolean;
+
+		$product['attributes']['promotable']   = $this->fakerService->boolean;
+
+		// maximum variant on a product is 5
+		$variantsQty = $this->fakerService->numberBetween(1, 5);
+
+		for ($rise = 1; $rise <= $variantsQty; $rise++)
+		{
+			$key = 'new' . $rise;
+			$title = $this->fakerService->text(30);
+
+			// Remove period on title
+			$title = str_replace('.', '', $title);
+			// Round off to nearest 10 or 5
+			$randomPrice = ceil($this->fakerService->numberBetween(5, 1000) / 10) * 5;
+
+			$product['content']['title']   = $title;
+
+			$product['variants'][$key]['title'] = $title;
+			$product['variants'][$key]['sku']   = $title;
+
+			$product['variants'][$key]['price'] = $randomPrice;
+			$product['variants'][$key]['unlimitedStock'] = 1;
+			$product['variants'][$key]['minQty'] = 1;
+			$product['variants'][$key]['maxQty'] = 100;
+		}
+
+		return $product;
+	}
+
+	/**
+	 * @return bool
 	 * @throws Exception
 	 * @throws \Exception
 	 */
