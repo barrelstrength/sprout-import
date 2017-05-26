@@ -3,6 +3,7 @@ namespace Craft;
 
 class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElementImporter
 {
+	private $productType;
 	/**
 	 * @return string
 	 */
@@ -61,19 +62,21 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 	{
 		$data = array();
 
-		$productType = $settings['productType'];
+		$productTypeId = $settings['productType'];
 
-		$data[] = $this->generateProduct($productType);
+		$data[] = $this->generateProduct($productTypeId);
 
 		return $data;
 	}
 
-	private function generateProduct($productType)
+	private function generateProduct($productTypeId)
 	{
 		$fakerDate = $this->fakerService->dateTimeThisYear('now');
 
 		$taxIds = array();
 		$taxCategories = craft()->commerce_taxCategories->getAllTaxCategories();
+
+		$this->productType = craft()->commerce_productTypes->getProductTypeById($productTypeId);
 
 		if (!empty($taxCategories))
 		{
@@ -100,7 +103,7 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 
 		$product = array();
 		$product['@model'] = "Commerce_ProductModel";
-		$product['attributes']['typeId']        = $productType;
+		$product['attributes']['typeId']        = $productTypeId;
 		$product['attributes']['postDate']      = $fakerDate;
 		$product['attributes']['enabled']       = 1;
 		$product['attributes']['taxCategoryId'] = $taxIds[$randomTaxKey];
@@ -109,6 +112,10 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 		$product['attributes']['freeShipping'] = $this->fakerService->boolean;
 
 		$product['attributes']['promotable']   = $this->fakerService->boolean;
+
+		$fieldLayouts = $this->getFieldLayouts();
+
+		$product['content']['fields'] = sproutImport()->mockData->getFieldsWithMockData($fieldLayouts);
 
 		// maximum variant on a product is 5
 		$variantsQty = $this->fakerService->numberBetween(1, 5);
@@ -232,5 +239,14 @@ class Commerce_ProductSproutImportElementImporter extends BaseSproutImportElemen
 	public function getImporterDataKeys()
 	{
 		return array('variants');
+	}
+
+	private function getFieldLayouts()
+	{
+		$fieldLayoutId = $this->productType->fieldLayoutId;
+
+		$layouts = craft()->fields->getLayoutFieldsById($fieldLayoutId);
+
+		return $layouts;
 	}
 }
