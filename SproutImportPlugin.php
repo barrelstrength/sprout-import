@@ -193,7 +193,6 @@ class SproutImportPlugin extends BasePlugin
 		if (isset($commercePlugin->isEnabled) && $commercePlugin->isEnabled)
 		{
 			$craftCommerceImporters = array(
-				new Commerce_OrderSproutImportElementImporter(),
 				new Commerce_ProductSproutImportElementImporter(),
 				new Commerce_ProductTypeSproutImportSettingsImporter(),
 				new Commerce_ProductsSproutImportFieldImporter()
@@ -231,7 +230,6 @@ class SproutImportPlugin extends BasePlugin
 		$elements = array(
 			"AssetSproutImportElementImporter",
 			"CategorySproutImportElementImporter",
-			"Commerce_OrderSproutImportElementImporter",
 			"Commerce_ProductSproutImportElementImporter",
 			"EntrySproutImportElementImporter",
 			"TagSproutImportElementImporter"
