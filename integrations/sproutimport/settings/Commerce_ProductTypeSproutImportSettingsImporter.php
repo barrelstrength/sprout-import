@@ -16,7 +16,7 @@ class Commerce_ProductTypeSproutImportSettingsImporter extends BaseSproutImportS
 	 */
 	public function getName()
 	{
-		return Craft::t('Craft Commerce Product Type');
+		return Craft::t('Commerce Product Type');
 	}
 
 	/**
