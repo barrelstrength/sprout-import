@@ -1,0 +1,43 @@
+[
+	{
+		"@model": "Commerce_OrderModel",
+		"attributes": {
+			"currency": "USD",
+			"billingAddressId": "4",
+			"shippingAddressId": "4",
+			"shippingMethod": "freeShipping",
+			"paymentMethodId": 1,
+			"customerId": 1,
+			"orderStatusId": 1,
+			"isCompleted": 1,
+			"dateOrdered": "2016-05-21 01:08:38",
+			"datePaid": "2016-05-21 01:09:38",
+			"returnUrl": "/commerce/customer/order?number={number}",
+			"cancelUrl": "/commerce/checkout/payment"
+		},
+		"content": {
+			"title": "Order One",
+			"fields": []
+		},
+		"lineItems": [
+			{
+				"purchasableId": "3703",
+				"qty": "3",
+				"options": []
+			},
+			{
+				"purchasableId": "3703",
+				"qty": "1",
+				"options": []
+			}
+		],
+		"payments": {
+			"firstName": "Boy",
+			"lastName": "Sue",
+			"number": "4929000000006",
+			"month": "1",
+			"year": "2017",
+			"cvv": "123"
+		}
+	}
+]
