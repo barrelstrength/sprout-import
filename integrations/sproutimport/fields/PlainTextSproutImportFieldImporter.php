@@ -23,12 +23,16 @@ class PlainTextSproutImportFieldImporter extends BaseSproutImportFieldImporter
 			$lines      = rand(1, 3);
 			$paragraphs = $this->fakerService->paragraphs($lines);
 
-			return implode("\n\n", $paragraphs);
+			$string = implode("\n\n", $paragraphs);
+
+			return ($settings['maxLength']) ? substr($string, 0, $settings['maxLength']) : $string;
 		}
 
 		$lines     = rand(2, 4);
 		$sentences = $this->fakerService->sentences($lines);
 
-		return implode("\n ", $sentences);
+		$string = implode("\n\n", $sentences);
+
+		return ($settings['maxLength']) ? substr($string, 0, $settings['maxLength']) : $string;
 	}
 }
