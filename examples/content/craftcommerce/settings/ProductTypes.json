@@ -1,8 +1,8 @@
 [
 	{
 		"@model": "Commerce_ProductTypeModel",
-		"name": "Shirts",
-		"handle": "shirts",
+		"name": "Product Type Example",
+		"handle": "productTypeExample",
 		"skuFormat": "",
 		"descriptionFormat": "",
 		"taxCategories": [
@@ -19,10 +19,50 @@
 		"urlFormat": "commerce/products/{slug}",
 		"template": "commerce/products/_product",
 		"productFields": {
-			"Sprout%20Commerce": [485,484]
+			"fieldLayout": {
+				"fieldLayoutTab": {
+					"name": "Content",
+					"fields": [
+						{
+							"@model": "FieldModel",
+							"groupId": 1,
+							"name": "Custom Field 1",
+							"handle": "customField1",
+							"type": "PlainText"
+						},
+						{
+							"@model": "FieldModel",
+							"groupId": 1,
+							"name": "Custom Field 2",
+							"handle": "customField2",
+							"type": "PlainText"
+						}
+					]
+				}
+			}
 		},
 		"variantLayout": {
-			"Content": [485,484]
+			"fieldLayout": {
+				"fieldLayoutTab": {
+					"name": "Details",
+					"fields": [
+						{
+							"@model": "FieldModel",
+							"groupId": 1,
+							"name": "Custom Variant Field 1",
+							"handle": "customVariantField1",
+							"type": "PlainText"
+						},
+						{
+							"@model": "FieldModel",
+							"groupId": 1,
+							"name": "Custom Variant Field 2",
+							"handle": "customVariantField2",
+							"type": "PlainText"
+						}
+					]
+				}
+			}
 		}
 	}
 ]
