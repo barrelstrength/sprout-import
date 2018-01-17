@@ -64,14 +64,15 @@ class SproutImport_SproutSeoController extends BaseController
 		{
 			$attributes = array_map('trim', $attributes);
 
-			if (count($attributes) == 4)
+			if (count($attributes) == 5)
 			{
 				$sproutSeoImportJson[$key]['@model'] = "SproutSeo_RedirectModel";
 				$sproutSeoImportJson[$key]['attributes'] = array(
 					"oldUrl" => $attributes[0],
 					"newUrl" => $attributes[1],
 					"method" => $attributes[2],
-					"regex"  => $attributes[3]
+					"regex"  => $attributes[3],
+					"count"  => $attributes[4]
 				);
 			}
 		}
@@ -95,7 +96,7 @@ class SproutImport_SproutSeoController extends BaseController
 	{
 		$result = false;
 
-		if (count($header) != 4)
+		if (count($header) != 5)
 		{
 			return false;
 		}
@@ -104,7 +105,8 @@ class SproutImport_SproutSeoController extends BaseController
 			$header[0] == 'oldUrl' ||
 			$header[1] == 'newUrl' ||
 			$header[2] == 'method' ||
-			$header[3] == 'regex'
+			$header[3] == 'regex'  ||
+			$header[4] == 'count'
 		)
 		{
 			$result = true;

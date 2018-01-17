@@ -169,7 +169,7 @@ class SectionSproutImportSettingsImporter extends BaseSproutImportSettingsImport
 	 */
 	protected function isHomepage($settings)
 	{
-		if ($settings['type'] != SectionType::Single)
+		if (isset($settings['type']) && $settings['type'] != SectionType::Single)
 		{
 			return false;
 		}
