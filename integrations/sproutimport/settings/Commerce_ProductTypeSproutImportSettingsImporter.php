@@ -78,35 +78,14 @@ class Commerce_ProductTypeSproutImportSettingsImporter extends BaseSproutImportS
         $fieldLayout = craft()->fields->assembleLayoutFromPost();
         $fieldLayout->type = 'Commerce_Product';
         $model->asa('productFieldLayout')->setFieldLayout($fieldLayout);
-
+        // Set the variant field layout
         $_POST['variant-layout.fieldLayout'] = $settings['variantLayout'];
 
         // Set the variant field layout
         $variantFieldLayout = craft()->fields->assembleLayoutFromPost('variant-layout');
         $variantFieldLayout->type = 'Commerce_Variant';
         $model->asa('variantFieldLayout')->setFieldLayout($variantFieldLayout);
-
-//        // Set the variant field layout
-//        $variantFieldLayout = craft()->fields->assembleLayoutFromPost('variant-layout');
-//        $variantFieldLayout->type = 'Commerce_Variant';
-//        $productType->asa('variantFieldLayout')->setFieldLayout($variantFieldLayout);
-
-//		if (isset($settings['productFields']) && !empty($settings['productFields']))
-//		{
-//			foreach ($settings['productFields'] as $name => $fields)
-//			{
-//				$entryFields = sproutImport()->getFieldIdsByHandle($name, $fields);
-//
-//				if (!empty($entryFields))
-//				{
-//					$fieldLayout       = craft()->fields->assembleLayout($entryFields);
-//					$fieldLayout->type = 'Commerce_Product';
-//
-//					$model->asa('productFieldLayout')->setFieldLayout($fieldLayout);
-//				}
-//			}
-//		}
-
+        
 		$model->setAttributes($attributes);
 
 		if (isset($settings['variantFields']["Content"]) && !empty($settings['variantFields']["Content"]))
