@@ -1,0 +1,68 @@
+[
+	{
+		"@model": "Commerce_ProductTypeModel",
+		"name": "Product Type Example",
+		"handle": "productTypeExample",
+		"skuFormat": "",
+		"descriptionFormat": "",
+		"taxCategories": [
+			1
+		],
+		"shippingCategories": [
+			1
+		],
+		"hasDimensions": 1,
+		"hasVariants": 1,
+		"hasVariantTitleField": 1,
+		"titleFormat": "{product.title}",
+		"hasUrls": 1,
+		"urlFormat": "commerce/products/{slug}",
+		"template": "commerce/products/_product",
+		"productFields": {
+			"fieldLayout": {
+				"fieldLayoutTab": {
+					"name": "Content",
+					"fields": [
+						{
+							"@model": "FieldModel",
+							"groupId": 1,
+							"name": "Custom Field 1",
+							"handle": "customField1",
+							"type": "PlainText"
+						},
+						{
+							"@model": "FieldModel",
+							"groupId": 1,
+							"name": "Custom Field 2",
+							"handle": "customField2",
+							"type": "PlainText"
+						}
+					]
+				}
+			}
+		},
+		"variantLayout": {
+			"fieldLayout": {
+				"fieldLayoutTab": {
+					"name": "Details",
+					"fields": [
+						{
+							"@model": "FieldModel",
+							"groupId": 1,
+							"name": "Custom Variant Field 1",
+							"handle": "customVariantField1",
+							"type": "PlainText"
+						},
+						{
+							"@model": "FieldModel",
+							"groupId": 1,
+							"name": "Custom Variant Field 2",
+							"handle": "customVariantField2",
+							"type": "PlainText"
+						}
+					]
+				}
+			}
+		}
+	}
+]
