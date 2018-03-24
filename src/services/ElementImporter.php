@@ -216,55 +216,19 @@ class ElementImporter extends Component
     }
 
     /**
-     * @param $model
-     * @param $updateElement
-     *
-     * @return bool
-     */
-    public function getModelByMatches(Element $model, $updateElement)
-    {
-        $utilities = SproutImport::$app->utilities;
-
-        if ($updateElement) {
-            $matchBy = $utilities->getValueByKey('matchBy', $updateElement);
-            $matchValue = $utilities->getValueByKey('matchValue', $updateElement);
-
-            if ($matchBy && $matchValue) {
-                if (is_array($matchValue)) {
-                    $matchValue = $matchValue[0];
-
-                    if (count($matchValue) > 0) {
-                        $message = Craft::t('sprout-import', 'The updateElement key can only retrieve a single match. Array with multiple values was provided. Only the first value has been used to find a match: {matchValue}', [
-                            'matchValue' => $matchValue
-                        ]);
-
-                        SproutImport::$app->utilities->addError('invalid-match', $message);
-                    }
-                }
-
-                $elementTypeName = Craft::$app->getElements()->getElementTypeByRefHandle($model::refHandle());
-
-                return $this->getElementByDefinitions($elementTypeName, $updateElement);
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * @param      $elementTypeName
-     * @param      $definitions
+     * @param      $updateElementSettings
      * @param bool $all
      *
      * @return array|bool|Element|null|static|static[]
      */
-    public function getElementByDefinitions($elementTypeName, $definitions, $all = false)
+    public function getElementFromImportSettings($elementTypeName, $updateElementSettings, $all = false)
     {
         $utilities = SproutImport::$app->utilities;
 
-        $matchBy = $utilities->getValueByKey('matchBy', $definitions);
-        $matchValue = $utilities->getValueByKey('matchValue', $definitions);
-        $matchCriteria = $utilities->getValueByKey('matchCriteria', $definitions);
+        $matchBy = $utilities->getValueByKey('matchBy', $updateElementSettings);
+        $matchValue = $utilities->getValueByKey('matchValue', $updateElementSettings);
+        $matchCriteria = $utilities->getValueByKey('matchCriteria', $updateElementSettings);
 
         /**
          * @var $elementType Element
@@ -275,7 +239,9 @@ class ElementImporter extends Component
         // If it is not an attribute search element by field
         if (!in_array($matchBy, $criteriaAttributes, false)) {
 
-            return $elementType::find()->search(['query' => $matchBy.':'.$matchValue])->all();
+            return $elementType::find()->search([
+                'query' => $matchBy.':'.$matchValue
+            ])->all();
         }
 
         $attributes = [$matchBy => $matchValue];
@@ -291,11 +257,9 @@ class ElementImporter extends Component
                 $element = $elementType::findOne($attributes);
             }
 
-            if ($element) {
-                return $element;
-            }
-
+            return $element;
         } catch (\Exception $e) {
+
             SproutImport::error($e->getMessage());
 
             SproutImport::$app->utilities->addError('invalid-model-match', $e->getMessage());
@@ -312,80 +276,83 @@ class ElementImporter extends Component
      */
     public function resolveRelationships(array $related = null, array $fields)
     {
-        if (count($related)) {
-            foreach ($related as $name => $definition) {
-                if (empty($definition)) {
-                    unset($related[$name]);
-                    continue;
+        if (!count($related)) {
+            return null;
+        }
+
+        foreach ($related as $fieldHandle => $elementSettings) {
+
+            if (empty($elementSettings)) {
+                unset($related[$fieldHandle]);
+                continue;
+            }
+
+            /**
+             * @var $importerClass BaseImporter
+             */
+            $importerClass = SproutBase::$app->importers->getImporter($elementSettings);
+
+            if (!$importerClass) {
+                continue;
+            }
+
+            $matchBy = SproutImport::$app->utilities->getValueByKey('matchBy', $elementSettings);
+            $matchValue = SproutImport::$app->utilities->getValueByKey('matchValue', $elementSettings);
+            $newElements = SproutImport::$app->utilities->getValueByKey('newElements', $elementSettings);
+
+            if (!$importerClass && !$matchValue && !$matchBy) {
+                continue;
+            }
+
+            if (!is_array($matchValue)) {
+                $matchValue = ArrayHelper::toArray($matchValue);
+            }
+
+            if (!count($matchValue)) {
+                continue;
+            }
+
+            $ids = [];
+
+            $model = $importerClass->getModel();
+
+            $refHandle = $model::refHandle();
+
+            $elementTypeName = Craft::$app->getElements()->getElementTypeByRefHandle($refHandle);
+
+            $elements = $this->getElementFromImportSettings($elementTypeName, $elementSettings, true);
+
+            if (!empty($elements)) {
+                foreach ($elements as $element) {
+                    $ids[] = $element->id;
                 }
+            }
 
-                /**
-                 * @var $importerClass BaseImporter
-                 */
-                $importerClass = SproutBase::$app->importers->getImporter($definition);
+            if (count($newElements) && is_array($newElements)) {
+                try {
+                    foreach ($newElements as $row) {
+                        $importerClass = SproutBase::$app->importers->getImporter($row);
 
-                if (!$importerClass) {
-                    return false;
-                }
+                        $this->saveElement($row, $importerClass);
 
-                $matchBy = SproutImport::$app->utilities->getValueByKey('matchBy', $definition);
-                $matchValue = SproutImport::$app->utilities->getValueByKey('matchValue', $definition);
-                $newElements = SproutImport::$app->utilities->getValueByKey('newElements', $definition);
-
-                if (!$importerClass && !$matchValue && !$matchBy) {
-                    continue;
-                }
-
-                if (!is_array($matchValue)) {
-                    $matchValue = ArrayHelper::toArray($matchValue);
-                }
-
-                if (!count($matchValue)) {
-                    continue;
-                }
-
-                $ids = [];
-
-                $model = $importerClass->getModel();
-
-                $refHandle = $model::refHandle();
-
-                $elementTypeName = Craft::$app->getElements()->getElementTypeByRefHandle($refHandle);
-
-                $elements = $this->getElementByDefinitions($elementTypeName, $definition, true);
-
-                if (!empty($elements)) {
-                    foreach ($elements as $element) {
-                        $ids[] = $element->id;
-                    }
-                }
-
-                if (count($newElements) && is_array($newElements)) {
-                    try {
-                        foreach ($newElements as $row) {
-                            $importerClass = SproutBase::$app->importers->getImporter($row);
-
-                            $this->saveElement($row, $importerClass);
-
-                            if ($this->savedElement) {
-                                $ids[] = $this->savedElement->id;
-                            }
+                        if ($this->savedElement) {
+                            $ids[] = $this->savedElement->id;
                         }
-                    } catch (\Exception $e) {
-                        $message['errorMessage'] = $e->getMessage();
-                        $message['errorObject'] = $e;
-
-                        SproutImport::error($message);
-
-                        continue;
                     }
-                }
+                } catch (\Exception $e) {
+                    $message['errorMessage'] = $e->getMessage();
+                    $message['errorObject'] = $e;
 
-                if (count($ids)) {
-                    $fields[$name] = $ids;
-                } else {
-                    $fields[$name] = [0];
+                    SproutImport::error($message);
+
+                    continue;
                 }
+            }
+
+            if (count($ids)) {
+                $fields[$fieldHandle] = $ids;
+            } else {
+                $fields[$fieldHandle] = [0];
             }
         }
 
