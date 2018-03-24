@@ -1,37 +1,23 @@
-# Sprout Import plugin for Craft CMS 3.x
+# Sprout Import
 
-Import content and settings. Generate fake data.
+Sprout Import can help you:
 
-![Screenshot](resources/img/plugin-logo.png)
+- **Import Data** - Import over 40 data types, complex relationships, multi-language content, and more
+- **Seed Data** - Generate fake data to build out your design, push your content model, and improve performance
+- **Weed Data** - Once you're finished with your Seed data, remove it from the system. It's like it was never there!
+- **Create Themes** - Package and reuse content architecture and templates.
 
-## Installation
+See the Sprout Import documentation to learn more about Sprout Import.
 
-To install Sprout Import, follow these steps:
+## Documentation
 
-1. Download & unzip the file and place the `sproutimport` directory into your `craft/plugins` directory
-2.  -OR- do a `git clone ???` directly into your `craft/plugins` folder.  You can then update it with `git pull`
-3.  -OR- install with Composer via `composer require /sprout-import`
-4. Install plugin in the Craft Control Panel under Settings > Plugins
-5. The plugin folder should be named `sproutimport` for Craft to see it.  GitHub recently started appending `-master` (the branch name) to the name of the folder for zip file downloads.
+See the [Sprout Website](https://sprout.barrelstrengthdesign.com/craft-plugins/import/docs) for documentation, guides, and additional resources. 
 
-Sprout Import works on Craft 3.x.
+## Support
 
-## Sprout Import Overview
+- [Send a Support Ticket](https://sprout.barrelstrengthdesign.com/craft-plugins/request/support) via the Sprout Website.
+- [Create an issue](https://github.com/barrelstrength/craft-sprout-import/issues) on Github.
 
--Insert text here-
-
-## Configuring Sprout Import
-
--Insert text here-
-
-## Using Sprout Import
-
--Insert text here-
-
-## Sprout Import Roadmap
-
-Some things to do, and ideas for potential features:
-
-* Release it
-
-Brought to you by [Barrel Strength Design](http://barrelstrengthdesign.com)
+<a href="https://sprout.barrelstrengthdesign.com" target="_blank">
+  <img src="https://sprout.barrelstrengthdesign.com/content/plugins/sprout-icon.svg" width="72" align="right">
+</a>
