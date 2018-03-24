@@ -11,37 +11,9 @@
 namespace barrelstrength\sproutimport;
 
 use barrelstrength\sproutbase\base\BaseSproutTrait;
-use barrelstrength\sproutimport\integrations\sproutimport\elements\Asset;
-use barrelstrength\sproutimport\integrations\sproutimport\elements\Category;
-use barrelstrength\sproutimport\integrations\sproutimport\elements\Entry;
-use barrelstrength\sproutimport\integrations\sproutimport\elements\Tag;
-use barrelstrength\sproutimport\integrations\sproutimport\elements\User;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Assets;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Categories;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Checkboxes;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Color;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Date;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Dropdown;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Entries;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Lightswitch;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Matrix;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\MultiSelect;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Number;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Email;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\PlainText;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\RadioButtons;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Redactor;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Table;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Tags;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Url;
-use barrelstrength\sproutimport\integrations\sproutimport\fields\Users;
-use barrelstrength\sproutimport\integrations\sproutimport\settings\Field;
-use barrelstrength\sproutimport\integrations\sproutimport\settings\Section;
-use barrelstrength\sproutimport\integrations\sproutimport\settings\Widget;
 use barrelstrength\sproutimport\integrations\sproutimport\themes\SimpleTheme;
 use barrelstrength\sproutimport\models\Settings;
 use barrelstrength\sproutimport\services\App;
-use barrelstrength\sproutimport\services\Importers;
 use barrelstrength\sproutimport\services\Themes;
 use barrelstrength\sproutbase\helpers\UninstallHelper;
 use Craft;
@@ -101,41 +73,6 @@ class SproutImport extends Plugin
             $event->rules['sprout-import/seed'] = 'sprout-import/seed/seed-index';
             $event->rules['sprout-import/settings'] = 'sprout-base/settings/edit-settings';
             $event->rules['sprout-import/settings/<settingsSectionHandle:.*>'] = 'sprout-base/settings/edit-settings';
-        });
-
-        Event::on(Importers::class, Importers::EVENT_REGISTER_IMPORTER, function(RegisterComponentTypesEvent $event) {
-            $event->types[] = Asset::class;
-            $event->types[] = Category::class;
-            $event->types[] = Entry::class;
-            $event->types[] = Tag::class;
-            $event->types[] = User::class;
-
-            $event->types[] = Assets::class;
-            $event->types[] = Categories::class;
-            $event->types[] = Checkboxes::class;
-            $event->types[] = Color::class;
-            $event->types[] = Date::class;
-            $event->types[] = Dropdown::class;
-            $event->types[] = Email::class;
-            $event->types[] = Entries::class;
-            $event->types[] = Lightswitch::class;
-            $event->types[] = Matrix::class;
-            $event->types[] = MultiSelect::class;
-            $event->types[] = Number::class;
-            $event->types[] = PlainText::class;
-            $event->types[] = RadioButtons::class;
-            $event->types[] = Table::class;
-            $event->types[] = Tags::class;
-            $event->types[] = Url::class;
-            $event->types[] = Users::class;
-
-            $event->types[] = Field::class;
-            $event->types[] = Section::class;
-            $event->types[] = Widget::class;
-
-            if (Craft::$app->getPlugins()->getPlugin('redactor')) {
-                $event->types[] = Redactor::class;
-            }
         });
 
         Event::on(Themes::class, Themes::EVENT_REGISTER_THEMES, function(RegisterComponentTypesEvent $event) {

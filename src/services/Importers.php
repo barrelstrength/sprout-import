@@ -2,6 +2,33 @@
 
 namespace barrelstrength\sproutimport\services;
 
+use barrelstrength\sproutimport\integrations\sproutimport\elements\Asset;
+use barrelstrength\sproutimport\integrations\sproutimport\elements\Category;
+use barrelstrength\sproutimport\integrations\sproutimport\elements\Entry;
+use barrelstrength\sproutimport\integrations\sproutimport\elements\Tag;
+use barrelstrength\sproutimport\integrations\sproutimport\elements\User;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Assets;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Categories;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Checkboxes;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Color;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Date;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Dropdown;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Entries;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Lightswitch;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Matrix;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\MultiSelect;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Number;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Email;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\PlainText;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\RadioButtons;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Redactor;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Table;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Tags;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Url;
+use barrelstrength\sproutimport\integrations\sproutimport\fields\Users;
+use barrelstrength\sproutimport\integrations\sproutimport\settings\Field;
+use barrelstrength\sproutimport\integrations\sproutimport\settings\Section;
+use barrelstrength\sproutimport\integrations\sproutimport\settings\Widget;
 use barrelstrength\sproutbase\contracts\sproutimport\BaseFieldImporter;
 use barrelstrength\sproutbase\contracts\sproutimport\BaseImporter;
 use barrelstrength\sproutimport\models\Seed as SeedModel;
@@ -14,7 +41,7 @@ use Craft;
 
 class Importers extends Component
 {
-    const EVENT_REGISTER_IMPORTER = 'registerSproutImportImporters';
+    const EVENT_REGISTER_IMPORTER_TYPES = 'registerSproutImportImporters';
 
     /**
      * @var array
@@ -36,11 +63,50 @@ class Importers extends Component
      */
     public function getSproutImportImporters(): array
     {
+        $importerTypes = [
+
+            // Elements
+            Asset::class,
+            Category::class,
+            Entry::class,
+            Tag::class,
+            User::class,
+
+            // Fields
+            Assets::class,
+            Categories::class,
+            Checkboxes::class,
+            Color::class,
+            Date::class,
+            Dropdown::class,
+            Email::class,
+            Entries::class,
+            Lightswitch::class,
+            Matrix::class,
+            MultiSelect::class,
+            Number::class,
+            PlainText::class,
+            RadioButtons::class,
+            Table::class,
+            Tags::class,
+            Url::class,
+            Users::class,
+
+            // Settings
+            Field::class,
+            Section::class,
+            Widget::class
+        ];
+
+        if (Craft::$app->getPlugins()->getPlugin('redactor')) {
+            $importerTypes[] = Redactor::class;
+        }
+
         $event = new RegisterComponentTypesEvent([
-            'types' => []
+            'types' => $importerTypes
         ]);
 
-        $this->trigger(self::EVENT_REGISTER_IMPORTER, $event);
+        $this->trigger(self::EVENT_REGISTER_IMPORTER_TYPES, $event);
 
         $importers = $event->types;
 
