@@ -61,8 +61,7 @@ class Category extends BaseElementImporter
     public function getSeedSettingsErrors($settings)
     {
 
-        if (isset($settings['categoryGroup']) && empty($settings['categoryGroup']))
-        {
+        if (isset($settings['categoryGroup']) && empty($settings['categoryGroup'])) {
             return Craft::t('sprout-import', 'Category Group is required.');
         }
 

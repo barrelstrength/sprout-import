@@ -31,7 +31,7 @@ class Import extends BaseJob
             $weedModelAttributes = [
                 'seed' => $seedModel->enabled,
                 'type' => $seedModel->type,
-                'details' => Craft::t('sprout-import', 'Import Type: ' . $seedModel->type),
+                'details' => Craft::t('sprout-import', 'Import Type: '.$seedModel->type),
                 'dateSubmitted' => $seedModel->dateCreated
             ];
 
@@ -55,7 +55,6 @@ class Import extends BaseJob
 
                 throw new Exception($message);
             }
-
         } catch (\Exception $e) {
 
             SproutImport::error('Unable to run Sprout Import job.');
@@ -63,7 +62,6 @@ class Import extends BaseJob
 
             throw $e;
         }
-
     }
 
     // Protected Methods

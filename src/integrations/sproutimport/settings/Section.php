@@ -137,7 +137,7 @@ class Section extends BaseSettingsImporter
 
     /**
      * @param SectionModel $section
-     * @param $settings
+     * @param              $settings
      *
      * @return bool
      * @throws \Throwable

@@ -31,8 +31,7 @@ class SettingsImporter extends Component
 
         try {
 
-            if ($importerClass->save())
-            {
+            if ($importerClass->save()) {
                 // Get updated model after save
                 $model = $importerClass->getModel();
 
@@ -42,7 +41,6 @@ class SettingsImporter extends Component
             }
 
             return false;
-
         } catch (\Exception $e) {
 
             $message = Craft::t('sprout-import', 'Unable to import Settings.');

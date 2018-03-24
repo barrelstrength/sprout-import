@@ -120,8 +120,7 @@ class SeedController extends Controller
         $seedJob->details = $details;
         $seedJob->dateCreated = DateTimeHelper::currentUTCDateTime();
 
-        if (!SproutImport::$app->seed->generateSeeds($seedJob))
-        {
+        if (!SproutImport::$app->seed->generateSeeds($seedJob)) {
             $message = Craft::t('sprout-import', 'Unable to plant seeds.');
 
             Craft::$app->getSession()->setError($message);
@@ -140,6 +139,5 @@ class SeedController extends Controller
         ]));
 
         return $this->redirectToPostedUrl($seedJob);
-
     }
 }

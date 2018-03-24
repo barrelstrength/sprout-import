@@ -109,7 +109,6 @@ class ImportController extends Controller
                 }
 
                 Craft::$app->getSession()->setNotice(Craft::t('sprout-import', 'Importing theme.'));
-
             } catch (\Exception $e) {
                 $importJobs->addError('queue', $e->getMessage());
 

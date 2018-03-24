@@ -42,8 +42,7 @@ class Seed extends Component
      */
     public function generateSeeds(SeedJobModel $seedJobModel)
     {
-        if (!$seedJobModel->validate())
-        {
+        if (!$seedJobModel->validate()) {
             return false;
         }
 
@@ -53,7 +52,6 @@ class Seed extends Component
             ]));
 
             return true;
-
         } catch (\Exception $e) {
             SproutImport::error($e->getMessage());
         }

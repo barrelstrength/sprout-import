@@ -63,8 +63,7 @@ class Tag extends BaseElementImporter
      */
     public function getSeedSettingsErrors($settings)
     {
-        if (isset($settings['tagGroup']) && empty($settings['tagGroup']))
-        {
+        if (isset($settings['tagGroup']) && empty($settings['tagGroup'])) {
             return Craft::t('sprout-import', 'Tag Group is required.');
         }
 

@@ -56,8 +56,7 @@ class Entry extends BaseElementImporter
      */
     public function getSeedSettingsErrors($settings)
     {
-        if (isset($settings['channel']) && empty($settings['channel']))
-        {
+        if (isset($settings['channel']) && empty($settings['channel'])) {
             return Craft::t('sprout-import', 'Section is required.');
         }
 

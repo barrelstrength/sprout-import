@@ -15,7 +15,7 @@ class SimpleTheme extends BaseTheme
     /**
      * @return string
      */
-    public function getName() : string
+    public function getName(): string
     {
         return Craft::t('sprout-import', 'Simple Theme');
     }
@@ -23,7 +23,7 @@ class SimpleTheme extends BaseTheme
     /**
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return Craft::t('sprout-import', 'A simple theme that installs some schema and moves some templates.');
     }
@@ -37,7 +37,7 @@ class SimpleTheme extends BaseTheme
      */
     public function getSchemaFolder()
     {
-        return $this->plugin->getBasePath() . DIRECTORY_SEPARATOR . 'themes/simple/schema';
+        return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'themes/simple/schema';
     }
 
     /**
@@ -49,7 +49,7 @@ class SimpleTheme extends BaseTheme
      */
     public function getSourceTemplateFolder()
     {
-        return $this->plugin->getBasePath() . DIRECTORY_SEPARATOR . 'themes/simple/templates';
+        return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'themes/simple/templates';
     }
 
 }

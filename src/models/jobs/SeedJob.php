@@ -69,8 +69,7 @@ class SeedJob extends Model
          */
         $elementImporter = new $this->elementType;
 
-        if ($errors = $elementImporter->getSeedSettingsErrors($this->settings))
-        {
+        if ($errors = $elementImporter->getSeedSettingsErrors($this->settings)) {
             $this->addError('settings', $errors);
         }
     }
