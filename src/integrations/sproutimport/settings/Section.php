@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutimport\integrations\sproutimport\settings;
 
 use barrelstrength\sproutbase\contracts\sproutimport\BaseSettingsImporter;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;
 use craft\models\Section as SectionModel;
@@ -173,7 +174,7 @@ class Section extends BaseSettingsImporter
         foreach ($settings['entryTypes'] as $key => $entryTypeSettings) {
             $settings['entryTypes'][$key]['sectionId'] = $sectionId;
 
-            $typeModel = SproutImport::$app->importers->getImporter($settings['entryTypes'][$key]);
+            $typeModel = SproutBase::$app->importers->getImporter($settings['entryTypes'][$key]);
 
             SproutImport::$app->settingsImporter->saveSetting($settings['entryTypes'][$key], $typeModel);
         }

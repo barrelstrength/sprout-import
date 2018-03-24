@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutimport\services;
 
 use barrelstrength\sproutbase\contracts\sproutimport\BaseFieldImporter;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\SproutImport;
 use craft\base\Component;
 use craft\base\Element;
@@ -35,7 +36,7 @@ class FieldImporter extends Component
 
                 $fieldType = get_class($field);
 
-                $fieldImporterClass = SproutImport::$app->importers->getFieldImporterClassByType($fieldType);
+                $fieldImporterClass = SproutBase::$app->importers->getFieldImporterClassByType($fieldType);
 
                 if ($fieldImporterClass !== null) {
                     /**

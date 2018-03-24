@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutimport\services;
 
 use barrelstrength\sproutbase\contracts\sproutimport\BaseImporter;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\events\ElementImportEvent;
 use Craft;
 use barrelstrength\sproutimport\SproutImport;
@@ -320,7 +321,7 @@ class ElementImporter extends Component
                 /**
                  * @var $importerClass BaseImporter
                  */
-                $importerClass = SproutImport::$app->importers->getImporter($definition);
+                $importerClass = SproutBase::$app->importers->getImporter($definition);
 
                 if (!$importerClass) {
                     return false;
@@ -361,7 +362,7 @@ class ElementImporter extends Component
                 if (count($newElements) && is_array($newElements)) {
                     try {
                         foreach ($newElements as $row) {
-                            $importerClass = SproutImport::$app->importers->getImporter($row);
+                            $importerClass = SproutBase::$app->importers->getImporter($row);
 
                             $this->saveElement($row, $importerClass);
 

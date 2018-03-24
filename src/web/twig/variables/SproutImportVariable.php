@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutimport\web\twig\variables;
 
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;
 
@@ -28,7 +29,7 @@ class SproutImportVariable
      */
     public function getSproutImportThemes()
     {
-        return SproutImport::$app->themes->getSproutImportThemes();
+        return SproutBase::$app->themes->getSproutImportThemes();
     }
 
     /**
@@ -36,7 +37,7 @@ class SproutImportVariable
      */
     public function getSproutImportImporters()
     {
-        return SproutImport::$app->importers->getSproutImportImporters();
+        return SproutBase::$app->importers->getSproutImportImporters();
     }
 
     /**
@@ -44,7 +45,7 @@ class SproutImportVariable
      */
     public function getSproutImportFieldImporters()
     {
-        return SproutImport::$app->importers->getSproutImportFieldImporters();
+        return SproutBase::$app->importers->getSproutImportFieldImporters();
     }
 
     /**

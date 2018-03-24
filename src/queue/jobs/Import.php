@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutimport\queue\jobs;
 
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\models\Seed;
 use barrelstrength\sproutimport\models\Weed;
 use barrelstrength\sproutimport\SproutImport;
@@ -39,7 +40,7 @@ class Import extends BaseJob
 
             $this->importData = Json::decode($this->importData, true);
 
-            SproutImport::$app->importers->save($this->importData, $weedModel);
+            SproutBase::$app->importers->save($this->importData, $weedModel);
 
             $errors = SproutImport::$app->utilities->getErrors();
 

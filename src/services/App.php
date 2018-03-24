@@ -28,11 +28,6 @@ class App extends Component
     public $faker;
 
     /**
-     * @var Importers
-     */
-    public $importers;
-
-    /**
      * @var ElementImporter
      */
     public $elementImporter;
@@ -41,11 +36,6 @@ class App extends Component
      * @var SettingsImporter
      */
     public $settingsImporter;
-
-    /**
-     * @var Themes
-     */
-    public $themes;
 
     /**
      * @var FieldImporter
@@ -63,9 +53,7 @@ class App extends Component
         $this->faker = new Faker();
         $this->seed = new Seed();
         $this->fieldImporter = new FieldImporter();
-        $this->importers = new Importers();
         $this->elementImporter = new ElementImporter();
         $this->settingsImporter = new SettingsImporter();
-        $this->themes = new Themes();
     }
 }

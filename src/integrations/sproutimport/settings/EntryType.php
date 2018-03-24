@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutimport\integrations\sproutimport\settings;
 
 use barrelstrength\sproutbase\contracts\sproutimport\BaseSettingsImporter;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutimport\SproutImport;
 use craft\models\EntryType as EntryTypeModel;
@@ -53,7 +54,7 @@ class EntryType extends BaseSettingsImporter
                 $fields = $tab['fields'];
 
                 foreach ($fields as $fieldSettings) {
-                    $model = SproutImport::$app->importers->getImporter($fieldSettings);
+                    $model = SproutBase::$app->importers->getImporter($fieldSettings);
 
                     $field = SproutImport::$app->settingsImporter->saveSetting($fieldSettings, $model);
 

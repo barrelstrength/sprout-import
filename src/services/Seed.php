@@ -6,6 +6,7 @@ namespace barrelstrength\sproutimport\services;
 use barrelstrength\sproutbase\contracts\sproutimport\BaseElementImporter;
 use barrelstrength\sproutbase\contracts\sproutimport\BaseImporter;
 use barrelstrength\sproutbase\contracts\sproutimport\BaseSettingsImporter;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\models\jobs\SeedJob as SeedJobModel;
 use barrelstrength\sproutimport\queue\jobs\Seed as SeedJob;
 use barrelstrength\sproutimport\models\Weed;
@@ -119,7 +120,7 @@ class Seed extends Component
                         /**
                          * @var BaseElementImporter|BaseSettingsImporter
                          */
-                        $importerClass = SproutImport::$app->importers->getImporter($row);
+                        $importerClass = SproutBase::$app->importers->getImporter($row);
 
                         $importerClass->deleteById($seed['itemId']);
                     }
@@ -247,7 +248,7 @@ class Seed extends Component
 
                 $seed = $importerClass->getMockData(1, $settings);
 
-                SproutImport::$app->importers->save($seed, $weedModel);
+                SproutBase::$app->importers->save($seed, $weedModel);
 
                 $errors = SproutImport::$app->utilities->getErrors();
 

@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutimport\controllers;
 
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\integrations\sproutimport\elements\Category;
 use barrelstrength\sproutimport\integrations\sproutimport\elements\Entry;
 use barrelstrength\sproutimport\integrations\sproutimport\elements\Tag;
@@ -29,7 +30,7 @@ class SeedController extends Controller
 
         $elementSelect = [];
 
-        $allSeedImporters = SproutImport::$app->importers->getSproutImportSeedImporters();
+        $allSeedImporters = SproutBase::$app->importers->getSproutImportSeedImporters();
 
         $defaultKeys = [
             Entry::class,
