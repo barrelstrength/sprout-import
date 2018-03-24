@@ -6,6 +6,7 @@ use barrelstrength\sproutimport\models\jobs\SeedJob;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;
 use barrelstrength\sproutbase\contracts\sproutimport\BaseElementImporter;
+use craft\base\Field;
 use craft\elements\Entry as EntryElement;
 
 class Entry extends BaseElementImporter
@@ -167,6 +168,10 @@ class Entry extends BaseElementImporter
 
         $handles = [];
         if (!empty($fields)) {
+
+            /**
+             * @var $field Field
+             */
             foreach ($fields as $field) {
                 $handles[] = $field->handle;
             }
@@ -201,9 +206,13 @@ class Entry extends BaseElementImporter
      * @param $entry
      *
      * @return int|null
+     * @throws \yii\base\InvalidConfigException
      */
     public function getFieldLayoutId($entry)
     {
+        /**
+         * @var $entry EntryElement
+         */
         return $entry->getType()->fieldLayoutId;
     }
 

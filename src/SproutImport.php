@@ -37,7 +37,7 @@ class SproutImport extends Plugin
      * @var \barrelstrength\sproutimport\services\App
      */
     public static $app;
-    
+
     /**
      * Identify our plugin for BaseSproutTrait
      *

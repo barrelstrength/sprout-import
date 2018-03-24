@@ -54,14 +54,6 @@ class User extends BaseElementImporter
     }
 
     /**
-     * @inheritdoc
-     */
-    public function getSeedSettingsErrors($settings)
-    {
-        return null;
-    }
-
-    /**
      * @param $quantity
      * @param $settings
      *
@@ -106,7 +98,7 @@ class User extends BaseElementImporter
 
         $fieldLayout = Craft::$app->getFields()->getLayoutByType(UserElement::class);
 
-        $fieldLayoutFieldModel = $fieldLayout->fields;
+        $fieldLayoutFieldModel = $fieldLayout->getFields();
 
         $data['content']['fields'] = SproutImport::$app->fieldImporter->getFieldsWithMockData($fieldLayoutFieldModel);
 

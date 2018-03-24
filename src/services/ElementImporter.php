@@ -98,7 +98,7 @@ class ElementImporter extends Component
             $elementFieldHandles[] = 'title';
 
             foreach ($fields as $fieldHandle => $fieldValue) {
-                if (!in_array($fieldHandle, $elementFieldHandles)) {
+                if (!in_array($fieldHandle, $elementFieldHandles, false)) {
                     $key = 'field-null-'.$fieldHandle;
 
                     $message = Craft::t('sprout-import', 'Could not find the {fieldHandle} field.', [
@@ -273,7 +273,7 @@ class ElementImporter extends Component
         $criteriaAttributes = $elementType::find()->criteriaAttributes();
 
         // If it is not an attribute search element by field
-        if (!in_array($matchBy, $criteriaAttributes)) {
+        if (!in_array($matchBy, $criteriaAttributes, false)) {
 
             return $elementType::find()->search(['query' => $matchBy.':'.$matchValue])->all();
         }
@@ -294,6 +294,7 @@ class ElementImporter extends Component
             if ($element) {
                 return $element;
             }
+
         } catch (\Exception $e) {
             SproutImport::error($e->getMessage());
 

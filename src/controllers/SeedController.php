@@ -44,7 +44,7 @@ class SeedController extends Controller
 
         if ($allSeedImporters) {
             foreach ($allSeedImporters as $key => $allSeedImporter) {
-                if (in_array($key, $defaultKeys)) {
+                if (in_array($key, $defaultKeys, false)) {
                     $defaultSeedImporters[$key] = $allSeedImporter;
                 } else {
                     $customSeedImporters[$key] = $allSeedImporter;

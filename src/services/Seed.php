@@ -4,7 +4,7 @@ namespace barrelstrength\sproutimport\services;
 
 
 use barrelstrength\sproutbase\contracts\sproutimport\BaseElementImporter;
-use barrelstrength\sproutbase\contracts\sproutimport\BaseImporter;
+
 use barrelstrength\sproutbase\contracts\sproutimport\BaseSettingsImporter;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\models\jobs\SeedJob as SeedJobModel;

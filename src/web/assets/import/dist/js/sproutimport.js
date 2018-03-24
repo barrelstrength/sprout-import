@@ -5,6 +5,8 @@ if (typeof Craft.SproutImport === typeof undefined) {
 Craft.SproutImport.Seed = {
 
     init: function() {
+        'use strict';
+
         $('#elementType').change(function() {
             Craft.SproutImport.Seed.selectElementTypeEvent();
         });
@@ -15,6 +17,8 @@ Craft.SproutImport.Seed = {
     },
 
     selectElementTypeEvent: function() {
+        'use strict';
+
         $('.element-options').hide();
         var val = $('#elementType').val().replace(/\\/g, '-');
 
@@ -22,6 +26,8 @@ Craft.SproutImport.Seed = {
     },
 
     selectSectionEvent: function() {
+        'use strict';
+
         $('.section-options').hide();
 
         var val = $('#sectionType').val().replace(/\\/g, '-');
