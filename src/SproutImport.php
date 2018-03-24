@@ -11,10 +11,8 @@
 namespace barrelstrength\sproutimport;
 
 use barrelstrength\sproutbase\base\BaseSproutTrait;
-use barrelstrength\sproutimport\integrations\sproutimport\themes\SimpleTheme;
 use barrelstrength\sproutimport\models\Settings;
 use barrelstrength\sproutimport\services\App;
-use barrelstrength\sproutimport\services\Themes;
 use barrelstrength\sproutbase\helpers\UninstallHelper;
 use Craft;
 use craft\base\Plugin;
@@ -22,7 +20,6 @@ use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\events\RegisterUrlRulesEvent;
 use yii\base\Event;
-use craft\events\RegisterComponentTypesEvent;
 use barrelstrength\sproutimport\web\twig\variables\SproutImportVariable;
 
 /**
@@ -73,10 +70,6 @@ class SproutImport extends Plugin
             $event->rules['sprout-import/seed'] = 'sprout-import/seed/seed-index';
             $event->rules['sprout-import/settings'] = 'sprout-base/settings/edit-settings';
             $event->rules['sprout-import/settings/<settingsSectionHandle:.*>'] = 'sprout-base/settings/edit-settings';
-        });
-
-        Event::on(Themes::class, Themes::EVENT_REGISTER_THEMES, function(RegisterComponentTypesEvent $event) {
-            $event->types[] = SimpleTheme::class;
         });
     }
 

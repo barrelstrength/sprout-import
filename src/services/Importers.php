@@ -41,7 +41,7 @@ use Craft;
 
 class Importers extends Component
 {
-    const EVENT_REGISTER_IMPORTER_TYPES = 'registerSproutImportImporters';
+    const EVENT_REGISTER_IMPORTER_TYPES = 'registerImporterTypes';
 
     /**
      * @var array

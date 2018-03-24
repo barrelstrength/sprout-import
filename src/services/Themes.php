@@ -2,13 +2,14 @@
 
 namespace barrelstrength\sproutimport\services;
 
+use barrelstrength\sproutimport\integrations\sproutimport\themes\SimpleTheme;
 use barrelstrength\sproutbase\contracts\sproutimport\BaseTheme;
 use craft\base\Component;
 use craft\events\RegisterComponentTypesEvent;
 
 class Themes extends Component
 {
-    const EVENT_REGISTER_THEMES = 'registerSproutImportThemes';
+    const EVENT_REGISTER_THEME_TYPES = 'registerThemesTypes';
 
     /**
      * @var array
@@ -17,11 +18,15 @@ class Themes extends Component
 
     public function getSproutImportThemes(): array
     {
+        $themeTypes = [
+            SimpleTheme::class
+        ];
+
         $event = new RegisterComponentTypesEvent([
-            'types' => []
+            'types' => $themeTypes
         ]);
 
-        $this->trigger(self::EVENT_REGISTER_THEMES, $event);
+        $this->trigger(self::EVENT_REGISTER_THEME_TYPES, $event);
 
         $themes = $event->types;
 
