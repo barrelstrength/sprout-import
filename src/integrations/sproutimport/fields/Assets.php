@@ -1,0 +1,77 @@
+<?php
+
+namespace barrelstrength\sproutimport\integrations\sproutimport\fields;
+
+use barrelstrength\sproutbase\contracts\sproutimport\BaseFieldImporter;
+use barrelstrength\sproutimport\SproutImport;
+use craft\elements\Asset;
+use Craft;
+use craft\fields\Assets as AssetsField;
+
+class Assets extends BaseFieldImporter
+{
+    /**
+     * @return string
+     */
+    public function getModelName()
+    {
+        return AssetsField::class;
+    }
+
+    /**
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     */
+    public function getSeedSettingsHtml(): string
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-import/_seeds/assets/settings', [
+            'settings' => $this->seedSettings['fields']['assets'] ?? []
+        ]);
+    }
+
+    /**
+     * @return array|bool|mixed|null
+     */
+    public function getMockData()
+    {
+        $settings = $this->model->settings;
+
+        $relatedMin = $this->seedSettings['fields']['assets']['relatedMin'] ?: 1;
+        $relatedMax = $this->seedSettings['fields']['assets']['relatedMax'] ?: 3;
+
+        $relatedMax = SproutImport::$app->fieldImporter->getLimit($settings['limit'], $relatedMax);
+
+        $mockDataSettings = [
+            'fieldName' => $this->model->name,
+            'required' => $this->model->required,
+            'relatedMin' => $relatedMin,
+            'relatedMax' => $relatedMax
+        ];
+
+        if (empty($settings['sources'])) {
+            SproutImport::info(Craft::t('sprout-import', 'Unable to generate Mock Data for relations field: {fieldName}. No Sources found.', [
+                'fieldName' => $this->model->name
+            ]));
+            return null;
+        }
+
+        $sources = $settings['sources'];
+
+        $sourceIds = SproutImport::$app->fieldImporter->getElementGroupIds($sources);
+
+        $attributes = null;
+
+        if ($sources != '*') {
+            $attributes = [
+                'sourceId' => $sourceIds
+            ];
+        }
+
+        $assetElement = new Asset();
+
+        $elementIds = SproutImport::$app->fieldImporter->getMockRelations($assetElement, $attributes, $mockDataSettings);
+
+        return $elementIds;
+    }
+}

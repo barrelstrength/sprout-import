@@ -1,0 +1,24 @@
+{% extends "_layouts/cp" %}
+
+{% set bodyClass = craft.app.request.segments()|slice(0, 3)|join(' ') %}
+
+{% set subnav = {
+    index: {
+        label: "Import"|t('sprout-import'),
+        url: url('sprout-import/index')
+    },
+    seed: {
+        label: "Seed"|t('sprout-import'),
+        url: url('sprout-import/seed')
+    },
+    weed: {
+        label: "Weed"|t('sprout-import'),
+        url: url('sprout-import/weed')
+    },
+    settings: {
+        label: "Settings"|t('sprout-import'),
+        url: url('sprout-import/settings/general')
+    }
+} %}
+
+{% set selectedSubnavItem = craft.app.request.getSegment(2) %}

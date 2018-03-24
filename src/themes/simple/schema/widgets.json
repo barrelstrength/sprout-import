@@ -1,0 +1,22 @@
+[
+  {
+    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Widget",
+    "type": "craft\\widgets\\Feed",
+    "title": "Craft News",
+    "url": "https://craftcms.com/news.rss",
+    "limit": 5
+  },
+  {
+    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Widget",
+    "type": "craft\\widgets\\NewUsers",
+    "userGroupId":null,
+    "dateRange":"d7"
+  },
+  {
+    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Widget",
+    "type": "craft\\widgets\\RecentEntries",
+    "section":"*",
+    "siteId":"1",
+    "limit":"10"
+  }
+]

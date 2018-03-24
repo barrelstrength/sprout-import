@@ -1,0 +1,27 @@
+[
+  {
+    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "type": "craft\\fields\\Checkboxes",
+    "groupId": 1,
+    "name": "THEME Example Checkboxes",
+    "handle": "themeExampleCheckboxes",
+    "instructions": "",
+    "options": [
+      {
+        "label": "Option One",
+        "value": "optionOne",
+        "default": true
+      },
+      {
+        "label": "Option Two",
+        "value": "optionTwo",
+        "default": false
+      },
+      {
+        "label": "Option Three",
+        "value": "optionThree",
+        "default": false
+      }
+    ]
+  }
+]

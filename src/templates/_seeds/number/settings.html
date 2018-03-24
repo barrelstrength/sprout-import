@@ -1,0 +1,32 @@
+{% import "_includes/forms" as forms %}
+
+
+{{ forms.textField({
+    label: "Minimum"|t('sprout-import'),
+    instructions: "Minimum number to generate."|t('sprout-import'),
+    name: 'fields[number][min]',
+    value: settings.min ?? null,
+    placeholder: '0',
+    size: 10,
+    errors: ''
+}) }}
+
+{{ forms.textField({
+    label: "Maximum"|t('sprout-import'),
+    instructions: "Maximum number to generate."|t('sprout-import'),
+    name: 'fields[number][max]',
+    value: settings.max ?? null,
+    placeholder: '100',
+    size: 10,
+    errors: ''
+}) }}
+
+{{ forms.textField({
+    label: "Number of Decimals"|t('sprout-import'),
+    instructions: "Number of decimals to generate."|t('sprout-import'),
+    name: 'fields[number][decimals]',
+    value: settings.decimals ?? null,
+    placeholder: '0',
+    size: 10,
+    errors: ''
+}) }}

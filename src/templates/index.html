@@ -1,0 +1,158 @@
+{% extends "sprout-import/_layouts/base" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = 'Import' %}
+
+{% macro errorList(errors) %}
+    {% if errors %}
+        <ul class="errors">
+            {% for categorizedErrors in errors %}
+                {% for error in categorizedErrors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}
+
+{% from _self import errorList %}
+
+{% block content %}
+
+    {% if errors is defined and errors|length %}
+        <div class="pane">
+            <h3>{{ "Unable to process import"|t('sprout-import') }}</h3>
+            {{ errorList(errors) }}
+        </div>
+        <br>
+    {% endif %}
+
+    <form method="post" accept-charset="utf-8" enctype="multipart/form-data">
+        {{ csrfInput() }}
+        <input type="hidden" name="action"
+               value="sprout-import/import/run-import">
+        {{ redirectInput("sprout-import") }}
+
+        {{ forms.textareaField({
+            label: "Import via Copy/Paste"|t,
+            instructions: "Paste JSON data to import."|t,
+            name: 'importData',
+            value: importData ?? null,
+            errors: '',
+            rows: 20,
+            first: true
+        }) }}
+
+        <div class="field first" id="files-field">
+            <div class="heading">
+                <label for="files">{{ 'Import via Files'|t('sprout-import') }}</label>
+                <div class="instructions">
+                    <p>{{ 'Select one or more JSON encoded files to import.'|t('sprout-import') }}</p>
+                </div>
+            </div>
+            <div class="input">
+                <input type="file" multiple id="files" name="files[]">
+            </div>
+        </div>
+
+        {{ forms.lightswitchField({
+            label: "Seed data"|t('sprout-import'),
+            instructions: "Mark your imported data as seed data. Seed data can be removed via the Weed tab."|t('sprout-import'),
+            on: true,
+            name: 'seed'
+        }) }}
+
+        <button class="btn submit"
+                type="submit">{{ 'Run Import'|t('sprout-import') }}</button>
+
+    </form>
+
+{% endblock %}
+
+{% block details %}
+
+    <div class="meta">
+
+        <h2>{{ "All aboard!"|t('sprout-import') }} <span
+                    class="info">{{ "If you need to import something that isn't supported, see our documentation on how to add custom integrations."|t('sprout-import') }}</span>
+        </h2>
+
+        <p>{{ 'Sprout Import provides a flexible and extensible framework to import your content and settings into Craft. A list of supported data types for this Craft install are below. Third-party plugins can add support for <a href="" target="_blank">additional data types</a>.'|t('sprout-import')|raw }}</p>
+
+        <h6>{{ "Supported Elements"|t('sprout-import') }}</h6>
+
+        {% set importers = craft.sproutImport.getSproutImportImporters() %}
+
+        <ul>
+            {% for importer in importers if importer.isElement() %}
+                <li>
+                    {% set importerName = importer.getName() %}
+                    {{ importerName }}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <h6>{{ "Supported Settings"|t('sprout-import') }}</h6>
+
+        <ul>
+            {% for importer in importers if importer.isSettings() %}
+                <li>
+                    {{ importer.getName() }}
+                </li>
+            {% endfor %}
+        </ul>
+
+
+        {% set sproutFormsIsInstalled  = craft.sproutImport.isPluginInstalled('sproutforms') %}
+        {% set sproutEmailIsInstalled  = craft.sproutImport.isPluginInstalled('sproutemail') %}
+        {% set sproutSeoIsInstalled    = craft.sproutImport.isPluginInstalled('sproutseo') %}
+        {% set sproutFieldsIsInstalled = craft.sproutImport.isPluginInstalled('sproutfields') %}
+
+        {% if sproutFieldsIsInstalled or sproutFormsIsInstalled or sproutEmailIsInstalled or sproutSeoIsInstalled %}
+
+            <br>
+            <hr>
+
+            <h6>{{ "Additional Sprout Integrations"|t('sprout-import') }}</h6>
+
+            {% if sproutFormsIsInstalled %}
+                <p class="light">
+                    <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms"
+                       target="_blank">Sprout Forms</a> &ndash;
+                    Import Contact Forms, Landing Page Forms, Feedback
+                    Forms, Surveys, and more. Generate fake Form Entries
+                    to test your workflows.</p>
+            {% endif %}
+
+            {% if sproutEmailIsInstalled %}
+                <p class="light">
+                    <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/email"
+                       target="_blank">Sprout Email</a> &ndash;
+                    Import Email Templates to use for Newsletters,
+                    Marketing, Announcements, Notifications, and more.
+                </p>
+            {% endif %}
+
+            {% if sproutSeoIsInstalled %}
+                <p class="light"><a
+                            href="http://sprout.barrelstrengthdesign.com/craft-plugins/seo"
+                            target="_blank">Sprout SEO</a> &ndash;
+                    Migrate your Meta Data and import and manage
+                    Redirects in bulk.</p>
+            {% endif %}
+
+            {% if sproutFieldsIsInstalled %}
+                <p class="light">
+                    <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/fields"
+                       target="_blank">Sprout Fields</a> &ndash;
+                    Import content and generate fake data with custom
+                    fields for Email Addresses, Phone Numbers, and
+                    Links.
+                </p>
+            {% endif %}
+
+        {% endif %}
+
+    </div>
+
+{% endblock %}

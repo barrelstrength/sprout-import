@@ -1,0 +1,14 @@
+[
+  {
+    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "type": "craft\\redactor\\RichText",
+    "groupId": 1,
+    "name": "Example Rich Text",
+    "handle": "sproutExampleRichText",
+    "instructions": "",
+    "configFile": "Simple.json",
+    "cleanupHtml": true,
+    "purifyHtml": true,
+    "columnType": "text"
+  }
+]

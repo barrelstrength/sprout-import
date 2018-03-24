@@ -1,0 +1,18 @@
+[
+  {
+    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\elements\\Category",
+    "attributes": {
+      "groupId": 1,
+      "slug": "category-slug",
+      "dateCreated": "2016-01-13 01:25:57",
+      "dateUpdated": "2016-01-13 01:25:57",
+      "enabled": true
+    },
+    "content": {
+      "title": "Category Title",
+      "fields": {
+        "firstPlain": "sdfsd"
+      }
+    }
+  }
+]
