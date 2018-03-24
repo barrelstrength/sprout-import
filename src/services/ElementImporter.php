@@ -16,12 +16,12 @@ class ElementImporter extends Component
     /**
      * @event ElementImportEvent The event that is triggered before the element is imported
      */
-    const EVENT_BEFORE_IMPORT = 'onBeforeImportElement';
+    const EVENT_BEFORE_ELEMENT_IMPORT = 'onBeforeElementImport';
 
     /**
      * @event ElementImportEvent The event that is triggered after the element is imported
      */
-    const EVENT_AFTER_IMPORT = 'onAfterImportElement';
+    const EVENT_AFTER_ELEMENT_IMPORT = 'onAfterElementImport';
 
     /**
      * Elements saved during the length of the import job
@@ -117,7 +117,7 @@ class ElementImporter extends Component
         $model = $importerClass->getModel();
         $modelName = $importerClass->getImporterClass();
 
-        $this->trigger(self::EVENT_BEFORE_IMPORT, new ElementImportEvent([
+        $this->trigger(self::EVENT_BEFORE_ELEMENT_IMPORT, new ElementImportEvent([
             'modelName' => $modelName,
             'element' => $model,
             'seed' => $seed
@@ -190,7 +190,7 @@ class ElementImporter extends Component
 
         if ($saved) {
 
-            $this->trigger(self::EVENT_AFTER_IMPORT, new ElementImportEvent([
+            $this->trigger(self::EVENT_AFTER_ELEMENT_IMPORT, new ElementImportEvent([
                 'modelName' => $modelName,
                 'element' => $model,
                 'seed' => $seed
