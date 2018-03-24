@@ -140,6 +140,22 @@ class Importers extends Component
             return $a->getName() <=> $b->getName();
         });
 
+        uasort($this->fieldImporters, function($a, $b) {
+            /**
+             * @var $a BaseImporter
+             * @var $b BaseImporter
+             */
+            return $a->getName() <=> $b->getName();
+        });
+
+        uasort($this->seedImporters, function($a, $b) {
+            /**
+             * @var $a BaseImporter
+             * @var $b BaseImporter
+             */
+            return $a->getName() <=> $b->getName();
+        });
+
         return $this->importers;
     }
 
