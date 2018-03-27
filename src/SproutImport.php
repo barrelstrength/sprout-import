@@ -107,10 +107,10 @@ class SproutImport extends Plugin
                     'label' => Craft::t('sprout-import', 'Weed'),
                     'url' => 'sprout-import/weed'
                 ],
-                'themes' => [
-                    'label' => Craft::t('sprout-import', 'Themes'),
-                    'url' => 'sprout-import/themes'
-                ],
+//                'themes' => [
+//                    'label' => Craft::t('sprout-import', 'Themes'),
+//                    'url' => 'sprout-import/themes'
+//                ],
                 'settings' => [
                     'label' => Craft::t('sprout-import', 'Settings'),
                     'url' => 'sprout-import/settings/general'
