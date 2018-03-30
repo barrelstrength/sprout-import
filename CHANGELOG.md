@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.0-beta.3 - 2018-03-30
+
+### Fixed
+- Fixed logic around default seed settings
+
+## 1.0.0-beta.2 - 2018-03-26
+
+### Fixed
+- Fixed license reference
+
 ## 1.0.0-beta.1 - 2018-03-26
 
 ### Added
