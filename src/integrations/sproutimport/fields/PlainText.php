@@ -24,7 +24,7 @@ class PlainText extends BaseFieldImporter
     public function getSeedSettingsHtml(): string
     {
         return Craft::$app->getView()->renderTemplate('sprout-import/_seeds/plaintext/settings', [
-            'settings' => $this->seedSettings['fields']['plaintext'] ?: []
+            'settings' => $this->seedSettings['fields']['plaintext'] ?? []
         ]);
     }
 
@@ -35,10 +35,18 @@ class PlainText extends BaseFieldImporter
     {
         $settings = $this->model->settings;
 
-        $singlelineLinesMin = $this->seedSettings['fields']['plaintext']['singleLineLinesMin'] ?: 2;
-        $singlelineLinesMax = $this->seedSettings['fields']['plaintext']['singleLineLinesMax'] ?: 4;
-        $multilineParagraphsMin = $this->seedSettings['fields']['plaintext']['multilineParagraphsMin'] ?: 1;
-        $multilineParagraphsMax = $this->seedSettings['fields']['plaintext']['multilineParagraphsMax'] ?: 3;
+        $singlelineLinesMin = 2;
+        $singlelineLinesMax = 4;
+        $multilineParagraphsMin = 1;
+        $multilineParagraphsMax = 3;
+
+        if (isset($this->seedSettings['fields']))
+        {
+            $singlelineLinesMin = $this->seedSettings['fields']['plaintext']['singleLineLinesMin'] ?: $singlelineLinesMin;
+            $singlelineLinesMax = $this->seedSettings['fields']['plaintext']['singleLineLinesMax'] ?: $singlelineLinesMax;
+            $multilineParagraphsMin = $this->seedSettings['fields']['plaintext']['multilineParagraphsMin'] ?: $multilineParagraphsMin;
+            $multilineParagraphsMax = $this->seedSettings['fields']['plaintext']['multilineParagraphsMax'] ?: $multilineParagraphsMax;
+        }
 
         if ($settings != null && isset($settings['multiline']) && $settings['multiline'] == 1) {
             $lines = random_int($multilineParagraphsMin, $multilineParagraphsMax);

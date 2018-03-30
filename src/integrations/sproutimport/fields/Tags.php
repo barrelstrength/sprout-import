@@ -37,8 +37,14 @@ class Tags extends BaseFieldImporter
     {
         $settings = $this->model->settings;
 
-        $relatedMin = $this->seedSettings['fields']['tags']['relatedMin'] ?: 1;
-        $relatedMax = $this->seedSettings['fields']['tags']['relatedMax'] ?: 3;
+        $relatedMin = 1;
+        $relatedMax = 3;
+
+        if (isset($this->seedSettings['fields']))
+        {
+            $relatedMin = $this->seedSettings['fields']['assets']['relatedMin'] ?: $relatedMin;
+            $relatedMax = $this->seedSettings['fields']['assets']['relatedMax'] ?: $relatedMax;
+        }
 
         $mockDataSettings = [
             'fieldName' => $this->model->name,

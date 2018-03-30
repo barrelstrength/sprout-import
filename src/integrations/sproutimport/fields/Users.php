@@ -37,8 +37,14 @@ class Users extends BaseFieldImporter
     {
         $settings = $this->model->settings;
 
-        $relatedMin = $this->seedSettings['fields']['users']['relatedMin'] ?: 1;
-        $relatedMax = $this->seedSettings['fields']['users']['relatedMax'] ?: 3;
+        $relatedMin = 1;
+        $relatedMax = 3;
+
+        if (isset($this->seedSettings['fields']))
+        {
+            $relatedMin = $this->seedSettings['fields']['assets']['relatedMin'] ?: $relatedMin;
+            $relatedMax = $this->seedSettings['fields']['assets']['relatedMax'] ?: $relatedMax;
+        }
 
         $relatedMax = SproutImport::$app->fieldImporter->getLimit($settings['limit'], $relatedMax);
 

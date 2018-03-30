@@ -33,9 +33,16 @@ class Number extends BaseFieldImporter
      */
     public function getMockData()
     {
-        $min = $this->seedSettings['fields']['number']['min'] ?? 0;
-        $max = $this->seedSettings['fields']['number']['max'] ?? 100;
-        $decimals = $this->seedSettings['fields']['number']['decimals'] ?? 0;
+        $min = 1;
+        $max = 3;
+        $decimals = 0;
+
+        if (isset($this->seedSettings['fields']))
+        {
+            $min = $this->seedSettings['fields']['number']['min'] ?: $min;
+            $max = $this->seedSettings['fields']['number']['max'] ?: $max;
+            $decimals = $this->seedSettings['fields']['number']['decimals'] ?: $decimals;
+        }
 
         $min = is_numeric($min) ? $min : 0;
         $max = is_numeric($max) ? $max : 100;
