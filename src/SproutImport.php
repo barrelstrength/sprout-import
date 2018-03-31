@@ -11,6 +11,7 @@
 namespace barrelstrength\sproutimport;
 
 use barrelstrength\sproutbase\base\BaseSproutTrait;
+use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutimport\models\Settings;
 use barrelstrength\sproutimport\services\App;
 use barrelstrength\sproutbase\helpers\UninstallHelper;
@@ -50,6 +51,8 @@ class SproutImport extends Plugin
     public function init()
     {
         parent::init();
+
+        SproutBaseHelper::registerModule();
 
         $this->setComponents([
             'app' => App::class

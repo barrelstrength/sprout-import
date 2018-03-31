@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0-beta.4 - 2018-03-31
+
+### Fixed
+- Fixed registration of Sprout Base
+
 ## 1.0.0-beta.3 - 2018-03-30
 
 ### Fixed
