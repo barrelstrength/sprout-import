@@ -1,0 +1,97 @@
+{% extends "sprout-import/_layouts/base" %}
+{% import "_includes/forms" as forms %}
+{% import 'sprout-base/sproutbase/_includes/sproutcp' as sproutCore %}
+
+{% set title = 'Weed'|t('sprout-import') %}
+
+{% set hasSeeds = craft.sproutImport.hasSeeds() %}
+{% do view.registerAssetBundle("barrelstrength\\sproutimport\\web\\assets\\import\\ImportAsset") %}
+{% set baseAssetsUrl = view.getAssetManager().getPublishedUrl('@sproutimport', true) %}
+
+{% block content %}
+
+    {% if seeds is not empty %}
+
+        <table class="weed data fullwidth">
+            <tr>
+                <th class="date">{{ "Import Date"|t('sprout-import') }}</th>
+                <th class="seeds">{{ "Total"|t('sprout-import') }}</th>
+                <th class="type">{{ "Type"|t('sprout-import') }}</th>
+                <th class="options">&nbsp;</th>
+            </tr>
+
+            {% for seed in seeds %}
+                <tr>
+                    <td>{{ seed['dateCreated']|date('M d, Y h:i A') }}</td>
+                    <td>{{ seed['total'] }}</td>
+                    <td>
+                        {{ seed['type'] }}
+                        <span class="info sprout-info">
+                            {{ seed['details'] }}
+                        </span>
+                    </td>
+                    <td>
+                        <form method="post" accept-charset="UTF-8">
+                            {{ csrfInput() }}
+                            <input type="hidden" name="action"
+                                   value="sprout-import/weed/process-weed">
+                            {{ redirectInput("sprout-import/weed") }}
+                            <input type="hidden" name="dateCreated"
+                                   value="{{ seed['dateCreated'] }}">
+                            <input class="btn small" name="submit"
+                                   type="submit" value="Weed">
+                            <input class="btn small" name="submit"
+                                   type="submit" value="Keep">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+
+        <div class="buttons">
+            <form method="post" accept-charset="UTF-8">
+                {{ csrfInput() }}
+                <input type="hidden" name="action"
+                       value="sprout-import/weed/process-weed">
+                {{ redirectInput("sprout-import/weed") }}
+                <input type="hidden" name="dateCreated" value="*">
+                <input class="btn submit" name="submit"
+                       type="submit" value="Weed All">
+                <input class="btn" name="submit" type="submit"
+                       value="Keep All">
+            </form>
+        </div>
+
+    {% else %}
+
+        {{ sproutCore.mediaBox({
+            resourcePath: '@sproutbase/web/assets/sproutbase/cp/dist/images/sprout-icon.svg',
+            heading: "The garden is weeded"|t('sprout-import'),
+            body: "Currently, no content or settings in your database are marked as seed content. Get started and <a href='{importLink}'>import content and settings</a> or <a href='{seedLink}'>generate seed content</a>."|t({
+                importLink: cpUrl('sprout-import/index'),
+                seedLink: cpUrl('sprout-import/seed')
+            })
+        }) }}
+
+    {% endif %}
+
+{% endblock %}
+
+{% block details %}
+
+    <div class="meta">
+
+        <h2>{{ "Managing seed data"|t('sprout-import') }}</h2>
+
+        <p>{{ "This page lists all content and settings that have been imported into your database and marked as seed data. When seed data exists, you can choose to keep or remove this data."|t('sprout-import') }}</p>
+
+        <h6>{{ "Weed"|t('sprout-import') }}</h6>
+        <p class="first">{{ "Select weed to remove all imported content or settings of a particular type."|t('sprout-import')|raw }}</p>
+
+        <h6>{{ "Keep"|t('sprout-import') }}</h6>
+        <p class="first">{{ "Select keep to unmark seed data and continue to manage it as permanent content and settings in Craft."|t('sprout-import')|raw }}</p>
+
+    </div>
+
+{% endblock %}

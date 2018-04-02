@@ -1,0 +1,45 @@
+{% extends "_layouts/cp" %}
+
+{% set title  = "Settings" %}
+
+{% set subnav = {
+    index: {
+        label: "Import"|t('sprout-import'),
+        url: url('sproutimport/index')
+    },
+    seed: {
+        label: "Seed"|t('sprout-import'),
+        url: url('sproutimport/seed')
+    },
+    weed: {
+        label: "Weed"|t('sprout-import'),
+        url: url('sproutimport/weed')
+    },
+    settings: {
+        label: "Settings"|t('sprout-import'),
+        url: url('sproutimport/settings/general')
+    }
+} %}
+
+{% set selectedSubnavItem = craft.request.segment(2) %}
+{% set selectedSidebarItem = craft.request.segment(3) %}
+
+{% set sidebar %}
+
+    <nav class="last">
+        <ul>
+            <li><a href="{{ url('sproutimport/settings/general') }}"
+                   {% if selectedSidebarItem == 'general' %}class="sel"{% endif %}>{{ "General"|t('sprout-import') }}</a>
+            </li>
+
+            <li class="heading">
+                <span>{{ "Integrations"|t('sprout-import') }}</span></li>
+
+            <li><a href="{{ url('sproutimport/settings/seo') }}"
+                   {% if selectedSidebarItem == 'seo' %}class="sel"{% endif %}>SEO</a>
+
+            </li>
+        </ul>
+    </nav>
+
+{% endset %}

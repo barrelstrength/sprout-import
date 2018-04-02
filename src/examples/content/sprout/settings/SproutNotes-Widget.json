@@ -1,0 +1,9 @@
+[
+  {
+    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Widget",
+    "type": "barrelstrength\\sproutnotes\\widgets\\Notes",
+    "heading": "Camping Checklist",
+    "notes": "<p><strong>Must Haves</strong></p><ul><li>Tent</li><li>Sleeping Bag</li><li>Stove</li></ul><p><strong>Nice to Haves</strong></p><ul><li>Salt and Pepper</li><li>Red Flashlight</li></ul>",
+    "output": "richText"
+  }
+]
