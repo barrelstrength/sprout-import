@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0-beta.5 - 2018-04-03
+
+## Changed
+- Fixed potential conflicts with svg icon styles
+
 ## 1.0.0-beta.4 - 2018-03-31
 
 ### Fixed
