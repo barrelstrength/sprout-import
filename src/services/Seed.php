@@ -29,7 +29,7 @@ class Seed extends Component
         $query = new Query();
 
         $seeds = $query->select('*')
-            ->from('sproutimport_seeds')
+            ->from('{{%sproutimport_seeds}}')
             ->all();
 
         return $seeds;
@@ -183,7 +183,7 @@ class Seed extends Component
         $query = new Query();
         $seeds = $query
             ->select('GROUP_CONCAT(id) ids, type, details, COUNT(1) as total, dateCreated')
-            ->from('sproutimport_seeds')
+            ->from('{{%sproutimport_seeds}}')
             ->groupBy(['dateCreated', 'details', 'type'])
             ->orderBy('dateCreated DESC')
             ->all();
@@ -204,7 +204,7 @@ class Seed extends Component
 
         $seeds = $query
             ->select('*')
-            ->from('sproutimport_seeds')
+            ->from('{{%sproutimport_seeds}}')
             ->where('dateCreated=:dateCreated', [':dateCreated' => $date])
             ->all();
 
