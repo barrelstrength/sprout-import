@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0-beta.6 - 2018-04-05
+
+### Fixed
+- Fixed invalid query on Weed page for `sproutimport_seeds`
+- Fixed icon mask display issue
+
 ## 1.0.0-beta.5 - 2018-04-03
 
 ## Changed
