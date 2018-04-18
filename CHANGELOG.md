@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0-beta.7 - 2018-04-17
+
+### Changed
+- Updates `league/csv` dependency to `^8.2.0`
+
 ## 1.0.0-beta.6 - 2018-04-05
 
 ### Fixed
