@@ -1,8 +1,8 @@
 [
 	{
-		"@model": "Commerce_ProductModel",
+		"@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\elements\\Product",
 		"attributes": {
-			"typeId": 2,
+			"typeId": 3,
 			"slug": "shoes-one",
 			"postDate": {
 				"date": "5/14/2016",
@@ -16,10 +16,9 @@
 		},
 		"variants": {
 			"new1": {
-				"sku": "shoes-1",
-				"title": "Shoes One",
+				"sku": "shoes-sku-1",
 				"price": 16,
-				"unlimitedStock": 1,
+				"hasUnlimitedStock": 1,
 				"minQty": "",
 				"maxQty": "",
 				"length": "",
@@ -28,10 +27,9 @@
 				"weight": ""
 			},
 			"new2": {
-				"sku": "shoes-2",
-				"title": "Shoes Two",
+				"sku": "shoes-sku-2",
 				"price": 18,
-				"unlimitedStock": 1,
+				"hasUnlimitedStock": 1,
 				"minQty": "",
 				"maxQty": "",
 				"length": "",
@@ -55,9 +53,9 @@
 		}
 	},
 	{
-		"@model": "Commerce_ProductModel",
+		"@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\elements\\Product",
 		"attributes": {
-			"typeId": 1,
+			"typeId": 3,
 			"slug": "clothes-one",
 			"postDate": {
 				"date": "5/14/2016",
@@ -70,10 +68,10 @@
 		},
 		"variants": {
 			"new1": {
-				"sku": "clothes-1",
+				"sku": "clothes-sku-1",
 				"title": "Clothes One",
 				"price": 16,
-				"unlimitedStock": 1,
+				"hasUnlimitedStock": 1,
 				"minQty": "",
 				"maxQty": "",
 				"length": "",
@@ -82,10 +80,10 @@
 				"weight": ""
 			},
 			"new2": {
-				"sku": "clothes-2",
+				"sku": "clothes-sku-2",
 				"title": "Clothes One",
 				"price": 22,
-				"unlimitedStock": 1,
+				"hasUnlimitedStock": 1,
 				"minQty": "",
 				"maxQty": "",
 				"length": "",
@@ -96,7 +94,9 @@
 		},
 		"content": {
 			"title": "Clothes One",
-			"fields": []
+			"fields": {
+				"body": "this is the body"
+			}
 		}
 	}
 ]
