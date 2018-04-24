@@ -3,6 +3,7 @@ namespace barrelstrength\sproutimport\integrations\sproutimport\elements;
 use barrelstrength\sproutbase\contracts\sproutimport\BaseElementImporter;
 use craft\commerce\elements\Order as OrderElement;
 use Craft;
+use craft\commerce\errors\PaymentException;
 use craft\commerce\Plugin;
 
 class Order extends BaseElementImporter
@@ -37,24 +38,66 @@ class Order extends BaseElementImporter
 	{
 		$this->model = parent::setModel($model, $settings);
 
-		$this->model->setAttributes($settings['attributes']);
+        $this->model = Plugin::getInstance()->getCarts()->getCart();
+
+		$this->model->setAttributes($settings['attributes'], false);
 
 		if ($settings['lineItems']) {
-            $this->model->setLineItems($settings['lineItems']);
+		    foreach ($settings['lineItems'] as $item) {
+                $lineItem = Plugin::getInstance()->getLineItems()
+                    ->resolveLineItem($this->model->id, $item['purchasableId'], $item['options'], $item['qty'], '');
+                $this->model->addLineItem($lineItem);
+            }
         }
 
-		$this->model->isCompleted = (!empty($settings['isCompleted'])) ? $settings['isCompleted'] : 0;
+		$this->model->isCompleted = $settings['attributes']['isCompleted'] ?: 0;
 
-		if (empty($this->model->number))
-		{
-			$this->model->number = $this->getRandomCartNumber();
-		}
+        $orderStatus = Plugin::getInstance()->getOrderStatuses()->getDefaultOrderStatusForOrder($this->model);
+		if ($orderStatus) {
+            $this->model->orderStatusId = $orderStatus->id;
+        }
 
 		$this->model->paymentCurrency = Plugin::getInstance()->getPaymentCurrencies()->getPrimaryPaymentCurrencyIso();
-
-		//Bypass validation
-		$this->model->customerId = 0;
 	}
+
+    /**
+     * @return bool|void
+     * @throws \Throwable
+     */
+	public function save()
+    {
+        parent::save();
+
+        $settings = $this->rows;
+        $order = $this->model;
+        if ($settings['payments']) {
+            $gateway = $order->getGateway();
+
+            if (!$gateway) {
+                $error = Craft::t('sprout-import', 'There is no gateway selected for this order.');
+            }
+
+            // Get the gateway's payment form
+            $paymentForm = $gateway->getPaymentFormModel();
+
+            $paymentForm->setAttributes($settings['payments'], false);
+
+            $redirect = '';
+            $transaction = null;
+            if (!$paymentForm->hasErrors() && !$order->hasErrors()) {
+                try {
+                    Plugin::getInstance()->getPayments()->processPayment($order, $paymentForm, $redirect, $transaction);
+                    $success = true;
+                } catch (PaymentException $exception) {
+                    $customError = $exception->getMessage();
+                    $success = false;
+                }
+            } else {
+                $customError = Craft::t('sprout-import', 'Invalid payment or order. Please review.');
+                $success = false;
+            }
+        }
+    }
 
     /**
      * @param $id
@@ -69,7 +112,7 @@ class Order extends BaseElementImporter
 
 	public function getImporterDataKeys()
 	{
-		return array('lineItems', 'transactions', 'addresses');
+		return array('lineItems', 'payments', 'transactions', 'addresses');
 	}
 
 	/**
