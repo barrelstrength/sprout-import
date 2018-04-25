@@ -1,6 +1,8 @@
 <?php
 namespace barrelstrength\sproutimport\integrations\sproutimport\elements;
 use barrelstrength\sproutbase\contracts\sproutimport\BaseElementImporter;
+use barrelstrength\sproutimport\SproutImport;
+use craft\commerce\base\Gateway;
 use craft\commerce\elements\Order as OrderElement;
 use Craft;
 use craft\commerce\errors\PaymentException;
@@ -32,7 +34,9 @@ class Order extends BaseElementImporter
      * @param array $settings
      *
      * @return bool|mixed|void
-     * @throws \Exception
+     * @throws \Throwable
+     * @throws \craft\errors\ElementNotFoundException
+     * @throws \yii\base\Exception
      */
 	public function setModel($model, array $settings = [])
 	{
@@ -68,6 +72,8 @@ class Order extends BaseElementImporter
     {
         parent::save();
 
+        $utilities = SproutImport::$app->utilities;
+
         $settings = $this->rows;
         $order = $this->model;
         if ($settings['payments']) {
@@ -75,8 +81,11 @@ class Order extends BaseElementImporter
 
             if (!$gateway) {
                 $error = Craft::t('sprout-import', 'There is no gateway selected for this order.');
+                $utilities->addError('invalid-gateway', $error);
             }
-
+            /**
+             * @var $gateway Gateway
+             */
             // Get the gateway's payment form
             $paymentForm = $gateway->getPaymentFormModel();
 
@@ -87,14 +96,12 @@ class Order extends BaseElementImporter
             if (!$paymentForm->hasErrors() && !$order->hasErrors()) {
                 try {
                     Plugin::getInstance()->getPayments()->processPayment($order, $paymentForm, $redirect, $transaction);
-                    $success = true;
                 } catch (PaymentException $exception) {
-                    $customError = $exception->getMessage();
-                    $success = false;
+                    $utilities->addError('invalid-payment', $exception->getMessage());
                 }
             } else {
                 $customError = Craft::t('sprout-import', 'Invalid payment or order. Please review.');
-                $success = false;
+                $utilities->addError('invalid-payment', $customError);
             }
         }
     }
