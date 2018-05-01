@@ -45,7 +45,7 @@ class Product extends BaseElementImporter
 
             }
         }
-        //\Craft::dd($rowVariants);
+
         $this->model->setVariants($rowVariants);
     }
 
