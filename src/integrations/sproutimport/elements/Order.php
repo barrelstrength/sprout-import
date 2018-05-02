@@ -7,6 +7,8 @@ use craft\commerce\elements\Order as OrderElement;
 use Craft;
 use craft\commerce\errors\PaymentException;
 use craft\commerce\Plugin;
+use craft\commerce\records\Purchasable;
+use craft\commerce\records\Transaction;
 
 class Order extends BaseElementImporter
 {
@@ -46,15 +48,37 @@ class Order extends BaseElementImporter
 
 		$this->model->setAttributes($settings['attributes'], false);
 
+		if (is_string($settings['attributes']['customerId'])) {
+		    $user = Craft::$app->users->getUserByUsernameOrEmail($settings['attributes']['customerId']);
+		    if ($user) {
+                $customer = Plugin::getInstance()->getCustomers()->getCustomerByUserId((int) $user->id);
+
+                if ($customer) {
+                    $this->model->customerId = $customer->id;
+                }
+            }
+        }
+
 		if ($settings['lineItems']) {
 		    foreach ($settings['lineItems'] as $item) {
+
+		        $purchasableId = $item['purchasableId'] ?? null;
+
+		        if ($sku = $item['sku']) {
+                    $purchasable = Purchasable::find()->where(['sku' => $sku])->one();
+
+                    if ($purchasable) {
+                        $purchasableId = $purchasable->id;
+                    }
+                }
+
                 $lineItem = Plugin::getInstance()->getLineItems()
-                    ->resolveLineItem($this->model->id, $item['purchasableId'], $item['options'], $item['qty'], '');
+                    ->resolveLineItem($this->model->id, $purchasableId, $item['options'], $item['qty'], '');
                 $this->model->addLineItem($lineItem);
             }
         }
 
-		$this->model->isCompleted = $settings['attributes']['isCompleted'] ?: 0;
+		$this->model->isCompleted = $settings['attributes']['isCompleted'] ?? 1;
 
         $orderStatus = Plugin::getInstance()->getOrderStatuses()->getDefaultOrderStatusForOrder($this->model);
 		if ($orderStatus) {
@@ -96,6 +120,25 @@ class Order extends BaseElementImporter
             if (!$paymentForm->hasErrors() && !$order->hasErrors()) {
                 try {
                     Plugin::getInstance()->getPayments()->processPayment($order, $paymentForm, $redirect, $transaction);
+
+                    if (!empty($settings['transactions'])) {
+                        $transactionRecord = Transaction::findOne($transaction->id);
+
+                        if ($status = $settings['transactions']['status']) {
+                            $transactionRecord->status = $status;
+                        }
+
+                        if ($reference = $settings['transactions']['reference']) {
+                            $transactionRecord->reference = $reference;
+                        }
+
+                        if ($response = $settings['transactions']['response']) {
+                            $transactionRecord->response = $response;
+                        }
+
+                        $transactionRecord->save();
+                    }
+
                 } catch (PaymentException $exception) {
                     $utilities->addError('invalid-payment', $exception->getMessage());
                 }
