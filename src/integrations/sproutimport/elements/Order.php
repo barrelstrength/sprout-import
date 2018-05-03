@@ -6,6 +6,8 @@ use craft\commerce\base\Gateway;
 use craft\commerce\elements\Order as OrderElement;
 use Craft;
 use craft\commerce\errors\PaymentException;
+use craft\commerce\models\Address;
+use craft\commerce\models\Customer;
 use craft\commerce\Plugin;
 use craft\commerce\records\Purchasable;
 use craft\commerce\records\Transaction;
@@ -46,15 +48,72 @@ class Order extends BaseElementImporter
 
         $this->model = Plugin::getInstance()->getCarts()->getCart();
 
+		if ($number = $settings['attributes']['number']) {
+		    $orderCart = Plugin::getInstance()->getOrders()->getOrderByNumber($number);
+		    if ($orderCart) {
+                $this->model = $orderCart;
+            }
+        }
+
 		$this->model->setAttributes($settings['attributes'], false);
 
 		if (is_string($settings['attributes']['customerId'])) {
 		    $user = Craft::$app->users->getUserByUsernameOrEmail($settings['attributes']['customerId']);
+
 		    if ($user) {
                 $customer = Plugin::getInstance()->getCustomers()->getCustomerByUserId((int) $user->id);
 
                 if ($customer) {
                     $this->model->customerId = $customer->id;
+                } else  {
+                    $customer = new Customer();
+
+                    if ($user) {
+                        $customer->userId = $user->id;
+                    }
+
+                    if ($address = $settings['addresses']['billingAddress']) {
+                        $billingAddress = new Address();
+
+                        $billingAddress->firstName = $address['firstName'];
+                        $billingAddress->lastName  = $address['lastName'];
+                        $countryCode = $address['countryCode'];
+
+                        $countryObj = Plugin::getInstance()->getCountries()->getCountryByIso($countryCode);
+                        $billingAddress->countryId = $countryObj ? $countryObj->id : null;
+
+                        if ($billingAddress->countryId) {
+                            $stateObj= Plugin::getInstance()
+                                ->getStates()
+                                ->getStateByAbbreviation($billingAddress->countryId, $address['state']);
+
+                            $stateId = $stateObj ? $stateObj->id : null;
+
+                            if ($stateId) {
+                                $billingAddress->stateId = $stateId;
+                            } else {
+                                $billingAddress->stateName = $address['state'];
+                            }
+
+                            $billingAddress->address1 = $address['address1'];
+                            $billingAddress->city = $address['city'];
+                        }
+
+                        $billingAddress->zipCode = $address['zipCode'];
+
+                        Plugin::getInstance()->getAddresses()->saveAddress($billingAddress);
+
+                        $customer->primaryBillingAddressId = $billingAddress->id;
+                        $customer->primaryShippingAddressId = $billingAddress->id;
+                    }
+
+                    Plugin::getInstance()->getCustomers()->saveCustomer($customer);
+                    //Craft::dd($customer);
+                    if ($customer->id) {
+                        $this->model->customerId = $customer->id;
+                    }
+
+
                 }
             }
         }
@@ -78,7 +137,7 @@ class Order extends BaseElementImporter
             }
         }
 
-		$this->model->isCompleted = $settings['attributes']['isCompleted'] ?? 1;
+		//$this->model->isCompleted = $settings['attributes']['isCompleted'] ?? 1;
 
         $orderStatus = Plugin::getInstance()->getOrderStatuses()->getDefaultOrderStatusForOrder($this->model);
 		if ($orderStatus) {
@@ -100,6 +159,7 @@ class Order extends BaseElementImporter
 
         $settings = $this->rows;
         $order = $this->model;
+
         if ($settings['payments']) {
             $gateway = $order->getGateway();
 
@@ -122,21 +182,23 @@ class Order extends BaseElementImporter
                     Plugin::getInstance()->getPayments()->processPayment($order, $paymentForm, $redirect, $transaction);
 
                     if (!empty($settings['transactions'])) {
-                        $transactionRecord = Transaction::findOne($transaction->id);
+                        if ($transaction) {
+                            $transactionRecord = Transaction::findOne($transaction->id);
 
-                        if ($status = $settings['transactions']['status']) {
-                            $transactionRecord->status = $status;
+                            if ($status = $settings['transactions']['status']) {
+                                $transactionRecord->status = $status;
+                            }
+
+                            if ($reference = $settings['transactions']['reference']) {
+                                $transactionRecord->reference = $reference;
+                            }
+
+                            if ($response = $settings['transactions']['response']) {
+                                $transactionRecord->response = $response;
+                            }
+
+                            $transactionRecord->save();
                         }
-
-                        if ($reference = $settings['transactions']['reference']) {
-                            $transactionRecord->reference = $reference;
-                        }
-
-                        if ($response = $settings['transactions']['response']) {
-                            $transactionRecord->response = $response;
-                        }
-
-                        $transactionRecord->save();
                     }
 
                 } catch (PaymentException $exception) {
