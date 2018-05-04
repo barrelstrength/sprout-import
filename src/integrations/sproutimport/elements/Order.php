@@ -72,6 +72,8 @@ class Order extends BaseElementImporter
                         $customer->userId = $user->id;
                     }
 
+                    Plugin::getInstance()->getCustomers()->saveCustomer($customer);
+
                     if ($address = $settings['addresses']['billingAddress']) {
                         $billingAddress = new Address();
 
@@ -101,19 +103,26 @@ class Order extends BaseElementImporter
 
                         $billingAddress->zipCode = $address['zipCode'];
 
-                        Plugin::getInstance()->getAddresses()->saveAddress($billingAddress);
+                        Plugin::getInstance()->getCustomers()->saveAddress($billingAddress, $customer);
 
                         $customer->primaryBillingAddressId = $billingAddress->id;
                         $customer->primaryShippingAddressId = $billingAddress->id;
+
+                        Plugin::getInstance()->getCustomers()->saveCustomer($customer);
                     }
 
-                    Plugin::getInstance()->getCustomers()->saveCustomer($customer);
-                    //Craft::dd($customer);
+
                     if ($customer->id) {
                         $this->model->customerId = $customer->id;
                     }
+                }
 
+                if ($this->model->customer) {
+                    $billingAddress = $this->model->customer->getPrimaryBillingAddress();
 
+                    $shippingAddress = $this->model->customer->getPrimaryShippingAddress();
+                    $this->model->setBillingAddress($billingAddress);
+                    $this->model->setShippingAddress($shippingAddress);
                 }
             }
         }
@@ -137,7 +146,7 @@ class Order extends BaseElementImporter
             }
         }
 
-		//$this->model->isCompleted = $settings['attributes']['isCompleted'] ?? 1;
+		$this->model->isCompleted = $settings['attributes']['isCompleted'] ?? 1;
 
         $orderStatus = Plugin::getInstance()->getOrderStatuses()->getDefaultOrderStatusForOrder($this->model);
 		if ($orderStatus) {
