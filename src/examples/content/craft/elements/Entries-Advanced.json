@@ -15,7 +15,19 @@
     "content": {
       "title": "In quaerat maiores sit est rerum iusto.",
       "fields": {
-        "body": "<p>Et dolor consectetur quo ea recusandae aut aperiam. Deleniti at quisquam facere enim est est ea dignissimos. Et aspernatur perspiciatis iusto enim. Rem quas rerum quam incidunt.</p><p>Qui ut impedit nesciunt tempore doloribus. Sed culpa repellendus et maiores quisquam. Enim necessitatibus quos placeat pariatur ut.</p><p>Dolorem iure ratione consectetur dolores. Velit harum dolorem est fuga sunt. Iusto voluptatum eum quo ad nisi qui facere. Aut voluptas repudiandae quam expedita sunt.</p><p>Nulla voluptatem consequuntur laborum est earum eos voluptatem. Qui architecto autem consequatur est. Eveniet veniam sint autem exercitationem minima.</p><p>Sint soluta dolores dicta. Exercitationem ipsum et rerum laborum qui. Et sed possimus ut est quos sit.</p>"
+        "body": "<p>Et dolor consectetur quo ea recusandae aut aperiam. Deleniti at quisquam facere enim est est ea dignissimos. Et aspernatur perspiciatis iusto enim. Rem quas rerum quam incidunt.</p><p>Qui ut impedit nesciunt tempore doloribus. Sed culpa repellendus et maiores quisquam. Enim necessitatibus quos placeat pariatur ut.</p><p>Dolorem iure ratione consectetur dolores. Velit harum dolorem est fuga sunt. Iusto voluptatum eum quo ad nisi qui facere. Aut voluptas repudiandae quam expedita sunt.</p><p>Nulla voluptatem consequuntur laborum est earum eos voluptatem. Qui architecto autem consequatur est. Eveniet veniam sint autem exercitationem minima.</p><p>Sint soluta dolores dicta. Exercitationem ipsum et rerum laborum qui. Et sed possimus ut est quos sit.</p>",
+        "testTable": [
+          {
+            "col1": "row 1 col 1",
+            "col2": "row 1 col 2",
+            "col3": "row 1 col 3"
+          },
+          {
+            "col1": "row 2 col 1",
+            "col2": "row 2 col 2",
+            "col3": "row 2 col 3"
+          }
+        ]
       },
       "related": {
         "categoryHandle": {

@@ -1,0 +1,102 @@
+[
+	{
+		"@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\elements\\Product",
+		"attributes": {
+			"typeId": 3,
+			"slug": "shoes-one",
+			"postDate": {
+				"date": "5/14/2016",
+				"time": "9:45 AM"
+			},
+			"enabled": 1,
+			"taxCategoryId": 1,
+			"shippingCategoryId": 1,
+			"freeShipping": "",
+			"promotable": 1
+		},
+		"variants": {
+			"new1": {
+				"sku": "shoes-sku-1",
+				"price": 16,
+				"hasUnlimitedStock": 1,
+				"minQty": "",
+				"maxQty": "",
+				"length": "",
+				"width": "",
+				"height": "",
+				"weight": ""
+			},
+			"new2": {
+				"sku": "shoes-sku-2",
+				"price": 18,
+				"hasUnlimitedStock": 1,
+				"minQty": "",
+				"maxQty": "",
+				"length": "",
+				"width": "",
+				"height": "",
+				"weight": ""
+			}
+		},
+		"content": {
+			"title": "Shoes One",
+			"fields": {
+				"startDate": {
+					"date": "5/14/2016",
+					"time": "9:45 AM"
+				},
+				"endDate": {
+					"date": "7/14/2016",
+					"time": "5:00 PM"
+				}
+			}
+		}
+	},
+	{
+		"@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\elements\\Product",
+		"attributes": {
+			"typeId": 3,
+			"slug": "clothes-one",
+			"postDate": {
+				"date": "5/14/2016",
+				"time": "9:45 AM"
+			},
+			"enabled": 1,
+			"taxCategoryId": 1,
+			"freeShipping": "",
+			"promotable": 1
+		},
+		"variants": {
+			"new1": {
+				"sku": "clothes-sku-1",
+				"title": "Clothes One",
+				"price": 16,
+				"hasUnlimitedStock": 1,
+				"minQty": "",
+				"maxQty": "",
+				"length": "",
+				"width": "",
+				"height": "",
+				"weight": ""
+			},
+			"new2": {
+				"sku": "clothes-sku-2",
+				"title": "Clothes One",
+				"price": 22,
+				"hasUnlimitedStock": 1,
+				"minQty": "",
+				"maxQty": "",
+				"length": "",
+				"width": "",
+				"height": "",
+				"weight": ""
+			}
+		},
+		"content": {
+			"title": "Clothes One",
+			"fields": {
+				"body": "this is the body"
+			}
+		}
+	}
+]

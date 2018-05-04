@@ -246,6 +246,11 @@ class ElementImporter extends Component
 
         $attributes = [$matchBy => $matchValue];
 
+        // Auto find all element status to avoid error when one of the element is disabled.
+        $status = ['status' => [Element::STATUS_ARCHIVED, Element::STATUS_ENABLED, Element::STATUS_DISABLED]];
+
+        $attributes = array_merge($attributes, $status);
+
         if (is_array($matchCriteria)) {
             $attributes = array_merge($attributes, $matchCriteria);
         }
@@ -318,8 +323,8 @@ class ElementImporter extends Component
 
             $refHandle = $model::refHandle();
 
-            $elementTypeName = Craft::$app->getElements()->getElementTypeByRefHandle($refHandle);
-
+            //$elementTypeName = Craft::$app->getElements()->getElementTypeByRefHandle($refHandle);
+            $elementTypeName = get_class($model);
             $elements = $this->getElementFromImportSettings($elementTypeName, $elementSettings, true);
 
             if (!empty($elements)) {
