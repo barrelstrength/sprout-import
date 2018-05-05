@@ -1,7 +1,7 @@
 <?php
 
 namespace barrelstrength\sproutimport\integrations\sproutimport\elements;
-use barrelstrength\sproutbase\contracts\sproutimport\BaseElementImporter;
+use barrelstrength\sproutbase\sproutimport\contracts\BaseElementImporter;
 use craft\commerce\elements\Product as ProductElement;
 use craft\commerce\elements\Variant;
 use craft\commerce\records\Purchasable;

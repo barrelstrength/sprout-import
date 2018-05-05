@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutimport\migrations;
 
-use barrelstrength\sproutbase\migrations\sproutimport\Install as SproutBaseImportInstall;
+use barrelstrength\sproutbase\sproutimport\migrations\Install as SproutBaseImportInstall;
 use craft\db\Migration;
 
 class Install extends Migration

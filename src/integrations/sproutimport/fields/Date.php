@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutimport\integrations\sproutimport\fields;
 
-use barrelstrength\sproutbase\contracts\sproutimport\BaseFieldImporter;
+use barrelstrength\sproutbase\sproutimport\contracts\BaseFieldImporter;
 use barrelstrength\sproutimport\SproutImport;
 use craft\fields\Date as DateField;
 

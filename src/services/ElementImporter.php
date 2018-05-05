@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutimport\services;
 
-use barrelstrength\sproutbase\contracts\sproutimport\BaseImporter;
+use barrelstrength\sproutbase\sproutimport\contracts\BaseImporter;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\events\ElementImportEvent;
 use Craft;

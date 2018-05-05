@@ -10,11 +10,11 @@
 
 namespace barrelstrength\sproutimport;
 
-use barrelstrength\sproutbase\base\BaseSproutTrait;
+use barrelstrength\sproutbase\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutimport\models\Settings;
 use barrelstrength\sproutimport\services\App;
-use barrelstrength\sproutbase\helpers\UninstallHelper;
+use barrelstrength\sproutbase\sproutbase\helpers\UninstallHelper;
 use Craft;
 use craft\base\Plugin;
 use craft\web\twig\variables\CraftVariable;

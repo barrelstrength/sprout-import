@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutimport\integrations\sproutimport\settings;
 
-use barrelstrength\sproutbase\contracts\sproutimport\BaseSettingsImporter;
+use barrelstrength\sproutbase\sproutimport\contracts\BaseSettingsImporter;
 use barrelstrength\sproutimport\models\importers\Field as FieldModel;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;

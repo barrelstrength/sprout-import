@@ -5,7 +5,7 @@ namespace barrelstrength\sproutimport\integrations\sproutimport\elements;
 use barrelstrength\sproutimport\models\jobs\SeedJob;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;
-use barrelstrength\sproutbase\contracts\sproutimport\BaseElementImporter;
+use barrelstrength\sproutbase\sproutimport\contracts\BaseElementImporter;
 use craft\base\Field;
 use craft\elements\Entry as EntryElement;
 

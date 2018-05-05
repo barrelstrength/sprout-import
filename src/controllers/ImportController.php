@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutimport\controllers;
 
-use barrelstrength\sproutbase\contracts\sproutimport\BaseTheme;
+use barrelstrength\sproutbase\sproutimport\contracts\BaseTheme;
 use barrelstrength\sproutimport\models\jobs\ImportJobs;
 use barrelstrength\sproutimport\models\Json;
 use barrelstrength\sproutimport\models\Seed;
