@@ -71,8 +71,8 @@ class SproutImport extends Plugin
             $event->rules['sprout-import/index'] = ['template' => 'sprout-import/index'];
             $event->rules['sprout-import/weed'] = 'sprout-import/weed/weed-index';
             $event->rules['sprout-import/seed'] = 'sprout-import/seed/seed-index';
-            $event->rules['sprout-import/settings'] = 'sprout-base/settings/edit-settings';
-            $event->rules['sprout-import/settings/<settingsSectionHandle:.*>'] = 'sprout-base/settings/edit-settings';
+            $event->rules['sprout-import/settings'] = 'sprout-base/sprout-base-settings/edit-settings';
+            $event->rules['sprout-import/settings/<settingsSectionHandle:.*>'] = 'sprout-base/sprout-base-settings/edit-settings';
         });
     }
 
