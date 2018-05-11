@@ -3,7 +3,7 @@
 namespace barrelstrength\sproutimport\integrations\sproutimport\elements;
 
 use Craft;
-use barrelstrength\sproutbase\sproutimport\contracts\BaseElementImporter;
+use barrelstrength\sproutbase\app\import\contracts\BaseElementImporter;
 use craft\elements\Asset as AssetElement;
 
 class Asset extends BaseElementImporter

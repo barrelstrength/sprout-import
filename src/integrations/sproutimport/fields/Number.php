@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutimport\integrations\sproutimport\fields;
 
-use barrelstrength\sproutbase\sproutimport\contracts\BaseFieldImporter;
+use barrelstrength\sproutbase\app\import\contracts\BaseFieldImporter;
 use craft\fields\Number as NumberField;
 use Craft;
 

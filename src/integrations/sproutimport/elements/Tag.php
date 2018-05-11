@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutimport\integrations\sproutimport\elements;
 
-use barrelstrength\sproutbase\sproutimport\contracts\BaseElementImporter;
+use barrelstrength\sproutbase\app\import\contracts\BaseElementImporter;
 use barrelstrength\sproutimport\models\jobs\SeedJob;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;

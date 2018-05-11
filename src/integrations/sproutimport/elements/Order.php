@@ -1,6 +1,6 @@
 <?php
 namespace barrelstrength\sproutimport\integrations\sproutimport\elements;
-use barrelstrength\sproutbase\sproutimport\contracts\BaseElementImporter;
+use barrelstrength\sproutbase\app\import\contracts\BaseElementImporter;
 use barrelstrength\sproutimport\SproutImport;
 use craft\commerce\base\Gateway;
 use craft\commerce\elements\Order as OrderElement;

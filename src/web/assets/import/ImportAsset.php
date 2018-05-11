@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutimport\web\assets\import;
 
-use barrelstrength\sproutbase\sproutbase\web\assets\cp\CpAsset as SproutBaseCpAsset;
+use barrelstrength\sproutbase\web\assets\cp\CpAsset as SproutBaseCpAsset;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 

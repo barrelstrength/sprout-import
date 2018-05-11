@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutimport\integrations\sproutimport\settings;
 
-use barrelstrength\sproutbase\sproutimport\contracts\BaseSettingsImporter;
+use barrelstrength\sproutbase\app\import\contracts\BaseSettingsImporter;
 use barrelstrength\sproutimport\models\importers\Widget as WidgetModel;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;

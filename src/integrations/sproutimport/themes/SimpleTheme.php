@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutimport\integrations\sproutimport\themes;
 
-use barrelstrength\sproutbase\sproutimport\contracts\BaseTheme;
+use barrelstrength\sproutbase\app\import\contracts\BaseTheme;
 use Craft;
 
 class SimpleTheme extends BaseTheme
