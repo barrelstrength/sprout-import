@@ -37,15 +37,11 @@
     "extra": {
         "name": "Sprout Import",
         "handle": "sprout-import",
-        "schemaVersion": "1.0.0",
         "developer": "Barrel Strength",
         "developerUrl": "https://barrelstrengthdesign.com",
         "documentationUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/import",
         "changelogUrl": "https://raw.githubusercontent.com/BarrelStrength/sprout-import/master/CHANGELOG.md",
         "downloadUrl": "https://github.com/BarrelStrength/sprout-import/archive/master.zip",
-        "class": "barrelstrength\\sproutimport\\SproutImport",
-        "components": {
-            "api": "barrelstrength\\sproutimport\\services\\Api"
-        }
+        "class": "barrelstrength\\sproutimport\\SproutImport"
     }
 }

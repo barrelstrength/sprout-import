@@ -46,7 +46,15 @@ class SproutImport extends Plugin
      */
     public static $pluginId = 'sprout-import';
 
+    /**
+     * @var bool
+     */
     public $hasCpSection = true;
+
+    /**
+     * @var string
+     */
+    public $schemaVersion = '1.0.0';
 
     public function init()
     {
