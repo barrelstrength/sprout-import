@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutimport\services;
 
-use barrelstrength\sproutbase\app\import\contracts\BaseFieldImporter;
+use barrelstrength\sproutbase\app\import\base\FieldImporter as BaseFieldImporter;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\SproutImport;
 use craft\base\Component;

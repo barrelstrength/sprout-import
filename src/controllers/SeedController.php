@@ -3,10 +3,10 @@
 namespace barrelstrength\sproutimport\controllers;
 
 use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutimport\integrations\sproutimport\elements\Category;
-use barrelstrength\sproutimport\integrations\sproutimport\elements\Entry;
-use barrelstrength\sproutimport\integrations\sproutimport\elements\Tag;
-use barrelstrength\sproutimport\integrations\sproutimport\elements\User;
+use barrelstrength\sproutimport\importers\elements\Category;
+use barrelstrength\sproutimport\importers\elements\Entry;
+use barrelstrength\sproutimport\importers\elements\Tag;
+use barrelstrength\sproutimport\importers\elements\User;
 use barrelstrength\sproutimport\models\jobs\SeedJob;
 use barrelstrength\sproutimport\SproutImport;
 use craft\helpers\DateTimeHelper;
@@ -86,7 +86,7 @@ class SeedController extends Controller
             }
         }
 
-        return $this->renderTemplate('sprout-import/seed', [
+        return $this->renderTemplate('sprout-base-import/seed/index', [
             'elements' => $elementSelect,
             'importers' => $allSeedImporters,
             'seedJob' => $seedJob

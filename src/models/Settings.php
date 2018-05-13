@@ -65,13 +65,13 @@ class Settings extends Model
                 'label' => Craft::t('sprout-import', 'General'),
                 'url' => 'sprout-import/settings/general',
                 'selected' => 'general',
-                'template' => 'sprout-import/_settings/general'
+                'template' => 'sprout-base-import/settings/general'
             ],
             'seed' => [
                 'label' => Craft::t('sprout-import', 'Seed Defaults'),
                 'url' => 'sprout-import/settings/seed',
                 'selected' => 'seed',
-                'template' => 'sprout-import/_settings/seed'
+                'template' => 'sprout-base-import/settings/seed-defaults/index'
             ],
             'integrationsHeading' => [
                 'heading' => Craft::t('sprout-import', 'Integrations'),
@@ -80,7 +80,7 @@ class Settings extends Model
                 'label' => Craft::t('sprout-import', 'SEO'),
                 'url' => 'sprout-import/settings/sproutseo',
                 'selected' => 'sproutseo',
-                'template' => 'sprout-import/_settings/seo',
+                'template' => 'sprout-base-import/settings/seo',
                 'settingsForm' => false
             ],
         ];

@@ -3,9 +3,9 @@
 namespace barrelstrength\sproutimport\services;
 
 
-use barrelstrength\sproutbase\app\import\contracts\BaseElementImporter;
+use barrelstrength\sproutbase\app\import\base\ElementImporter;
 
-use barrelstrength\sproutbase\app\import\contracts\BaseSettingsImporter;
+use barrelstrength\sproutbase\app\import\base\SettingsImporter;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\models\jobs\SeedJob as SeedJobModel;
 use barrelstrength\sproutimport\queue\jobs\Seed as SeedJob;
@@ -116,7 +116,7 @@ class Seed extends Component
                         $row['@model'] = $seed['importerClass'];
 
                         /**
-                         * @var BaseElementImporter|BaseSettingsImporter
+                         * @var ElementImporter|SettingsImporter
                          */
                         $importerClass = SproutBase::$app->importers->getImporter($row);
 
@@ -238,7 +238,7 @@ class Seed extends Component
             $settings = $seedJob['settings'];
 
             /**
-             * @var $importerClass BaseElementImporter
+             * @var $importerClass ElementImporter
              */
             $importerClass = new $elementType;
 

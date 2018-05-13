@@ -17,11 +17,9 @@ use barrelstrength\sproutimport\services\App;
 use barrelstrength\sproutbase\helpers\UninstallHelper;
 use Craft;
 use craft\base\Plugin;
-use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\events\RegisterUrlRulesEvent;
 use yii\base\Event;
-use barrelstrength\sproutimport\web\twig\variables\SproutImportVariable;
 
 /**
  * Class SproutImport
@@ -70,17 +68,13 @@ class SproutImport extends Plugin
 
         Craft::setAlias('@sproutimport', $this->getBasePath());
 
-        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
-            $variable = $event->sender;
-            $variable->set('sproutImport', SproutImportVariable::class);
-        });
-
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
-            $event->rules['sprout-import/index'] = ['template' => 'sprout-import/index'];
+            $event->rules['sprout-import'] = ['template' => 'sprout-base-import/index'];
+            $event->rules['sprout-import/index'] = ['template' => 'sprout-base-import/index'];
             $event->rules['sprout-import/weed'] = 'sprout-import/weed/weed-index';
             $event->rules['sprout-import/seed'] = 'sprout-import/seed/seed-index';
-            $event->rules['sprout-import/settings'] = 'sprout-base/sprout-base-settings/edit-settings';
-            $event->rules['sprout-import/settings/<settingsSectionHandle:.*>'] = 'sprout-base/sprout-base-settings/edit-settings';
+            $event->rules['sprout-import/settings'] = 'sprout-base/settings/edit-settings';
+            $event->rules['sprout-import/settings/<settingsSectionHandle:.*>'] = 'sprout-base/settings/edit-settings';
         });
     }
 
