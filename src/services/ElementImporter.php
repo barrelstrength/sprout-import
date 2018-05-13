@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutimport\services;
 
-use barrelstrength\sproutbase\sproutimport\contracts\BaseImporter;
+use barrelstrength\sproutbase\app\import\base\Importer;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\events\ElementImportEvent;
 use Craft;
@@ -57,13 +57,13 @@ class ElementImporter extends Component
 
     /**
      * @param              $rows
-     * @param BaseImporter $importerClass
+     * @param Importer     $importerClass
      * @param bool         $seed
      *
      * @return bool|mixed
      * @throws \ReflectionException
      */
-    public function saveElement($rows, BaseImporter $importerClass, $seed = false)
+    public function saveElement($rows, Importer $importerClass, $seed = false)
     {
         $additionalDataKeys = $importerClass->getImporterDataKeys();
 
@@ -293,7 +293,7 @@ class ElementImporter extends Component
             }
 
             /**
-             * @var $importerClass BaseImporter
+             * @var $importerClass Importer
              */
             $importerClass = SproutBase::$app->importers->getImporter($elementSettings);
 

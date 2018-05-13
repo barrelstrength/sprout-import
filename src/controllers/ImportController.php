@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutimport\controllers;
 
-use barrelstrength\sproutbase\sproutimport\contracts\BaseTheme;
+use barrelstrength\sproutbase\app\import\base\Theme;
 use barrelstrength\sproutimport\models\jobs\ImportJobs;
 use barrelstrength\sproutimport\models\Json;
 use barrelstrength\sproutimport\models\Seed;
@@ -78,7 +78,7 @@ class ImportController extends Controller
         $seed = Craft::$app->getRequest()->getBodyParam('seed', false);
 
         /**
-         * @var $theme BaseTheme
+         * @var $theme Theme
          */
         $theme = new $themeClassName;
         $sourceFolder = $theme->getSourceTemplateFolder();
