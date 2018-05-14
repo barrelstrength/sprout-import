@@ -4,7 +4,7 @@ namespace barrelstrength\sproutimport\models\jobs;
 
 use craft\base\Model;
 use sproutimport\enums\ImportType;
-use barrelstrength\sproutbase\sproutimport\contracts\BaseElementImporter;
+use barrelstrength\sproutbase\app\import\base\ElementImporter;
 
 class SeedJob extends Model
 {
@@ -32,7 +32,7 @@ class SeedJob extends Model
     /**
      * Additional settings the Element Importer will use
      *
-     * @see BaseElementImporter
+     * @see ElementImporter
      *
      * @var string
      */
@@ -65,7 +65,7 @@ class SeedJob extends Model
     public function validateSeedSettings()
     {
         /**
-         * @var $elementImporter BaseElementImporter
+         * @var $elementImporter ElementImporter
          */
         $elementImporter = new $this->elementType;
 

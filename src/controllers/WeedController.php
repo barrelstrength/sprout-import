@@ -18,7 +18,7 @@ class WeedController extends Controller
     {
         $seeds = SproutImport::$app->seed->getSeeds();
 
-        return $this->renderTemplate('sprout-import/weed', [
+        return $this->renderTemplate('sprout-base-import/weed/index', [
             'seeds' => $seeds
         ]);
     }
