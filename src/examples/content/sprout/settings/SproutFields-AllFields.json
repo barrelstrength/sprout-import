@@ -1,6 +1,6 @@
 [
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "type": "barrelstrength\\sproutfields\\fields\\Address",
     "groupId": 1,
     "name": "Address Field",
@@ -10,7 +10,7 @@
     "hideCountryDropdown": 0
   },
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "type": "barrelstrength\\sproutfields\\fields\\Email",
     "groupId": 1,
     "name": "Email Field Basic",
@@ -22,7 +22,7 @@
     "uniqueEmail": false
   },
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "type": "barrelstrength\\sproutfields\\fields\\Email",
     "groupId": 1,
     "name": "Email Field - Unique",
@@ -34,7 +34,7 @@
     "uniqueEmail": true
   },
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "type": "barrelstrength\\sproutfields\\fields\\Email",
     "groupId": 1,
     "name": "Email Field - Custom Pattern",
@@ -46,7 +46,7 @@
     "uniqueEmail": false
   },
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "type": "barrelstrength\\sproutfields\\fields\\EmailDropdown",
     "groupId": 1,
     "name": "Email Dropdown Field",
@@ -64,7 +64,7 @@
     ]
   },
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "type": "barrelstrength\\sproutfields\\fields\\Notes",
     "groupId": 1,
     "name": "Notes",
@@ -74,7 +74,7 @@
     "style": "default"
   },
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "type": "barrelstrength\\sproutfields\\fields\\Gender",
     "groupId": 1,
     "name": "Gender",
@@ -82,7 +82,7 @@
     "instructions": ""
   },
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "type": "barrelstrength\\sproutfields\\fields\\Phone",
     "groupId": 1,
     "name": "Phone Field - All",
@@ -92,7 +92,7 @@
     "country": "VE"
   },
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "type": "barrelstrength\\sproutfields\\fields\\Phone",
     "groupId": 1,
     "name": "Phone Field - US",
@@ -102,7 +102,7 @@
     "country": "US"
   },
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "type": "barrelstrength\\sproutfields\\fields\\Predefined",
     "groupId": 1,
     "name": "Predefined Field",
@@ -111,7 +111,7 @@
     "fieldFormat": "{title} OR {{ object.title }}"
   },
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "type": "barrelstrength\\sproutfields\\fields\\RegularExpression",
     "groupId": 1,
     "name": "RegularExpression Field",
@@ -122,7 +122,7 @@
     "placeholder": "you@barrelstrengthdesign.com"
   },
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "type": "barrelstrength\\sproutfields\\fields\\Url",
     "groupId": 1,
     "name": "URL Field",
@@ -133,7 +133,7 @@
     "customPatternErrorMessage": ""
   },
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "type": "barrelstrength\\sproutfields\\fields\\Url",
     "groupId": 1,
     "name": "URL Field - Custom Pattern",

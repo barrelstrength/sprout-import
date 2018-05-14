@@ -1,6 +1,6 @@
 [
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\elements\\Tag",
+    "@model": "barrelstrength\\sproutimport\\importers\\elements\\Tag",
     "attributes": {
       "groupId": 1,
       "slug": "tag-slug",

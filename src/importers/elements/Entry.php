@@ -234,4 +234,9 @@ class Entry extends ElementImporter
 
         return $selects;
     }
+
+    public function getImporterDataKeys()
+    {
+        return ['enableVersioning'];
+    }
 }

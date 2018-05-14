@@ -1,20 +1,20 @@
 [
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "groupId": 1,
     "name": "Lonely Field",
     "handle": "lonelyField1",
     "type": "craft\\fields\\PlainText"
   },
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "groupId": 1,
     "name": "Lonely Field 2",
     "handle": "lonelyField2",
     "type": "craft\\fields\\PlainText"
   },
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Section",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Section",
     "name": "Field section",
     "handle": "fieldSection",
     "type": "channel",
@@ -38,7 +38,7 @@
     },
     "entryTypes": [
       {
-        "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\EntryType",
+        "@model": "barrelstrength\\sproutimport\\importers\\settings\\EntryType",
         "name": "Posts",
         "handle": "posts",
         "showTitles": true,
@@ -48,14 +48,14 @@
             "name": "Content",
             "fields": [
               {
-                "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+                "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
                 "groupId": 1,
                 "name": "Blog Field 1",
                 "handle": "blogField1",
                 "type": "craft\\fields\\PlainText"
               },
               {
-                "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+                "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
                 "groupId": 1,
                 "name": "Blog Field 2",
                 "handle": "blogField2",
