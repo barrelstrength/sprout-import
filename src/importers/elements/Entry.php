@@ -8,6 +8,8 @@ use Craft;
 use barrelstrength\sproutbase\app\import\base\ElementImporter;
 use craft\base\Field;
 use craft\elements\Entry as EntryElement;
+use craft\helpers\DateTimeHelper;
+use craft\records\EntryVersion;
 
 class Entry extends ElementImporter
 {
@@ -238,5 +240,67 @@ class Entry extends ElementImporter
     public function getImporterDataKeys()
     {
         return ['enableVersioning'];
+    }
+
+    public function afterSaveElement($class)
+    {
+        $settings = $class->rows;
+
+        $revisionsService = Craft::$app->getEntryRevisions();
+
+        if (!empty($settings['enableVersioning'])) {
+
+            $dateCreated = $this->previousDateCreated();
+
+            $version = $revisionsService->saveVersion($this->model);
+
+            if ($version) {
+                $this->updateDateCreated($dateCreated);
+            }
+        }
+    }
+
+    private function previousDateCreated()
+    {
+        $previousVersionRecord = EntryVersion::find()
+            ->where(['entryId' => $this->model->id, 'siteId' => $this->model->siteId])
+            ->orderBy(['dateCreated' => SORT_DESC])
+            ->one();
+
+        $dateCreated = null;
+
+        if ($previousVersionRecord) {
+            $dateCreated = $previousVersionRecord->dateCreated;
+        }
+
+        return $dateCreated;
+    }
+
+    /**
+     * This will ensure that it will not skip version when showing it on edit entry
+     * because version is ordered by dateCreated.
+     * @param $dateCreated
+     */
+    private function updateDateCreated($dateCreated)
+    {
+        $versionRecord = EntryVersion::find()
+            ->where(['entryId' => $this->model->id, 'siteId' => $this->model->siteId])
+            ->orderBy(['id' => SORT_DESC])
+            ->one();
+
+        if ($dateCreated) {
+            $time = strtotime($dateCreated . "+1 seconds");
+
+            $dateValue = date("Y-m-d H:i:s", $time);
+
+            $toDate = DateTimeHelper::toDateTime($dateValue, false, false);
+        } else {
+            $toDate = DateTimeHelper::currentUTCDateTime();
+        }
+
+        $versionRecord->dateCreated = $toDate;
+
+        $versionRecord->save();
+
     }
 }
