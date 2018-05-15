@@ -242,14 +242,31 @@ class Entry extends ElementImporter
         return ['enableVersioning'];
     }
 
-    public function afterSaveElement($class)
+    /**
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function afterSaveElement()
     {
-        $settings = $class->rows;
+        $settings = $this->rows;
+
+        /**
+         * @var $entry EntryElement
+         */
+        $entry = $this->model;
 
         $revisionsService = Craft::$app->getEntryRevisions();
 
-        if (!empty($settings['enableVersioning'])) {
-            $revisionsService->saveVersion($this->model);
+        $enableVersioning = $settings['enableVersioning'] ?? null;
+
+        // Overrides section default settings
+        if ($enableVersioning === false) {
+            return null;
         }
+
+        if ($enableVersioning === true || $entry->getSection()->enableVersioning) {
+            $revisionsService->saveVersion($entry);
+        }
+
+        return null;
     }
 }
