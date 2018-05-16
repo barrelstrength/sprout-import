@@ -224,7 +224,7 @@ class Seed extends Component
 
         $weedModelAttributes = [
             'seed' => true,
-            'seedType' => $seedJob['seedType'],
+            'seedType' => $seedJob['type'],
             'details' => $details,
             'dateCreated' => $seedJob['dateCreated']
         ];

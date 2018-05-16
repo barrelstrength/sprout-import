@@ -321,9 +321,6 @@ class ElementImporter extends Component
 
             $model = $importerClass->getModel();
 
-            $refHandle = $model::refHandle();
-
-            //$elementTypeName = Craft::$app->getElements()->getElementTypeByRefHandle($refHandle);
             $elementTypeName = get_class($model);
             $elements = $this->getElementFromImportSettings($elementTypeName, $elementSettings, true);
 
