@@ -8,7 +8,7 @@ class Weed extends Model
 {
     public $seed;
 
-    public $type;
+    public $seedType;
 
     public $details;
 

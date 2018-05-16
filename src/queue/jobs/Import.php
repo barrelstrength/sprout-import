@@ -30,8 +30,8 @@ class Import extends BaseJob
 
             $weedModelAttributes = [
                 'seed' => $seedModel->enabled,
-                'type' => $seedModel->type,
-                'details' => Craft::t('sprout-import', 'Import Type: '.$seedModel->type),
+                'seedType' => $seedModel->seedType,
+                'details' => Craft::t('sprout-import', 'Import Type: '.$seedModel->seedType),
                 'dateSubmitted' => $seedModel->dateCreated
             ];
 

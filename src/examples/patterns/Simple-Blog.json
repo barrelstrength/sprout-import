@@ -1,6 +1,6 @@
 [
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Section",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Section",
     "name": "Blog",
     "handle": "blog",
     "type": "channel",
@@ -24,7 +24,7 @@
     },
     "entryTypes": [
       {
-        "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\EntryType",
+        "@model": "barrelstrength\\sproutimport\\importers\\settings\\EntryType",
         "name": "Posts",
         "handle": "posts",
         "showTitles": true,
@@ -34,7 +34,7 @@
             "name": "Content",
             "fields": [
               {
-                "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+                "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
                 "groupId": 1,
                 "name": "Summary",
                 "handle": "summary",
@@ -47,7 +47,7 @@
                 }
               },
               {
-                "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+                "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
                 "type": "craft\\fields\\Matrix",
                 "groupId": 1,
                 "name": "Longform Content Body",
