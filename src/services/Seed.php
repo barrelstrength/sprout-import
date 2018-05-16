@@ -182,7 +182,7 @@ class Seed extends Component
     {
         $query = new Query();
         $seeds = $query
-            ->select('GROUP_CONCAT(id) ids, seedType, details, COUNT(1) as total, dateCreated')
+            ->select('seedType, details, COUNT(1) as total, dateCreated')
             ->from('{{%sproutimport_seeds}}')
             ->groupBy(['dateCreated', 'details', 'seedType'])
             ->orderBy('dateCreated DESC')
