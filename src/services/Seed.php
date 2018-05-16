@@ -113,7 +113,7 @@ class Seed extends Component
                     if (!$isKeep) {
                         $row = [];
                         // we're just appending 'Model' and adding it to the array here...
-                        $row['@model'] = $seed['importerClass'];
+                        $row['@model'] = $seed['type'];
 
                         /**
                          * @var ElementImporter|SettingsImporter
