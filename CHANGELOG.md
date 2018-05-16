@@ -2,6 +2,8 @@
 
 ## 1.0.0-beta.8 - 2018-05-15
 
+{warning} If you have more than one Sprout Plugin installed, to avoid errors use the 'Update All' option.
+
 ### Added
 - Added support for importing Craft Commerce Products and Product Variants
 - Added support for importing Craft Commerce Orders
@@ -19,6 +21,7 @@
 - Updated BaseFieldImporter => FieldImporter
 - Updated BaseSettingsImporter => SettingsImporter
 - Updated BaseTheme => Theme
+- Updated Seeding behavior to only track new elements ([#22](https://github.com/barrelstrength/craft-sprout-import/issues/22)) 
 - Updated folder structure
 - Moved schema and component definitions to Plugin class
 - Moved templates to Sprout Base
