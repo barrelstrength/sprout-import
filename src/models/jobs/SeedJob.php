@@ -16,11 +16,11 @@ class SeedJob extends Model
     public $elementType;
 
     /**
-     * The Import Type
+     * The Seed Type
      *
-     * @var ImportType $type
+     * @var Seed $type
      */
-    public $type;
+    public $seedType;
 
     /**
      * The number of seeds that will be generated
