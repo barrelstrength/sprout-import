@@ -1,6 +1,6 @@
 [
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\elements\\Category",
+    "@model": "barrelstrength\\sproutimport\\importers\\elements\\Category",
     "attributes": {
       "groupId": 1,
       "slug": "category-slug",

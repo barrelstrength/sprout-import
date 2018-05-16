@@ -1,0 +1,96 @@
+[
+  {
+    "@model": "barrelstrength\\sproutimport\\importers\\elements\\Entry",
+    "attributes": {
+      "sectionId": 1,
+      "typeId": 1,
+      "authorId": 1,
+      "slug": "entry-slug",
+      "postDate": "2015-02-27 16:43:52",
+      "expiryDate": null,
+      "dateCreated": "2015-02-27 16:43:52",
+      "dateUpdated": "2015-02-27 16:51:42",
+      "enabled": true
+    },
+    "content": {
+      "title": "Entry title",
+      "fields": {
+        "body": "Body content"
+      }
+    },
+    "enableVersioning": true
+  },
+  {
+    "@model": "barrelstrength\\sproutimport\\importers\\elements\\Entry",
+    "attributes": {
+      "sectionId": 1,
+      "typeId": 1,
+      "authorId": 1,
+      "slug": "entry-slug",
+      "postDate": "2015-02-27 16:43:52",
+      "expiryDate": null,
+      "dateCreated": "2015-02-27 16:43:52",
+      "dateUpdated": "2015-02-27 16:51:42",
+      "enabled": true
+    },
+    "content": {
+      "title": "Entry title two",
+      "fields": {
+        "body": "Body content two",
+        "plainText": "plain text version 2"
+      }
+    },
+    "settings": {
+      "updateElement": {
+        "matchBy": "slug",
+        "matchValue": "entry-slug",
+        "matchCriteria": {
+          "section": "blog"
+        }
+      }
+    },
+    "enableVersioning": true
+  },
+  {
+    "@model": "barrelstrength\\sproutimport\\importers\\elements\\Entry",
+    "attributes": {
+      "sectionId": 1,
+      "typeId": 1,
+      "authorId": 1,
+      "slug": "entry-slug",
+      "postDate": "2015-02-27 16:43:52",
+      "expiryDate": null,
+      "dateCreated": "2015-02-27 16:43:52",
+      "dateUpdated": "2015-02-27 16:51:42",
+      "enabled": true
+    },
+    "content": {
+      "title": "Entry title three",
+      "fields": {
+        "body": "Body content three",
+        "testTable": [
+          {
+            "col1": "row 1 col 1",
+            "col2": "row 1 col 2",
+            "col3": "row 1 col 3"
+          },
+          {
+            "col1": "row 2 col 1",
+            "col2": "row 2 col 2",
+            "col3": "row 2 col 3"
+          }
+        ]
+      }
+    },
+    "settings": {
+      "updateElement": {
+        "matchBy": "slug",
+        "matchValue": "entry-slug",
+        "matchCriteria": {
+          "section": "blog"
+        }
+      }
+    },
+    "enableVersioning": true
+  }
+]

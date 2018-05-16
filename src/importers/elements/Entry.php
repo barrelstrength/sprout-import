@@ -8,6 +8,8 @@ use Craft;
 use barrelstrength\sproutbase\app\import\base\ElementImporter;
 use craft\base\Field;
 use craft\elements\Entry as EntryElement;
+use craft\helpers\DateTimeHelper;
+use craft\records\EntryVersion;
 
 class Entry extends ElementImporter
 {
@@ -233,5 +235,38 @@ class Entry extends ElementImporter
         }
 
         return $selects;
+    }
+
+    public function getImporterDataKeys()
+    {
+        return ['enableVersioning'];
+    }
+
+    /**
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function afterSaveElement()
+    {
+        $settings = $this->rows;
+
+        /**
+         * @var $entry EntryElement
+         */
+        $entry = $this->model;
+
+        $revisionsService = Craft::$app->getEntryRevisions();
+
+        $enableVersioning = $settings['enableVersioning'] ?? null;
+
+        // Overrides section default settings
+        if ($enableVersioning === false) {
+            return null;
+        }
+
+        if ($enableVersioning === true || $entry->getSection()->enableVersioning) {
+            $revisionsService->saveVersion($entry);
+        }
+
+        return null;
     }
 }

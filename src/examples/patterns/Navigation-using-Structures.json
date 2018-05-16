@@ -1,6 +1,6 @@
 [
   {
-    "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Section",
+    "@model": "barrelstrength\\sproutimport\\importers\\settings\\Section",
     "name": "Primary Navigation",
     "handle": "primaryNavigation",
     "type": "structure",
@@ -25,7 +25,7 @@
     },
     "entryTypes": [
       {
-        "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\EntryType",
+        "@model": "barrelstrength\\sproutimport\\importers\\settings\\EntryType",
         "name": "Page",
         "handle": "page",
         "showTitles": true,
@@ -35,7 +35,7 @@
             "name": "Nav Item",
             "fields": [
               {
-                "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+                "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
                 "type": "craft\\fields\\Entries",
                 "groupId": 1,
                 "name": "Page",
@@ -52,7 +52,7 @@
         }
       },
       {
-        "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\EntryType",
+        "@model": "barrelstrength\\sproutimport\\importers\\settings\\EntryType",
         "name": "Custom URL",
         "handle": "customUrl",
         "showTitles": true,
@@ -62,7 +62,7 @@
             "name": "Nav Item",
             "fields": [
               {
-                "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+                "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
                 "type": "craft\\fields\\PlainText",
                 "groupId": 1,
                 "name": "Custom URL",
