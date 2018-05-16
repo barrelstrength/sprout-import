@@ -42,7 +42,7 @@ class SproutImport extends Plugin
      *
      * @var string
      */
-    public static $pluginId = 'sprout-import';
+    public static $pluginHandle = 'sprout-import';
 
     /**
      * @var bool
@@ -52,7 +52,12 @@ class SproutImport extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '1.0.0';
+    public $schemaVersion = '1.0.1';
+
+    /**
+     * @var string
+     */
+    public $minVersionRequired = '0.6.3';
 
     public function init()
     {

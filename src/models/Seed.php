@@ -9,9 +9,9 @@ class Seed extends Model
 {
     public $itemId;
 
-    public $importerClass;
-
     public $type;
+
+    public $seedType;
 
     public $details = '';
 

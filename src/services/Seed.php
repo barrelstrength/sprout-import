@@ -161,14 +161,14 @@ class Seed extends Component
     /**
      * Get the number of seed items in the database for element class type
      *
-     * @param $handle
+     * @param $type
      *
      * @return string
      */
-    public function getSeedCountByElementType($handle)
+    public function getSeedCountByElementType($type)
     {
         $count = SeedRecord::model()->countByAttributes([
-            'importerClass' => $handle
+            'type' => $type
         ]);
 
         if ($count) {
@@ -182,9 +182,9 @@ class Seed extends Component
     {
         $query = new Query();
         $seeds = $query
-            ->select('GROUP_CONCAT(id) ids, type, details, COUNT(1) as total, dateCreated')
+            ->select('GROUP_CONCAT(id) ids, seedType, details, COUNT(1) as total, dateCreated')
             ->from('{{%sproutimport_seeds}}')
-            ->groupBy(['dateCreated', 'details', 'type'])
+            ->groupBy(['dateCreated', 'details', 'seedType'])
             ->orderBy('dateCreated DESC')
             ->all();
 
@@ -224,7 +224,7 @@ class Seed extends Component
 
         $weedModelAttributes = [
             'seed' => true,
-            'type' => $seedJob['type'],
+            'seedType' => $seedJob['seedType'],
             'details' => $details,
             'dateCreated' => $seedJob['dateCreated']
         ];

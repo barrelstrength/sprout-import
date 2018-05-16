@@ -140,7 +140,7 @@ class ImportController extends Controller
         }
 
         $seedModel = new Seed();
-        $seedModel->type = ImportType::Theme;
+        $seedModel->seedType = ImportType::Theme;
         $seedModel->enabled = (bool)$seed;
 
         foreach ($themeFiles as $filepath) {
@@ -189,7 +189,7 @@ class ImportController extends Controller
         }
 
         $seedModel = new Seed();
-        $seedModel->type = ImportType::File;
+        $seedModel->seedType = ImportType::File;
         $seedModel->enabled = (bool)$seed;
 
         $tempFolderPath = SproutImport::$app->utilities->createTempFolder();
@@ -248,7 +248,7 @@ class ImportController extends Controller
         }
 
         $seedModel = new Seed();
-        $seedModel->type = ImportType::CopyPaste;
+        $seedModel->seedType = ImportType::CopyPaste;
         $seedModel->enabled = (bool)$seed;
 
         $importData = new Json();
