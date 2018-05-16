@@ -1,5 +1,32 @@
 # Changelog
 
+## 1.0.0-beta.8 - 2018-05-15
+
+### Added
+- Added support for importing Craft Commerce Products and Product Variants
+- Added support for importing Craft Commerce Orders
+- Added support for importing Entry Revisions
+- Added `enabledVersioning` override setting on Entry Element Importer
+- Added example Craft Commerce Products JSON file
+- Added example Craft Commerce Orders JSON file
+- Added example Table Field JSON
+- Added example Entry Revisions JSON
+- Added ElementImporter->afterSaveElement method
+- Added minVersionRequired as Sprout Import v0.6.3
+
+### Changed
+- Updated BaseElementImporter => ElementImporter
+- Updated BaseFieldImporter => FieldImporter
+- Updated BaseSettingsImporter => SettingsImporter
+- Updated BaseTheme => Theme
+- Updated folder structure
+- Moved schema and component definitions to Plugin class
+- Moved templates to Sprout Base
+- Moved asset bundles to Sprout Base
+- Moved craft.sproutImport variable to Sprout Base
+- Updated sproutimport_seeds.type => sproutimport_seeds.seedType
+- Updated sproutimport_seeds.importerClass => sproutimport_seeds.type
+
 ## 1.0.0-beta.7 - 2018-04-17
 
 ### Changed
