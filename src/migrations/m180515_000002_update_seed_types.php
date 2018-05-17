@@ -30,6 +30,22 @@ class m180515_000002_update_seed_types extends Migration
             3 => [
                 'oldType' => 'barrelstrength\sproutimport\integrations\sproutimport\elements\User',
                 'newType' => 'barrelstrength\sproutimport\importers\elements\User'
+            ],
+            4 => [
+                'oldType' => 'barrelstrength\sproutimport\integrations\sproutimport\settings\Section',
+                'newType' => 'barrelstrength\sproutimport\importers\settings\Section'
+            ],
+            5 => [
+                'oldType' => 'barrelstrength\sproutimport\integrations\sproutimport\settings\Field',
+                'newType' => 'barrelstrength\sproutimport\importers\settings\Field'
+            ],
+            6 => [
+                'oldType' => 'barrelstrength\sproutimport\integrations\sproutimport\settings\EntryType',
+                'newType' => 'barrelstrength\sproutimport\importers\settings\EntryType'
+            ],
+            7 => [
+                'oldType' => 'barrelstrength\sproutimport\integrations\sproutimport\settings\Widget',
+                'newType' => 'barrelstrength\sproutimport\importers\settings\Widget'
             ]
         ];
 

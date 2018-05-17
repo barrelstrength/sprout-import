@@ -112,8 +112,8 @@ class Seed extends Component
                 try {
                     if (!$isKeep) {
                         $row = [];
-                        // we're just appending 'Model' and adding it to the array here...
-                        $row['@model'] = $seed['importerClass'];
+
+                        $row['@model'] = $seed['type'];
 
                         /**
                          * @var ElementImporter|SettingsImporter
@@ -182,7 +182,7 @@ class Seed extends Component
     {
         $query = new Query();
         $seeds = $query
-            ->select('GROUP_CONCAT(id) ids, seedType, details, COUNT(1) as total, dateCreated')
+            ->select('seedType, details, COUNT(1) as total, dateCreated')
             ->from('{{%sproutimport_seeds}}')
             ->groupBy(['dateCreated', 'details', 'seedType'])
             ->orderBy('dateCreated DESC')
@@ -224,7 +224,7 @@ class Seed extends Component
 
         $weedModelAttributes = [
             'seed' => true,
-            'seedType' => $seedJob['type'],
+            'seedType' => $seedJob['seedType'],
             'details' => $details,
             'dateCreated' => $seedJob['dateCreated']
         ];

@@ -116,7 +116,7 @@ class SeedController extends Controller
         $seedJob->elementType = $elementType;
         $seedJob->quantity = !empty($quantity) ? $quantity : 11;
         $seedJob->settings = $settings;
-        $seedJob->type = 'Seed';
+        $seedJob->seedType = 'Seed';
         $seedJob->details = $details;
         $seedJob->dateCreated = DateTimeHelper::currentUTCDateTime();
 
