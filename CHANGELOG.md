@@ -1,8 +1,13 @@
 # Changelog
 
+## 1.0.0-beta.10 - 2018-05-17
+
+### Fixed
+- Fixes release notes warning syntax
+
 ## 1.0.0-beta.9 - 2018-05-15
 
-{warning} If you have more than one Sprout Plugin installed, to avoid errors use the 'Update All' option.
+> {warning} If you have more than one Sprout Plugin installed, to avoid errors use the 'Update All' option.
 
 ### Added
 - Added support for importing Craft Commerce Products and Product Variants
