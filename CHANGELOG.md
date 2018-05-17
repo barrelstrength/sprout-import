@@ -9,10 +9,10 @@
 - Added support for importing Craft Commerce Orders
 - Added support for importing Entry Revisions
 - Added `enabledVersioning` override setting on Entry Element Importer
-- Added example Craft Commerce Products JSON file
-- Added example Craft Commerce Orders JSON file
-- Added example Table Field JSON
-- Added example Entry Revisions JSON
+- Added example Craft Commerce Products JSON import file
+- Added example Craft Commerce Orders JSON import file
+- Added example Table Field JSON to import files
+- Added example Entry Revisions JSON import file
 - Added ElementImporter->afterSaveElement method
 - Added minVersionRequired as Sprout Import v0.6.3
 
