@@ -16,8 +16,8 @@ class m180515_000001_rename_importClass_column extends Migration
     {
         $table = '{{%sproutimport_seeds}}';
 
-        if ($this->db->columnExists($table, 'importClass')) {
-            $this->renameColumn($table, 'importClass', 'type');
+        if ($this->db->columnExists($table, 'importerClass')) {
+            $this->renameColumn($table, 'importerClass', 'type');
         }
 
         return true;
