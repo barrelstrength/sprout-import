@@ -2,8 +2,9 @@
 
 namespace barrelstrength\sproutimport\importers\elements;
 use barrelstrength\sproutbase\app\import\base\ElementImporter;
+use barrelstrength\sproutimport\SproutImport;
 use craft\commerce\elements\Product as ProductElement;
-use craft\commerce\elements\Variant;
+use Craft;
 use craft\commerce\records\Purchasable;
 
 class Product extends ElementImporter
@@ -21,11 +22,13 @@ class Product extends ElementImporter
     }
 
     /**
-     * @param       $model
-     * @param array $settings
+     * @param \yii\base\Model $model
+     * @param array           $settings
      *
      * @return bool|mixed|void
-     * @throws \Exception
+     * @throws \Throwable
+     * @throws \craft\errors\ElementNotFoundException
+     * @throws \yii\base\Exception
      */
     public function setModel($model, array $settings = [])
     {
@@ -39,18 +42,29 @@ class Product extends ElementImporter
                 $var = Purchasable::find()->where(['sku' => $variant['sku']])->one();
                 if ($var) {
                     $rowVariants[$var->id] = $variant;
+
+                    if (!$this->model->id) {
+                        SproutImport::$app
+                            ->utilities
+                            ->addError('exist-' . $variant['sku'], $variant['sku'] . ' sku already exists');
+                    }
                 } else {
                     $rowVariants["new" . $key] = $variant;
                 }
-
             }
         }
 
-        $this->model->setVariants($rowVariants);
+        /**
+         * @var $product ProductElement
+         */
+        $product = $this->model;
+
+        $product->setVariants($rowVariants);
     }
 
     public function getFieldLayoutId($model)
     {
         // TODO: Implement getFieldLayoutId() method.
     }
+
 }
