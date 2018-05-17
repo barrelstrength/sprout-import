@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0-beta.8 - 2018-05-15
+## 1.0.0-beta.9 - 2018-05-15
 
 {warning} If you have more than one Sprout Plugin installed, to avoid errors use the 'Update All' option.
 
