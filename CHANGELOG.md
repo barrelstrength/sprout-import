@@ -1,9 +1,16 @@
 # Changelog
 
+## 1.0.0-beta.11 - 2018-05-17
+
+### Fixed
+- Fixed request dependency in Element Importer logic ([#35](https://github.com/barrelstrength/craft-sprout-import/issues/35))
+- Fixed bug where controller behavior was not playing nicely with console requests ([#35](https://github.com/barrelstrength/craft-sprout-import/issues/35))
+- Fixed issue where Assets Seed relatedMin was set to relatedMax
+
 ## 1.0.0-beta.10 - 2018-05-17
 
 ### Fixed
-- Fixes release notes warning syntax
+- Fixed release notes warning syntax
 
 ## 1.0.0-beta.9 - 2018-05-15
 
