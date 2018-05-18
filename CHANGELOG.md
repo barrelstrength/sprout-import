@@ -1,18 +1,23 @@
 # Changelog
 
-## 1.0.0-beta.8 - 2018-05-15
+## 1.0.0-beta.10 - 2018-05-17
 
-{warning} If you have more than one Sprout Plugin installed, to avoid errors use the 'Update All' option.
+### Fixed
+- Fixes release notes warning syntax
+
+## 1.0.0-beta.9 - 2018-05-15
+
+> {warning} If you have more than one Sprout Plugin installed, to avoid errors use the 'Update All' option.
 
 ### Added
 - Added support for importing Craft Commerce Products and Product Variants
 - Added support for importing Craft Commerce Orders
 - Added support for importing Entry Revisions
 - Added `enabledVersioning` override setting on Entry Element Importer
-- Added example Craft Commerce Products JSON file
-- Added example Craft Commerce Orders JSON file
-- Added example Table Field JSON
-- Added example Entry Revisions JSON
+- Added example Craft Commerce Products JSON import file
+- Added example Craft Commerce Orders JSON import file
+- Added example Table Field JSON to import files
+- Added example Entry Revisions JSON import file
 - Added ElementImporter->afterSaveElement method
 - Added minVersionRequired as Sprout Import v0.6.3
 
