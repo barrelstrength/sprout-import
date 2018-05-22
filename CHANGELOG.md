@@ -2,6 +2,9 @@
 
 ## 1.0.0-beta.11 - 2018-05-17
 
+### Changed
+- Updated Sprout Base requirement to ^2.0.2
+
 ### Fixed
 - Fixed request dependency in Element Importer logic ([#35](https://github.com/barrelstrength/craft-sprout-import/issues/35))
 - Fixed bug where controller behavior was not playing nicely with console requests ([#35](https://github.com/barrelstrength/craft-sprout-import/issues/35))

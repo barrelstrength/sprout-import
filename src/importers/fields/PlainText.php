@@ -52,12 +52,21 @@ class PlainText extends FieldImporter
             $lines = random_int($multilineParagraphsMin, $multilineParagraphsMax);
             $paragraphs = $this->fakerService->paragraphs($lines);
 
-            return implode("\n\n", $paragraphs);
+            $text = implode("\n\n", $paragraphs);
+        } else {
+            $lines = random_int($singlelineLinesMin, $singlelineLinesMax);
+            $sentences = $this->fakerService->sentences($lines);
+
+            $text = implode("\n ", $sentences);
         }
 
-        $lines = random_int($singlelineLinesMin, $singlelineLinesMax);
-        $sentences = $this->fakerService->sentences($lines);
+        $charLimit = $settings['charLimit'] ?? null;
 
-        return implode("\n ", $sentences);
+        if ($charLimit) {
+            $charLimit = (int) $charLimit;
+            $text = trim(substr($text, 0, $charLimit));
+        }
+
+        return $text;
     }
 }
