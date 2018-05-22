@@ -70,7 +70,7 @@ class Assets extends FieldImporter
 
         if ($sources != '*') {
             $attributes = [
-                'sourceId' => $sourceIds
+                'volumeId' => $sourceIds
             ];
         }
 

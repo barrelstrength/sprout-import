@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-beta.12 - 2018-05-22
+
+### Fixed
+- Fixed bug when generating mock data for Asset field [#37] 
+- Fixed bug where seeding did not respect character limit of Plain Text field [#36]
+- Fixed bug where Weed tab did not render when using PostgreSQL [#21]
+
+[#37]: https://github.com/barrelstrength/craft-sprout-import/issues/37
+[#36]: https://github.com/barrelstrength/craft-sprout-import/issues/36
+[#21]: https://github.com/barrelstrength/craft-sprout-import/issues/21
+
 ## 1.0.0-beta.11 - 2018-05-17
 
 ### Changed
