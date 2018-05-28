@@ -120,18 +120,28 @@ class SeedController extends Controller
         $seedJob->details = $details;
         $seedJob->dateCreated = DateTimeHelper::currentUTCDateTime();
 
+        $seedJobErrors = null;
         if (!SproutImport::$app->seed->generateSeeds($seedJob)) {
+
+            $seedJobErrors = $seedJob->getErrors();
+
+            SproutImport::error($seedJobErrors);
+        }
+
+        $errors = SproutImport::$app->utilities->getErrors();
+
+        if (!empty($errors) || $seedJobErrors != null) {
             $message = Craft::t('sprout-import', 'Unable to plant seeds.');
 
             Craft::$app->getSession()->setError($message);
 
-            SproutImport::error($seedJob->getErrors());
+            SproutImport::error($errors);
 
             Craft::$app->getUrlManager()->setRouteParams([
                 'seedJob' => $seedJob
             ]);
 
-            return null;
+            return false;
         }
 
         Craft::$app->getSession()->setNotice(Craft::t('sprout-import', '{quantity} Element(s) queued for seeding.', [

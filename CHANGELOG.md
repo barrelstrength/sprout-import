@@ -1,9 +1,30 @@
 # Changelog
 
+## 1.0.0-beta.12 - 2018-05-22
+
+### Fixed
+- Fixed bug when generating mock data for Asset field [#37] 
+- Fixed bug where seeding did not respect character limit of Plain Text field [#36]
+- Fixed bug where Weed tab did not render when using PostgreSQL [#21]
+
+[#37]: https://github.com/barrelstrength/craft-sprout-import/issues/37
+[#36]: https://github.com/barrelstrength/craft-sprout-import/issues/36
+[#21]: https://github.com/barrelstrength/craft-sprout-import/issues/21
+
+## 1.0.0-beta.11 - 2018-05-17
+
+### Changed
+- Updated Sprout Base requirement to ^2.0.2
+
+### Fixed
+- Fixed request dependency in Element Importer logic ([#35](https://github.com/barrelstrength/craft-sprout-import/issues/35))
+- Fixed bug where controller behavior was not playing nicely with console requests ([#35](https://github.com/barrelstrength/craft-sprout-import/issues/35))
+- Fixed issue where Assets Seed relatedMin was set to relatedMax
+
 ## 1.0.0-beta.10 - 2018-05-17
 
 ### Fixed
-- Fixes release notes warning syntax
+- Fixed release notes warning syntax
 
 ## 1.0.0-beta.9 - 2018-05-15
 

@@ -81,7 +81,7 @@ class FieldImporter extends Component
 
         $fieldName = $mockDataSettings['fieldName'];
         $required = $mockDataSettings['required'];
-        $relatedMin = $mockDataSettings['relatedMax'];
+        $relatedMin = $mockDataSettings['relatedMin'];
         $relatedMax = $mockDataSettings['relatedMax'];
 
         // If $relatedMin is less than one and the field is required, use the value 1
