@@ -239,9 +239,15 @@ class ElementImporter extends Component
         // If it is not an attribute search element by field
         if (!in_array($matchBy, $criteriaAttributes, false)) {
 
-            return $elementType::find()->search([
+            $search = $elementType::find()->search([
                 'query' => $matchBy.':'.$matchValue
-            ])->all();
+            ]);
+
+            if ($all === true) {
+                return $search->all();
+            }
+
+            return $search->one();
         }
 
         $attributes = [$matchBy => $matchValue];
