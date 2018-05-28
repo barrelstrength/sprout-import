@@ -117,4 +117,19 @@ class User extends ElementImporter
     {
 
     }
+
+    public function afterSaveElement()
+    {
+        if ($this->model)
+        {
+            if (!empty($this->rows['groupIds']))
+            {
+                $groupIds = $this->rows['groupIds'];
+
+                $userId = $this->model->id;
+
+                Craft::$app->getUsers()->assignUserToGroups($userId, $groupIds);
+            }
+        }
+    }
 }
