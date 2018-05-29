@@ -110,7 +110,7 @@ class User extends ElementImporter
      */
     public function getImporterDataKeys()
     {
-        return ['groupIds'];
+        return ['groupIds', 'userPhoto'];
     }
 
     public function getFieldLayoutId($model)
@@ -132,4 +132,23 @@ class User extends ElementImporter
             }
         }
     }
+
+    public function setModel($model, array $settings = [])
+    {
+        parent::setModel($model, $settings);
+
+        $userPhoto = $settings['userPhoto'] ?? null;
+
+        if ($userPhoto) {
+            $userPhoto['@model'] = "barrelstrength\\sproutimport\\importers\\elements\\Asset";
+        }
+
+        $ids = SproutImport::$app->elementImporter->getRelationIds($userPhoto);
+
+        if ($ids) {
+            // Only assign first asset ID for user photo
+            $this->model->photoId = $ids[0];
+        }
+    }
+
 }
