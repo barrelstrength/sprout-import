@@ -22,12 +22,18 @@
       "slug": "category-slug-child",
       "dateCreated": "2016-01-13 01:25:57",
       "dateUpdated": "2016-01-13 01:25:57",
-      "enabled": true
+      "enabled": true,
+      "related": {
+        "newParentId": {
+          "@model": "barrelstrength\\sproutimport\\importers\\elements\\Category",
+          "matchBy": "slug",
+          "matchValue": "category-slug"
+        }
+      }
     },
     "content": {
       "title": "Category Child",
       "fields": []
-    },
-    "parentSlug": "category-slug"
+    }
   }
 ]

@@ -78,9 +78,9 @@ class Section extends SettingsImporter
             $section->id = $settings['sectionId'];
         }
 
-        $section->name = $settings['name'];
-        $section->handle = $settings['handle'];
-        $section->type = $settings['type'];
+        $section->name = $settings['name'] ?? null;
+        $section->handle = $settings['handle'] ?? null;
+        $section->type = $settings['type'] ?? null;
         $section->enableVersioning = $settings['enableVersioning'] ?? true;
 
         if ($section->type === SectionModel::TYPE_STRUCTURE && isset($settings['maxLevels'])) {
