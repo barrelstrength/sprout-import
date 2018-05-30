@@ -292,64 +292,9 @@ class ElementImporter extends Component
                 continue;
             }
 
-            /**
-             * @var $importerClass Importer
-             */
-            $importerClass = SproutBase::$app->importers->getImporter($elementSettings);
+            $ids = $this->getRelationIds($elementSettings);
 
-            if (!$importerClass) {
-                continue;
-            }
-
-            $matchBy = SproutImport::$app->utilities->getValueByKey('matchBy', $elementSettings);
-            $matchValue = SproutImport::$app->utilities->getValueByKey('matchValue', $elementSettings);
-            $newElements = SproutImport::$app->utilities->getValueByKey('newElements', $elementSettings);
-
-            if (!$importerClass && !$matchValue && !$matchBy) {
-                continue;
-            }
-
-            if (!is_array($matchValue)) {
-                $matchValue = ArrayHelper::toArray($matchValue);
-            }
-
-            if (!count($matchValue)) {
-                continue;
-            }
-
-            $ids = [];
-
-            $model = $importerClass->getModel();
-
-            $elementTypeName = get_class($model);
-            $elements = $this->getElementFromImportSettings($elementTypeName, $elementSettings, true);
-
-            if (!empty($elements)) {
-                foreach ($elements as $element) {
-                    $ids[] = $element->id;
-                }
-            }
-
-            if (count($newElements) && is_array($newElements)) {
-                try {
-                    foreach ($newElements as $row) {
-                        $importerClass = SproutBase::$app->importers->getImporter($row);
-
-                        $this->saveElement($row, $importerClass);
-
-                        if ($this->savedElement) {
-                            $ids[] = $this->savedElement->id;
-                        }
-                    }
-                } catch (\Exception $e) {
-                    $message['errorMessage'] = $e->getMessage();
-                    $message['errorObject'] = $e;
-
-                    SproutImport::error($message);
-
-                    continue;
-                }
-            }
+            if (!$ids) continue;
 
             if (count($ids)) {
                 $fields[$fieldHandle] = $ids;
@@ -359,6 +304,70 @@ class ElementImporter extends Component
         }
 
         return $fields;
+    }
+
+    public function getRelationIds($elementSettings)
+    {
+        /**
+         * @var $importerClass Importer
+         */
+        $importerClass = SproutBase::$app->importers->getImporter($elementSettings);
+
+        if (!$importerClass) {
+            return false;
+        }
+
+        $matchBy = SproutImport::$app->utilities->getValueByKey('matchBy', $elementSettings);
+        $matchValue = SproutImport::$app->utilities->getValueByKey('matchValue', $elementSettings);
+        $newElements = SproutImport::$app->utilities->getValueByKey('newElements', $elementSettings);
+
+        if (!$importerClass && !$matchValue && !$matchBy) {
+            return false;
+        }
+
+        if (!is_array($matchValue)) {
+            $matchValue = ArrayHelper::toArray($matchValue);
+        }
+
+        if (!count($matchValue)) {
+            return false;
+        }
+
+        $ids = [];
+
+        $model = $importerClass->getModel();
+
+        $elementTypeName = get_class($model);
+        $elements = $this->getElementFromImportSettings($elementTypeName, $elementSettings, true);
+
+        if (!empty($elements)) {
+            foreach ($elements as $element) {
+                $ids[] = $element->id;
+            }
+        }
+
+        if (count($newElements) && is_array($newElements)) {
+            try {
+                foreach ($newElements as $row) {
+                    $importerClass = SproutBase::$app->importers->getImporter($row);
+
+                    $this->saveElement($row, $importerClass);
+
+                    if ($this->savedElement) {
+                        $ids[] = $this->savedElement->id;
+                    }
+                }
+            } catch (\Exception $e) {
+                $message['errorMessage'] = $e->getMessage();
+                $message['errorObject'] = $e;
+
+                SproutImport::error($message);
+
+                return false;
+            }
+        }
+
+        return $ids;
     }
 
     /**
