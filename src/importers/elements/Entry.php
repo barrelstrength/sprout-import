@@ -96,6 +96,7 @@ class Entry extends ElementImporter
                 $entryId = null;
 
                 if (!empty($entryTypes)) {
+                    // Get only one entry type
                     $randomEntryType = $entryTypes[array_rand($entryTypes)];
 
                     $entryParams['entryTypeId'] = $randomEntryType->id;

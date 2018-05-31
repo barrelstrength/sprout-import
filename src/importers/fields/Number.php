@@ -44,9 +44,13 @@ class Number extends FieldImporter
             $decimals = $this->seedSettings['fields']['number']['decimals'] ?: $decimals;
         }
 
-        $min = is_numeric($min) ? $min : 0;
-        $max = is_numeric($max) ? $max : 100;
-        $decimals = is_numeric($decimals) ? $decimals : 0;
+        $defaultMin = is_numeric($min) ? $min : 0;
+        $defaultMax = is_numeric($max) ? $max : 100;
+        $defaultDecimals = is_numeric($decimals) ? $decimals : 0;
+
+        $min = $this->model->min ?? $defaultMin;
+        $max = $this->model->max ?? $defaultMax;
+        $decimals = $this->model->decimals ?? $defaultDecimals;
 
         if ($decimals > 0) {
             return $this->fakerService->randomFloat($decimals, $min, $max);
