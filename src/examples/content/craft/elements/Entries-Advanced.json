@@ -71,5 +71,37 @@
         "dateCreated": "2015-01-01 12:00:00"
       }
     }
+  },
+  {
+    "@model": "barrelstrength\\sproutimport\\importers\\elements\\Entry",
+    "attributes": {
+      "slug": "entry-slug-related",
+      "postDate": "2017-04-27 16:00:00",
+      "expiryDate": null,
+      "dateCreated": "2017-06-27 16:00:00",
+      "dateUpdated": "2017-05-27 16:51:42",
+      "enabled": true,
+      "related": {
+        "authorId": {
+          "@model": "barrelstrength\\sproutimport\\importers\\elements\\User",
+          "matchBy": "email",
+          "matchValue": "muller.giuseppe@howell.com"
+        },
+        "typeId": {
+          "@model": "barrelstrength\\sproutimport\\importers\\settings\\EntryType",
+          "matchBy": "handle",
+          "matchValue": "recent"
+        },
+        "sectionId": {
+          "@model": "barrelstrength\\sproutimport\\importers\\settings\\Section",
+          "matchBy": "handle",
+          "matchValue": "news"
+        }
+      }
+    },
+    "content": {
+      "title": "Entry title Related",
+      "fields": []
+    }
   }
 ]
