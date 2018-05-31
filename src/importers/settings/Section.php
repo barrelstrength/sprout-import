@@ -9,6 +9,7 @@ use Craft;
 use craft\models\Section as SectionModel;
 use craft\models\Section_SiteSettings;
 use craft\models\Site;
+use craft\records\Section as SectionRecord;
 
 class Section extends SettingsImporter
 {
@@ -41,6 +42,11 @@ class Section extends SettingsImporter
     public function getModelByHandle($handle = null)
     {
         return Craft::$app->getSections()->getSectionByHandle($handle);
+    }
+
+    public function getRecord()
+    {
+        return new SectionRecord();
     }
 
     /**

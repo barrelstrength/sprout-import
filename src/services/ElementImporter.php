@@ -11,6 +11,7 @@ use craft\base\Component;
 use craft\base\Element;
 use craft\base\Model;
 use craft\helpers\ArrayHelper;
+use barrelstrength\sproutbase\app\import\base\ElementImporter as BaseElementImporter;
 
 class ElementImporter extends Component
 {
@@ -54,6 +55,16 @@ class ElementImporter extends Component
      * @var array
      */
     protected $updatedElements = [];
+
+    /**
+     * @var array
+     */
+    private $elementSettings = [];
+
+    /**
+     * @var Importer
+     */
+    private $importerClass;
 
     /**
      * @param              $rows
@@ -234,7 +245,8 @@ class ElementImporter extends Component
          * @var $elementType Element
          */
         $elementType = new $elementTypeName();
-        $criteriaAttributes = $elementType::find()->criteriaAttributes();
+
+        $criteriaAttributes = get_object_vars($elementType);
 
         // If it is not an attribute search element by field
         if (!in_array($matchBy, $criteriaAttributes, false)) {
@@ -308,6 +320,8 @@ class ElementImporter extends Component
 
     public function getRelationIds($elementSettings)
     {
+        $this->elementSettings = $elementSettings;
+
         /**
          * @var $importerClass Importer
          */
@@ -316,6 +330,41 @@ class ElementImporter extends Component
         if (!$importerClass) {
             return false;
         }
+
+        $this->importerClass = $importerClass;
+
+        if ($importerClass instanceof BaseElementImporter) {
+            return $this->getElementRelationIds();
+        } else {
+            return $this->getSettingRelationIds();
+        }
+    }
+
+    private function getSettingRelationIds()
+    {
+        $elementSettings = $this->elementSettings;
+        $importerClass   = $this->importerClass;
+
+        $record = $importerClass->getRecord();
+
+        $matchBy = SproutImport::$app->utilities->getValueByKey('matchBy', $elementSettings);
+        $matchValue = SproutImport::$app->utilities->getValueByKey('matchValue', $elementSettings);
+
+        if ($matchBy && $matchValue) {
+            $record = $record::findOne([$matchBy => $matchValue]);
+
+            if ($record) {
+                return $record->id;
+            }
+        }
+
+        return null;
+    }
+
+    private function getElementRelationIds()
+    {
+        $elementSettings = $this->elementSettings;
+        $importerClass   = $this->importerClass;
 
         $matchBy = SproutImport::$app->utilities->getValueByKey('matchBy', $elementSettings);
         $matchValue = SproutImport::$app->utilities->getValueByKey('matchValue', $elementSettings);
