@@ -85,7 +85,8 @@ class FieldImporter extends Component
         $relatedMax = $mockDataSettings['relatedMax'];
 
         // If $relatedMin is less than one and the field is required, use the value 1
-        if ($relatedMin < 1 && $required === true) {
+        // Min should not be 0
+        if ($relatedMin < 1 || $required === true) {
             $relatedMin = 1;
         }
 
@@ -114,6 +115,7 @@ class FieldImporter extends Component
                 $elementIds[] = $results[$key]->id;
             }
         }
+
 
         return $elementIds;
     }
