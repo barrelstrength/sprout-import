@@ -86,7 +86,7 @@ class FieldImporter extends Component
 
         // If $relatedMin is less than one and the field is required, use the value 1
         // Min should not be 0
-        if ($relatedMin < 1 || $required === true) {
+        if ($relatedMin < 1 && $required === true) {
             $relatedMin = 1;
         }
 

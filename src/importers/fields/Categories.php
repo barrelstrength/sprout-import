@@ -42,11 +42,14 @@ class Categories extends FieldImporter
 
         if (isset($this->seedSettings['fields']))
         {
-            $relatedMin = $this->seedSettings['fields']['assets']['relatedMin'] ?: $relatedMin;
-            $relatedMax = $this->seedSettings['fields']['assets']['relatedMax'] ?: $relatedMax;
+            $relatedMin = $this->seedSettings['fields']['categories']['branchLimitMin'] ?: $relatedMin;
+            $relatedMax = $this->seedSettings['fields']['categories']['branchLimitMax'] ?: $relatedMax;
         }
 
-        $relatedMax = SproutImport::$app->fieldImporter->getLimit($settings['branchLimit'], $relatedMax);
+        if (!empty($settings['branchLimit'])) {
+            $relatedMin = 1;
+            $relatedMax = $settings['branchLimit'];
+        }
 
         $mockDataSettings = [
             'fieldName' => $this->model->name,

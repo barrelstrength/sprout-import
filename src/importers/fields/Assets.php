@@ -48,7 +48,7 @@ class Assets extends FieldImporter
 
         // If setting limit is set on asset field setting override default settings.
         if (!empty($settings['limit'])) {
-            $relatedMin = 0;
+            $relatedMin = 1;
             $relatedMax = $settings['limit'];
         }
 
