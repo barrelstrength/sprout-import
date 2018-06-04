@@ -5,28 +5,33 @@ namespace barrelstrength\sproutimport\importers\fields;
 use barrelstrength\sproutbase\app\import\base\FieldImporter;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;
+use craft\commerce\elements\Product;
+use craft\commerce\fields\Products as ProductsField;
 
-class Commerce_ProductsField extends FieldImporter
+class Products extends FieldImporter
 {
     /**
      * @return string
      */
     public function getModelName()
     {
-        return 'Commerce_Products';
+        return ProductsField::class;
     }
 
     /**
-     * @return mixed
+     * @return array|bool|mixed|null
+     * @throws \Exception
      */
     public function getMockData()
     {
         $settings = $this->model->settings;
 
-        $relatedMin = $this->seedSettings['commerceProductsField']['relatedMin'];
-        $relatedMax = $this->seedSettings['commerceProductsField']['relatedMax'];
+        $relatedMin = 1;
+        $relatedMax = 3;
 
-        $relatedMax = SproutImport::$app->fieldImporter->getLimit($settings['limit'], $relatedMax);
+        if (!empty($settings['limit'])) {
+            $relatedMax = $settings['limit'];
+        }
 
         $mockDataSettings = [
             'fieldName' => $this->model->name,
@@ -50,8 +55,9 @@ class Commerce_ProductsField extends FieldImporter
             'typeId' => $productTypeIds
         ];
 
-        // @todo - update to new classname once Craft Commerce is released
-        $elementIds = SproutImport::$app->fieldImporter->getMockRelations('Commerce_Product', $attributes, $mockDataSettings);
+        $productElement = new Product();
+
+        $elementIds = SproutImport::$app->fieldImporter->getMockRelations($productElement, $attributes, $mockDataSettings);
 
         return $elementIds;
     }

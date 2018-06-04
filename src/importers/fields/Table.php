@@ -29,7 +29,11 @@ class Table extends FieldImporter
 
         $columns = $settings['columns'];
 
-        $randomLength = random_int(2, 5);
+        $minRows = $settings['minRows'] ?: 1;
+
+        $maxRows = $settings['maxRows'] ?: 5;
+
+        $randomLength = random_int($minRows, $maxRows);
 
         $values = [];
 

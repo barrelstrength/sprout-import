@@ -40,10 +40,12 @@ class Categories extends FieldImporter
         $relatedMin = 1;
         $relatedMax = 3;
 
-        if (isset($this->seedSettings['fields']))
+        $categorySettings = $this->seedSettings['fields']['categories'] ?? null;
+
+        if ($categorySettings)
         {
-            $relatedMin = $this->seedSettings['fields']['categories']['branchLimitMin'] ?: $relatedMin;
-            $relatedMax = $this->seedSettings['fields']['categories']['branchLimitMax'] ?: $relatedMax;
+            $relatedMin = $categorySettings['branchLimitMin'] ?: $relatedMin;
+            $relatedMax = $categorySettings['branchLimitMax'] ?: $relatedMax;
         }
 
         if (!empty($settings['branchLimit'])) {

@@ -40,13 +40,18 @@ class Entries extends FieldImporter
         $relatedMin = 1;
         $relatedMax = 3;
 
-        if (isset($this->seedSettings['fields']))
+        $entrySettings = $this->seedSettings['fields']['entries'] ?? null;
+
+        if ($entrySettings)
         {
-            $relatedMin = $this->seedSettings['fields']['assets']['relatedMin'] ?: $relatedMin;
-            $relatedMax = $this->seedSettings['fields']['assets']['relatedMax'] ?: $relatedMax;
+            $relatedMin = $entrySettings['relatedMin'] ?: $relatedMin;
+            $relatedMax = $entrySettings['relatedMax'] ?: $relatedMax;
         }
 
-        $relatedMax = SproutImport::$app->fieldImporter->getLimit($settings['limit'], $relatedMax);
+        if (!empty($settings['limit'])) {
+            $relatedMin = 1;
+            $relatedMax = $settings['limit'];
+        }
 
         $mockDataSettings = [
             'fieldName' => $this->model->name,

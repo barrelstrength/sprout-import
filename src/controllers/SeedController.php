@@ -121,12 +121,16 @@ class SeedController extends Controller
         $seedJob->dateCreated = DateTimeHelper::currentUTCDateTime();
 
         $seedJobErrors = null;
-        if (!SproutImport::$app->seed->generateSeeds($seedJob)) {
+
+        $attributes = $seedJob->getAttributes();
+        SproutImport::$app->seed->runSeed($attributes);
+
+/*        if (!SproutImport::$app->seed->generateSeeds($seedJob)) {
 
             $seedJobErrors = $seedJob->getErrors();
 
             SproutImport::error($seedJobErrors);
-        }
+        }*/
 
         $errors = SproutImport::$app->utilities->getErrors();
 

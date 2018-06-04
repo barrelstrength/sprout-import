@@ -40,10 +40,17 @@ class Tags extends FieldImporter
         $relatedMin = 1;
         $relatedMax = 3;
 
-        if (isset($this->seedSettings['fields']))
+        $tagSettings = $this->seedSettings['fields']['tags'] ?? null;
+
+        if ($tagSettings)
         {
-            $relatedMin = $this->seedSettings['fields']['assets']['relatedMin'] ?: $relatedMin;
-            $relatedMax = $this->seedSettings['fields']['assets']['relatedMax'] ?: $relatedMax;
+            $relatedMin = $tagSettings['relatedMin'] ?: $relatedMin;
+            $relatedMax = $tagSettings['relatedMax'] ?: $relatedMax;
+        }
+
+        if (!empty($settings['limit'])) {
+            $relatedMin = 1;
+            $relatedMax = $settings['limit'];
         }
 
         $mockDataSettings = [

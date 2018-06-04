@@ -40,10 +40,12 @@ class Assets extends FieldImporter
         $relatedMin = 1;
         $relatedMax = 3;
 
-        if (isset($this->seedSettings['fields']['assets']))
+        $assetSettings = $this->seedSettings['fields']['assets'] ?? null;
+
+        if ($assetSettings)
         {
-            $relatedMin = $this->seedSettings['fields']['assets']['relatedMin'] ?: $relatedMin;
-            $relatedMax = $this->seedSettings['fields']['assets']['relatedMax'] ?: $relatedMax;
+            $relatedMin = $assetSettings['relatedMin'] ?: $relatedMin;
+            $relatedMax = $assetSettings['relatedMax'] ?: $relatedMax;
         }
 
         // If setting limit is set on asset field setting override default settings.
