@@ -234,6 +234,7 @@ class ElementImporter extends Component
          * @var $elementType Element
          */
         $elementType = new $elementTypeName();
+
         $attributes = [$matchBy => $matchValue];
 
         // Auto find all element status to avoid error when one of the element is disabled.
