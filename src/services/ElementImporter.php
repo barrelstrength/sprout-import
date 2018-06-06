@@ -234,21 +234,6 @@ class ElementImporter extends Component
          * @var $elementType Element
          */
         $elementType = new $elementTypeName();
-        $criteriaAttributes = $elementType::find()->criteriaAttributes();
-
-        // If it is not an attribute search element by field
-        if (!in_array($matchBy, $criteriaAttributes, false)) {
-
-            $search = $elementType::find()->search([
-                'query' => $matchBy.':'.$matchValue
-            ]);
-
-            if ($all === true) {
-                return $search->all();
-            }
-
-            return $search->one();
-        }
 
         $attributes = [$matchBy => $matchValue];
 
