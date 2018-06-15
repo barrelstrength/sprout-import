@@ -46,15 +46,18 @@ class Order extends ElementImporter
      */
     public function setModel($model, array $settings = [])
     {
-        $this->model = parent::setModel($model, $settings);
-
-        $this->model = Plugin::getInstance()->getCarts()->getCart();
         $number = $settings['attributes']['number'] ?? null;
         if ($number) {
             $orderCart = Plugin::getInstance()->getOrders()->getOrderByNumber($number);
             if ($orderCart) {
                 $this->model = $orderCart;
             }
+        }
+
+        if ($this->model->id == null) {
+            // Forget cart to create new order
+            Plugin::getInstance()->getCarts()->forgetCart();
+            $this->model = Plugin::getInstance()->getCarts()->getCart();
         }
 
         $this->model->setAttributes($settings['attributes'], false);
@@ -106,11 +109,11 @@ class Order extends ElementImporter
                     $billingAddress->stateName = $address['state'];
                 }
 
-                $billingAddress->address1 = $address['address1'];
-                $billingAddress->city = $address['city'];
+                $billingAddress->address1 = $address['address1'] ?? null;
+                $billingAddress->city = $address['city'] ?? null;
             }
 
-            $billingAddress->zipCode = $address['zipCode'];
+            $billingAddress->zipCode = $address['zipCode'] ?? null;
 
             Plugin::getInstance()->getCustomers()->saveAddress($billingAddress, $customer);
 
@@ -133,6 +136,10 @@ class Order extends ElementImporter
         }
 
         if ($settings['lineItems']) {
+
+            // Remove line item if it exist to avoid appending of line item values
+            Plugin::getInstance()->getLineItems()->deleteAllLineItemsByOrderId($this->model->id);
+
             foreach ($settings['lineItems'] as $item) {
 
                 $purchasableId = $item['purchasableId'] ?? null;
@@ -149,16 +156,25 @@ class Order extends ElementImporter
 
                 $lineItem = Plugin::getInstance()->getLineItems()
                     ->resolveLineItem($this->model->id, $purchasableId, $item['options'], $item['qty'], '');
+
                 $this->model->addLineItem($lineItem);
             }
         }
 
         $this->model->isCompleted = $settings['attributes']['isCompleted'] ?? 1;
 
-        $orderStatus = Plugin::getInstance()->getOrderStatuses()->getDefaultOrderStatusForOrder($this->model);
-        if ($orderStatus) {
-            $this->model->orderStatusId = $orderStatus->id;
+        $orderStatusId = $settings['attributes']['orderStatusId'] ?? null;
+
+        if (!$orderStatusId) {
+            $orderStatus = Plugin::getInstance()->getOrderStatuses()->getDefaultOrderStatusForOrder($this->model);
+            $orderStatusId = $orderStatus->id;
+        } elseif (is_string($orderStatusId)) {
+            $orderStatus = Plugin::getInstance()->getOrderStatuses()->getOrderStatusByHandle($orderStatusId);
+
+            $orderStatusId = $orderStatus->id ?? null;
         }
+
+        $this->model->orderStatusId = $orderStatusId;
 
         $this->model->paymentCurrency = Plugin::getInstance()->getPaymentCurrencies()->getPrimaryPaymentCurrencyIso();
     }
