@@ -9,10 +9,7 @@
       "enabled": true
     },
     "content": {
-      "title": "Category Title",
-      "fields": {
-        "firstPlain": "sdfsd"
-      }
+      "title": "Category Title"
     }
   },
   {
