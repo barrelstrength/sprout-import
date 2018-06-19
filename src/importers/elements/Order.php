@@ -54,21 +54,25 @@ class Order extends ElementImporter
             }
         }
 
+        $orderStatusId = $settings['attributes']['orderStatusId'] ?? null;
+
+        if (!$orderStatusId) {
+            $orderStatus = Plugin::getInstance()->getOrderStatuses()->getDefaultOrderStatus();
+            $orderStatusId = $orderStatus->id;
+
+        } elseif (is_string($orderStatusId)) {
+            $orderStatus = Plugin::getInstance()->getOrderStatuses()->getOrderStatusByHandle($orderStatusId);
+
+            $orderStatusId = $orderStatus->id ?? null;
+            // Avoid setAttributes error
+            unset($settings['attributes']['orderStatusId']);
+        }
+
         if ($this->model->id == null) {
 
             $this->model = new OrderElement();
             $this->model->number = Plugin::getInstance()->getCarts()->generateCartNumber();
 
-            $orderStatusId = $settings['attributes']['orderStatusId'] ?? null;
-
-            if (!$orderStatusId) {
-                $orderStatus = Plugin::getInstance()->getOrderStatuses()->getDefaultOrderStatus();
-                $orderStatusId = $orderStatus->id;
-            } elseif (is_string($orderStatusId)) {
-                $orderStatus = Plugin::getInstance()->getOrderStatuses()->getOrderStatusByHandle($orderStatusId);
-
-                $orderStatusId = $orderStatus->id ?? null;
-            }
 
             $this->model->orderStatusId = $orderStatusId;
 
