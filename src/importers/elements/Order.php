@@ -55,9 +55,24 @@ class Order extends ElementImporter
         }
 
         if ($this->model->id == null) {
-            // Forget cart to create new order
-            Plugin::getInstance()->getCarts()->forgetCart();
-            $this->model = Plugin::getInstance()->getCarts()->getCart();
+
+            $this->model = new OrderElement();
+            $this->model->number = Plugin::getInstance()->getCarts()->generateCartNumber();
+
+            $orderStatusId = $settings['attributes']['orderStatusId'] ?? null;
+
+            if (!$orderStatusId) {
+                $orderStatus = Plugin::getInstance()->getOrderStatuses()->getDefaultOrderStatus();
+                $orderStatusId = $orderStatus->id;
+            } elseif (is_string($orderStatusId)) {
+                $orderStatus = Plugin::getInstance()->getOrderStatuses()->getOrderStatusByHandle($orderStatusId);
+
+                $orderStatusId = $orderStatus->id ?? null;
+            }
+
+            $this->model->orderStatusId = $orderStatusId;
+
+            Craft::$app->getElements()->saveElement($this->model, false);
         }
 
         $this->model->setAttributes($settings['attributes'], false);
@@ -79,12 +94,13 @@ class Order extends ElementImporter
                         $customer->userId = $user->id;
                     }
                 }
+
+                Plugin::getInstance()->getCustomers()->saveCustomer($customer);
             }
         } else {
             $customer = Plugin::getInstance()->getCustomers()->getCustomerById($customerEmail);
         }
 
-        Plugin::getInstance()->getCustomers()->saveCustomer($customer);
         $address = $settings['addresses']['billingAddress'] ?? null;
         if ($address) {
             $billingAddress = new Address();
@@ -162,19 +178,6 @@ class Order extends ElementImporter
         }
 
         $this->model->isCompleted = $settings['attributes']['isCompleted'] ?? 1;
-
-        $orderStatusId = $settings['attributes']['orderStatusId'] ?? null;
-
-        if (!$orderStatusId) {
-            $orderStatus = Plugin::getInstance()->getOrderStatuses()->getDefaultOrderStatusForOrder($this->model);
-            $orderStatusId = $orderStatus->id;
-        } elseif (is_string($orderStatusId)) {
-            $orderStatus = Plugin::getInstance()->getOrderStatuses()->getOrderStatusByHandle($orderStatusId);
-
-            $orderStatusId = $orderStatus->id ?? null;
-        }
-
-        $this->model->orderStatusId = $orderStatusId;
 
         $this->model->paymentCurrency = Plugin::getInstance()->getPaymentCurrencies()->getPrimaryPaymentCurrencyIso();
     }
