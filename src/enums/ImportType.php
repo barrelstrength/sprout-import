@@ -10,8 +10,23 @@ abstract class ImportType
     // Constants
     // =========================================================================
 
-    const CopyPaste = 'CopyPaste';
-    const File = 'File';
+    /**
+     * Seeds generated via a POST data including imports submitted via the CopyPaste option on the Import tab
+     */
     const Post = 'Post';
+
+    /**
+     * Seeds generated via the Upload Files option on the Import tab
+     */
+    const File = 'File';
+
+    /**
+     * Seeds generated via the Seed tab
+     */
+    const Seed = 'Seed';
+
+    /**
+     * Seeds generated via a Theme integration
+     */
     const Theme = 'Theme';
 }

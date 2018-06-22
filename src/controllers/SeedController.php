@@ -12,6 +12,7 @@ use barrelstrength\sproutimport\SproutImport;
 use craft\helpers\DateTimeHelper;
 use craft\web\Controller;
 use Craft;
+use sproutimport\enums\ImportType;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
@@ -116,7 +117,7 @@ class SeedController extends Controller
         $seedJob->elementType = $elementType;
         $seedJob->quantity = !empty($quantity) ? $quantity : 11;
         $seedJob->settings = $settings;
-        $seedJob->seedType = 'Seed';
+        $seedJob->seedType = ImportType::Seed;
         $seedJob->details = $details;
         $seedJob->dateCreated = DateTimeHelper::currentUTCDateTime();
 
