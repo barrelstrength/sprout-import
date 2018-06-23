@@ -7,6 +7,7 @@ use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutimport\SproutImport;
 use craft\models\EntryType as EntryTypeModel;
+use craft\records\EntryType as EntryTypeRecord;
 use Craft;
 
 class EntryType extends SettingsImporter
@@ -37,9 +38,9 @@ class EntryType extends SettingsImporter
     public function setModel($entryType, array $rows = [])
     {
         // Set the simple stuff
-        $entryType->sectionId = $rows['sectionId'];
-        $entryType->name = $rows['name'];
-        $entryType->handle = $rows['handle'];
+        $entryType->sectionId = $rows['sectionId'] ?? null;
+        $entryType->name = $rows['name'] ?? null;
+        $entryType->handle = $rows['handle'] ?? null;
         $entryType->hasTitleField = $rows['hasTitleField'] ?? true;
         $entryType->titleLabel = $rows['titleLabel'] ?? Craft::t('sprout-import', 'Title');
         $entryType->titleFormat = $rows['titleFormat'] ?? '';
@@ -80,6 +81,11 @@ class EntryType extends SettingsImporter
         }
 
         $this->model = $entryType;
+    }
+
+    public function getRecord()
+    {
+        return new EntryTypeRecord();
     }
 
     /**
