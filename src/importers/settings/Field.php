@@ -51,9 +51,12 @@ class Field extends SettingsImporter
         return Craft::$app->getFields()->getFieldByHandle($handle);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getRecord()
     {
-        return new FieldRecord();
+        return FieldRecord::class;
     }
 
     /**

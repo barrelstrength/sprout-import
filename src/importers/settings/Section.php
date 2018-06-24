@@ -44,9 +44,12 @@ class Section extends SettingsImporter
         return Craft::$app->getSections()->getSectionByHandle($handle);
     }
 
-    public function getRecord()
+    /**
+     * @inheritdoc
+     */
+    public function getRecordName()
     {
-        return new SectionRecord();
+        return SectionRecord::class;
     }
 
     /**

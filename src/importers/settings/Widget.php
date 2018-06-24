@@ -27,9 +27,12 @@ class Widget extends SettingsImporter
         return WidgetModel::class;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getRecord()
     {
-        return new WidgetRecord();
+        return WidgetRecord::class;
     }
 
     /**

@@ -83,9 +83,12 @@ class EntryType extends SettingsImporter
         $this->model = $entryType;
     }
 
-    public function getRecord()
+    /**
+     * @inheritdoc
+     */
+    public function getRecordName()
     {
-        return new EntryTypeRecord();
+        return EntryTypeRecord::class;
     }
 
     /**
