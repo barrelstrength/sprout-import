@@ -118,6 +118,8 @@ class ElementImporter extends Component
         $model = $importerClass->getModel();
         $modelName = $importerClass->getImporterClass();
 
+        $importerClass->beforeValidateElement();
+
         $this->trigger(self::EVENT_BEFORE_ELEMENT_IMPORT, new ElementImportEvent([
             'modelName' => $modelName,
             'element' => $model,
