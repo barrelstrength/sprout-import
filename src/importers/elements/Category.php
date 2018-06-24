@@ -68,21 +68,6 @@ class Category extends ElementImporter
         return null;
     }
 
-    public function setModel($model, array $settings = [])
-    {
-        parent::setModel($model, $settings);
-
-        $slug = $settings['parentSlug'] ?? null;
-
-        if ($slug) {
-            $category = CategoryElement::findOne(['slug' => $slug]);
-
-            if ($category) {
-                $this->model->newParentId = $category->id;
-            }
-        }
-    }
-
     /**
      * @param $quantity
      * @param $settings
@@ -161,10 +146,5 @@ class Category extends ElementImporter
         }
 
         return $group->fieldLayoutId;
-    }
-
-    public function getImporterDataKeys()
-    {
-        return ['parentSlug'];
     }
 }
