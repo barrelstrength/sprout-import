@@ -243,6 +243,16 @@ class Entry extends ElementImporter
         return ['enableVersioning'];
     }
 
+    public function beforeValidateElement()
+    {
+        // If authorId is an array we matched it via a 'related' attribute and we should set
+        // it to be an integer because authorId is an attribute and not like custom relation fields
+        if (is_array($this->model->authorId) && count($this->model->authorId))
+        {
+            $this->model->authorId = $this->model->authorId[0];
+        }
+    }
+
     /**
      * @throws \yii\base\InvalidConfigException
      */

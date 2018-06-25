@@ -4,6 +4,7 @@ namespace barrelstrength\sproutimport\importers\settings;
 
 use barrelstrength\sproutbase\app\import\base\SettingsImporter;
 use barrelstrength\sproutimport\models\importers\Field as FieldModel;
+use craft\records\Field as FieldRecord;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;
 
@@ -48,6 +49,14 @@ class Field extends SettingsImporter
     public function getModelByHandle($handle = null)
     {
         return Craft::$app->getFields()->getFieldByHandle($handle);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRecord()
+    {
+        return FieldRecord::class;
     }
 
     /**

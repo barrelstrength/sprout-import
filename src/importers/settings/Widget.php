@@ -5,6 +5,7 @@ namespace barrelstrength\sproutimport\importers\settings;
 use barrelstrength\sproutbase\app\import\base\SettingsImporter;
 use barrelstrength\sproutimport\models\importers\Widget as WidgetModel;
 use barrelstrength\sproutimport\SproutImport;
+use craft\records\Widget as WidgetRecord;
 use Craft;
 use craft\base\WidgetInterface;
 
@@ -24,6 +25,14 @@ class Widget extends SettingsImporter
     public function getModelName()
     {
         return WidgetModel::class;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRecord()
+    {
+        return WidgetRecord::class;
     }
 
     /**

@@ -9,6 +9,7 @@ use Craft;
 use craft\models\Section as SectionModel;
 use craft\models\Section_SiteSettings;
 use craft\models\Site;
+use craft\records\Section as SectionRecord;
 
 class Section extends SettingsImporter
 {
@@ -41,6 +42,14 @@ class Section extends SettingsImporter
     public function getModelByHandle($handle = null)
     {
         return Craft::$app->getSections()->getSectionByHandle($handle);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRecordName()
+    {
+        return SectionRecord::class;
     }
 
     /**
@@ -78,9 +87,9 @@ class Section extends SettingsImporter
             $section->id = $settings['sectionId'];
         }
 
-        $section->name = $settings['name'];
-        $section->handle = $settings['handle'];
-        $section->type = $settings['type'];
+        $section->name = $settings['name'] ?? null;
+        $section->handle = $settings['handle'] ?? null;
+        $section->type = $settings['type'] ?? null;
         $section->enableVersioning = $settings['enableVersioning'] ?? true;
 
         if ($section->type === SectionModel::TYPE_STRUCTURE && isset($settings['maxLevels'])) {

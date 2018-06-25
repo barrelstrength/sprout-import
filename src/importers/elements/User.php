@@ -90,11 +90,11 @@ class User extends ElementImporter
 
         $data = [];
         $data['@model'] = User::class;
-        $data['groupIds'] = [$groupId];
         $data['attributes']['username'] = $username;
         $data['attributes']['firstName'] = $firstName;
         $data['attributes']['lastName'] = $lastName;
         $data['attributes']['email'] = $email;
+        $data['attributes']['groups'] = [$groupId];
 
         $fieldLayout = Craft::$app->getFields()->getLayoutByType(UserElement::class);
 
@@ -105,14 +105,6 @@ class User extends ElementImporter
         return $data;
     }
 
-    /**
-     * @return array
-     */
-    public function getImporterDataKeys()
-    {
-        return ['groupIds'];
-    }
-
     public function getFieldLayoutId($model)
     {
 
@@ -120,16 +112,13 @@ class User extends ElementImporter
 
     public function afterSaveElement()
     {
-        if ($this->model)
+        if (count($this->model->getGroups()))
         {
-            if (!empty($this->rows['groupIds']))
-            {
-                $groupIds = $this->rows['groupIds'];
+            $groupIds = $this->model->getGroups();
 
-                $userId = $this->model->id;
+            $userId = $this->model->id;
 
-                Craft::$app->getUsers()->assignUserToGroups($userId, $groupIds);
-            }
+            Craft::$app->getUsers()->assignUserToGroups($userId, $groupIds);
         }
     }
 }

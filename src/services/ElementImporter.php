@@ -10,7 +10,8 @@ use barrelstrength\sproutimport\SproutImport;
 use craft\base\Component;
 use craft\base\Element;
 use craft\base\Model;
-use craft\helpers\ArrayHelper;
+use barrelstrength\sproutbase\app\import\base\ElementImporter as BaseElementImporter;
+use barrelstrength\sproutbase\app\import\base\SettingsImporter as BaseSettingsImporter;
 
 class ElementImporter extends Component
 {
@@ -117,6 +118,8 @@ class ElementImporter extends Component
 
         $model = $importerClass->getModel();
         $modelName = $importerClass->getImporterClass();
+
+        $importerClass->beforeValidateElement();
 
         $this->trigger(self::EVENT_BEFORE_ELEMENT_IMPORT, new ElementImportEvent([
             'modelName' => $modelName,
@@ -226,31 +229,60 @@ class ElementImporter extends Component
     {
         $utilities = SproutImport::$app->utilities;
 
+        $params = $utilities->getValueByKey('params', $updateElementSettings);
+
+        /**
+         * @deprecated - The matchBy, matchValue, and matchCriteria keys will be removed in Sprout Import v2.0.0
+         *
+         * If the new 'params' syntax isn't used, use deprecated matchCriteria values if provided
+         */
         $matchBy = $utilities->getValueByKey('matchBy', $updateElementSettings);
         $matchValue = $utilities->getValueByKey('matchValue', $updateElementSettings);
         $matchCriteria = $utilities->getValueByKey('matchCriteria', $updateElementSettings);
+
+        if ($params === null && ($matchBy || $matchValue || $matchCriteria)) {
+            if ($matchBy !== null) {
+                Craft::$app->getDeprecator()->log('ElementImporter matchBy key', 'The “matchBy” key has been deprecated. Use “params” in place of “matchBy”, “matchValue”, and “matchCriteria”.');
+            }
+
+            if ($matchValue !== null) {
+                Craft::$app->getDeprecator()->log('ElementImporter matchValue key', 'The “matchValue” key has been deprecated. Use “params” in place of “matchBy”, “matchValue”, and “matchCriteria”.');
+            }
+
+            if ($matchCriteria !== null) {
+                Craft::$app->getDeprecator()->log('ElementImporter matchCriteria key', 'The “matchCriteria” key has been deprecated. Use “params” in place of “matchBy”, “matchValue”, and “matchCriteria”.');
+            }
+
+            $params = [
+                $matchBy => $matchValue
+            ];
+
+            if (is_array($matchCriteria)) {
+                $params = array_merge($params, $matchCriteria);
+            }
+        }
+
+        // Find all element statuses to avoid errors when one of the element is disabled.
+        $status = [
+            'status' => [
+                Element::STATUS_ARCHIVED,
+                Element::STATUS_ENABLED,
+                Element::STATUS_DISABLED
+            ]
+        ];
+
+        $params = array_merge($params, $status);
 
         /**
          * @var $elementType Element
          */
         $elementType = new $elementTypeName();
 
-        $attributes = [$matchBy => $matchValue];
-
-        // Auto find all element status to avoid error when one of the element is disabled.
-        $status = ['status' => [Element::STATUS_ARCHIVED, Element::STATUS_ENABLED, Element::STATUS_DISABLED]];
-
-        $attributes = array_merge($attributes, $status);
-
-        if (is_array($matchCriteria)) {
-            $attributes = array_merge($attributes, $matchCriteria);
-        }
-
         try {
             if ($all == true) {
-                $element = $elementType::findAll($attributes);
+                $element = $elementType::findAll($params);
             } else {
-                $element = $elementType::findOne($attributes);
+                $element = $elementType::findOne($params);
             }
 
             return $element;
@@ -276,9 +308,14 @@ class ElementImporter extends Component
             return null;
         }
 
-        foreach ($related as $fieldHandle => $elementSettings) {
+        /**
+         * $elementSettings can be attribute or content criteria/params
+         */
+        foreach ($related as $fieldHandle => $relatedSettings) {
 
-            if (empty($elementSettings)) {
+            $ids = null;
+
+            if (empty($relatedSettings)) {
                 unset($related[$fieldHandle]);
                 continue;
             }
@@ -286,60 +323,20 @@ class ElementImporter extends Component
             /**
              * @var $importerClass Importer
              */
-            $importerClass = SproutBase::$app->importers->getImporter($elementSettings);
+            $importerClass = SproutBase::$app->importers->getImporter($relatedSettings);
 
             if (!$importerClass) {
+                return null;
+            }
+
+            if ($importerClass instanceof BaseElementImporter) {
+                $ids = $this->getElementRelationIds($importerClass, $relatedSettings);
+            } else {
+                $ids = $this->getSettingRelationIds($importerClass, $relatedSettings);
+            }
+
+            if (!$ids) {
                 continue;
-            }
-
-            $matchBy = SproutImport::$app->utilities->getValueByKey('matchBy', $elementSettings);
-            $matchValue = SproutImport::$app->utilities->getValueByKey('matchValue', $elementSettings);
-            $newElements = SproutImport::$app->utilities->getValueByKey('newElements', $elementSettings);
-
-            if (!$importerClass && !$matchValue && !$matchBy) {
-                continue;
-            }
-
-            if (!is_array($matchValue)) {
-                $matchValue = ArrayHelper::toArray($matchValue);
-            }
-
-            if (!count($matchValue)) {
-                continue;
-            }
-
-            $ids = [];
-
-            $model = $importerClass->getModel();
-
-            $elementTypeName = get_class($model);
-            $elements = $this->getElementFromImportSettings($elementTypeName, $elementSettings, true);
-
-            if (!empty($elements)) {
-                foreach ($elements as $element) {
-                    $ids[] = $element->id;
-                }
-            }
-
-            if (count($newElements) && is_array($newElements)) {
-                try {
-                    foreach ($newElements as $row) {
-                        $importerClass = SproutBase::$app->importers->getImporter($row);
-
-                        $this->saveElement($row, $importerClass);
-
-                        if ($this->savedElement) {
-                            $ids[] = $this->savedElement->id;
-                        }
-                    }
-                } catch (\Exception $e) {
-                    $message['errorMessage'] = $e->getMessage();
-                    $message['errorObject'] = $e;
-
-                    SproutImport::error($message);
-
-                    continue;
-                }
             }
 
             if (count($ids)) {
@@ -350,6 +347,95 @@ class ElementImporter extends Component
         }
 
         return $fields;
+    }
+
+    /**
+     * Returns the related Element ID(s)
+     *
+     * @return array|bool
+     */
+    private function getElementRelationIds(BaseElementImporter $importerClass, array $relatedSettings = array())
+    {
+        $elementIds = [];
+        $newElements = SproutImport::$app->utilities->getValueByKey('newElements', $relatedSettings);
+
+        $model = $importerClass->getModel();
+        $elementTypeName = get_class($model);
+        $elements = $this->getElementFromImportSettings($elementTypeName, $relatedSettings, true);
+
+        if (!empty($elements)) {
+            foreach ($elements as $element) {
+                $elementIds[] = $element->id;
+            }
+        }
+
+        if (count($newElements) && is_array($newElements)) {
+            try {
+                foreach ($newElements as $row) {
+                    $importerClass = SproutBase::$app->importers->getImporter($row);
+
+                    $this->saveElement($row, $importerClass);
+
+                    if ($this->savedElement) {
+                        $elementIds[] = $this->savedElement->id;
+                    }
+                }
+            } catch (\Exception $e) {
+                $message['errorMessage'] = $e->getMessage();
+                $message['errorObject'] = $e;
+
+                SproutImport::error($message);
+
+                return false;
+            }
+        }
+
+        return $elementIds;
+    }
+
+    /**
+     * Returns the matched settings record ID
+     *
+     * @return int|null
+     */
+    private function getSettingRelationIds(BaseSettingsImporter $importerClass, array $relatedSettings = array())
+    {
+        $recordClass = $importerClass->getRecordName();
+        $record = new $recordClass();
+
+        $params = SproutImport::$app->utilities->getValueByKey('params', $relatedSettings);
+
+        /**
+         * @deprecated - The matchBy, matchValue, and matchCriteria keys will be removed in Sprout Import v2.0.0
+         *
+         * If the new 'params' syntax isn't used, use deprecated matchCriteria values if provided
+         */
+        $matchBy = SproutImport::$app->utilities->getValueByKey('matchBy', $relatedSettings);
+        $matchValue = SproutImport::$app->utilities->getValueByKey('matchValue', $relatedSettings);
+
+        if ($params === null && ($matchBy || $matchValue)) {
+            if ($matchBy !== null) {
+                Craft::$app->getDeprecator()->log('ElementImporter matchBy key', 'The “matchBy” key has been deprecated. Use “params” in place of “matchBy”, “matchValue”, and “matchCriteria”.');
+            }
+
+            if ($matchValue !== null) {
+                Craft::$app->getDeprecator()->log('ElementImporter matchValue key', 'The “matchValue” key has been deprecated. Use “params” in place of “matchBy”, “matchValue”, and “matchCriteria”.');
+            }
+
+            $params = [
+                $matchBy => $matchValue
+            ];
+        }
+
+        if ($params) {
+            $record = $record::findOne($params);
+
+            if ($record) {
+                return $record->id;
+            }
+        }
+
+        return null;
     }
 
     /**

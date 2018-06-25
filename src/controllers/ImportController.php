@@ -248,7 +248,7 @@ class ImportController extends Controller
         }
 
         $seedModel = new Seed();
-        $seedModel->seedType = ImportType::CopyPaste;
+        $seedModel->seedType = ImportType::Post;
         $seedModel->enabled = (bool)$seed;
 
         $importData = new Json();
