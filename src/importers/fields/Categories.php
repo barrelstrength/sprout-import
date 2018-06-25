@@ -48,10 +48,7 @@ class Categories extends FieldImporter
             $relatedMax = $categorySettings['branchLimitMax'] ?: $relatedMax;
         }
 
-        if (!empty($settings['branchLimit'])) {
-            $relatedMin = 1;
-            $relatedMax = $settings['branchLimit'];
-        }
+        $relatedMax = SproutImport::$app->fieldImporter->getLimit($settings['branchLimit'], $relatedMax);
 
         $mockDataSettings = [
             'fieldName' => $this->model->name,

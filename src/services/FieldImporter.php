@@ -116,7 +116,6 @@ class FieldImporter extends Component
             }
         }
 
-
         return $elementIds;
     }
 
@@ -173,7 +172,8 @@ class FieldImporter extends Component
     /**
      * Determine what limit to use for a field that has a limit setting.
      *
-     * If a limit is set, use that limit. If the limit is infinite, use a reasonable default.
+     * If a limit is set, greater than zero, and lower than the defined default, use that limit.
+     * If the limit is infinite use a reasonable default.
      *
      * @param     $limitFromSettings
      * @param int $defaultLimit
@@ -182,7 +182,7 @@ class FieldImporter extends Component
      */
     public function getLimit($limitFromSettings, $defaultLimit = 3)
     {
-        if ($limitFromSettings > 0) {
+        if ($limitFromSettings > 0 && $defaultLimit > $limitFromSettings) {
             return $limitFromSettings;
         }
 

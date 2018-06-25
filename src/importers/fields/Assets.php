@@ -48,11 +48,7 @@ class Assets extends FieldImporter
             $relatedMax = $assetSettings['relatedMax'] ?: $relatedMax;
         }
 
-        // If setting limit is set on asset field setting override default settings.
-        if (!empty($settings['limit'])) {
-            $relatedMin = 1;
-            $relatedMax = $settings['limit'];
-        }
+        $relatedMax = SproutImport::$app->fieldImporter->getLimit($settings['limit'], $relatedMax);
 
         $mockDataSettings = [
             'fieldName' => $this->model->name,

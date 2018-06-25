@@ -48,10 +48,7 @@ class Entries extends FieldImporter
             $relatedMax = $entrySettings['relatedMax'] ?: $relatedMax;
         }
 
-        if (!empty($settings['limit'])) {
-            $relatedMin = 1;
-            $relatedMax = $settings['limit'];
-        }
+        $relatedMax = SproutImport::$app->fieldImporter->getLimit($settings['limit'], $relatedMax);
 
         $mockDataSettings = [
             'fieldName' => $this->model->name,
