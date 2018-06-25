@@ -4,10 +4,10 @@ namespace barrelstrength\sproutimport\importers\settings;
 
 use barrelstrength\sproutbase\app\import\base\SettingsImporter;
 use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutimport\SproutImport;
 use craft\models\EntryType as EntryTypeModel;
 use craft\records\EntryType as EntryTypeRecord;
+use craft\elements\Entry;
 use Craft;
 
 class EntryType extends SettingsImporter
