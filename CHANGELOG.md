@@ -1,5 +1,36 @@
 # Changelog
 
+## 1.0.0-beta.13 - 2018-06-25
+
+### Added
+- Added support for matching related elements in Element attributes such as entry.authorId, category.newParentId, and user.photoId ([#16], [#31])
+- Added support for matching related settings in Element attributes such as entry.typeId and entry.sectionId ([#25])
+- Added support for assigning a user to a User Group when importing User Elements ([#17])
+- Added Seed Default support for Number Field 
+- Added minRows and maxRows seed setting when seeding a Table field
+- Added SettingsImporter::getRecordName()
+
+## Changed
+- Added support for matching elements based on all Element query parameters using `params` syntax in place of `matchBy`, `matchValue`, and `matchCriteria` [#39]
+- The `updateElement` key now supports attributes and custom fields ([#38], [#39])
+- Fixed bug where all items imported would be marked as Seed items ([#44])
+
+### Fixed
+- Fixed bug where `updateElement` key was creating a new element ([#38])
+- Fixed bug where all items imported would be marked as Seed items ([#44])
+- Fixed bug where EntryType Importer was not referencing Entry Element ([#32])
+- Fixed various inconsistencies in how field limits were being set ([#43])
+- Fixed issue when importing Orders from a console request
+
+[#16]: https://github.com/barrelstrength/craft-sprout-import/issues/16
+[#17]: https://github.com/barrelstrength/craft-sprout-import/issues/17
+[#31]: https://github.com/barrelstrength/craft-sprout-import/issues/31
+[#32]: https://github.com/barrelstrength/craft-sprout-import/issues/32
+[#38]: https://github.com/barrelstrength/craft-sprout-import/issues/38
+[#39]: https://github.com/barrelstrength/craft-sprout-import/issues/39
+[#43]: https://github.com/barrelstrength/craft-sprout-import/issues/43
+[#44]: https://github.com/barrelstrength/craft-sprout-import/issues/44
+
 ## 1.0.0-beta.12 - 2018-05-22
 
 ### Fixed
