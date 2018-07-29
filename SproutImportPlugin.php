@@ -27,7 +27,7 @@ class SproutImportPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '0.6.3';
+		return '0.7.0';
 	}
 
 	/**
@@ -54,21 +54,21 @@ class SproutImportPlugin extends BasePlugin
 		return 'http://barrelstrengthdesign.com';
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getDocumentationUrl()
-	{
-		return 'http://sprout.barrelstrengthdesign.com/craft-plugins/import/docs';
-	}
+    /**
+     * @return null|string
+     */
+    public function getDocumentationUrl()
+    {
+        return "https://sprout.barrelstrengthdesign.com/docs/import";
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getReleaseFeedUrl()
-	{
-		return 'https://sprout.barrelstrengthdesign.com/craft-plugins/import/releases.json';
-	}
+    /**
+     * @return null|string
+     */
+    public function getReleaseFeedUrl()
+    {
+        return 'https://raw.githubusercontent.com/barrelstrength/craft-sprout-import/v0/releases.json';
+    }
 
 	/**
 	 * @return bool

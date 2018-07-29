@@ -1,0 +1,74 @@
+[
+  {
+    "version": "0.7.0",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-import/archive/v0.7.0.zip",
+    "date": "2018-07-28T08:00:00+00:00",
+    "notes": [
+      "[Improved] Moved release feed to Github"
+    ]
+  },
+  {
+    "version": "0.6.3",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-import/releases",
+    "date": "2018-01-17T08:00:00+00:00",
+    "notes": [
+      "[Improved] Improved examples and documentation",
+      "[Fixed] Fixed issue where Plain text fields with character limits could throw errors"
+    ]
+  },
+  {
+    "version": "0.6.2",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-import/releases",
+    "date": "2017-11-20T21:00:00+00:00",
+    "notes": [
+      "[Added] Added support for seeding Commerce Products with Variants and Commerce Products Relations field",
+      "[Added] Added Sprout SEO Redirect Helper tool for converting redirects from a Spreadsheet into JSON",
+      "[Improved] Improved support for Weeding and Keeping Seed data",
+      "[Improved] Improved performance of generating and saving mock data",
+      "[Improved] Added `type` and `details` to the Seed log",
+      "[Improved] Updated Weed log to track Seeded items on a per-import basis",
+      "[Improved] Improved various example JSON files",
+      "[Fixed] Fixed issue where undefined field variable could occur when using Field Importer",
+      "[Fixed] Fixed issue with default settings for field importer when null",
+      "[Fixed] Fixed issue where Sections without URLs enabled would throw an error",
+      "[Fixed] Fixes bug on weed page where redirect would not happen after successful",
+      "weeding"
+    ]
+  },
+  {
+    "version": "0.5.2",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-import/releases",
+    "date": "2017-01-10T08:00:00+00:00",
+    "notes": [
+      "[Added] Added support for importing Sections with multiple locales",
+      "[Improved] Improved error messages in several scenarios",
+      "[Improved] Cleaned up syntax in various examples",
+      "[Fixed] Fixed bug where User Import would throw error if not using Craft Pro",
+      "[Fixed] Fixed broken links in UI"
+    ]
+  },
+  {
+    "version": "0.5.1",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-import/releases",
+    "date": "2016-12-05T18:00:00+00:00",
+    "notes": [
+      "[Fixed] Fixed bug where macro was not included on Seed and Weed tab"
+    ]
+  },
+  {
+    "version": "0.5.0",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-import/releases",
+    "date": "2016-10-25T06:50:00+00:00",
+    "notes": [
+      "[Added] Public beta"
+    ]
+  },
+  {
+    "version": "0.4.0",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-import/releases",
+    "date": "2016-01-17T08:00:00+00:00",
+    "notes": [
+      "[Added] Private beta"
+    ]
+  }
+]
