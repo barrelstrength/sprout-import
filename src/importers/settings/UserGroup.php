@@ -48,6 +48,10 @@ class UserGroup extends SettingsImporter
         return Craft::$app->getUserGroups()->deleteGroupById($id);
     }
 
+    /**
+     * @return bool
+     * @throws \craft\errors\WrongEditionException
+     */
     public function save()
     {
         $this->isNewSection = $this->model->id ? false : true;
@@ -55,4 +59,20 @@ class UserGroup extends SettingsImporter
         return Craft::$app->getUserGroups()->saveGroup($this->model);
     }
 
+    public function returnRelatedValue($params)
+    {
+        $recordClass = $this->getRecordName();
+        $record = new $recordClass();
+
+        $records = $record::findAll($params);
+
+        $ids = null;
+        if ($records) {
+            foreach ($records as$record ) {
+                $ids[] = $record->id;
+            }
+        }
+
+        return $ids;
+    }
 }

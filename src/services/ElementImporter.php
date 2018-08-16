@@ -12,6 +12,7 @@ use craft\base\Element;
 use craft\base\Model;
 use barrelstrength\sproutbase\app\import\base\ElementImporter as BaseElementImporter;
 use barrelstrength\sproutbase\app\import\base\SettingsImporter as BaseSettingsImporter;
+use barrelstrength\sproutbase\app\import\base\SettingsImporter;
 
 class ElementImporter extends Component
 {
@@ -321,7 +322,7 @@ class ElementImporter extends Component
             }
 
             /**
-             * @var $importerClass Importer
+             * @var $importerClass Importer|SettingsImporter
              */
             $importerClass = SproutBase::$app->importers->getImporter($relatedSettings);
 
@@ -400,9 +401,6 @@ class ElementImporter extends Component
      */
     private function getSettingRelationIds(BaseSettingsImporter $importerClass, array $relatedSettings = array())
     {
-        $recordClass = $importerClass->getRecordName();
-        $record = new $recordClass();
-
         $params = SproutImport::$app->utilities->getValueByKey('params', $relatedSettings);
 
         /**
@@ -428,11 +426,7 @@ class ElementImporter extends Component
         }
 
         if ($params) {
-            $record = $record::findOne($params);
-
-            if ($record) {
-                return $record->id;
-            }
+            return $importerClass->returnRelatedValue($params);
         }
 
         return null;
