@@ -136,7 +136,7 @@ class Entry extends ElementImporter
         $data['attributes']['typeId'] = $entryParams['entryTypeId'];
 
         $user = Craft::$app->getUser()->getIdentity();
-        $data['attributes']['authorId'] = $user->id;
+        $data['attributes']['authorId'] = $user->id ?? null;
         $data['attributes']['postDate'] = $fakerDate;
         $data['attributes']['expiryDate'] = null;
         $data['attributes']['dateCreated'] = $fakerDate;
