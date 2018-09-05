@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutimport\controllers;
 
-use barrelstrength\sproutseo\elements\Redirect;
+use barrelstrength\sproutseo\integrations\sproutimport\importers\elements\Redirect as RedirectImporter;
 use Craft;
 use yii\web\Controller;
 
@@ -21,8 +21,12 @@ class SproutSeoController extends Controller
         if (!empty($importableJson)) {
             Craft::$app->getSession()->setNotice(Craft::t('sprout-import', 'Redirect JSON generated.'));
 
-            Craft::$app->getUrlManager()->setRouteParams([
+            $params = [
                 'importableJson' => $importableJson
+            ];
+
+            Craft::$app->getUrlManager()->setRouteParams([
+                'params' => $params
             ]);
         } else {
             Craft::$app->getSession()->setError(Craft::t('sprout-import', 'Unable to convert data.'));
@@ -63,13 +67,14 @@ class SproutSeoController extends Controller
         foreach ($array as $key => $attributes) {
             $attributes = array_map('trim', $attributes);
 
-            if (count($attributes) == 4) {
-                $sproutSeoImportJson[$key]['@model'] = Redirect::class;
+            if (count($attributes) == 5) {
+                $sproutSeoImportJson[$key]['@model'] = RedirectImporter::class;
                 $sproutSeoImportJson[$key]['attributes'] = [
                     'oldUrl' => $attributes[0],
                     'newUrl' => $attributes[1],
                     'method' => $attributes[2],
-                    'regex' => $attributes[3]
+                    'regex' => $attributes[3],
+                    'count' => $attributes[4]
                 ];
             }
         }
@@ -92,7 +97,7 @@ class SproutSeoController extends Controller
     {
         $result = false;
 
-        if (count($header) != 4) {
+        if (count($header) != 5) {
             return false;
         }
 
@@ -100,7 +105,8 @@ class SproutSeoController extends Controller
             $header[0] === 'oldUrl' ||
             $header[1] === 'newUrl' ||
             $header[2] === 'method' ||
-            $header[3] === 'regex'
+            $header[3] === 'regex' ||
+            $header[4] === 'count'
         ) {
             $result = true;
         }
