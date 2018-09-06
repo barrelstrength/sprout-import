@@ -34,7 +34,7 @@ class Product extends ElementImporter
     {
         $this->model = parent::setModel($model, $settings);
 
-        $variants = $settings['variants'];
+        $variants = $settings['variants'] ?? null;
         $rowVariants = [];
         if ($variants) {
             foreach ($variants as $key => $variant) {
@@ -59,7 +59,9 @@ class Product extends ElementImporter
          */
         $product = $this->model;
 
-        $product->setVariants($rowVariants);
+        if ($this->model != null AND !empty($rowVariants)) {
+            $product->setVariants($rowVariants);
+        }
     }
 
     public function getFieldLayoutId($model)
