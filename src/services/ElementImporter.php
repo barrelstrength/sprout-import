@@ -370,7 +370,7 @@ class ElementImporter extends Component
             }
         }
 
-        if (count($newElements) && is_array($newElements)) {
+        if (is_array($newElements) && count($newElements)) {
             try {
                 foreach ($newElements as $row) {
                     $importerClass = SproutBase::$app->importers->getImporter($row);
