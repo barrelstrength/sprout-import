@@ -59,7 +59,7 @@ class Product extends ElementImporter
          */
         $product = $this->model;
 
-        if ($this->model != null AND !empty($rowVariants)) {
+        if ($this->model !== null && count($rowVariants)) {
             $product->setVariants($rowVariants);
         }
     }
