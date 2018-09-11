@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.0.0-beta.15 - 2018-09-11
+
+### Added
+- Added support for assigning multiple User Groups when importing Users ([#65])
+- Added support for relating multiple settings on Settings Importers
+
+### Changed
+- Updated Sprout Base requirement to v3.0.4
+	
+### Fixed
+- Fixed bug where expiryDate attribute caused an error when importing an Entry ([#58])
+- Fixed bug where variant field was required when importing to Commerce Products relations field ([#61])
+- Fixed error when converting Sprout SEO Redirects to JSON using CSV helper ([#59])
+
+[#58]: https://github.com/barrelstrength/craft-sprout-import/issues/58
+[#59]: https://github.com/barrelstrength/craft-sprout-import/issues/59
+[#61]: https://github.com/barrelstrength/craft-sprout-import/issues/61
+[#65]: https://github.com/barrelstrength/craft-sprout-import/issues/65
+
 ## 1.0.0-beta.14 - 2018-08-01
 
 ## Changed
