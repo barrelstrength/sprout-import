@@ -8,8 +8,6 @@ use Craft;
 use barrelstrength\sproutbase\app\import\base\ElementImporter;
 use craft\base\Field;
 use craft\elements\Entry as EntryElement;
-use craft\helpers\DateTimeHelper;
-use craft\records\EntryVersion;
 
 class Entry extends ElementImporter
 {
@@ -93,20 +91,12 @@ class Entry extends ElementImporter
 
         if (!empty($quantity)) {
             for ($i = 1; $i <= $quantity; $i++) {
-                $entryId = null;
 
                 if (!empty($entryTypes)) {
                     // Get only one entry type
                     $randomEntryType = $entryTypes[array_rand($entryTypes)];
 
                     $entryParams['entryTypeId'] = $randomEntryType->id;
-
-                    // Update entry prevent duplicate
-                    if ($entryId != null) {
-                        $entryParams['entryId'] = $entryId;
-                    } else {
-                        $entryParams['entryId'] = null;
-                    }
 
                     $generatedEntry = $this->generateEntry($entryParams);
 
@@ -150,12 +140,6 @@ class Entry extends ElementImporter
         $fieldLayouts = $this->getFieldLayouts();
 
         $data['content']['fields'] = SproutImport::$app->fieldImporter->getFieldsWithMockData($fieldLayouts);
-
-        if (isset($entryParams['entryId'])) {
-            $data['settings']['updateElement']['matchBy'] = 'id';
-            $data['settings']['updateElement']['matchValue'] = $entryParams['entryId'];
-            $data['settings']['updateElement']['matchCriteria'] = ['section' => $entryParams['sectionHandle']];
-        }
 
         return $data;
     }

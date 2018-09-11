@@ -6,6 +6,7 @@ use barrelstrength\sproutbase\app\import\base\SettingsImporter;
 use Craft;
 use craft\models\UserGroup as UserGroupModel;
 use craft\records\UserGroup as UserGroupRecord;
+use yii\db\BaseActiveRecord;
 
 class UserGroup extends SettingsImporter
 {
@@ -62,6 +63,9 @@ class UserGroup extends SettingsImporter
     public function returnRelatedValue($params)
     {
         $recordClass = $this->getRecordName();
+        /**
+         * @var $record BaseActiveRecord
+         */
         $record = new $recordClass();
 
         $records = $record::findAll($params);
