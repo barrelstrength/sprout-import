@@ -68,19 +68,13 @@ class Order extends ElementImporter
             unset($settings['attributes']['orderStatusId']);
         }
 
-        if ($this->model->id == null) {
-
-            $this->model = new OrderElement();
-            $this->model->number = Plugin::getInstance()->getCarts()->generateCartNumber();
-
-
-            $this->model->orderStatusId = $orderStatusId;
-
-            Craft::$app->getElements()->saveElement($this->model, false);
-        }
-
         $this->model->setAttributes($settings['attributes'], false);
 
+        if ($this->model->id === null) {
+            $this->model->number = Plugin::getInstance()->getCarts()->generateCartNumber();
+        }
+
+        $customer = null;
         $customerEmail = $settings['attributes']['customerId'] ?? null;
 
         if (is_string($customerEmail)) {
@@ -103,6 +97,20 @@ class Order extends ElementImporter
             }
         } else {
             $customer = Plugin::getInstance()->getCustomers()->getCustomerById($customerEmail);
+        }
+
+        if ($customer == null) {
+            $customer = Plugin::getInstance()->getCustomers()->getCustomer();
+        }
+
+        if ($customer) {
+            $this->model->customerId = $customer->id;
+        }
+
+        if ($this->model !== null) {
+            $this->model->orderStatusId = $orderStatusId;
+
+            Craft::$app->getElements()->saveElement($this->model, false);
         }
 
         $address = $settings['addresses']['billingAddress'] ?? null;
@@ -155,6 +163,7 @@ class Order extends ElementImporter
             $this->model->setShippingAddress($shippingAddress);
         }
 
+        $lineObjectItems = [];
         if ($settings['lineItems']) {
 
             // Remove line item if it exist to avoid appending of line item values
@@ -176,8 +185,15 @@ class Order extends ElementImporter
 
                 $lineItem = Plugin::getInstance()->getLineItems()
                     ->resolveLineItem($this->model->id, $purchasableId, $item['options'], $item['qty'], '');
+                $lineObjectItems[] = $lineItem;
 
-                $this->model->addLineItem($lineItem);
+                if ($this->model === null) {
+                    $this->model->addLineItem($lineItem);
+                }
+            }
+
+            if ($this->model !== null) {
+                $this->model->setLineItems($lineObjectItems);
             }
         }
 
