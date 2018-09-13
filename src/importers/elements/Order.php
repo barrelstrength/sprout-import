@@ -99,8 +99,16 @@ class Order extends ElementImporter
             $customer = Plugin::getInstance()->getCustomers()->getCustomerById($customerEmail);
         }
 
-        if ($customer == null) {
-            $customer = Plugin::getInstance()->getCustomers()->getCustomer();
+        if ($customer === null) {
+            if (empty($customerEmail)) {
+                $message = Craft::t('sprout-import',
+                    'customerId attribute is required.');
+            } else {
+                $message = Craft::t('sprout-import',
+                    'The customer ' .$customerEmail . ' was not found.');
+            }
+
+            throw new \Exception($message);
         }
 
         if ($customer) {
