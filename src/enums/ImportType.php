@@ -29,4 +29,9 @@ abstract class ImportType
      * Seeds generated via a Theme integration
      */
     const Theme = 'Theme';
+
+    /**
+     * Seeds generated through console
+     */
+    const Console = 'Console';
 }
