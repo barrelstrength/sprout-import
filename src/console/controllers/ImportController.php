@@ -1,17 +1,13 @@
 <?php
 namespace barrelstrength\sproutimport\console\controllers;
 
-use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutimport\models\Weed;
-use craft\helpers\DateTimeHelper;
 use yii\console\Controller;
-use craft\helpers\Json;
-use barrelstrength\sproutimport\queue\jobs\Import;
 use barrelstrength\sproutimport\models\Seed;
 use sproutimport\enums\ImportType;
 use barrelstrength\sproutimport\models\Json as JsonModel;
 use Craft;
 use yii\console\ExitCode;
+use barrelstrength\sproutimport\queue\jobs\Import;
 
 class ImportController extends Controller
 {
@@ -24,22 +20,35 @@ class ImportController extends Controller
     }
 
     /**
-     * @return int
-     * @throws \ReflectionException
+     * Queue files for import
      */
     public function actionIndex()
     {
-        if (!file_exists($this->filePath)) {
+        if ($this->filePath) {
+            $paths = array_map('trim', explode(' ', $this->filePath));
+            if ($paths) {
+                foreach ($paths as $path) {
+                    $this->queueFile($path);
+
+                    $message = Craft::t("sprout-import", $path . " file in queue.");
+                    $this->stdout($message. PHP_EOL);
+                }
+            }
+        }
+    }
+
+    private function queueFile($path)
+    {
+        if (!file_exists($path)) {
             $message = Craft::t("sprout-import", "File path does not exist.");
             $this->stdout($message);
 
             return ExitCode::DATAERR;
         }
 
-        $fileContent = file_get_contents($this->filePath);
+        $fileContent = file_get_contents($path);
 
         if ($fileContent) {
-
             $importData = new JsonModel();
             $importData->setJson($fileContent);
 
@@ -52,22 +61,20 @@ class ImportController extends Controller
                 return ExitCode::DATAERR;
             }
 
-            $currentDate = DateTimeHelper::currentUTCDateTime();
-            $dateCreated = $currentDate->format('Y-m-d H:i:s');
+            $seedModel = new Seed();
+            $seedModel->seedType = ImportType::Console;
+            $seedModel->enabled = ($this->seed)? true : false;
 
-            $weedModelAttributes = [
-                'seed' => ($this->seed)? true : false,
-                'seedType' => ImportType::Console,
-                'details' => Craft::t('sprout-import', 'Import Type: '.ImportType::Console),
-                'dateSubmitted' => $dateCreated
-            ];
+            $fileImportJob = new Import();
+            $fileImportJob->seedAttributes = $seedModel->getAttributes();
+            $fileImportJob->importData = $importData->json;
 
-            $weedModel = new Weed();
-            $weedModel->setAttributes($weedModelAttributes, false);
-
-            $importData = Json::decode($importData->json, true);
-
-            SproutBase::$app->importers->save($importData, $weedModel);
+            Craft::$app->queue->push(new Import([
+                'importData' => $fileImportJob->importData,
+                'seedAttributes' => $fileImportJob->seedAttributes
+            ]));
         }
+
+        return null;
     }
 }
