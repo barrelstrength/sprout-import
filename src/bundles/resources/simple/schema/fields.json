@@ -3,8 +3,8 @@
     "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
     "type": "craft\\fields\\Checkboxes",
     "groupId": 1,
-    "name": "THEME Example Checkboxes",
-    "handle": "themeExampleCheckboxes",
+    "name": "BUNDLE Example Checkboxes",
+    "handle": "bundleExampleCheckboxes",
     "instructions": "",
     "options": [
       {

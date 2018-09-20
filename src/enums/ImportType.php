@@ -26,9 +26,9 @@ abstract class ImportType
     const Seed = 'Seed';
 
     /**
-     * Seeds generated via a Theme integration
+     * Seeds generated via a Bundle integration
      */
-    const Theme = 'Theme';
+    const Bundle = 'Bundle';
 
     /**
      * Seeds generated through console

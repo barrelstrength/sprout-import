@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutimport\controllers;
 
-use barrelstrength\sproutbase\app\import\base\Theme;
+use barrelstrength\sproutbase\app\import\base\Bundle;
 use barrelstrength\sproutimport\models\jobs\ImportJobs;
 use barrelstrength\sproutimport\models\Json;
 use barrelstrength\sproutimport\models\Seed;
@@ -70,31 +70,31 @@ class ImportController extends Controller
      * @throws BadRequestHttpException
      * @throws \yii\base\Exception
      */
-    public function actionInstallTheme()
+    public function actionInstallBundle()
     {
         $this->requirePostRequest();
 
-        $themeClassName = Craft::$app->getRequest()->getRequiredBodyParam('className');
+        $bundleClassName = Craft::$app->getRequest()->getRequiredBodyParam('className');
         $seed = Craft::$app->getRequest()->getBodyParam('seed', false);
 
         /**
-         * @var $theme Theme
+         * @var $bundle Bundle
          */
-        $theme = new $themeClassName;
-        $sourceFolder = $theme->getSourceTemplateFolder();
-        $destinationFolder = $theme->getDestinationTemplateFolder();
+        $bundle = new $bundleClassName;
+        $sourceFolder = $bundle->getSourceTemplateFolder();
+        $destinationFolder = $bundle->getDestinationTemplateFolder();
 
         FileHelper::copyDirectory($sourceFolder, $destinationFolder);
 
         // Prepare our Jobs
         $importJobs = new ImportJobs();
 
-        $importSchemaFolder = $theme->getSchemaFolder();
+        $importSchemaFolder = $bundle->getSchemaFolder();
         $schemaFiles = FileHelper::findFiles($importSchemaFolder, [
             'recursive' => true
         ]);
 
-        $this->prepareThemeFileImportJobs($importJobs, $schemaFiles, $seed);
+        $this->prepareBundleFileImportJobs($importJobs, $schemaFiles, $seed);
 
         // Queue our Jobs
         if (count($importJobs->jobs)) {
@@ -108,7 +108,7 @@ class ImportController extends Controller
                     ]));
                 }
 
-                Craft::$app->getSession()->setNotice(Craft::t('sprout-import', 'Importing theme.'));
+                Craft::$app->getSession()->setNotice(Craft::t('sprout-import', 'Importing bundle.'));
             } catch (\Exception $e) {
                 $importJobs->addError('queue', $e->getMessage());
 
@@ -122,28 +122,28 @@ class ImportController extends Controller
                 'errors' => $importJobs->getErrors()
             ]);
 
-            Craft::$app->getSession()->setError(Craft::t('sprout-import', 'Unable to import theme.'));
+            Craft::$app->getSession()->setError(Craft::t('sprout-import', 'Unable to import bundle.'));
         }
     }
 
     /**
      * @param ImportJobs $importJobs
-     * @param            $themeFiles
+     * @param            $bundleFiles
      * @param            $seed
      *
      * @return void
      */
-    protected function prepareThemeFileImportJobs(ImportJobs $importJobs, $themeFiles, $seed)
+    protected function prepareBundleFileImportJobs(ImportJobs $importJobs, $bundleFiles, $seed)
     {
-        if (!count($themeFiles)) {
+        if (!count($bundleFiles)) {
             return;
         }
 
         $seedModel = new Seed();
-        $seedModel->seedType = ImportType::Theme;
+        $seedModel->seedType = ImportType::Bundle;
         $seedModel->enabled = (bool)$seed;
 
-        foreach ($themeFiles as $filepath) {
+        foreach ($bundleFiles as $filepath) {
 
             $fileContent = file_get_contents($filepath);
 

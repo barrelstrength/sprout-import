@@ -5,7 +5,7 @@ Sprout Import can help you:
 - **Import Data** - Import over 40 data types, complex relationships, multi-language content, and more
 - **Seed Data** - Generate fake data to build out your design, push your content model, and improve performance
 - **Weed Data** - Once you're finished with your Seed data, remove it from the system. It's like it was never there!
-- **Create Themes** - Package and reuse content architecture and templates.
+- **Create Bundles** - Package and reuse content architecture and templates.
 
 See the Sprout Import documentation to learn more about Sprout Import.
 
