@@ -54,5 +54,7 @@ class SeedController extends Controller
             $message = Craft::t("sprout-import", $this->content . " seed in queue.");
             $this->stdout($message. PHP_EOL);
         }
+
+        return null;
     }
 }

@@ -78,6 +78,7 @@ class SproutImport extends Plugin
             $event->rules['sprout-import/index'] = ['template' => 'sprout-base-import/index'];
             $event->rules['sprout-import/weed'] = 'sprout-import/weed/weed-index';
             $event->rules['sprout-import/seed'] = 'sprout-import/seed/seed-index';
+            $event->rules['sprout-import/themes'] = ['template' => 'sprout-base-import/themes'];
             $event->rules['sprout-import/settings'] = 'sprout-base/settings/edit-settings';
             $event->rules['sprout-import/settings/<settingsSectionHandle:.*>'] = 'sprout-base/settings/edit-settings';
         });
@@ -117,10 +118,10 @@ class SproutImport extends Plugin
                     'label' => Craft::t('sprout-import', 'Weed'),
                     'url' => 'sprout-import/weed'
                 ],
-//                'themes' => [
-//                    'label' => Craft::t('sprout-import', 'Themes'),
-//                    'url' => 'sprout-import/themes'
-//                ],
+                'themes' => [
+                    'label' => Craft::t('sprout-import', 'Themes'),
+                    'url' => 'sprout-import/themes'
+                ],
                 'settings' => [
                     'label' => Craft::t('sprout-import', 'Settings'),
                     'url' => 'sprout-import/settings/general'
