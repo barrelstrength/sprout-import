@@ -7,7 +7,7 @@ use sproutimport\enums\ImportType;
 use barrelstrength\sproutimport\models\Json as JsonModel;
 use Craft;
 use yii\console\ExitCode;
-use barrelstrength\sproutimport\queue\jobs\Import;
+use barrelstrength\sproutbase\app\import\queue\jobs\Import;
 
 class ImportController extends Controller
 {

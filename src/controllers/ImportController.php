@@ -3,10 +3,10 @@
 namespace barrelstrength\sproutimport\controllers;
 
 use barrelstrength\sproutbase\app\import\base\Bundle;
-use barrelstrength\sproutimport\models\jobs\ImportJobs;
+use barrelstrength\sproutbase\app\import\models\jobs\ImportJobs;
 use barrelstrength\sproutimport\models\Json;
 use barrelstrength\sproutimport\models\Seed;
-use barrelstrength\sproutimport\queue\jobs\Import;
+use barrelstrength\sproutbase\app\import\queue\jobs\Import;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;
 use craft\helpers\FileHelper;

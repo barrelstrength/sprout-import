@@ -5,7 +5,6 @@ namespace barrelstrength\sproutimport\services;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;
 use craft\base\Component;
-use craft\helpers\FileHelper;
 
 class Utilities extends Component
 {
@@ -26,25 +25,6 @@ class Utilities extends Component
         }
 
         return $inst;
-    }
-
-    /**
-     * Make sure the Sprout Import temp folder is created
-     *
-     * @return string
-     * @throws \yii\base\ErrorException
-     */
-    public function createTempFolder()
-    {
-        $folderPath = Craft::$app->getPath()->getTempAssetUploadsPath().'/sproutimport/';
-
-        if (file_exists($folderPath)) {
-            FileHelper::clearDirectory($folderPath);
-        }
-
-        FileHelper::createDirectory($folderPath);
-
-        return $folderPath;
     }
 
     /**
