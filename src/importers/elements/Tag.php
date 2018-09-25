@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutimport\importers\elements;
 
 use barrelstrength\sproutbase\app\import\base\ElementImporter;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\models\jobs\SeedJob;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;
@@ -139,7 +140,7 @@ class Tag extends ElementImporter
     {
         $groupId = $model->groupId;
 
-        $utilities = SproutImport::$app->utilities;
+        $utilities = SproutBase::$app->importUtilities;
 
         if (($group = Craft::$app->getTags()->getTagGroupById($groupId)) === null) {
             $utilities->addError('invalid-tag-groupId', 'Invalid tag group ID: '.$groupId);

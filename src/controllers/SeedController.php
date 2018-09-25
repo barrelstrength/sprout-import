@@ -12,7 +12,7 @@ use barrelstrength\sproutimport\SproutImport;
 use craft\helpers\DateTimeHelper;
 use craft\web\Controller;
 use Craft;
-use sproutimport\enums\ImportType;
+use barrelstrength\sproutbase\app\import\enums\ImportType;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
@@ -127,10 +127,10 @@ class SeedController extends Controller
 
             $seedJobErrors = $seedJob->getErrors();
 
-            SproutImport::error($seedJobErrors);
+            SproutBase::error($seedJobErrors);
         }
 
-        $errors = SproutImport::$app->utilities->getErrors();
+        $errors = SproutBase::$app->importUtilities->getErrors();
 
         if (!empty($errors) || $seedJobErrors != null) {
             $message = Craft::t('sprout-import', 'Unable to plant seeds.');

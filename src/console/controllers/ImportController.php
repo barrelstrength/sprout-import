@@ -2,9 +2,9 @@
 namespace barrelstrength\sproutimport\console\controllers;
 
 use yii\console\Controller;
-use barrelstrength\sproutimport\models\Seed;
-use sproutimport\enums\ImportType;
-use barrelstrength\sproutimport\models\Json as JsonModel;
+use barrelstrength\sproutbase\app\import\models\Seed;
+use barrelstrength\sproutbase\app\import\enums\ImportType;
+use barrelstrength\sproutbase\app\import\models\Json as JsonModel;
 use Craft;
 use yii\console\ExitCode;
 use barrelstrength\sproutbase\app\import\queue\jobs\Import;

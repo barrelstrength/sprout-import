@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutimport\models\jobs;
 
 use craft\base\Model;
-use sproutimport\enums\ImportType;
 use barrelstrength\sproutbase\app\import\base\ElementImporter;
 
 class SeedJob extends Model

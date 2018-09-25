@@ -2,9 +2,7 @@
 
 namespace barrelstrength\sproutimport\services;
 
-
 use barrelstrength\sproutbase\app\import\base\ElementImporter;
-
 use barrelstrength\sproutbase\app\import\base\SettingsImporter;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\models\jobs\SeedJob as SeedJobModel;
@@ -14,7 +12,7 @@ use barrelstrength\sproutimport\SproutImport;
 use craft\base\Component;
 use Craft;
 use craft\db\Query;
-use barrelstrength\sproutimport\models\Seed as SeedModel;
+use barrelstrength\sproutbase\app\import\models\Seed as SeedModel;
 use barrelstrength\sproutimport\records\Seed as SeedRecord;
 
 class Seed extends Component
@@ -248,7 +246,7 @@ class Seed extends Component
 
                 SproutBase::$app->importers->save($seed, $weedModel);
 
-                $errors = SproutImport::$app->utilities->getErrors();
+                $errors = SproutBase::$app->importUtilities->getErrors();
 
                 if (!empty($errors)) {
 

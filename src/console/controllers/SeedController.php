@@ -8,7 +8,7 @@ use craft\helpers\Json;
 use Craft;
 use yii\console\ExitCode;
 use barrelstrength\sproutimport\models\jobs\SeedJob;
-use sproutimport\enums\ImportType;
+use barrelstrength\sproutbase\app\import\enums\ImportType;
 
 class SeedController extends Controller
 {

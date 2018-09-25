@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutimport\importers\elements;
 
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\models\jobs\SeedJob;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;
@@ -139,7 +140,7 @@ class Category extends ElementImporter
     {
         $groupId = $model->groupId;
 
-        $utilities = SproutImport::$app->utilities;
+        $utilities = SproutBase::$app->importUtilities;
 
         if (($group = Craft::$app->getCategories()->getGroupById($groupId)) === null) {
             $utilities->addError('invalid-category-groupId', 'Invalid category group ID: '.$groupId);

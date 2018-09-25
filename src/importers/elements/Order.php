@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutimport\importers\elements;
 
 use barrelstrength\sproutbase\app\import\base\ElementImporter;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\SproutImport;
 use craft\commerce\base\Gateway;
 use craft\commerce\elements\Order as OrderElement;
@@ -218,7 +219,7 @@ class Order extends ElementImporter
     {
         parent::save();
 
-        $utilities = SproutImport::$app->utilities;
+        $utilities = SproutBase::$app->importUtilities;
 
         $settings = $this->rows;
         $order = $this->model;

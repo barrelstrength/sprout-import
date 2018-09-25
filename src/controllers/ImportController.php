@@ -4,15 +4,16 @@ namespace barrelstrength\sproutimport\controllers;
 
 use barrelstrength\sproutbase\app\import\base\Bundle;
 use barrelstrength\sproutbase\app\import\models\jobs\ImportJobs;
-use barrelstrength\sproutimport\models\Json;
-use barrelstrength\sproutimport\models\Seed;
+use barrelstrength\sproutbase\app\import\models\Json;
+use barrelstrength\sproutbase\app\import\models\Seed;
 use barrelstrength\sproutbase\app\import\queue\jobs\Import;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;
 use craft\helpers\FileHelper;
 use craft\web\Controller;
 use craft\web\UploadedFile;
-use sproutimport\enums\ImportType;
+use barrelstrength\sproutbase\app\import\enums\ImportType;
 use yii\base\ErrorException;
 use yii\web\BadRequestHttpException;
 
@@ -192,7 +193,7 @@ class ImportController extends Controller
         $seedModel->seedType = ImportType::File;
         $seedModel->enabled = (bool)$seed;
 
-        $tempFolderPath = SproutImport::$app->utilities->createTempFolder();
+        $tempFolderPath = SproutBase::$app->bundles->createTempFolder();
 
         foreach ($uploadedFiles as $file) {
 
