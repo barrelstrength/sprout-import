@@ -10,6 +10,8 @@
 
 namespace barrelstrength\sproutimport\services;
 
+use barrelstrength\sproutbase\app\import\services\ElementImporter;
+use barrelstrength\sproutbase\app\import\services\SettingsImporter;
 use craft\base\Component;
 
 /**
@@ -49,7 +51,6 @@ class App extends Component
 
     public function init()
     {
-        $this->utilities = Utilities::Instance();
         $this->faker = new Faker();
         $this->seed = new Seed();
         $this->fieldImporter = new FieldImporter();
