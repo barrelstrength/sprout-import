@@ -2,12 +2,12 @@
 
 namespace barrelstrength\sproutimport\controllers;
 
+use barrelstrength\sproutbase\app\import\models\jobs\SeedJob;
 use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutimport\importers\elements\Category;
-use barrelstrength\sproutimport\importers\elements\Entry;
-use barrelstrength\sproutimport\importers\elements\Tag;
-use barrelstrength\sproutimport\importers\elements\User;
-use barrelstrength\sproutimport\models\jobs\SeedJob;
+use barrelstrength\sproutbase\app\import\importers\elements\Category;
+use barrelstrength\sproutbase\app\import\importers\elements\Entry;
+use barrelstrength\sproutbase\app\import\importers\elements\Tag;
+use barrelstrength\sproutbase\app\import\importers\elements\User;
 use barrelstrength\sproutimport\SproutImport;
 use craft\helpers\DateTimeHelper;
 use craft\web\Controller;
@@ -123,7 +123,7 @@ class SeedController extends Controller
 
         $seedJobErrors = null;
 
-        if (!SproutImport::$app->seed->generateSeeds($seedJob)) {
+        if (!SproutBase::$app->seed->generateSeeds($seedJob)) {
 
             $seedJobErrors = $seedJob->getErrors();
 

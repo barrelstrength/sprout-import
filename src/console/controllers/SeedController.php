@@ -1,13 +1,13 @@
 <?php
 namespace barrelstrength\sproutimport\console\controllers;
 
-use barrelstrength\sproutimport\SproutImport;
+use barrelstrength\sproutbase\SproutBase;
 use craft\helpers\DateTimeHelper;
 use yii\console\Controller;
 use craft\helpers\Json;
 use Craft;
 use yii\console\ExitCode;
-use barrelstrength\sproutimport\models\jobs\SeedJob;
+use barrelstrength\sproutbase\app\import\models\jobs\SeedJob;
 use barrelstrength\sproutbase\app\import\enums\ImportType;
 
 class SeedController extends Controller
@@ -50,7 +50,7 @@ class SeedController extends Controller
 
         $seedJobErrors = null;
 
-        if (SproutImport::$app->seed->generateSeeds($seedJob)) {
+        if (SproutBase::$app->seed->generateSeeds($seedJob)) {
             $message = Craft::t("sprout-import", $this->content . " seed in queue.");
             $this->stdout($message. PHP_EOL);
         }

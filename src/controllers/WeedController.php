@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutimport\controllers;
 
-use barrelstrength\sproutimport\SproutImport;
+use barrelstrength\sproutbase\SproutBase;
 use Craft;
 use craft\web\Controller;
 use yii\web\Response;
@@ -16,7 +16,7 @@ class WeedController extends Controller
      */
     public function actionWeedIndex(): Response
     {
-        $seeds = SproutImport::$app->seed->getSeeds();
+        $seeds = SproutBase::$app->seed->getSeeds();
 
         return $this->renderTemplate('sprout-base-import/weed/index', [
             'seeds' => $seeds
@@ -46,15 +46,15 @@ class WeedController extends Controller
 
         // @todo - move this logic to the service layer
         if ($dateCreated != null && $dateCreated != '*') {
-            $seeds = SproutImport::$app->seed->getSeedsByDateCreated($dateCreated);
+            $seeds = SproutBase::$app->seed->getSeedsByDateCreated($dateCreated);
         }
 
         if ($dateCreated == '*') {
-            $seeds = SproutImport::$app->seed->getAllSeeds();
+            $seeds = SproutBase::$app->seed->getAllSeeds();
         }
 
         // @todo - update weed method to accept a Weed model so we can validate.
-        if (!SproutImport::$app->seed->weed($seeds, $isKeep)) {
+        if (!SproutBase::$app->seed->weed($seeds, $isKeep)) {
 
             Craft::$app->getSession()->setError(Craft::t('sprout-import', 'Unable to weed data.'));
 

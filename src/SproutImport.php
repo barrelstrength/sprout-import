@@ -13,7 +13,6 @@ namespace barrelstrength\sproutimport;
 use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutimport\models\Settings;
-use barrelstrength\sproutimport\services\App;
 use barrelstrength\sproutbase\helpers\UninstallHelper;
 use Craft;
 use craft\base\Plugin;
@@ -29,13 +28,6 @@ use yii\base\Event;
 class SproutImport extends Plugin
 {
     use BaseSproutTrait;
-
-    /**
-     * Enable use of SproutImport::$app-> in place of Craft::$app->
-     *
-     * @var \barrelstrength\sproutimport\services\App
-     */
-    public static $app;
 
     /**
      * Identify our plugin for BaseSproutTrait
@@ -65,11 +57,6 @@ class SproutImport extends Plugin
 
         SproutBaseHelper::registerModule();
 
-        $this->setComponents([
-            'app' => App::class
-        ]);
-
-        self::$app = $this->get('app');
 
         Craft::setAlias('@sproutimport', $this->getBasePath());
 
@@ -117,10 +104,6 @@ class SproutImport extends Plugin
                 'weed' => [
                     'label' => Craft::t('sprout-import', 'Weed'),
                     'url' => 'sprout-import/weed'
-                ],
-                'bundles' => [
-                    'label' => Craft::t('sprout-import', 'Bundles'),
-                    'url' => 'sprout-import/bundles'
                 ],
                 'settings' => [
                     'label' => Craft::t('sprout-import', 'Settings'),
