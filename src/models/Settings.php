@@ -73,15 +73,6 @@ class Settings extends Model
                 'selected' => 'seed',
                 'template' => 'sprout-base-import/settings/seed-defaults/index'
             ],
-            'bundles' => [
-                'label' => Craft::t('sprout-import', 'Bundles'),
-                'url' => 'sprout-import/bundles',
-                'selected' => 'bundles',
-                'template' => 'sprout-forms/_integrations/sproutimport/bundles/bundle-cards',
-                'actionTemplate' => false,
-                'fullPageForm' => false,
-                'settingsForm' => false
-            ],
             'integrationsHeading' => [
                 'heading' => Craft::t('sprout-import', 'Integrations'),
             ],
