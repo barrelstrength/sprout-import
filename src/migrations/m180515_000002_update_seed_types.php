@@ -51,7 +51,8 @@ class m180515_000002_update_seed_types extends Migration
 
         foreach ($seedClasses as $seedClass) {
             $this->update('{{%sproutimport_seeds}}', [
-                'type' => $seedClass['newType']], ['type' => $seedClass['oldType']], [], false);
+                'type' => $seedClass['newType']
+            ], ['type' => $seedClass['oldType']], [], false);
         }
 
         return true;
