@@ -57,17 +57,16 @@ class SproutImport extends Plugin
 
         SproutBaseHelper::registerModule();
 
-
         Craft::setAlias('@sproutimport', $this->getBasePath());
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
             $event->rules['sprout-import'] = ['template' => 'sprout-base-import/index'];
             $event->rules['sprout-import/index'] = ['template' => 'sprout-base-import/index'];
-            $event->rules['sprout-import/weed'] = 'sprout-import/weed/weed-index';
-            $event->rules['sprout-import/seed'] = 'sprout-import/seed/seed-index';
+            $event->rules['sprout-import/weed'] = 'sprout/weed/weed-index';
+            $event->rules['sprout-import/seed'] = 'sprout/seed/seed-index';
             $event->rules['sprout-import/bundles'] = ['template' => 'sprout-base-import/bundles'];
-            $event->rules['sprout-import/settings'] = 'sprout-base/settings/edit-settings';
-            $event->rules['sprout-import/settings/<settingsSectionHandle:.*>'] = 'sprout-base/settings/edit-settings';
+            $event->rules['sprout-import/settings'] = 'sprout/settings/edit-settings';
+            $event->rules['sprout-import/settings/<settingsSectionHandle:.*>'] = 'sprout/settings/edit-settings';
         });
     }
 
