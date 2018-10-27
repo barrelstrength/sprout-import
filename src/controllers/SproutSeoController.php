@@ -10,6 +10,8 @@ class SproutSeoController extends Controller
 {
     /**
      * Generate Redirect JSON in Sprout Import Format
+     *
+     * @throws \craft\errors\MissingComponentException
      */
     public function actionGenerateRedirectJson()
     {
@@ -17,7 +19,7 @@ class SproutSeoController extends Controller
 
         $importableJson = $this->convertToJson($pastedCSV);
 
-        // Format: /zing, /zang, 301, 0
+        // Format: /old-url, /new-url, 301, 0
         if (!empty($importableJson)) {
             Craft::$app->getSession()->setNotice(Craft::t('sprout-import', 'Redirect JSON generated.'));
 

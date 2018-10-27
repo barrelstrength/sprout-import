@@ -11,6 +11,8 @@ class m180515_000001_rename_importClass_column extends Migration
 {
     /**
      * @inheritdoc
+     *
+     * @throws \yii\base\NotSupportedException
      */
     public function safeUp()
     {

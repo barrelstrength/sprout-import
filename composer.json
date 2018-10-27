@@ -1,47 +1,47 @@
 {
-    "name": "barrelstrength/sprout-import",
-    "description": "Import content and settings. Generate fake data.",
-    "version": "1.0.0-beta.15",
-    "type": "craft-plugin",
-    "keywords": [
-        "craft",
-        "cms",
-        "craftcms",
-        "import",
-        "sprout import"
-    ],
-    "license": "proprietary",
-    "authors": [
-        {
-            "name": "Barrel Strength",
-            "homepage": "https://www.barrelstrengthdesign.com/"
-        }
-    ],
-    "support": {
-        "email": "sprout@barrelstrengthdesign.com",
-        "issues": "https://github.com/barrelstrength/sprout-import/issues?state=open",
-        "source": "https://github.com/barrelstrength/sprout-import",
-        "docs": "https://sprout.barrelstrengthdesign.com/craft-plugins/import/docs",
-        "rss": "https://github.com/barrelstrength/sprout-import/commits/v2.atom"
-    },
-    "require": {
-        "craftcms/cms": "^3.0.0",
-        "fzaninotto/faker": "~1.4",
-        "barrelstrength/sprout-base": "^3.0.5"
-    },
-    "autoload": {
-        "psr-4": {
-          "barrelstrength\\sproutimport\\": "src/"
-        }
-    },
-    "extra": {
-        "name": "Sprout Import",
-        "handle": "sprout-import",
-        "developer": "Barrel Strength",
-        "developerUrl": "https://barrelstrengthdesign.com",
-        "documentationUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/import",
-        "changelogUrl": "https://raw.githubusercontent.com/BarrelStrength/sprout-import/master/CHANGELOG.md",
-        "downloadUrl": "https://github.com/BarrelStrength/sprout-import/archive/master.zip",
-        "class": "barrelstrength\\sproutimport\\SproutImport"
+  "name": "barrelstrength/sprout-import",
+  "description": "Import content and settings. Generate fake data.",
+  "version": "1.0.0-beta.15",
+  "type": "craft-plugin",
+  "keywords": [
+    "craft",
+    "cms",
+    "craftcms",
+    "import",
+    "sprout import"
+  ],
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Barrel Strength",
+      "homepage": "https://www.barrelstrengthdesign.com/"
     }
+  ],
+  "support": {
+    "email": "sprout@barrelstrengthdesign.com",
+    "issues": "https://github.com/barrelstrength/sprout-import/issues?state=open",
+    "source": "https://github.com/barrelstrength/sprout-import",
+    "docs": "https://sprout.barrelstrengthdesign.com/craft-plugins/import/docs",
+    "rss": "https://github.com/barrelstrength/sprout-import/commits/v2.atom"
+  },
+  "require": {
+    "craftcms/cms": "^3.0.0",
+    "fzaninotto/faker": "~1.4",
+    "barrelstrength/sprout-base": "^3.0.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "barrelstrength\\sproutimport\\": "src/"
+    }
+  },
+  "extra": {
+    "name": "Sprout Import",
+    "handle": "sprout-import",
+    "developer": "Barrel Strength",
+    "developerUrl": "https://barrelstrengthdesign.com",
+    "documentationUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/import",
+    "changelogUrl": "https://raw.githubusercontent.com/BarrelStrength/sprout-import/master/CHANGELOG.md",
+    "downloadUrl": "https://github.com/BarrelStrength/sprout-import/archive/master.zip",
+    "class": "barrelstrength\\sproutimport\\SproutImport"
+  }
 }

@@ -24,9 +24,10 @@ class WeedController extends Controller
     }
 
     /**
-     * @return Response
-     * @throws Exception
+     * @return null|Response
      * @throws BadRequestHttpException
+     * @throws Exception
+     * @throws \craft\errors\MissingComponentException
      */
     public function actionProcessWeed()
     {
