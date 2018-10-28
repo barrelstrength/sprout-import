@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.0-beta.16 - 2018-10-27
+
+### Changed
+- Updated Sprout Base requirement to v3.0.10
+
+### Fixed
+- Fixed bug in Order imports where orderLanguage was not found [#63]
+- Fixed logic bug that occurred when using PHP 7.2 [#66]
+- Fixed bug where console application could not access User
+
+[#63]: https://github.com/barrelstrength/craft-sprout-import/issues/63
+[#66]: https://github.com/barrelstrength/craft-sprout-import/issues/66
+
 ## 1.0.0-beta.15 - 2018-09-11
 
 ### Added
@@ -8,7 +21,7 @@
 
 ### Changed
 - Updated Sprout Base requirement to v3.0.4
-	
+
 ### Fixed
 - Fixed bug where expiryDate attribute caused an error when importing an Entry ([#58])
 - Fixed bug where variant field was required when importing to Commerce Products relations field ([#61])
