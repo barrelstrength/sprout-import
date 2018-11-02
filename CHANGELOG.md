@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0-beta.18 - 2018-11-02
+
+> {warning} This release of Sprout Import includes a breaking change that will require you to update any @model namespaces in your import scripts. This update to the application structure was made to add more flexible import, seeding, and more to all plugins within the Sprout Plugin Suite. See the docs for a comprehensive [list of all namespace changes](https://sprout.barrelstrengthdesign.com/docs/import/installing-and-updating-craft-3.html#upgrading-to-v1-0-0-beta-17).
+
 ## 1.0.0-beta.17 - 2018-10-29
 
 ### Changed
