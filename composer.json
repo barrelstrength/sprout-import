@@ -1,7 +1,7 @@
 {
   "name": "barrelstrength/sprout-import",
   "description": "Import content and settings. Generate fake data.",
-  "version": "1.0.0-beta.19",
+  "version": "1.0.0-beta.20",
   "type": "craft-plugin",
   "keywords": [
     "craft",
@@ -25,9 +25,9 @@
     "rss": "https://github.com/barrelstrength/sprout-import/commits/v2.atom"
   },
   "require": {
-    "craftcms/cms": "^3.0.0",
+    "craftcms/cms": "^3.1.0",
     "fzaninotto/faker": "~1.4",
-    "barrelstrength/sprout-base": "^4.0.3"
+    "barrelstrength/sprout-base": "^4.0.5"
   },
   "autoload": {
     "psr-4": {
