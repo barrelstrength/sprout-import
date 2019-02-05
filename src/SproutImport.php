@@ -11,7 +11,7 @@
 namespace barrelstrength\sproutimport;
 
 use barrelstrength\sproutbase\base\BaseSproutTrait;
-use barrelstrength\sproutbase\SproutBaseHelper;
+use barrelstrength\sproutbase\SproutBaseImportHelper;
 use barrelstrength\sproutimport\models\Settings;
 use barrelstrength\sproutbase\helpers\UninstallHelper;
 use Craft;
@@ -55,7 +55,7 @@ class SproutImport extends Plugin
     {
         parent::init();
 
-        SproutBaseHelper::registerModule();
+        SproutBaseImportHelper::registerModule();
 
         Craft::setAlias('@sproutimport', $this->getBasePath());
 
