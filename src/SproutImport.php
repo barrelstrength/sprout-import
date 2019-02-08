@@ -11,6 +11,7 @@
 namespace barrelstrength\sproutimport;
 
 use barrelstrength\sproutbase\base\BaseSproutTrait;
+use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutbaseimport\SproutBaseImportHelper;
 use barrelstrength\sproutimport\models\Settings;
 use barrelstrength\sproutbase\helpers\UninstallHelper;
@@ -55,6 +56,7 @@ class SproutImport extends Plugin
     {
         parent::init();
 
+        SproutBaseHelper::registerModule();
         SproutBaseImportHelper::registerModule();
 
         Craft::setAlias('@sproutimport', $this->getBasePath());
@@ -65,8 +67,8 @@ class SproutImport extends Plugin
             $event->rules['sprout-import/weed'] = 'sproutbaseimport/weed/weed-index';
             $event->rules['sprout-import/seed'] = 'sproutbaseimport/seed/seed-index';
             $event->rules['sprout-import/bundles'] = ['template' => 'sprout-base-import/bundles'];
-            $event->rules['sprout-import/settings'] = 'sproutbaseimport/settings/edit-settings';
-            $event->rules['sprout-import/settings/<settingsSectionHandle:.*>'] = 'sproutbaseimport/settings/edit-settings';
+            $event->rules['sprout-import/settings'] = 'sprout/settings/edit-settings';
+            $event->rules['sprout-import/settings/<settingsSectionHandle:.*>'] = 'sprout/settings/edit-settings';
         });
     }
 
