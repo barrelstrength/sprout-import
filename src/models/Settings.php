@@ -2,10 +2,11 @@
 
 namespace barrelstrength\sproutimport\models;
 
+use barrelstrength\sproutbase\base\SproutSettingsInterface;
 use Craft;
 use craft\base\Model;
 
-class Settings extends Model
+class Settings extends Model implements SproutSettingsInterface
 {
     /**
      * @var string
@@ -53,9 +54,9 @@ class Settings extends Model
     public $seedSettings = [];
 
     /**
-     * @return array
+     * @inheritdoc
      */
-    public function getSettingsNavItems()
+    public function getSettingsNavItems(): array
     {
         return [
             'settingsHeading' => [
