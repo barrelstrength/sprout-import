@@ -14,7 +14,7 @@ class m180515_000000_rename_seedtype_column extends Migration
      *
      * @throws \yii\base\NotSupportedException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $table = '{{%sproutimport_seeds}}';
 
@@ -28,7 +28,7 @@ class m180515_000000_rename_seedtype_column extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180515_000000_rename_seedtype_column cannot be reverted.\n";
         return false;

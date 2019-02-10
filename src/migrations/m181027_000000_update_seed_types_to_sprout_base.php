@@ -12,7 +12,7 @@ class m181027_000000_update_seed_types_to_sprout_base extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $seedClasses = [
             0 => [
@@ -61,7 +61,7 @@ class m181027_000000_update_seed_types_to_sprout_base extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m181027_000000_update_seed_types_to_sprout_base cannot be reverted.\n";
         return false;

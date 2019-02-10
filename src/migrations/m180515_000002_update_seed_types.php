@@ -12,7 +12,7 @@ class m180515_000002_update_seed_types extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $seedClasses = [
             0 => [
@@ -61,7 +61,7 @@ class m180515_000002_update_seed_types extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180515_000000_update_seed_types cannot be reverted.\n";
         return false;

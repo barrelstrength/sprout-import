@@ -6,6 +6,10 @@ use barrelstrength\sproutbase\base\SproutSettingsInterface;
 use Craft;
 use craft\base\Model;
 
+/**
+ *
+ * @property array $settingsNavItems
+ */
 class Settings extends Model implements SproutSettingsInterface
 {
     /**

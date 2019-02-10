@@ -12,7 +12,6 @@ namespace barrelstrength\sproutimport;
 
 use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\SproutBaseHelper;
-use barrelstrength\sproutbaseimport\SproutBaseImport;
 use barrelstrength\sproutbaseimport\SproutBaseImportHelper;
 use barrelstrength\sproutimport\models\Settings;
 use barrelstrength\sproutbase\helpers\UninstallHelper;
@@ -26,6 +25,8 @@ use yii\base\Event;
  * Class SproutImport
  *
  * @package barrelstrength\sproutimport
+ *
+ * @property array $cpNavItem
  */
 class SproutImport extends Plugin
 {
@@ -76,7 +77,7 @@ class SproutImport extends Plugin
     /**
      * @return Settings
      */
-    protected function createSettingsModel()
+    protected function createSettingsModel(): Settings
     {
         return new Settings();
     }
@@ -84,7 +85,7 @@ class SproutImport extends Plugin
     /**
      * @return array
      */
-    public function getCpNavItem()
+    public function getCpNavItem(): array
     {
         $parent = parent::getCpNavItem();
 
