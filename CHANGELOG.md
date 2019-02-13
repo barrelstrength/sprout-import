@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.0.0-beta.21 - 2019-02-13
+
+> {warning} This release includes breaking changes. Please see the [Sprout Import upgrade documentation](https://sprout.barrelstrengthdesign.com/docs/import/installing-and-updating-craft-3.html) for more details on import class names and console commands that have changed.
+    
+### Breaking Changes
+- Importer @model class names have been updated
+- Console commands have been updated to run from sprout-import namespace
+
+### Changed
+- Improved error reporting when importing multiple json files ([#77])
+- Improved translation support
+- Updated settings to implement SproutSettingsInterface
+- Updated barrelstrength/sprout-base requirement to v4.0.6
+- Added barrelstrength/sprout-base-import requirement v1.0.0
+	
+[#77]: https://github.com/barrelstrength/craft-sprout-import/issues/77
+
 ## 1.0.0-beta.20 - 2019-01-25
 
 ### Added
