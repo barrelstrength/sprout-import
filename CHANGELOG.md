@@ -2,7 +2,7 @@
 
 ## 1.0.0-beta.21 - 2019-02-13
 
-> {warning} This release includes breaking changes. Please see the [Sprout Import upgrade documentation](https://sprout.barrelstrengthdesign.com/docs/import/installing-and-updating-craft-3.html) for more details on import class names and console commands that have changed.
+> {warning} This release includes breaking changes. Please see the [Sprout Import upgrade documentation](https://sprout.barrelstrengthdesign.com/docs/import/installing-and-updating-craft-3.html#upgrading-to-v1-0-0-beta-21) for more details on import class names and console commands that have changed.
     
 ### Breaking Changes
 - Importer @model class names have been updated
