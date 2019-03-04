@@ -17,6 +17,8 @@ use barrelstrength\sproutimport\models\Settings;
 use barrelstrength\sproutbase\helpers\UninstallHelper;
 use Craft;
 use craft\base\Plugin;
+use craft\events\RegisterUserPermissionsEvent;
+use craft\services\UserPermissions;
 use craft\web\UrlManager;
 use craft\events\RegisterUrlRulesEvent;
 use yii\base\Event;
@@ -54,6 +56,20 @@ class SproutImport extends Plugin
      */
     public $minVersionRequired = '0.6.3';
 
+    const EDITION_LITE = 'lite';
+    const EDITION_PRO = 'pro';
+
+    /**
+     * @inheritdoc
+     */
+    public static function editions(): array
+    {
+        return [
+            self::EDITION_LITE,
+            self::EDITION_PRO,
+        ];
+    }
+
     public function init()
     {
         parent::init();
@@ -64,13 +80,11 @@ class SproutImport extends Plugin
         Craft::setAlias('@sproutimport', $this->getBasePath());
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
-            $event->rules['sprout-import'] = ['template' => 'sprout-base-import/index'];
-            $event->rules['sprout-import/index'] = ['template' => 'sprout-base-import/index'];
-            $event->rules['sprout-import/weed'] = 'sprout-base-import/weed/weed-index';
-            $event->rules['sprout-import/seed'] = 'sprout-base-import/seed/seed-index';
-            $event->rules['sprout-import/bundles'] = ['template' => 'sprout-base-import/bundles'];
-            $event->rules['sprout-import/settings'] = 'sprout/settings/edit-settings';
-            $event->rules['sprout-import/settings/<settingsSectionHandle:.*>'] = 'sprout/settings/edit-settings';
+            $event->rules = array_merge($event->rules, $this->getCpUrlRules());
+        });
+
+        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
+            $event->permissions['Sprout Import'] = $this->getUserPermissions();
         });
     }
 
@@ -118,6 +132,49 @@ class SproutImport extends Plugin
                 ]
             ]
         ]);
+    }
+
+    private function getCpUrlRules(): array
+    {
+        return [
+            'sprout-import' => [
+                'template' => 'sprout-base-import/index'
+            ],
+            'sprout-import/index' => [
+                'template' => 'sprout-base-import/index'
+            ],
+            'sprout-import/seed' =>
+                'sprout-base-import/seed/seed-index',
+            'sprout-import/weed' =>
+                'sprout-base-import/weed/weed-index',
+            'sprout-import/bundles' => [
+                'template' => 'sprout-base-import/bundles'
+            ],
+            'sprout-import/settings' =>
+                'sprout/settings/edit-settings',
+            'sprout-import/settings/<settingsSectionHandle:.*>' =>
+                'sprout/settings/edit-settings'
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getUserPermissions(): array
+    {
+        return [
+            'sproutImport-generateSeeds' => [
+                'label' => Craft::t('sprout-email', 'Generate Seed data'),
+                'nested' => [
+                    'sproutImport-removeSeeds' => [
+                        'label' => Craft::t('sprout-email', 'Remove Seed data')
+                    ]
+                ]
+            ],
+            'sproutImport-importBundles' => [
+                'label' => Craft::t('sprout-email', 'Import Bundles')
+            ],
+        ];
     }
 
     /**
