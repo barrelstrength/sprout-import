@@ -42,7 +42,7 @@
 - Updated Sprout Base requirement to v4.0.3
 
 ### Fixed 
-- Fixed issue where jobs could fail when import encoutered an error 
+- Fixed issue where jobs could fail when import encountered an error 
 
 ## 1.0.0-beta.18 - 2018-11-02
 
