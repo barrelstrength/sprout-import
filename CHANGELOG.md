@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.0-beta.22 - 2019-03-15
+
+### Changed
+- Updated barrelstrength/sprout-base-import requirement to v1.0.1
+
+### Fixed 
+- Fixed timezone output for Weed items ([#76])
+
+[#76]: https://github.com/barrelstrength/craft-sprout-import/issues/76
+
 ## 1.0.0-beta.21 - 2019-02-13
 
 > {warning} This release includes breaking changes. Please see the [Sprout Import upgrade documentation](https://sprout.barrelstrengthdesign.com/docs/import/installing-and-updating-craft-3.html#upgrading-to-v1-0-0-beta-21) for more details on import class names and console commands that have changed.
