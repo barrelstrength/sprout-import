@@ -14,7 +14,6 @@ use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutbaseimport\SproutBaseImportHelper;
 use barrelstrength\sproutimport\models\Settings;
-use barrelstrength\sproutbase\helpers\UninstallHelper;
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterUserPermissionsEvent;
@@ -28,6 +27,8 @@ use yii\base\Event;
  *
  * @package barrelstrength\sproutimport
  *
+ * @property array $userPermissions
+ * @property array $cpUrlRules
  * @property array $cpNavItem
  */
 class SproutImport extends Plugin
@@ -171,18 +172,9 @@ class SproutImport extends Plugin
                     ]
                 ]
             ],
-            'sproutImport-importBundles' => [
-                'label' => Craft::t('sprout-email', 'Import Bundles')
-            ],
+//            'sproutImport-importBundles' => [
+//                'label' => Craft::t('sprout-email', 'Import Bundles')
+//            ],
         ];
-    }
-
-    /**
-     * Uninstall Sprout Import and related schema
-     */
-    public function uninstall()
-    {
-        $uninstallHelper = new UninstallHelper($this);
-        $uninstallHelper->uninstall();
     }
 }
