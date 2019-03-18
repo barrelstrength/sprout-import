@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.0-beta.23 - 2019-03-18
+
+### Added
+- Added additional permissions support
+
+### Changed
+- Updated settings to require Admin permission to edit
+- Updated barrelstrength/sprout-base-import requirement v1.0.2
+- Updated barrelstrength/sprout-base requirement v4.0.7
+
 ## 1.0.0-beta.22 - 2019-03-15
 
 ### Changed
