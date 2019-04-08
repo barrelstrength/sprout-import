@@ -165,15 +165,15 @@ class SproutImport extends Plugin
     {
         return [
             'sproutImport-generateSeeds' => [
-                'label' => Craft::t('sprout-email', 'Generate Seed data'),
+                'label' => Craft::t('sprout-import', 'Generate Seed data'),
                 'nested' => [
                     'sproutImport-removeSeeds' => [
-                        'label' => Craft::t('sprout-email', 'Remove Seed data')
+                        'label' => Craft::t('sprout-import', 'Remove Seed data')
                     ]
                 ]
             ],
 //            'sproutImport-importBundles' => [
-//                'label' => Craft::t('sprout-email', 'Import Bundles')
+//                'label' => Craft::t('sprout-import', 'Import Bundles')
 //            ],
         ];
     }
