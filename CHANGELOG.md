@@ -1,11 +1,11 @@
 # Changelog
 
-## 1.0.0-beta.25 - 2019-03-18
+## 1.0.0-beta.25 - 2019-04-10
 
 ### Fixed
 - Fixed Settings model path
 
-## 1.0.0-beta.24 - 2019-03-18
+## 1.0.0-beta.24 - 2019-04-10
 
 ### Changed
 - Improved Postgres support
