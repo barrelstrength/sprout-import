@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0-beta.25 - 2019-03-18
+
+### Fixed
+- Fixed Settings model path
+
 ## 1.0.0-beta.24 - 2019-03-18
 
 ### Changed
