@@ -13,7 +13,7 @@ namespace barrelstrength\sproutimport;
 use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutbaseimport\SproutBaseImportHelper;
-use barrelstrength\sproutimport\models\Settings;
+use barrelstrength\sproutbaseimport\models\Settings;
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterUserPermissionsEvent;
