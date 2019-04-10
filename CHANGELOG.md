@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.0-beta.24 - 2019-03-18
+
+### Changed
+- Improved Postgres support
+- Updated barrelstrength/sprout-base-import requirement v1.0.3
+- Updated barrelstrength/sprout-base requirement v4.0.8
+
+### Fixed
+- Fixed incorrect translation category ([#81])
+- Fixed bug where Settings attributes did not resolve the attribute relation ([#80])
+
+[#80]: https://github.com/barrelstrength/craft-sprout-import/issues/80
+[#81]: https://github.com/barrelstrength/craft-sprout-import/issues/81
+
 ## 1.0.0-beta.23 - 2019-03-18
 
 ### Added
