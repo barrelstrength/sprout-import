@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.0-beta.26 - 2019-04-20
+
+### Changed
+- Updated barrelstrength/sprout-base-import requirement v1.0.4
+- Updated barrelstrength/sprout-base requirement v5.0.0
+
+### Fixed
+- Fixed bug when an invalid element class is imported
+
 ## 1.0.0-beta.25 - 2019-04-10
 
 ### Fixed
