@@ -32,7 +32,7 @@ class ImportController extends Controller
      *
      * @return array|string[]
      */
-    public function options($actionID)
+    public function options($actionID): array
     {
         return ['file', 'seed'];
     }
@@ -40,7 +40,7 @@ class ImportController extends Controller
     /**
      * @inheritdoc
      */
-    public function optionAliases()
+    public function optionAliases(): array
     {
         $aliases = parent::optionAliases();
         $aliases['f'] = 'file';
@@ -55,7 +55,7 @@ class ImportController extends Controller
     public function actionRun()
     {
         if (!$this->file) {
-            $message = Craft::t("sprout-base-import", "Invalid attribute: --file requires a valid file path");
+            $message = Craft::t('sprout-import', 'Invalid attribute: --file requires a valid file path');
             $this->stdout($message);
 
             return ExitCode::DATAERR;
@@ -68,7 +68,7 @@ class ImportController extends Controller
                 $filepath = Craft::getAlias($path);
                 $this->queueFile($filepath);
 
-                $message = Craft::t("sprout-import", $filepath." queued for import.");
+                $message = Craft::t('sprout-import', $filepath.' queued for import.');
                 $this->stdout($message.PHP_EOL);
             }
         }
@@ -82,7 +82,7 @@ class ImportController extends Controller
     private function queueFile($path)
     {
         if (!file_exists($path)) {
-            $message = Craft::t("sprout-import", "File path does not exist.");
+            $message = Craft::t('sprout-import', 'File path does not exist.');
             $this->stdout($message);
 
             return ExitCode::DATAERR;

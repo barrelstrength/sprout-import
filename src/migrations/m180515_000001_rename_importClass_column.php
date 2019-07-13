@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutimport\migrations;
 
 use craft\db\Migration;
+use yii\base\NotSupportedException;
 
 /**
  * m180515_000001_rename_importClass_column migration.
@@ -12,7 +13,7 @@ class m180515_000001_rename_importClass_column extends Migration
     /**
      * @inheritdoc
      *
-     * @throws \yii\base\NotSupportedException
+     * @throws NotSupportedException
      */
     public function safeUp(): bool
     {

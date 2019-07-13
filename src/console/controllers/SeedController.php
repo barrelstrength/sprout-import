@@ -46,7 +46,7 @@ class SeedController extends Controller
      *
      * @return array|string[]
      */
-    public function options($actionID)
+    public function options($actionID): array
     {
         return ['element', 'settings', 'quantity'];
     }
@@ -54,7 +54,7 @@ class SeedController extends Controller
     /**
      * @inheritdoc
      */
-    public function optionAliases()
+    public function optionAliases(): array
     {
         $aliases = parent::optionAliases();
         $aliases['e'] = 'element';
@@ -70,7 +70,7 @@ class SeedController extends Controller
     public function actionGenerate()
     {
         if (!$this->element) {
-            $message = Craft::t("sprout-base-import", "Invalid attribute: --element requires an Element class");
+            $message = Craft::t('sprout-import', 'Invalid attribute: --element requires an Element class');
             $this->stdout($message);
 
             return ExitCode::DATAERR;
@@ -93,11 +93,11 @@ class SeedController extends Controller
             $seedSettings = [];
             foreach ($this->settings as $key => $value) {
                 if (false !== strpos($value, '=')) {
-                    $value = explode("=", $value);
+                    $value = explode('=', $value);
                 }
 
                 // If we have a setting with a key/value pair
-                if (is_array($value) && isset($value[0]) && isset($value[1])) {
+                if (isset($value[0], $value[1]) && is_array($value)) {
                     $seedSettings[$value[0]] = $value[1];
                 } else {
                     $seedSettings[] = $value;
@@ -128,7 +128,7 @@ class SeedController extends Controller
         $seedJobErrors = null;
 
         if (SproutBaseImport::$app->seed->generateSeeds($seedJob)) {
-            $message = Craft::t("sprout-import", $this->element." seed in queue.");
+            $message = Craft::t('sprout-import', $this->element.' seed in queue.');
             $this->stdout($message.PHP_EOL);
         }
 
