@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.1 - UNRELEASED
+## 1.0.1 - 2019-07-14
 
 ### Changed
 - Updated fzaninotto/faker requirement v1.8.0
