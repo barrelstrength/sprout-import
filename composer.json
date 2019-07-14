@@ -26,9 +26,9 @@
     },
     "require": {
         "craftcms/cms": "^3.1.0",
-        "fzaninotto/faker": "~1.4",
+        "fzaninotto/faker": "^1.8.0",
         "barrelstrength/sprout-base": "^5.0.0",
-        "barrelstrength/sprout-base-import": "^1.0.4"
+        "barrelstrength/sprout-base-import": "^1.0.5"
     },
     "autoload": {
         "psr-4": {
