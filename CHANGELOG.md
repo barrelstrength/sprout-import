@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1 - UNRELEASED
+
+### Changed
+- Updated fzaninotto/faker requirement v1.8.0
+- Updated barrelstrength/sprout-base-import requirement v1.0.5
+
 ## 1.0.0 - 2019-05-17
 
 > {warning} Sprout Import has been retired. We recommend using the free, first-party [Feed Me](https://plugins.craftcms.com/feed-me) plugin instead. We will continue to offer support and bugfixes for existing license holders for the duration of the license terms but will not be planning any new features unless contracted to do so.
