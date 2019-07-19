@@ -68,7 +68,9 @@ class ImportController extends Controller
                 $filepath = Craft::getAlias($path);
                 $this->queueFile($filepath);
 
-                $message = Craft::t('sprout-import', $filepath.' queued for import.');
+                $message = Craft::t('sprout-import', '{filepath} queued for import.', [
+                    'filepath' => $filepath
+                ]);
                 $this->stdout($message.PHP_EOL);
             }
         }

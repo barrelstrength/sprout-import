@@ -111,9 +111,7 @@ class SeedController extends Controller
             }
         }
 
-        $weedMessage = Craft::t('sprout-import', '{elementType} Element(s)');
-
-        $details = Craft::t('sprout-import', $weedMessage, [
+        $details = Craft::t('sprout-import', '{elementType} Element(s)', [
             'elementType' => $this->element
         ]);
 
